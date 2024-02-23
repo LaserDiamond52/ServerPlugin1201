@@ -3,25 +3,25 @@ package net.laserdiamond.serverplugin1201.items.crafting.SmithingTable;
 import net.laserdiamond.serverplugin1201.ServerPlugin1201;
 import net.laserdiamond.serverplugin1201.items.crafting.Recipes.SmithingTableRecipes;
 import net.laserdiamond.serverplugin1201.items.equipment.EquipmentItems;
+import net.laserdiamond.serverplugin1201.items.management.ItemForger;
 import net.laserdiamond.serverplugin1201.items.management.misc.MenuItems;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.trim.ArmorTrim;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class SmithingTableGUI implements Listener {
 
@@ -74,6 +74,11 @@ public class SmithingTableGUI implements Listener {
         if (humanEntity instanceof Player player) {
             if (event.getView().getTitle().contains("Smithing Table")) {
 
+                if (event.getClick().equals(ClickType.SHIFT_LEFT) || event.getClick().equals(ClickType.SHIFT_RIGHT)) {
+                    event.setResult(Event.Result.DENY);
+                    //event.setCancelled(true);
+                }
+
                 ItemStack clickedItem = event.getCurrentItem();
 
                 int clickedSlot = event.getSlot();
@@ -113,7 +118,36 @@ public class SmithingTableGUI implements Listener {
 
                     // TODO: Create Result Item
 
+                    // Want to check cursor item before producing result
+                    // Check that cmd on input matches recipe item, then create result
 
+                    //ItemStack resultItem = SmithingTableRecipes.Recipes.createResult(clickedInv, cursorItem);
+                    ItemForger resultForger = new ItemForger(SmithingTableRecipes.Recipes.createResult(clickedInv, cursorItem));
+
+                    /*
+                    // Get ItemForger of Equipment Item
+                    ItemForger equipmentForger = new ItemForger(clickedInv.getItem(SmithingTableEnum.EQUIPMENT_ITEM.getInventorySlot()));
+
+                    // Collect all relevant data to carry over to result item
+                    Map<Enchantment, Integer> equipmentEnchants = equipmentForger.getEnchantments();
+                    Integer stars = equipmentForger.getStars();
+
+                    resultForger.addEnchantments(equipmentEnchants);
+                    resultForger.setStars(stars);
+
+                    try {
+                        ArmorTrim equipmentTrim = equipmentForger.getArmorTrim();
+                        resultForger.setArmorTrim(equipmentTrim);
+                    } catch (ClassCastException ignored) {
+                    }
+
+                     */
+
+
+                    clickedInv.setItem(SmithingTableEnum.RESULT_ITEM.getInventorySlot(), resultForger.toItemStack());
+
+                    // TODO: Allow player to click on result item and collect
+                    // Should remove the recipe items from the crafting inventory
                 }
 
             }
@@ -129,6 +163,7 @@ public class SmithingTableGUI implements Listener {
             }
         }
     }
+
 
     @EventHandler
     public void closeSmithingTableInv(InventoryCloseEvent event) {
@@ -153,14 +188,14 @@ public class SmithingTableGUI implements Listener {
                     int enumSlot = smithingTableEnum.getInventorySlot();
                     if (SmithingTableEnum.isInputSlot(enumSlot)) {
                         ItemStack inputItem = eventInv.getItem(enumSlot);
-                        if (SmithingTableEnum.isSlotItem(inputItem)) {
-                            player.sendMessage("no input items were present; return no items");
-                        } else {
+                        if (!SmithingTableEnum.isSlotItem(inputItem)) {
                             if (inputItem != null) {
-                                player.sendMessage("adding input item to inventory");
+
                                 player.getInventory().addItem(inputItem);
 
                             }
+                        } else {
+
                         }
 
                     }

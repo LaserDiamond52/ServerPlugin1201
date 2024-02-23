@@ -57,6 +57,7 @@ public class SmithingMenuItems {
 
     public enum SmithingItemEnum {
 
+        RESULT_ITEM (Material.GREEN_STAINED_GLASS_PANE, ChatColor.GREEN + "Result Item", 92),
         EQUIPMENT_ITEM (Material.GREEN_STAINED_GLASS_PANE, ChatColor.GREEN + "Equipment Piece", 93),
         MATERIAL_ITEM (Material.GREEN_STAINED_GLASS_PANE,ChatColor.AQUA + "Material", 94),
         TEMPLATE_ITEM (Material.GREEN_STAINED_GLASS_PANE,ChatColor.DARK_RED + "Template", 95),
