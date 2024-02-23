@@ -1,0 +1,27 @@
+
+toughness: 4
+knockBackRes: 1
+auraBaseDamage: 5
+abilityDuration: 5
+abilityCooldown: 5
+manaCost: 80
+abilityName: Blazing Aura
+
+
+helmetMeleeDamage: 5
+helmetHealth: 3
+helmetArmor: 3.5
+
+chestplateMeleeDamage: 5
+chestplateHealth: 7
+chestplateArmor: 8.5
+
+leggingsMeleeDamage: 5
+leggingsHealth: 5
+leggingsArmor: 6.5
+
+bootsMeleeDamage: 5
+bootsHealth: 3
+bootsArmor: 3.5
+
+HelmetURL: http://textures.minecraft.net/texture/b20657e24b56e1b2f8fc219da1de788c0c24f36388b1a409d0cd2d8dba44aa3b

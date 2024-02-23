@@ -1,0 +1,128 @@
+package net.laserdiamond.serverplugin1201.events.Stats;
+
+import net.laserdiamond.serverplugin1201.ServerPlugin1201;
+import net.laserdiamond.serverplugin1201.stats.Components.Stats;
+import net.laserdiamond.serverplugin1201.stats.Manager.StatProfileManager;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Sound;
+import org.bukkit.entity.*;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.scheduler.BukkitRunnable;
+
+import java.text.DecimalFormat;
+
+public class DamageEvent implements Listener {
+
+    private ServerPlugin1201 plugin;
+    private StatProfileManager statProfileManager;
+
+    public DamageEvent(ServerPlugin1201 plugin) {
+        this.plugin = plugin;
+        statProfileManager = plugin.getStatProfileManager();
+    }
+
+    @EventHandler
+    public void damageStat(EntityDamageByEntityEvent event) {
+
+        double damage = event.getDamage();
+
+        if (event.getDamager() instanceof Player player) {
+
+            Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).getStats();
+
+            double baseMelee = stats.getBaseMeleeDamage();
+            double baseMagic = stats.getBaseMagicDamage();
+
+            double meleeIncrease = 1 + stats.getMeleeDamage() * 0.01;
+            double magicIncrease = 1 + stats.getMagicDamage() * 0.01;
+
+            EntityDamageEvent.DamageCause damageCause = event.getCause();
+
+            if (damageCause.equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK) ||
+                    damageCause.equals(EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK)) {
+                double finalMeleeDamage = (baseMelee + damage) * meleeIncrease;
+                event.setDamage(finalMeleeDamage);
+            }
+
+        }
+
+        if (event.getDamager() instanceof Arrow arrow) {
+
+            if (arrow.getShooter() instanceof Player player) {
+
+                Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).getStats();
+                double baseRange = stats.getBaseRangeDamage();
+                double rangeIncrease = 1 + stats.getRangeDamage() * 0.01;
+                double finalArrowDamage = (baseRange + damage) * rangeIncrease;
+
+                if (event.getEntity() instanceof LivingEntity) {
+
+                    // Arrow ping sound
+                    player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP,100,1);
+                    event.setDamage(finalArrowDamage);
+
+                }
+            }
+        }
+    }
+
+    @EventHandler (priority = EventPriority.HIGHEST)
+    public void damageDisplay(EntityDamageEvent event) {
+
+        if (event.getEntity() instanceof LivingEntity livingEntity) {
+            if (!(livingEntity instanceof ArmorStand)) {
+
+                if (!event.isCancelled()) {
+                    Location location = livingEntity.getEyeLocation().add(0,0.5,0);
+                    double damage = event.getFinalDamage();
+
+                    int textLifeSpan = plugin.getConfig().getInt("damageDisplayLifeSpanTicks");
+                    TextDisplay damageDisplay = location.getWorld().spawn(location, TextDisplay.class);
+                    DecimalFormat doubleDecimal = new DecimalFormat("0.00");
+                    damageDisplay.setSeeThrough(true);
+                    damageDisplay.setBillboard(Display.Billboard.CENTER);
+
+                    EntityDamageEvent.DamageCause damageCause = event.getCause();
+
+                    String damageChar;
+                    if (damageCause.equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK) ||
+                            damageCause.equals(EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK))
+                    {
+                        damageChar = ChatColor.RED + "🗡";
+                    } else if (damageCause.equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
+                        damageChar = ChatColor.DARK_PURPLE + "➶";
+                    } else if (damageCause.equals(EntityDamageEvent.DamageCause.MAGIC)) {
+                        damageChar = ChatColor.AQUA + "⚝";
+                    } else {
+                        damageChar = ChatColor.RED + "❤";
+                    }
+
+                    damageDisplay.setText("-" + doubleDecimal.format(damage) + damageChar);
+
+                    new BukkitRunnable() {
+
+                        int i = 0;
+
+                        @Override
+                        public void run() {
+                            i++;
+                            if (i >= textLifeSpan) {
+                                damageDisplay.remove();
+                            }
+                        }
+                    }.runTaskTimer(plugin, 0L, 1L);
+
+                }
+
+            }
+        }
+    }
+
+
+}

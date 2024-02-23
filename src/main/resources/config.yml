@@ -1,0 +1,7 @@
+
+# Damage Display Lifespan
+damageDisplayLifeSpanTicks: 20
+
+# Star stats
+maxStars: 5
+increasePerStar: 0.1

@@ -1,0 +1,57 @@
+### Base Player stats when joining
+
+# Base melee damage %
+
+# Increases a player's melee damage by x%
+meleeDamage: 0
+
+# Base magic damage %
+
+# Increases a player's magic damage by x%
+magicDamage: 0
+
+# Base range damage %
+
+# Increases a player's range damage by x%
+rangeDamage: 0
+
+# Base amount of available mana a player starts with
+
+# Values higher than the max mana are set to the max mana value in-game
+availableMana: 0
+
+# Player's base max mana
+maxMana: 100
+
+# Player's base melee damage
+baseMelee: 0
+
+# Player's base magic damage
+baseMagic: 0
+
+# Player's base range damage
+baseRange: 0
+
+# Player's base defense points
+baseDefense: 0
+
+# Player's base fire defense points
+baseFireDefense: 0
+
+# Player's base explosion defense points
+baseExplosionDefense: 0
+
+# Player's base projectile defense points
+baseProjectileDefense: 0
+
+# Player's base magic defense points
+baseMagicDefense: 0
+
+# Player's base toughness
+baseToughness: 0
+
+# Player's base skill points
+
+# Base skill points when players first join
+baseSkillPoints: 0
+

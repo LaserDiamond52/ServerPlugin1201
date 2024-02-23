@@ -1,0 +1,23 @@
+venomousAspectPoisonLvl: 1
+venomousAspectPoisonDurationPerLvl: 5
+
+decayWitherLvl: 3
+decayWitherDurationPerLvl: 5
+
+thunderStrikeHits: 3
+thunderStrikeDamagePerLvl: 0.1
+
+glowDurationPerLvl: 7.5
+
+protectionArmor: 1.25
+fireProtectionArmor: 2.25
+explosionProtectionArmor: 2.25
+projectileProtectionArmor: 2.25
+magicProtectionArmor: 2.25
+toughnessArmor: 1
+
+manaPool: 5
+strength: 0.25
+arcane: 0.25
+archer: 0.25
+

@@ -1,0 +1,32 @@
+toughness: 3.5
+knockBackRes: 1
+eyeOfTheStormBaseDamage: 2.5
+blastRadius: 5
+cooldown: 60
+manaCost: 250
+weaknessLvl: 2
+weaknessDuration: 10
+baseDamage: 2.5
+abilityName: Eye of the Storm
+
+helmetMagicDamage: 10
+helmetMana: 120
+helmetHealth: 4
+helmetArmor: 3
+
+chestplateMagicDamage : 10
+chestplateMana: 100
+chestplateHealth: 7
+chestplateArmor: 8
+
+leggingsMagicDamage: 10
+leggingsMana: 100
+leggingsHealth: 5
+leggingsArmor: 6
+
+bootsMagicDamage: 10
+bootsMana: 100
+bootsHealth: 4
+bootsArmor: 3
+
+HelmetURL: http://textures.minecraft.net/texture/319939ea5e7655e616be86a3a400131c2c9c745e7e38ed0d1ee2987bbe75a44a

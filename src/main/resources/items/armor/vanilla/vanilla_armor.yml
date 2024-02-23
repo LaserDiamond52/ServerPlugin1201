@@ -1,0 +1,34 @@
+
+## DIAMOND
+
+DiamondhelmetArmor: 3
+DiamondhelmetToughness: 2
+
+DiamondchestplateArmor: 8
+DiamondchestplateToughness: 2
+
+DiamondleggingsArmor: 6
+DiamondleggingsToughness: 2
+
+DiamondbootsArmor: 3
+DiamondbootsToughness: 2
+
+### NETHERITE
+
+NetheritehelmetArmor: 3
+NetheritehelmetToughness: 3
+NetheritehelmetFortitude: 1
+
+NetheritechestplateArmor: 8
+NetheritechestplateToughness: 3
+NetheritechestplateFortitude: 1
+
+NetheriteleggingsArmor: 6
+NetheriteleggingsToughness: 3
+NetheriteleggingsFortitude: 1
+
+NetheritebootsArmor: 3
+NetheritebootsToughness: 3
+NetheritebootsFortitude: 1
+
+NetheriteFireArmorMultiplier: 1.5
