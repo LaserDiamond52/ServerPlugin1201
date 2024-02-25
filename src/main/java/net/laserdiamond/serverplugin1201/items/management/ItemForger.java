@@ -182,8 +182,26 @@ public class ItemForger {
         return this;
     }
 
+    public ItemForger removeEnchantments() {
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        Map<Enchantment, Integer> enchants = itemMeta.getEnchants();
+        for (Enchantment enchantment : enchants.keySet()) {
+            itemMeta.removeEnchant(enchantment);
+        }
+        itemStack.setItemMeta(itemMeta);
+        return this;
+    }
+
     public Map<Enchantment, Integer> getEnchantments() {
         return itemStack.getItemMeta().getEnchants();
+    }
+
+    public boolean hasEnchants() {
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        if (itemMeta.hasEnchants()) {
+            return true;
+        }
+        return false;
     }
 
     public ItemForger addAttributeModifier(Attribute attribute, AttributeModifier attributeModifier) {

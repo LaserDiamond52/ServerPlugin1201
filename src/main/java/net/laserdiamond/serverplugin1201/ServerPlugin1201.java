@@ -29,7 +29,7 @@ import net.laserdiamond.serverplugin1201.items.armor.StormLord.Config.StormLordA
 import net.laserdiamond.serverplugin1201.items.armor.Vanilla.Components.DiamondArmorManager;
 import net.laserdiamond.serverplugin1201.items.armor.Vanilla.Components.NetheriteArmorManager;
 import net.laserdiamond.serverplugin1201.items.armor.Vanilla.Config.VanillaArmorConfig;
-import net.laserdiamond.serverplugin1201.items.crafting.SmithingTable.SmithingTableGUI;
+import net.laserdiamond.serverplugin1201.items.crafting.SmithingTable.SmithingTableCrafting;
 import net.laserdiamond.serverplugin1201.items.management.ItemMappings;
 import net.laserdiamond.serverplugin1201.stats.Config.BaseStatsConfig;
 import net.laserdiamond.serverplugin1201.stats.Manager.StatProfileManager;
@@ -99,7 +99,8 @@ public final class ServerPlugin1201 extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new CancelInventoryMovementMenus(),this);
 
         // Smithing Table Inventory
-        getServer().getPluginManager().registerEvents(new SmithingTableGUI(this),this);
+        getServer().getPluginManager().registerEvents(new SmithingTableCrafting(this),this);
+        //SmithingTableCrafting.init();
 
         // Register Commands
         getCommand("plugineffect").setExecutor(new EffectsCommand(this));

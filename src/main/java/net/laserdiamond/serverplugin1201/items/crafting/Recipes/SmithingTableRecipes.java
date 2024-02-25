@@ -3,14 +3,16 @@ package net.laserdiamond.serverplugin1201.items.crafting.Recipes;
 import net.laserdiamond.serverplugin1201.ServerPlugin1201;
 import net.laserdiamond.serverplugin1201.items.armor.Vanilla.Components.DiamondArmorManager;
 import net.laserdiamond.serverplugin1201.items.armor.Vanilla.Components.NetheriteArmorManager;
-import net.laserdiamond.serverplugin1201.items.crafting.SmithingTable.SmithingTableGUI;
-import net.laserdiamond.serverplugin1201.items.management.ItemForger;
+import net.laserdiamond.serverplugin1201.items.crafting.SmithingTable.SmithingRecipe;
 import net.laserdiamond.serverplugin1201.items.management.armor.ArmorTypes;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.Item;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.HashMap;
+
 
 public class SmithingTableRecipes {
 
@@ -21,58 +23,118 @@ public class SmithingTableRecipes {
 
     public enum Recipes {
 
-        NETHERITE_BOOTS (diamondArmorManager.createArmorPiece(ArmorTypes.BOOTS, 0).toItemStack(), new ItemStack(Material.NETHERITE_INGOT),1, new ItemStack(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE),1, netheriteArmorManager.createArmorPiece(ArmorTypes.BOOTS, 0).toItemStack()),
-        NETHERITE_LEGGINGS (diamondArmorManager.createArmorPiece(ArmorTypes.LEGGINGS, 0).toItemStack(), new ItemStack(Material.NETHERITE_INGOT),1, new ItemStack(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE),1, netheriteArmorManager.createArmorPiece(ArmorTypes.LEGGINGS, 0).toItemStack()),
-        NETHERITE_CHESTPLATE(diamondArmorManager.createArmorPiece(ArmorTypes.CHESTPLATE, 0).toItemStack(), new ItemStack(Material.NETHERITE_INGOT),1, new ItemStack(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE),1, netheriteArmorManager.createArmorPiece(ArmorTypes.CHESTPLATE, 0).toItemStack()),
-        NETHERITE_HELMET (diamondArmorManager.createArmorPiece(ArmorTypes.HELMET, 0).toItemStack(), new ItemStack(Material.NETHERITE_INGOT),1, new ItemStack(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE),1, netheriteArmorManager.createArmorPiece(ArmorTypes.HELMET, 0).toItemStack());
+        NETHERITE_BOOTS (new SmithingRecipe(new ItemStack(Material.DIAMOND_BOOTS), new ItemStack(Material.NETHERITE_INGOT,2), new ItemStack(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE,1)), netheriteArmorManager.createArmorPiece(ArmorTypes.BOOTS,0).toItemStack()),
+        NETHERITE_LEGGINGS (new SmithingRecipe(new ItemStack(Material.DIAMOND_LEGGINGS), new ItemStack(Material.NETHERITE_INGOT,2), new ItemStack(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE,1)), netheriteArmorManager.createArmorPiece(ArmorTypes.LEGGINGS,0).toItemStack()),
+        NETHERITE_CHESTPLATE (new SmithingRecipe(new ItemStack(Material.DIAMOND_CHESTPLATE), new ItemStack(Material.NETHERITE_INGOT,2), new ItemStack(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE,1)), netheriteArmorManager.createArmorPiece(ArmorTypes.CHESTPLATE,0).toItemStack()),
+        NETHERITE_HELMET (new SmithingRecipe(new ItemStack(Material.DIAMOND_HELMET), new ItemStack(Material.NETHERITE_INGOT,2), new ItemStack(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE,1)), netheriteArmorManager.createArmorPiece(ArmorTypes.HELMET,0).toItemStack());
 
-        private final ItemStack equipmentItem, materialItem, templateItem, resultItem;
-        private final int materialAmount, templateAmount;
-        Recipes(ItemStack equipmentItem, ItemStack materialItem, int materialAmount, ItemStack templateItem, int templateAmount, ItemStack resultItem) {
-            this.equipmentItem = equipmentItem;
-            this.materialItem = materialItem;
-            this.materialAmount = materialAmount;
-            this.templateItem = templateItem;
-            this.templateAmount = templateAmount;
-            this.resultItem = resultItem;
+        private final SmithingRecipe smithingRecipe;
+        private final ItemStack result;
+
+        Recipes(SmithingRecipe smithingRecipe, ItemStack result) {
+            this.smithingRecipe = smithingRecipe;
+            this.result = result;
         }
 
-        public static ItemStack createResult(Inventory inventory, ItemStack inputItem) {
+        public static final HashMap<SmithingRecipe, ItemStack> ingredientsResultMap = new HashMap<>();
+        static {
+            for (Recipes recipes : values()) {
+                SmithingRecipe smithingRecipe = recipes.smithingRecipe;
+                ItemStack result = recipes.result;
 
-            ItemStack equipmentSlot = inventory.getItem(SmithingTableGUI.SmithingTableEnum.EQUIPMENT_ITEM.getInventorySlot());
-            ItemStack materialSlot = inventory.getItem(SmithingTableGUI.SmithingTableEnum.MATERIAL_ITEM.getInventorySlot());
-            ItemStack templateSlot = inventory.getItem(SmithingTableGUI.SmithingTableEnum.TEMPLATE_ITEM.getInventorySlot());
+                ingredientsResultMap.put(smithingRecipe, result);
+            }
+        }
 
+       public static ItemStack createResult(ItemStack equipmentInput, ItemStack materialInput, ItemStack templateInput) {
 
-            ItemMeta inputMeta = inputItem.getItemMeta();
-            ItemForger inputItemForger = new ItemForger(inputItem);
+            boolean correctEquipment = false;
+            boolean correctMaterial = false;
+            boolean correctTemplate = false;
+
+            int inputMaterialAmount;
+            int inputTemplateAmount;
 
             for (Recipes recipes : values()) {
+                ItemStack recipeEquipment = recipes.smithingRecipe.getEquipmentItem();
+                ItemStack recipeMaterial = recipes.smithingRecipe.getMaterialItem();
+                ItemStack recipeTemplate = recipes.smithingRecipe.getTemplateItem();
+                ItemStack result = recipes.result;
 
-                ItemMeta equipRecipeMeta = recipes.getEquipmentItem().getItemMeta();
+                int requiredMaterialAmount;
+                int requiredTemplateAmount;
 
-                // Check that input is a valid equipment item
-                if (materialSlot != null && templateSlot != null) {
-                    // Check custom model data for input and recipe items
+                if (equipmentInput != null && recipeEquipment != null) {
 
-                    int materialSlotAmt = materialSlot.getAmount();
-                    int templateSlotAmt = templateSlot.getAmount();
+                    ItemMeta inputMeta = equipmentInput.getItemMeta();
+                    ItemMeta recipeMeta = recipeEquipment.getItemMeta();
 
-                    int materialRecipeAmt = recipes.getMaterialAmount();
-                    int templateRecipeAmt = recipes.getTemplateAmount();
+                    if (equipmentInput.getType().equals(recipeEquipment.getType())) {
 
-                    if (inputMeta != null) {
-                        if (inputMeta.hasCustomModelData() && equipRecipeMeta.hasCustomModelData()) {
-                            int inputEquipCMD = inputItemForger.getCustomModelData();
-                            int recipeEquipCMD = equipRecipeMeta.getCustomModelData();
+                        if (inputMeta != null && recipeMeta != null) {
 
-                            // Check if required item types are present
-                            if (inputEquipCMD == recipeEquipCMD && materialSlot.equals(recipes.getMaterialItem()) && templateSlot.equals(recipes.getTemplateItem())) {
+                            if (inputMeta.hasCustomModelData() && recipeMeta.hasCustomModelData()) {
 
-                                // Check if quantity is correct
+                                if (inputMeta.getCustomModelData() == recipeMeta.getCustomModelData()) {
+                                    correctEquipment = true;
+                                }
+                            } else if (!inputMeta.hasCustomModelData() && !recipeMeta.hasCustomModelData()) {
+                                correctEquipment = true;
+                            }
+                        }
+                    }
+                }
 
-                                if (materialSlotAmt <= materialRecipeAmt && templateSlotAmt <= templateRecipeAmt) {
-                                    return recipes.getResultItem();
+                if (materialInput != null && recipeMaterial != null) {
+
+                    ItemMeta inputMeta = materialInput.getItemMeta();
+                    ItemMeta recipeMeta = recipeMaterial.getItemMeta();
+
+                    inputMaterialAmount = materialInput.getAmount();
+                    requiredMaterialAmount = recipeMaterial.getAmount();
+
+                    if (materialInput.getType().equals(recipeMaterial.getType())) {
+
+                        if (inputMeta != null && recipeMeta != null) {
+
+                            if (inputMaterialAmount >= requiredMaterialAmount) {
+
+                                if (inputMeta.hasCustomModelData() && recipeMeta.hasCustomModelData()) {
+
+                                    if (inputMeta.getCustomModelData() == recipeMeta.getCustomModelData()) {
+                                        correctMaterial = true;
+                                    }
+                                } else if (!inputMeta.hasCustomModelData() && !recipeMeta.hasCustomModelData()) {
+                                    correctMaterial = true;
+                                }
+                            }
+
+
+                        }
+                    }
+                }
+
+                if (templateInput != null && recipeTemplate != null) {
+
+                    ItemMeta inputMeta = templateInput.getItemMeta();
+                    ItemMeta recipeMeta = recipeTemplate.getItemMeta();
+
+                    inputTemplateAmount = templateInput.getAmount();
+                    requiredTemplateAmount = recipeTemplate.getAmount();
+
+                    if (templateInput.getType().equals(recipeTemplate.getType())) {
+
+                        if (inputMeta != null && recipeMeta != null) {
+
+                            if (inputTemplateAmount >= requiredTemplateAmount) {
+
+                                if (inputMeta.hasCustomModelData() && recipeMeta.hasCustomModelData()) {
+
+                                    if (inputMeta.getCustomModelData() == recipeMeta.getCustomModelData()) {
+                                        correctTemplate = true;
+                                    }
+                                } else if (!inputMeta.hasCustomModelData() && !recipeMeta.hasCustomModelData()) {
+                                    correctTemplate = true;
                                 }
                             }
 
@@ -80,95 +142,27 @@ public class SmithingTableRecipes {
                     }
                 }
 
-                // Check that input is a valid material item
-                if (equipmentSlot != null && templateSlot != null) {
-                    // Check custom model data for input and recipe items
-                    ItemMeta equipmentSlotMeta = equipmentSlot.getItemMeta();
+                if (correctEquipment && correctMaterial && correctTemplate) {
+                    // Return result, etc.
 
-                    int inputAmount = inputItem.getAmount();
-                    int templateSlotAmt = templateSlot.getAmount();
-
-                    int materialRecipeAmt = recipes.getMaterialAmount();
-                    int templateRecipeAmt = recipes.getTemplateAmount();
-
-                    if (equipmentSlotMeta != null) {
-                        if (equipmentSlotMeta.hasCustomModelData() && equipRecipeMeta.hasCustomModelData()) {
-                            int equipmentSlotCMD = equipmentSlotMeta.getCustomModelData();
-                            int equipmentRecipeCMD = equipRecipeMeta.getCustomModelData();
-
-                            if (equipmentSlotCMD == equipmentRecipeCMD && inputItem.equals(recipes.getMaterialItem()) && templateSlot.equals(recipes.getTemplateItem())) {
-
-                                if (inputAmount >= materialRecipeAmt && templateSlotAmt >= templateRecipeAmt) {
-                                    return recipes.getResultItem();
-                                }
-                            }
-                        }
-                    }
+                    return result;
                 }
-
-                // Check that input is a valid template item
-                if (equipmentSlot != null && materialSlot != null) {
-                    // Check custom model data for input and recipe items
-                    ItemMeta equipmentSlotMeta = equipmentSlot.getItemMeta();
-
-                    int materialSlotAmt = materialSlot.getAmount();
-                    int inputAmount = inputItem.getAmount();
-
-                    int materialRecipeAmt = recipes.getMaterialAmount();
-                    int templateRecipeAmt = recipes.getTemplateAmount();
-
-                    if (equipmentSlotMeta != null) {
-                        if (equipmentSlotMeta.hasCustomModelData() && equipRecipeMeta.hasCustomModelData()) {
-                            int equipmentSlotCMD = equipmentSlotMeta.getCustomModelData();
-                            int equipmentRecipeCMD = equipRecipeMeta.getCustomModelData();
-
-                            if (equipmentSlotCMD == equipmentRecipeCMD && materialSlot.equals(recipes.getMaterialItem()) && inputItem.equals(recipes.getTemplateItem())) {
-
-                                if (materialSlotAmt >= materialRecipeAmt && inputAmount >= templateRecipeAmt) {
-                                    return recipes.getResultItem();
-                                }
-                            }
-                        }
-                    }
-                }
-
             }
+
             return new ItemStack(Material.AIR);
+       }
+
+
+
+        public SmithingRecipe getSmithingRecipe() {
+            return smithingRecipe;
         }
 
-        public static boolean isResultItem(ItemStack itemStack) {
-
-            for (Recipes recipes : values()) {
-                if (itemStack.equals(recipes.getResultItem())) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public ItemStack getEquipmentItem() {
-            return equipmentItem;
-        }
-
-        public ItemStack getMaterialItem() {
-            return materialItem;
-        }
-
-        public ItemStack getTemplateItem() {
-            return templateItem;
-        }
-
-        public ItemStack getResultItem() {
-            return resultItem;
-        }
-
-        public int getMaterialAmount() {
-            return materialAmount;
-        }
-
-        public int getTemplateAmount() {
-            return templateAmount;
+        public ItemStack getResult() {
+            return result;
         }
     }
+
+
 
 }
