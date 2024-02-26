@@ -1,4 +1,4 @@
-package net.laserdiamond.serverplugin1201.Management.File;
+package net.laserdiamond.serverplugin1201.management.File;
 
 public interface FileLoaderSaver extends FileLoader {
 

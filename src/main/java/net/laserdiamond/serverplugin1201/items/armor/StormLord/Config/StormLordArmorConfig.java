@@ -1,6 +1,6 @@
 package net.laserdiamond.serverplugin1201.items.armor.StormLord.Config;
 
-import net.laserdiamond.serverplugin1201.Management.File.GetVarFile;
+import net.laserdiamond.serverplugin1201.management.File.GetVarFile;
 import net.laserdiamond.serverplugin1201.ServerPlugin1201;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

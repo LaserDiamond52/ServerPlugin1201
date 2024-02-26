@@ -1,4 +1,4 @@
-package net.laserdiamond.serverplugin1201.Management;
+package net.laserdiamond.serverplugin1201.management;
 
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;

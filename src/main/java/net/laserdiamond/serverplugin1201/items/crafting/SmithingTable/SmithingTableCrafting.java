@@ -2,16 +2,21 @@ package net.laserdiamond.serverplugin1201.items.crafting.SmithingTable;
 
 import net.laserdiamond.serverplugin1201.ServerPlugin1201;
 import net.laserdiamond.serverplugin1201.items.crafting.Recipes.SmithingTableRecipes;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
+import net.laserdiamond.serverplugin1201.items.management.ItemForger;
+import net.laserdiamond.serverplugin1201.items.management.UpdateItem;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.PrepareSmithingEvent;
 import org.bukkit.inventory.*;
+import org.bukkit.inventory.meta.ArmorMeta;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.trim.ArmorTrim;
+import org.bukkit.inventory.meta.trim.TrimMaterial;
+import org.bukkit.inventory.meta.trim.TrimPattern;
 
 import java.util.HashMap;
 
@@ -26,6 +31,9 @@ public class SmithingTableCrafting implements Listener {
         //recipeTest();
     }
 
+    // TODO: If using vanilla smithing table, dummy recipe(s) may need to be added in order to allow new items to be inserted in the craft interface
+    // TODO: Otherwise, no need :)
+
     /*
     public static void recipeTest() {
 
@@ -35,11 +43,41 @@ public class SmithingTableCrafting implements Listener {
 
      */
 
-    private HashMap<SmithingRecipe, ItemStack> recipe = new HashMap<>();
-    {
-        //recipe.put(new SmithingRecipe(new ItemStack(Material.DIAMOND_BOOTS), new ItemStack(Material.NETHERITE_INGOT), new ItemStack(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE)), new ItemStack(Material.IRON_BOOTS));
+    // HashMap for Determining Trim Material
+    public final static HashMap<Material, TrimMaterial> trimMaterialMap = new HashMap<>();
+    static {
+        trimMaterialMap.put(Material.COPPER_INGOT, TrimMaterial.COPPER);
+        trimMaterialMap.put(Material.GOLD_INGOT, TrimMaterial.GOLD);
+        trimMaterialMap.put(Material.IRON_INGOT, TrimMaterial.IRON);
+        trimMaterialMap.put(Material.LAPIS_LAZULI, TrimMaterial.LAPIS);
+        trimMaterialMap.put(Material.QUARTZ, TrimMaterial.QUARTZ);
+        trimMaterialMap.put(Material.REDSTONE, TrimMaterial.REDSTONE);
+        trimMaterialMap.put(Material.EMERALD, TrimMaterial.EMERALD);
+        trimMaterialMap.put(Material.AMETHYST_SHARD, TrimMaterial.AMETHYST);
+        trimMaterialMap.put(Material.DIAMOND, TrimMaterial.DIAMOND);
+        trimMaterialMap.put(Material.NETHERITE_INGOT, TrimMaterial.NETHERITE);
     }
 
+    // HashMap for determining trim pattern
+    public final static HashMap<Material, TrimPattern> trimPatternMap = new HashMap<>();
+    static {
+        trimPatternMap.put(Material.SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE, TrimPattern.SENTRY);
+        trimPatternMap.put(Material.VEX_ARMOR_TRIM_SMITHING_TEMPLATE, TrimPattern.VEX);
+        trimPatternMap.put(Material.WILD_ARMOR_TRIM_SMITHING_TEMPLATE, TrimPattern.WILD);
+        trimPatternMap.put(Material.COAST_ARMOR_TRIM_SMITHING_TEMPLATE, TrimPattern.COAST);
+        trimPatternMap.put(Material.DUNE_ARMOR_TRIM_SMITHING_TEMPLATE, TrimPattern.DUNE);
+        trimPatternMap.put(Material.WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE, TrimPattern.WAYFINDER);
+        trimPatternMap.put(Material.RAISER_ARMOR_TRIM_SMITHING_TEMPLATE, TrimPattern.RAISER);
+        trimPatternMap.put(Material.SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE, TrimPattern.SHAPER);
+        trimPatternMap.put(Material.HOST_ARMOR_TRIM_SMITHING_TEMPLATE, TrimPattern.HOST);
+        trimPatternMap.put(Material.WARD_ARMOR_TRIM_SMITHING_TEMPLATE, TrimPattern.WARD);
+        trimPatternMap.put(Material.SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE, TrimPattern.SILENCE);
+        trimPatternMap.put(Material.TIDE_ARMOR_TRIM_SMITHING_TEMPLATE, TrimPattern.TIDE);
+        trimPatternMap.put(Material.SNOUT_ARMOR_TRIM_SMITHING_TEMPLATE, TrimPattern.SNOUT);
+        trimPatternMap.put(Material.RIB_ARMOR_TRIM_SMITHING_TEMPLATE, TrimPattern.RIB);
+        trimPatternMap.put(Material.EYE_ARMOR_TRIM_SMITHING_TEMPLATE, TrimPattern.EYE);
+        trimPatternMap.put(Material.SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE, TrimPattern.SPIRE);
+    }
 
     @EventHandler
     public void prepareSmithingEvent(PrepareSmithingEvent event) {
@@ -50,16 +88,49 @@ public class SmithingTableCrafting implements Listener {
         ItemStack templateInput = smithingInventory.getInputTemplate();
 
         ItemStack resultItemStack = SmithingTableRecipes.Recipes.createResult(equipmentInput, materialInput, templateInput);
-
         event.setResult(resultItemStack);
+
+        // Try to make armor trim
+        try {
+            if (templateInput != null && materialInput != null && equipmentInput != null) {
+
+                ItemMeta templateInputMeta = templateInput.getItemMeta();
+                ItemMeta materialInputMeta = materialInput.getItemMeta();
+
+                // Make sure template DOES NOT have customModelData
+
+                // Want to apply trim
+                if (templateInputMeta != null && materialInputMeta != null) {
+                    if (!templateInputMeta.hasCustomModelData() && !materialInputMeta.hasCustomModelData()) {
+
+                        // Check if HashMaps have key for material
+                        if (trimPatternMap.containsKey(templateInput.getType()) && trimMaterialMap.containsKey(materialInput.getType())) {
+                            TrimPattern patternToAdd = trimPatternMap.get(templateInput.getType());
+                            TrimMaterial materialToAdd = trimMaterialMap.get(materialInput.getType());
+
+                            ArmorTrim trimToAdd = new ArmorTrim(materialToAdd, patternToAdd);
+                            ItemStack resultItem = equipmentInput.clone();
+                            ItemForger resultForger = new ItemForger(resultItem);
+
+                            resultForger.setArmorTrim(trimToAdd);
+                            resultForger.setLore(UpdateItem.renewLore(resultForger.toItemStack()));
+                            event.setResult(resultForger.toItemStack());
+                        }
+
+                    }
+                }
+            }
+        } catch (ClassCastException ignored) {
+
+        }
     }
 
     @EventHandler
-    public void smithingTableClick(InventoryClickEvent event) {
+    public void smithingTableCollectResult(InventoryClickEvent event) {
 
         Player player = (Player) event.getWhoClicked();
 
-        if (event.getClickedInventory() instanceof SmithingInventory smithingInventory) {
+        if (event.getClickedInventory() instanceof SmithingInventory) {
 
             ItemStack resultItem = event.getClickedInventory().getItem(3);
             ItemStack equipmentItemRawSlot = event.getClickedInventory().getItem(1);
@@ -67,29 +138,46 @@ public class SmithingTableCrafting implements Listener {
             ItemStack materialItemRawSlot = event.getClickedInventory().getItem(2);
             int slotClicked = event.getSlot();
 
-            ItemStack equipmentSlot = smithingInventory.getInputEquipment();
-            ItemStack templateSlot = smithingInventory.getInputTemplate();
-            ItemStack materialSlot = smithingInventory.getInputMineral();
-            ItemStack resultSlot = smithingInventory.getResult();
-
-            player.sendMessage("Clicked slot: " + slotClicked);
-
             if (slotClicked == 3) {
-                player.sendMessage("result");
-            } else if (slotClicked == 2) {
-                player.sendMessage("material");
-            } else if (slotClicked == 1) {
-                player.sendMessage("equipment");
-            } else if (slotClicked == 0) {
-                player.sendMessage("template");
+                boolean ready = false;
+
+                for (SmithingTableRecipes.Recipes recipes : SmithingTableRecipes.Recipes.values()) {
+                    ItemStack result = recipes.getResult();
+                    ItemStack equipment = recipes.getSmithingRecipe().getEquipmentItem();
+                    ItemStack material = recipes.getSmithingRecipe().getMaterialItem();
+                    ItemStack template = recipes.getSmithingRecipe().getTemplateItem();
+
+                    if (resultItem != null && equipmentItemRawSlot != null && templateItemRawSlot != null && materialItemRawSlot != null) {
+                        if (resultItem.getType().equals(result.getType())) {
+
+                            ItemMeta resultItemMeta = resultItem.getItemMeta();
+                            ItemMeta resultMeta = result.getItemMeta();
+
+                            if (resultItemMeta != null && resultMeta != null) {
+
+                                if (resultItemMeta.hasCustomModelData() && resultMeta.hasCustomModelData()) {
+
+                                    if (resultItemMeta.getCustomModelData() == resultMeta.getCustomModelData()) {
+                                        ready = true;
+                                    }
+                                } else if (!resultItemMeta.hasCustomModelData() && !resultMeta.hasCustomModelData()) {
+                                    ready = true;
+                                }
+
+                                if (ready) {
+                                    equipmentItemRawSlot.setAmount(equipmentItemRawSlot.getAmount() - equipment.getAmount());
+                                    materialItemRawSlot.setAmount(materialItemRawSlot.getAmount() - material.getAmount());
+                                    templateItemRawSlot.setAmount(templateItemRawSlot.getAmount() - template.getAmount());
+
+                                    player.playSound(player, Sound.BLOCK_SMITHING_TABLE_USE, 100, 1);
+                                    event.setCurrentItem(SmithingTableRecipes.Recipes.createResult(equipmentItemRawSlot, materialItemRawSlot, templateItemRawSlot));
+                                    event.setCursor(resultItem);
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
-
-
-
-
-
-
-
 }

@@ -2,7 +2,7 @@ package net.laserdiamond.serverplugin1201.items.management.armor;
 
 import com.google.common.collect.Multimap;
 import net.laserdiamond.serverplugin1201.items.management.ItemForger;
-import net.laserdiamond.serverplugin1201.Management.ItemStatKeys;
+import net.laserdiamond.serverplugin1201.management.ItemStatKeys;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;

@@ -8,7 +8,7 @@ import net.laserdiamond.serverplugin1201.events.effects.Components.Timers.Paraly
 import net.laserdiamond.serverplugin1201.events.effects.Components.Timers.VulnerableTimer;
 import net.laserdiamond.serverplugin1201.events.effects.EffectBoolean;
 import net.laserdiamond.serverplugin1201.events.effects.Managers.EffectManager;
-import net.laserdiamond.serverplugin1201.Management.EffectKeys;
+import net.laserdiamond.serverplugin1201.management.EffectKeys;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;

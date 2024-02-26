@@ -1,6 +1,6 @@
 package net.laserdiamond.serverplugin1201.events.effects;
 
-import net.laserdiamond.serverplugin1201.Management.EffectKeys;
+import net.laserdiamond.serverplugin1201.management.EffectKeys;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;

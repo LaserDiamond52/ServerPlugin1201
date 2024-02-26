@@ -1,6 +1,6 @@
 package net.laserdiamond.serverplugin1201.events.effects;
 
-import net.laserdiamond.serverplugin1201.Management.EffectKeys;
+import net.laserdiamond.serverplugin1201.management.EffectKeys;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataContainer;

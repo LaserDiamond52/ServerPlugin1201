@@ -1,7 +1,7 @@
 package net.laserdiamond.serverplugin1201.items.armor.Vanilla.Components;
 
 import com.google.common.collect.Multimap;
-import net.laserdiamond.serverplugin1201.Management.ItemStatKeys;
+import net.laserdiamond.serverplugin1201.management.ItemStatKeys;
 import net.laserdiamond.serverplugin1201.ServerPlugin1201;
 import net.laserdiamond.serverplugin1201.items.armor.Vanilla.Config.VanillaArmorConfig;
 import net.laserdiamond.serverplugin1201.items.management.ItemForger;

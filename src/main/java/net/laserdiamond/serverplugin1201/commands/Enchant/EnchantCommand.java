@@ -2,7 +2,8 @@ package net.laserdiamond.serverplugin1201.commands.Enchant;
 
 import net.laserdiamond.serverplugin1201.enchants.Components.EnchantsClass;
 import net.laserdiamond.serverplugin1201.items.management.ItemForger;
-import net.laserdiamond.serverplugin1201.Management.messages.messages;
+import net.laserdiamond.serverplugin1201.items.management.UpdateItem;
+import net.laserdiamond.serverplugin1201.management.messages.messages;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -67,6 +68,7 @@ public class EnchantCommand implements CommandExecutor, TabExecutor {
                 ItemForger mainHandForger = new ItemForger(mainHand);
                 int finalLevel = Math.min(enchantToAdd.getMaxLevel(), levelInput);
                 mainHandForger.addEnchant(enchantToAdd, finalLevel);
+                mainHandForger.setLore(UpdateItem.renewLore(mainHandForger.toItemStack()));
                 target.getInventory().setItemInMainHand(mainHandForger.toItemStack());
             } else {
                 sender.sendMessage(ChatColor.RED + "Cannot apply " + input + " to " + mainHand.getType());

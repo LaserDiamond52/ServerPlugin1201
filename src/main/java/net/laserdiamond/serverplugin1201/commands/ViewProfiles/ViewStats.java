@@ -2,7 +2,7 @@ package net.laserdiamond.serverplugin1201.commands.ViewProfiles;
 
 import net.laserdiamond.serverplugin1201.items.management.misc.MenuItems;
 import net.laserdiamond.serverplugin1201.stats.Components.StatsItemManager;
-import net.laserdiamond.serverplugin1201.Management.messages.messages;
+import net.laserdiamond.serverplugin1201.management.messages.messages;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;

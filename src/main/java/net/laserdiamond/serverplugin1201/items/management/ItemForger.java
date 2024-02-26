@@ -3,15 +3,11 @@ package net.laserdiamond.serverplugin1201.items.management;
 import com.google.common.collect.Multimap;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.ComponentLike;
-import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.format.Style;
-import net.laserdiamond.serverplugin1201.Management.ItemStatKeys;
+import net.laserdiamond.serverplugin1201.management.ItemStatKeys;
 import net.laserdiamond.serverplugin1201.items.attributes.AttributeLoreNameMap;
 import org.apache.commons.codec.binary.Base64;
 import net.laserdiamond.serverplugin1201.ServerPlugin1201;
-import net.laserdiamond.serverplugin1201.Management.ItemPropertiesKeys;
+import net.laserdiamond.serverplugin1201.management.ItemPropertiesKeys;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -29,7 +25,6 @@ import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Unmodifiable;
 
 import java.lang.reflect.Field;
 import java.text.DecimalFormat;
@@ -337,9 +332,9 @@ public class ItemForger {
         try {
             ArmorMeta armorMeta = (ArmorMeta) itemStack.getItemMeta();
             return armorMeta.getTrim();
-        } catch (ClassCastException exception) {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Could not case item to 'ArmorMeta'!");
-            exception.printStackTrace();
+        } catch (ClassCastException ignored) {
+            //Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Could not case item to 'ArmorMeta'!");
+            //exception.printStackTrace();
         }
         return null;
     }
@@ -350,9 +345,9 @@ public class ItemForger {
             if (armorMeta.getTrim() != null) {
                 return armorMeta.getTrim().getMaterial();
             }
-        } catch (ClassCastException exception) {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Could not case item to 'ArmorMeta'!");
-            exception.printStackTrace();
+        } catch (ClassCastException ignored) {
+            //Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Could not case item to 'ArmorMeta'!");
+            //exception.printStackTrace();
         }
         return null;
     }
@@ -363,9 +358,9 @@ public class ItemForger {
             if (armorMeta.getTrim() != null) {
                 return armorMeta.getTrim().getPattern();
             }
-        } catch (ClassCastException exception) {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Could not case item to 'ArmorMeta'!");
-            exception.printStackTrace();
+        } catch (ClassCastException ignored) {
+            //Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Could not cast item to 'ArmorMeta'!");
+            //exception.printStackTrace();
         }
         return null;
     }
@@ -375,9 +370,34 @@ public class ItemForger {
             ArmorMeta armorMeta = (ArmorMeta) itemStack.getItemMeta();
             armorMeta.setTrim(armorTrim);
             itemStack.setItemMeta(armorMeta);
-        } catch (ClassCastException exception) {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Could not case item to 'ArmorMeta'!");
-            exception.printStackTrace();
+        } catch (ClassCastException ignored) {
+            //Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Could not cast item to 'ArmorMeta'!");
+            //exception.printStackTrace();
+        }
+        return this;
+    }
+
+    public boolean hasArmorTrim() {
+        try {
+            ArmorMeta armorMeta = (ArmorMeta) itemStack.getItemMeta();
+            if (armorMeta.hasTrim()) {
+                return true;
+            }
+        } catch (ClassCastException ignored) {
+            //Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Could not cast item to 'ArmorMeta'!");
+            //exception.printStackTrace();
+        }
+        return false;
+    }
+
+    public ItemForger removeArmorTrim() {
+        try {
+            ArmorMeta armorMeta = (ArmorMeta) itemStack.getItemMeta();
+            armorMeta.setTrim(null);
+            itemStack.setItemMeta(armorMeta);
+        } catch (ClassCastException ignored) {
+            //Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Could not cast item to 'ArmorMeta'!");
+            //exception.printStackTrace();
         }
         return this;
     }
@@ -402,7 +422,6 @@ public class ItemForger {
     public PluginItemRarity.Rarity getRarity() {
         ItemMeta itemMeta = itemStack.getItemMeta();
         PluginItemRarity rarityInst = new PluginItemRarity();
-
 
         for (PluginItemRarity.Rarity rarity : PluginItemRarity.Rarity.values()) {
             if (rarity != null) {

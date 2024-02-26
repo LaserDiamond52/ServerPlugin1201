@@ -1,4 +1,4 @@
-package net.laserdiamond.serverplugin1201.enchants.Config;
+package net.laserdiamond.serverplugin1201.items.armor.Trims.Config;
 
 import net.laserdiamond.serverplugin1201.management.File.GetVarFile;
 import net.laserdiamond.serverplugin1201.ServerPlugin1201;
@@ -11,33 +11,39 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.io.IOException;
 
-public class EnchantConfig implements GetVarFile {
+public class ArmorTrimConfig implements GetVarFile {
 
-    private final ServerPlugin1201 plugin;
-    private final String fileName;
-    private final File folders;
-    private final File file;
-    private final FileConfiguration config = new YamlConfiguration();
+    private ServerPlugin1201 plugin;
+    private String fileName;
+    private File folders;
+    private File file;
+    private FileConfiguration config = new YamlConfiguration();
 
-    public EnchantConfig(ServerPlugin1201 plugin, String fileName) {
+    public ArmorTrimConfig(ServerPlugin1201 plugin, String fileName) {
         this.plugin = plugin;
         this.fileName = fileName;
-        folders = new File(plugin.getDataFolder() + File.separator + "enchants");
+        folders = new File(plugin.getDataFolder() + File.separator + "items" + File.separator + "armor" + File.separator + "trims");
         file = new File(folders, fileName + ".yml");
     }
 
     @Override
     public void loadConfig() {
+
         if (!file.exists()) {
             file.getParentFile().mkdirs();
-            plugin.saveResource("enchants" + File.separator + fileName + ".yml", false);
+            plugin.saveResource("items" + File.separator + "armor" + File.separator + "trims" + File.separator + fileName + ".yml", false);
         }
         try {
             config.load(file);
         } catch (IOException | InvalidConfigurationException exception) {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "ERROR LOADING ENCHANTS CONFIG FROM FILE");
+            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "ERROR WHILE LOADING ARMOR TRIM CONFIG FROM FILE");
             exception.printStackTrace();
         }
+    }
+
+    @Override
+    public FileConfiguration getConfig() {
+        return config;
     }
 
     @Override
@@ -58,10 +64,5 @@ public class EnchantConfig implements GetVarFile {
     @Override
     public Boolean getBoolean(String path) {
         return config.getBoolean(path);
-    }
-
-    @Override
-    public FileConfiguration getConfig() {
-        return config;
     }
 }

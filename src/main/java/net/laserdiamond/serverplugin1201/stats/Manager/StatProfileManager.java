@@ -2,6 +2,9 @@ package net.laserdiamond.serverplugin1201.stats.Manager;
 
 import net.laserdiamond.serverplugin1201.ServerPlugin1201;
 import net.laserdiamond.serverplugin1201.enchants.Components.EnchantStats;
+import net.laserdiamond.serverplugin1201.items.armor.Trims.Components.ArmorTrimMaterialStats;
+import net.laserdiamond.serverplugin1201.items.armor.Trims.Components.ArmorTrimPatternStats;
+import net.laserdiamond.serverplugin1201.items.armor.Trims.Manager.ArmorTrimStats;
 import net.laserdiamond.serverplugin1201.stats.Components.StatProfile;
 import net.laserdiamond.serverplugin1201.stats.Components.Stats;
 import net.laserdiamond.serverplugin1201.stats.Config.BaseStatsConfig;
@@ -41,7 +44,12 @@ public class StatProfileManager {
 
         Stats stats = new Stats(0,meleeDamage,magicDamage, rangeDamage, availableMana, maxMana, baseMelee, baseMagic, baseRange, baseDefense, baseFireDefense, baseExplosionDefense, baseProjectileDefense, baseMagicDefense,baseToughness,0);
         EnchantStats enchantStats = new EnchantStats(0,0,0,0,0,0,0,0,0,0,0);
-        StatProfile statProfile = new StatProfile(stats, enchantStats);
+
+        ArmorTrimMaterialStats armorTrimMaterialStats = new ArmorTrimMaterialStats(0,0,0,0,0,0,0,0,0,0,0);
+        ArmorTrimPatternStats armorTrimPatternStats = new ArmorTrimPatternStats(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+        ArmorTrimStats armorTrimStats = new ArmorTrimStats(armorTrimMaterialStats, armorTrimPatternStats);
+
+        StatProfile statProfile = new StatProfile(stats, enchantStats, armorTrimStats);
         statProfiles.put(player.getUniqueId(), statProfile);
         return statProfile;
     }

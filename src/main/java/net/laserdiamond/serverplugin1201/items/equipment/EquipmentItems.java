@@ -51,18 +51,10 @@ public class EquipmentItems {
     public static List<Material> armorPieces = new ArrayList<>();
     static {
 
-        for (Material helmets : helmets) {
-            armorPieces.add(helmets);
-        }
-        for (Material chestplates : chestplates) {
-            armorPieces.add(chestplates);
-        }
-        for (Material leggings : leggings) {
-            armorPieces.add(leggings);
-        }
-        for (Material boots : boots) {
-            armorPieces.add(boots);
-        }
+        armorPieces.addAll(helmets);
+        armorPieces.addAll(chestplates);
+        armorPieces.addAll(leggings);
+        armorPieces.addAll(boots);
     }
     public static List<Material> swords = new ArrayList<>();
     static {
@@ -117,24 +109,12 @@ public class EquipmentItems {
     public static List<Material> any = new ArrayList<>();
     static {
 
-        for (Material material : armorPieces) {
-            any.add(material);
-        }
-        for (Material material : swords) {
-            any.add(material);
-        }
-        for (Material material : pickaxes) {
-            any.add(material);
-        }
-        for (Material material : axes) {
-            any.add(material);
-        }
-        for (Material material : shovels) {
-            any.add(material);
-        }
-        for (Material material : hoes) {
-            any.add(material);
-        }
+        any.addAll(armorPieces);
+        any.addAll(swords);
+        any.addAll(pickaxes);
+        any.addAll(axes);
+        any.addAll(shovels);
+        any.addAll(hoes);
     }
 
 }

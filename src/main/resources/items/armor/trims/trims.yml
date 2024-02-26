@@ -1,0 +1,87 @@
+
+## MATERIALS ##
+
+# Grants x% more speed
+copperSpeed: 10
+
+# Grants x% chance to not lose hunger point
+goldSaturation: 5
+
+# Grants +x health
+ironHealthBoost: 5
+
+# Grants +x% more exp when killing mobs
+lapisExpBonus: 15
+
+# Grants +x% more mining exp
+quartzMiningExp: 7.5
+
+# Grants +x% more potion duration (positive effects only)
+redstonePotionBonus: 15
+
+# Grants +x luck
+emeraldLuck: 0.25
+
+# Grants +x boost to damage percent stat
+amethystDamage: 1.25
+
+# Grants +x max mana
+diamondMana: 15
+
+# Grants +x defense
+netheriteDefense: 3
+
+# Grants +x fire defense
+netheriteFireDefense: 5
+
+## PATTERNS ##
+
+# Grants +x% chance for pillagers to drop an extra emerald
+sentryEmerald: 2.5
+
+# Grants +x% bonus mana regen
+vexManaRegen: 2.5
+
+# Grants +x% more foraging exp
+wildForagingExp: 7.5
+
+# Grants +x% more fishing exp
+coastFishingExp: 7.5
+
+# Grants +x% more mining exp
+duneMiningExp: 7.5
+
+# Hitting mobs causes them to glow for +x seconds
+wayfinderGlow: 5
+
+# Grants +x% chance to find suspicious sand drops while mining
+raiserSusSandDrop: 3.75
+
+# Grants +x% chance to find suspicious gravel drops while mining
+shaperSusGravelDrop: 3.75
+
+# Grants +x% bonus skill exp (all skills)
+hostBonusExp: 5
+
+# Grants +x% bonus combat exp
+wardCombatExp: 7.5
+
+# Grants +x% chance for attacks to hit a second time
+silenceAttackChance: 1.25
+
+# Grants +x% more damage against aquatic mobs (includes fishing mobs)
+tideAquaticDamage: 5
+
+# Grants +x% chance to perform a counter-attack when blocking incoming damage
+snoutCounterChance: 1.75
+
+# Attacks inflict wither 3 for +x seconds
+ribWitherDuration: 5
+ribWitherLevel: 3
+
+# Grants +x percent boost to magic damage stat per 5 exp level you have
+eyeMagicDamagePerLevel: 0.175
+eyeMagicDamageLevelCap: 100
+
+# Grants +x% chance not to consume elytra fuel
+spireSaveFuelChance: 1.75

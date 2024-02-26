@@ -2,8 +2,10 @@ package net.laserdiamond.serverplugin1201.stats.Components;
 
 import net.laserdiamond.serverplugin1201.ServerPlugin1201;
 import net.laserdiamond.serverplugin1201.enchants.Components.EnchantStats;
+import net.laserdiamond.serverplugin1201.items.armor.Trims.Components.ArmorTrimMaterialStats;
+import net.laserdiamond.serverplugin1201.items.armor.Trims.Components.ArmorTrimPatternStats;
+import net.laserdiamond.serverplugin1201.items.armor.Trims.Manager.ArmorTrimStats;
 import net.laserdiamond.serverplugin1201.items.management.ItemForger;
-import net.laserdiamond.serverplugin1201.stats.Components.Stats;
 import net.laserdiamond.serverplugin1201.stats.Manager.StatProfileManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -24,6 +26,9 @@ public class StatsItemManager {
 
         Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).getStats();
         EnchantStats enchantStats = statProfileManager.getStatProfile(player.getUniqueId()).getEnchantStats();
+        ArmorTrimStats armorTrimStats = statProfileManager.getStatProfile(player.getUniqueId()).getArmorTrimStats();
+        ArmorTrimMaterialStats materialStats = armorTrimStats.getArmorTrimMaterialStats();
+        ArmorTrimPatternStats patternStats = armorTrimStats.getArmorTrimPatternStats();
 
         DecimalFormat doubleDecimal = new DecimalFormat("0.00");
 
@@ -31,36 +36,65 @@ public class StatsItemManager {
         double meleeDamage = stats.getMeleeDamage();
         double magicDamage = stats.getMagicDamage();
         double rangeDamage = stats.getRangeDamage();
-        Double maxMana = stats.getMaxMana();
-        Double baseMelee = stats.getBaseMeleeDamage();
-        Double baseMagic = stats.getBaseMagicDamage();
-        Double baseRange = stats.getBaseRangeDamage();
+        double maxMana = stats.getMaxMana();
+        double baseMelee = stats.getBaseMeleeDamage();
+        double baseMagic = stats.getBaseMagicDamage();
+        double baseRange = stats.getBaseRangeDamage();
         double armor = stats.getDefense();
         double fire_armor = stats.getFire_defense();
         double explosion_armor = stats.getExplosion_defense();
         double projectile_armor = stats.getProjectile_defense();
         double magic_armor = stats.getMagic_defense();
-        Double toughness = stats.getToughness();
+        double toughness = stats.getToughness();
         double maxHealth = player.getMaxHealth();
 
         // TODO: Enchantment Stats
         double enchant_armor = enchantStats.getEnchant_armor();
-        Double enchant_fire_armor = enchantStats.getEnchant_armor();
-        Double enchant_explosion_armor = enchantStats.getEnchant_armor();
-        Double enchant_projectile_armor = enchantStats.getEnchant_armor();
-        Double enchant_magic_armor = enchantStats.getEnchant_armor();
-        Double enchant_toughness = enchantStats.getEnchant_armor();
-        Double enchant_base_melee = enchantStats.getEnchant_armor();
-        Double enchant_base_magic = enchantStats.getEnchant_armor();
-        Double enchant_base_range = enchantStats.getEnchant_armor();
-        Double enchant_base_mana = enchantStats.getEnchant_armor();
+        double enchant_fire_armor = enchantStats.getEnchant_armor();
+        double enchant_explosion_armor = enchantStats.getEnchant_armor();
+        double enchant_projectile_armor = enchantStats.getEnchant_armor();
+        double enchant_magic_armor = enchantStats.getEnchant_armor();
+        double enchant_toughness = enchantStats.getEnchant_armor();
+        double enchant_base_melee = enchantStats.getEnchant_armor();
+        double enchant_base_magic = enchantStats.getEnchant_armor();
+        double enchant_base_range = enchantStats.getEnchant_armor();
+        double enchant_base_mana = enchantStats.getEnchant_armor();
         double enchant_health = enchantStats.getEnchant_health();
 
         // TODO: Tuning Menu
 
         // TODO: Trims
 
+        double copperSpeed = materialStats.getCopperSpeed();
+        double goldSaturation = materialStats.getGoldSaturationChance();
+        double ironHealthBoost = materialStats.getIronHealthBoost();
+        double lapisExpBoost = materialStats.getLapisBonusExp();
+        double quartzMiningExp = materialStats.getQuartzBonusMiningExp();
+        double redstonePotionBonus = materialStats.getRedstoneBonusPotion();
+        double emeraldLuck = materialStats.getEmeraldBonusLuck();
+        double amethystDamage = materialStats.getAmethystBonusDamage();
+        double diamondMana = materialStats.getDiamondBonusMana();
+        double netheriteDefense = materialStats.getNetheriteBonusDefense();
+        double netheriteFireDefense = materialStats.getNetheriteBonusFireDefense();
+
         // TODO: Patterns
+        double sentryEmerald = patternStats.getSentryEmeralds();
+        double vexManaRegen = patternStats.getVexManaRegen();
+        double wildForagingExp = patternStats.getWildForagingExp();
+        double coastFishingExp = patternStats.getCoastFishingExp();
+        double duneMiningExp = patternStats.getDuneMiningExp();
+        double raiserSusSand = patternStats.getRaiserSusSand();
+        double shaperSusGravel = patternStats.getShaperSusGravel();
+        double hostBonusExp = patternStats.getHostBonusExp();
+        double wardCombatExp = patternStats.getWardCombatExp();
+        double silenceAttackChance = patternStats.getSilenceAttackChance();
+        double tideAquaticDamage = patternStats.getTideAquaticDamage();
+        double snoutCounterChance = patternStats.getSnoutCounterChance();
+        double ribWitherDuration = patternStats.getRibWitherDuration();
+        double eyeMagicDamage = patternStats.getEyeMagicDamagePerExpLevel();
+
+        double spireSaveElytraFuel = patternStats.getSpireSaveElytraFuel();
+
 
         // TODO: Base Attributes
         double playerBaseHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue();

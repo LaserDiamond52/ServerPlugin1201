@@ -1,7 +1,8 @@
 package net.laserdiamond.serverplugin1201.items.management;
 
 import com.google.common.collect.Multimap;
-import net.laserdiamond.serverplugin1201.Management.ItemStatKeys;
+import net.laserdiamond.serverplugin1201.management.ItemStatKeys;
+import net.laserdiamond.serverplugin1201.items.armor.Trims.Components.TrimLore;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -10,6 +11,7 @@ import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ArmorMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
@@ -19,16 +21,135 @@ import java.util.List;
 public class UpdateItem {
 
     // TODO: Item keys for custom stats don't update in item tags, but update for in-game stats
-    public static void renewItem(ItemStack itemStack) {
+
+    // Updates the lore (best to call on recipe results)
+    public static List<String> renewLore(ItemStack itemStack) {
+
         List<String> newLore = new ArrayList<>();
+
+        if (itemStack != null && !itemStack.getType().isAir()) {
+            ItemMeta itemMeta = itemStack.getItemMeta();
+
+            if (itemMeta != null) {
+
+                // Trim Lore
+                try {
+                    ArmorMeta armorMeta = (ArmorMeta) itemMeta;
+                    List<String> trimLore = TrimLore.createLore(armorMeta);
+                    newLore.addAll(trimLore);
+
+                } catch (ClassCastException ignored) {
+                }
+
+                // Enchant Lore
+                for (Enchantment enchantment : itemMeta.getEnchants().keySet()) {
+                    newLore.add(ItemMappings.enchantString(enchantment, itemMeta));
+                }
+
+                // Item Lore
+                if (itemMeta.hasCustomModelData()) {
+
+                    Integer stars = ItemForger.getItemStars(itemStack);
+                    HashMap<Integer, ItemForger> itemProfiles = ItemMappings.itemForgerHashMap(stars);
+
+                    try {
+
+                        ItemForger itemForger = itemProfiles.get(itemMeta.getCustomModelData());
+                        List<String> lore = itemForger.getLore();
+
+                        if (lore != null) {
+                            newLore.addAll(lore);
+                        }
+
+                    } catch (NullPointerException exception) {
+                        Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Item found with no mapping! :(");
+                        Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Custom model data: " + itemMeta.getCustomModelData());
+
+                    }
+                }
+
+                return newLore;
+
+            } else {
+                return new ArrayList<>();
+            }
+        }
+
+        return new ArrayList<>();
+    }
+    public static List<String> renewLore(ItemStack itemStack, Player player) {
+        List<String> newLore = new ArrayList<>();
+
+        if (itemStack != null && !itemStack.getType().isAir()) {
+            ItemMeta itemMeta = itemStack.getItemMeta();
+
+            if (itemMeta != null) {
+
+                // Trim Lore
+                try {
+                    ArmorMeta armorMeta = (ArmorMeta) itemMeta;
+                    List<String> trimLore = TrimLore.createLore(armorMeta);
+                    newLore.addAll(trimLore);
+
+                } catch (ClassCastException ignored) {
+                }
+
+                // Enchant Lore
+                for (Enchantment enchantment : itemMeta.getEnchants().keySet()) {
+                    newLore.add(ItemMappings.enchantString(enchantment, itemMeta));
+
+                }
+
+                // Item Lore
+                if (itemMeta.hasCustomModelData()) {
+
+                    Integer stars = ItemForger.getItemStars(itemStack);
+                    HashMap<Integer, ItemForger> itemProfiles = ItemMappings.itemForgerHashMap(stars);
+                    HashMap<Integer, List<String>> playerLoreProfiles = ItemMappings.itemLoreHashMapPlayer(stars, player);
+
+                    try {
+
+                        ItemForger itemForger = itemProfiles.get(itemMeta.getCustomModelData());
+                        List<String> lore = itemForger.getLore();
+                        List<String> playerLore = playerLoreProfiles.get(itemMeta.getCustomModelData());
+
+                        if (lore != null) {
+                            if (itemProfiles.containsKey(itemMeta.getCustomModelData()) && !playerLoreProfiles.containsKey(itemMeta.getCustomModelData())) {
+                                newLore.addAll(lore);
+                            }
+                        }
+
+                        if (playerLore != null) {
+                            if (itemProfiles.containsKey(itemMeta.getCustomModelData()) && playerLoreProfiles.containsKey(itemMeta.getCustomModelData())) {
+                                newLore.addAll(playerLore);
+                            }
+                        }
+
+                    } catch (NullPointerException exception) {
+                        Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Item found with no mapping! :(");
+                        Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Custom model data: " + itemMeta.getCustomModelData());
+
+                    }
+                }
+
+                return newLore;
+
+            } else {
+                return new ArrayList<>();
+            }
+        }
+
+        return new ArrayList<>();
+    }
+
+    // Updates the entire item. Should be called when absolutely necessary
+    public static void renewItem(ItemStack itemStack) {
 
         if (itemStack != null) {
             if (itemStack.getType() != Material.AIR) {
                 ItemMeta itemMeta = itemStack.getItemMeta();
                 if (itemMeta != null) {
-                    for (Enchantment enchantment : itemMeta.getEnchants().keySet()) {
-                        ItemMappings.enchantString(enchantment, itemMeta);
-                    }
+                    List<String> lore = renewLore(itemStack);
 
                     if (itemMeta.hasCustomModelData()) {
 
@@ -38,7 +159,6 @@ public class UpdateItem {
                         try {
                             ItemForger itemForger = itemProfiles.get(itemMeta.getCustomModelData());
                             PluginItemRarity.Rarity itemRarity = itemForger.getRarity();
-                            List<String> lore = itemForger.getLore();
                             Multimap<Attribute, AttributeModifier> attributes = itemForger.getAttributes();
                             HashMap<ItemStatKeys, Double> itemStatMap = itemForger.getItemStats();
 
@@ -47,11 +167,6 @@ public class UpdateItem {
                             }
                             if (itemStatMap != null) {
                                 ItemForger.setItemStats(itemStack, itemStatMap);
-                            }
-                            if (lore != null) {
-                                for (String l : lore) {
-                                    newLore.add(l);
-                                }
                             }
                             if (attributes != null) {
                                 itemMeta.setAttributeModifiers(attributes);
@@ -65,28 +180,23 @@ public class UpdateItem {
                         }
                     }
 
-                    itemMeta.setLore(newLore);
+                    itemMeta.setLore(lore);
                     itemStack.setItemMeta(itemMeta);
                 } else {
-                    itemStack.setLore(null);
+                    itemStack.setLore(new ArrayList<>());
                 }
             }
         }
     }
     public static void renewItem(ItemStack itemStack, Player player) {
-        List<String> newLore = new ArrayList<>();
 
         if (itemStack != null) {
             if (itemStack.getType() != Material.AIR) {
                 ItemMeta itemMeta = itemStack.getItemMeta();
                 if (itemMeta != null) {
-
-                    for (Enchantment enchantment : itemMeta.getEnchants().keySet()) {
-                        newLore.add(ItemMappings.enchantString(enchantment, itemMeta));
-                    }
+                    List<String> lore = renewLore(itemStack, player);
 
                     if (itemMeta.hasCustomModelData()) {
-
 
                         Integer stars = ItemForger.getItemStars(itemStack);
 
@@ -95,7 +205,6 @@ public class UpdateItem {
                         try {
                             ItemForger itemForger = itemForgerProfiles.get(itemMeta.getCustomModelData());
                             PluginItemRarity.Rarity itemRarity = itemForger.getRarity();
-                            List<String> lore = itemForger.getLore();
                             Multimap<Attribute, AttributeModifier> attributes = itemForger.getAttributes();
                             HashMap<ItemStatKeys, Double> itemStatMap = itemForger.getItemStats();
 
@@ -107,29 +216,9 @@ public class UpdateItem {
                                 ItemForger.setItemStats(itemStack, itemStatMap);
                             }
 
-                            HashMap<Integer, List<String>> playerLoreMap = ItemMappings.itemLoreHashMapPlayer(stars, player);
-                            List<String> playerLore = playerLoreMap.get(itemMeta.getCustomModelData());
-
-                            if (lore != null) {
-                                for (String l : lore) {
-                                    if (itemForgerProfiles.containsKey(itemMeta.getCustomModelData()) && !playerLoreMap.containsKey(itemMeta.getCustomModelData())) {
-                                        newLore.add(l);
-                                    }
-
-                                }
-                            }
-                            if (playerLore != null) {
-                                for (String l : playerLore) {
-                                    if (itemForgerProfiles.containsKey(itemMeta.getCustomModelData()) && playerLoreMap.containsKey(itemMeta.getCustomModelData())) {
-                                        newLore.add(l);
-                                    }
-                                }
-                            }
                             if (attributes != null) {
                                 itemMeta.setAttributeModifiers(attributes);
                             }
-
-
 
                         } catch (NullPointerException exception) {
                             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Item found with no mapping! :(");
@@ -139,10 +228,10 @@ public class UpdateItem {
 
                     }
 
-                    itemMeta.setLore(newLore);
+                    itemMeta.setLore(lore);
                     itemStack.setItemMeta(itemMeta);
                 } else {
-                    itemStack.setLore(null);
+                    itemStack.setLore(new ArrayList<>());
                 }
             }
         }

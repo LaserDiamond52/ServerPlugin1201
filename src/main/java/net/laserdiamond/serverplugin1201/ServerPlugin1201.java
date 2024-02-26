@@ -26,6 +26,7 @@ import net.laserdiamond.serverplugin1201.items.armor.ArmorEquipStats;
 import net.laserdiamond.serverplugin1201.items.armor.Blaze.Config.BlazeArmorConfig;
 import net.laserdiamond.serverplugin1201.items.armor.StormLord.Components.StormLordArmorManager;
 import net.laserdiamond.serverplugin1201.items.armor.StormLord.Config.StormLordArmorConfig;
+import net.laserdiamond.serverplugin1201.items.armor.Trims.Config.ArmorTrimConfig;
 import net.laserdiamond.serverplugin1201.items.armor.Vanilla.Components.DiamondArmorManager;
 import net.laserdiamond.serverplugin1201.items.armor.Vanilla.Components.NetheriteArmorManager;
 import net.laserdiamond.serverplugin1201.items.armor.Vanilla.Config.VanillaArmorConfig;
@@ -50,6 +51,7 @@ public final class ServerPlugin1201 extends JavaPlugin {
 
     private BaseStatsConfig baseStatsConfig;
     private EnchantConfig enchantConfig;
+    private ArmorTrimConfig armorTrimConfig;
     private DiamondArmorManager diamondArmorManager;
     private NetheriteArmorManager netheriteArmorManager;
     private VanillaArmorConfig vanillaArmorConfig;
@@ -159,6 +161,9 @@ public final class ServerPlugin1201 extends JavaPlugin {
     public EnchantConfig getEnchantConfig() {
         return enchantConfig;
     }
+    public ArmorTrimConfig getArmorTrimConfig() {
+        return armorTrimConfig;
+    }
     public VanillaArmorConfig getVanillaArmorConfig() {
         return vanillaArmorConfig;
     }
@@ -175,6 +180,9 @@ public final class ServerPlugin1201 extends JavaPlugin {
 
         effectProfileConfig = new EffectProfileConfig(this, "effectDurations");
         effectProfileConfig.loadConfig();
+
+        armorTrimConfig = new ArmorTrimConfig(this, "trims");
+        armorTrimConfig.loadConfig();
 
         enchantConfig = new EnchantConfig(this, "enchants");
         enchantConfig.loadConfig();

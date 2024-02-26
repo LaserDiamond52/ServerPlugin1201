@@ -5,7 +5,6 @@ import net.laserdiamond.serverplugin1201.enchants.Components.EnchantsClass;
 import net.laserdiamond.serverplugin1201.items.armor.StormLord.Components.StormLordArmorManager;
 import net.laserdiamond.serverplugin1201.items.armor.Vanilla.Components.DiamondArmorManager;
 import net.laserdiamond.serverplugin1201.items.armor.Vanilla.Components.NetheriteArmorManager;
-import net.laserdiamond.serverplugin1201.items.crafting.SmithingTable.SmithingMenuItems;
 import net.laserdiamond.serverplugin1201.items.management.armor.ArmorTypes;
 import net.laserdiamond.serverplugin1201.items.management.misc.MenuItems;
 import net.laserdiamond.serverplugin1201.stats.Components.StatsItemManager;
@@ -53,11 +52,6 @@ public class ItemMappings implements Listener {
         // Menu Items
         for (MenuItems.MenuItemEnum menuItemEnum : MenuItems.MenuItemEnum.values()) {
             itemForgerHashMap.put(menuItemEnum.getCmd(), MenuItems.createMenuItem(menuItemEnum));
-        }
-
-
-        for (SmithingMenuItems.SmithingItemEnum smithingItemEnum : SmithingMenuItems.SmithingItemEnum.values()) {
-            itemForgerHashMap.put(SmithingMenuItems.createEquipmentItem(smithingItemEnum).getCustomModelData(), SmithingMenuItems.createEquipmentItem(smithingItemEnum));
         }
 
         // Armor Items
@@ -471,14 +465,12 @@ public class ItemMappings implements Listener {
     // Item Mappings for "plugingive" command
     public enum ItemMaps {
 
-        DIAMOND_BOOTS (diamondArmorManager.createArmorPiece(ArmorTypes.BOOTS, 0), "diamond_boots"),
-        DIAMOND_LEGGINGS (diamondArmorManager.createArmorPiece(ArmorTypes.LEGGINGS, 0), "diamond_leggings"),
-        DIAMOND_CHESTPLATE (diamondArmorManager.createArmorPiece(ArmorTypes.CHESTPLATE, 0), "diamond_chestplate"),
-        DIAMOND_HELMET (diamondArmorManager.createArmorPiece(ArmorTypes.HELMET, 0), "diamond_helmet"),
+
         NETHERITE_BOOTS (netheriteArmorManager.createArmorPiece(ArmorTypes.BOOTS, 0), "netherite_boots"),
         NETHERITE_LEGGINGS (netheriteArmorManager.createArmorPiece(ArmorTypes.LEGGINGS, 0), "netherite_leggings"),
         NETHERITE_CHESTPLATE (netheriteArmorManager.createArmorPiece(ArmorTypes.CHESTPLATE, 0), "netherite_chestplate"),
         NETHERITE_HELMET (netheriteArmorManager.createArmorPiece(ArmorTypes.HELMET, 0), "netherite_helmet"),
+
         STORM_LORD_BOOTS (stormLordArmorManager.createArmorPiece(ArmorTypes.BOOTS, 0), "storm_lord_boots"),
         STORM_LORD_LEGGINGS (stormLordArmorManager.createArmorPiece(ArmorTypes.LEGGINGS, 0),"storm_lord_leggings"),
         STORM_LORD_CHESTPLATE (stormLordArmorManager.createArmorPiece(ArmorTypes.CHESTPLATE, 0), "storm_lord_chestplate"),

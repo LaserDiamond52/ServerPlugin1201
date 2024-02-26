@@ -2,8 +2,8 @@ package net.laserdiamond.serverplugin1201.commands.Effects;
 
 import net.laserdiamond.serverplugin1201.ServerPlugin1201;
 import net.laserdiamond.serverplugin1201.events.effects.Managers.EffectManager;
-import net.laserdiamond.serverplugin1201.Management.EffectKeys;
-import net.laserdiamond.serverplugin1201.Management.messages.messages;
+import net.laserdiamond.serverplugin1201.management.EffectKeys;
+import net.laserdiamond.serverplugin1201.management.messages.messages;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.*;

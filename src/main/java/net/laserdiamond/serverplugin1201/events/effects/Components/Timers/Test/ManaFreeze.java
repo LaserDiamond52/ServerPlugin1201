@@ -1,7 +1,7 @@
 package net.laserdiamond.serverplugin1201.events.effects.Components.Timers.Test;
 
 import net.laserdiamond.serverplugin1201.events.effects.Components.TimerMethods;
-import net.laserdiamond.serverplugin1201.Management.messages.messages;
+import net.laserdiamond.serverplugin1201.management.messages.messages;
 import org.bukkit.entity.LivingEntity;
 
 import java.util.HashMap;

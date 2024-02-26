@@ -1,4 +1,4 @@
-package net.laserdiamond.serverplugin1201.Management.messages;
+package net.laserdiamond.serverplugin1201.management.messages;
 
 import org.bukkit.ChatColor;
 
