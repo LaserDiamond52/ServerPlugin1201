@@ -20,14 +20,16 @@ import org.bukkit.inventory.meta.trim.TrimPattern;
 
 import java.util.HashMap;
 
-public class SmithingTableCrafting implements Listener {
+public class SmithingTableCrafting implements Listener
+{
 
     private ServerPlugin1201 plugin;
     public SmithingTableCrafting(ServerPlugin1201 plugin) {
         this.plugin = plugin;
     }
 
-    public static void init() {
+    public static void init()
+    {
         //recipeTest();
     }
 
@@ -45,7 +47,8 @@ public class SmithingTableCrafting implements Listener {
 
     // HashMap for Determining Trim Material
     public final static HashMap<Material, TrimMaterial> trimMaterialMap = new HashMap<>();
-    static {
+    static
+    {
         trimMaterialMap.put(Material.COPPER_INGOT, TrimMaterial.COPPER);
         trimMaterialMap.put(Material.GOLD_INGOT, TrimMaterial.GOLD);
         trimMaterialMap.put(Material.IRON_INGOT, TrimMaterial.IRON);
@@ -60,7 +63,8 @@ public class SmithingTableCrafting implements Listener {
 
     // HashMap for determining trim pattern
     public final static HashMap<Material, TrimPattern> trimPatternMap = new HashMap<>();
-    static {
+    static
+    {
         trimPatternMap.put(Material.SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE, TrimPattern.SENTRY);
         trimPatternMap.put(Material.VEX_ARMOR_TRIM_SMITHING_TEMPLATE, TrimPattern.VEX);
         trimPatternMap.put(Material.WILD_ARMOR_TRIM_SMITHING_TEMPLATE, TrimPattern.WILD);
@@ -87,24 +91,31 @@ public class SmithingTableCrafting implements Listener {
         ItemStack materialInput = smithingInventory.getInputMineral();
         ItemStack templateInput = smithingInventory.getInputTemplate();
 
-        ItemStack resultItemStack = SmithingTableRecipes.Recipes.createResult(equipmentInput, materialInput, templateInput);
-        event.setResult(resultItemStack);
+        if (templateInput != null && materialInput != null && equipmentInput != null)
+        {
+            // TODO: Check if result is correct result, otherwise return air
+
+            ItemStack resultTestStack = SmithingTableRecipes.Recipes.createResultTest(equipmentInput, materialInput, templateInput);
+            event.setResult(resultTestStack);
+            //ItemStack resultItemStack = SmithingTableRecipes.Recipes.createResult(equipmentInput, materialInput, templateInput);
+            //event.setResult(resultItemStack);
+        }
 
         // Try to make armor trim
-        try {
-            if (templateInput != null && materialInput != null && equipmentInput != null) {
-
+        try
+        {
+            if (templateInput != null && materialInput != null && equipmentInput != null)
+            {
                 ItemMeta templateInputMeta = templateInput.getItemMeta();
                 ItemMeta materialInputMeta = materialInput.getItemMeta();
 
                 // Make sure template DOES NOT have customModelData
-
-                // Want to apply trim
-                if (templateInputMeta != null && materialInputMeta != null) {
-                    if (!templateInputMeta.hasCustomModelData() && !materialInputMeta.hasCustomModelData()) {
-
-                        // Check if HashMaps have key for material
-                        if (trimPatternMap.containsKey(templateInput.getType()) && trimMaterialMap.containsKey(materialInput.getType())) {
+                if (templateInputMeta != null && materialInputMeta != null) // Want to apply trim
+                {
+                    if (!templateInputMeta.hasCustomModelData() && !materialInputMeta.hasCustomModelData())
+                    {
+                        if (trimPatternMap.containsKey(templateInput.getType()) && trimMaterialMap.containsKey(materialInput.getType())) // Check if HashMaps have key for material
+                        {
                             TrimPattern patternToAdd = trimPatternMap.get(templateInput.getType());
                             TrimMaterial materialToAdd = trimMaterialMap.get(materialInput.getType());
 
@@ -120,17 +131,20 @@ public class SmithingTableCrafting implements Listener {
                     }
                 }
             }
-        } catch (ClassCastException ignored) {
-
+        }
+        catch (ClassCastException ignored)
+        {
         }
     }
 
     @EventHandler
-    public void smithingTableCollectResult(InventoryClickEvent event) {
+    public void smithingTableCollectResult(InventoryClickEvent event)
+    {
 
         Player player = (Player) event.getWhoClicked();
 
-        if (event.getClickedInventory() instanceof SmithingInventory) {
+        if (event.getClickedInventory() instanceof SmithingInventory)
+        {
 
             ItemStack resultItem = event.getClickedInventory().getItem(3);
             ItemStack equipmentItemRawSlot = event.getClickedInventory().getItem(1);
@@ -141,36 +155,44 @@ public class SmithingTableCrafting implements Listener {
             if (slotClicked == 3) {
                 boolean ready = false;
 
-                for (SmithingTableRecipes.Recipes recipes : SmithingTableRecipes.Recipes.values()) {
-                    ItemStack result = recipes.getResult();
+                for (SmithingTableRecipes.Recipes recipes : SmithingTableRecipes.Recipes.values())
+                {
+                    ItemStack recipesResult = recipes.getResult();
                     ItemStack equipment = recipes.getSmithingRecipe().getEquipmentItem();
                     ItemStack material = recipes.getSmithingRecipe().getMaterialItem();
                     ItemStack template = recipes.getSmithingRecipe().getTemplateItem();
 
-                    if (resultItem != null && equipmentItemRawSlot != null && templateItemRawSlot != null && materialItemRawSlot != null) {
-                        if (resultItem.getType().equals(result.getType())) {
-
+                    if (resultItem != null && equipmentItemRawSlot != null && templateItemRawSlot != null && materialItemRawSlot != null)
+                    {
+                        if (resultItem.getType().equals(recipesResult.getType()))
+                        {
                             ItemMeta resultItemMeta = resultItem.getItemMeta();
-                            ItemMeta resultMeta = result.getItemMeta();
+                            ItemMeta resultMeta = recipesResult.getItemMeta();
 
-                            if (resultItemMeta != null && resultMeta != null) {
-
-                                if (resultItemMeta.hasCustomModelData() && resultMeta.hasCustomModelData()) {
-
-                                    if (resultItemMeta.getCustomModelData() == resultMeta.getCustomModelData()) {
+                            if (resultItemMeta != null && resultMeta != null)
+                            {
+                                if (resultItemMeta.hasCustomModelData() && resultMeta.hasCustomModelData())
+                                {
+                                    if (resultItemMeta.getCustomModelData() == resultMeta.getCustomModelData())
+                                    {
                                         ready = true;
                                     }
-                                } else if (!resultItemMeta.hasCustomModelData() && !resultMeta.hasCustomModelData()) {
+                                } else if (!resultItemMeta.hasCustomModelData() && !resultMeta.hasCustomModelData())
+                                {
                                     ready = true;
                                 }
 
-                                if (ready) {
+                                if (ready)
+                                {
                                     equipmentItemRawSlot.setAmount(equipmentItemRawSlot.getAmount() - equipment.getAmount());
                                     materialItemRawSlot.setAmount(materialItemRawSlot.getAmount() - material.getAmount());
                                     templateItemRawSlot.setAmount(templateItemRawSlot.getAmount() - template.getAmount());
 
                                     player.playSound(player, Sound.BLOCK_SMITHING_TABLE_USE, 100, 1);
-                                    event.setCurrentItem(SmithingTableRecipes.Recipes.createResult(equipmentItemRawSlot, materialItemRawSlot, templateItemRawSlot));
+
+                                    // TODO: Check if result is correct result, otherwise return air
+
+                                    event.setCurrentItem(SmithingTableRecipes.Recipes.createResultTest(equipmentItemRawSlot, materialItemRawSlot, templateItemRawSlot));
                                     event.setCursor(resultItem);
                                 }
                             }

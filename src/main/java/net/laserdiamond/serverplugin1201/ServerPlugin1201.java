@@ -8,6 +8,7 @@ import net.laserdiamond.serverplugin1201.enchants.Components.EnchantListeners;
 import net.laserdiamond.serverplugin1201.enchants.Components.EnchantPlayerHeadHelmets;
 import net.laserdiamond.serverplugin1201.enchants.Components.EnchantsClass;
 import net.laserdiamond.serverplugin1201.enchants.Config.EnchantConfig;
+import net.laserdiamond.serverplugin1201.enchants.anvil.AnvilInvetoryGUI;
 import net.laserdiamond.serverplugin1201.events.CancelInventoryMovementMenus;
 import net.laserdiamond.serverplugin1201.events.Stats.DamageEvent;
 import net.laserdiamond.serverplugin1201.events.Stats.DefenseEvent;
@@ -103,6 +104,9 @@ public final class ServerPlugin1201 extends JavaPlugin {
         // Smithing Table Inventory
         getServer().getPluginManager().registerEvents(new SmithingTableCrafting(this),this);
         //SmithingTableCrafting.init();
+
+        // Anvil Inventory GUI
+        getServer().getPluginManager().registerEvents(new AnvilInvetoryGUI(this),this);
 
         // Register Commands
         getCommand("plugineffect").setExecutor(new EffectsCommand(this));
