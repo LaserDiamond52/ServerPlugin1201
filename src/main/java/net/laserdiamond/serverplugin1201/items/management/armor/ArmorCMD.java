@@ -138,14 +138,19 @@ public enum ArmorCMD {
         {
             if (armorPiece != null) {
 
-                if (isAnyArmorPiece(armorPiece, armorCMD)) {
-                    if (matchCount == 0) {
+                // TODO: More checks may be needed. Not final
+                if (isAnyArmorPiece(armorPiece, armorCMD)) // Check if armorPiece is any armor piece we want to match
+                {
+                    if (matchCount == 0)
+                    {
                         matchCount++;
-                    } else if (matchCount == 1) {
+                    } else if (matchCount == 1)
+                    {
                         matchCount++;
-                    } else if (matchCount == 2) {
+                    } else if (matchCount == 2)
+                    {
                         matchCount++;
-                    } else if (matchCount >= 3) {
+                    } else { // Break out of loop after attempts to match
                         break;
                     }
                 }
