@@ -1,5 +1,10 @@
 package net.laserdiamond.serverplugin1201.items.management.armor;
 
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.ItemMeta;
+
 public enum ArmorCMD {
 
     DIAMOND_ARMOR (37, 38, 39, 40),
@@ -62,6 +67,138 @@ public enum ArmorCMD {
         this.chestplateStar3 = chestplateStar3;
         this.leggingsStar3 = leggingsStar3;
         this.bootsStar3 = bootsStar3;
+    }
+
+    public static boolean isArmorPiece (ItemStack itemStack, ArmorCMD armorCMD, ArmorTypes armorTypes)
+    {
+
+        if (itemStack != null)  // Check that itemStack is not null
+        {
+            ItemMeta itemMeta = itemStack.getItemMeta();
+            if (itemMeta != null && itemMeta.hasCustomModelData())  // Check itemMeta is not null and has customModelData
+            {
+                int cmd = itemMeta.getCustomModelData();
+                switch (armorTypes) { // Check for which armor piece we pass through
+                    case HELMET -> {
+                        if (cmd == armorCMD.getHelmet()) {
+                            return true;
+                        }
+                    }
+                    case CHESTPLATE -> {
+                        if (cmd == armorCMD.getChestplate()) {
+                            return true;
+                        }
+                    }
+                    case LEGGINGS -> {
+                        if (cmd == armorCMD.getLeggings()) {
+                            return true;
+                        }
+                    }
+                    case BOOTS -> {
+                        if (cmd == armorCMD.getBoots()) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public static boolean isAnyArmorPiece (ItemStack itemStack, ArmorCMD armorCMD) {
+
+        if (itemStack != null) {
+            ItemMeta itemMeta = itemStack.getItemMeta();
+            if (itemMeta != null && itemMeta.hasCustomModelData())
+            {
+                int cmd = itemMeta.getCustomModelData();
+                if (cmd == armorCMD.getHelmet() || cmd == armorCMD.getChestplate() || cmd == armorCMD.getLeggings() || cmd == armorCMD.getBoots())
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean isWearingThreePcs (Player player, ArmorCMD armorCMD) {
+
+        PlayerInventory pInv = player.getInventory();
+        ItemStack helmet = pInv.getHelmet(), chestplate = pInv.getChestplate(), leggings = pInv.getLeggings(), boots = pInv.getBoots();
+
+        ItemStack[] armorContents = pInv.getArmorContents();
+        int matchCount = 0;
+        int hlmtToMatch = armorCMD.helmet;
+        int chstpltToMatch = armorCMD.chestplate;
+        int lggngsToMatch = armorCMD.leggings;
+        int btsToMatch = armorCMD.boots;
+        ItemMeta armorPcMeta;
+        for (ItemStack armorPiece : armorContents)
+        {
+            if (armorPiece != null) {
+
+                if (isAnyArmorPiece(armorPiece, armorCMD)) {
+                    if (matchCount == 0) {
+                        matchCount++;
+                    } else if (matchCount == 1) {
+                        matchCount++;
+                    } else if (matchCount == 2) {
+                        matchCount++;
+                    } else if (matchCount >= 3) {
+                        break;
+                    }
+                }
+
+                /*
+                armorPcMeta = armorPiece.getItemMeta();
+                if (armorPcMeta != null && armorPcMeta.hasCustomModelData())
+                {
+                    cmd = armorPcMeta.getCustomModelData();
+                    if (matchCount == 0)
+                    {
+                        if (cmd == armorCMD.helmet)
+                        {
+                            matchCount++;
+                        }
+                    }
+
+                    if (matchCount >= 0)
+                    {
+                        if (cmd == armorCMD.chestplate)
+                        {
+                            matchCount++;
+                        }
+                    }
+
+                    if (matchCount >= 1)
+                    {
+
+                    } else
+                    {
+                        break;
+                    }
+
+                    if (matchCount >= 2)
+                    {
+
+                    } else
+                    {
+                        break;
+                    }
+                }
+
+                 */
+
+
+            }
+        }
+        if (matchCount >= 3)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     public Integer getHelmet() {
