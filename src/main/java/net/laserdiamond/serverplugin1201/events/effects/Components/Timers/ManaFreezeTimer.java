@@ -23,8 +23,8 @@ public class ManaFreezeTimer {
         manaFreezeAmp.put(livingEntity.getUniqueId(), amplifier);
 
         while (manaFreezeTimer.get(livingEntity.getUniqueId()) == 0 && manaFreezeAmp.get(livingEntity.getUniqueId()) > 0) {
-            manaFreezeAmp.put(livingEntity.getUniqueId(), 0);
             livingEntity.sendMessage("Mana freeze gone!");
+            manaFreezeAmp.put(livingEntity.getUniqueId(), 0);
         }
     }
 

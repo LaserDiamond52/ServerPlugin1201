@@ -155,6 +155,8 @@ public class SmithingTableCrafting implements Listener
             if (slotClicked == 3) {
                 boolean ready = false;
 
+                // TODO: Optimize more!!!
+                // Take more stuff out of for-loop
                 for (SmithingTableRecipes.Recipes recipes : SmithingTableRecipes.Recipes.values())
                 {
                     ItemStack recipesResult = recipes.getResult();

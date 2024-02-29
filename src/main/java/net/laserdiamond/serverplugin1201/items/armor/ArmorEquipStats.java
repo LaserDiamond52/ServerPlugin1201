@@ -204,4 +204,24 @@ public class ArmorEquipStats implements Listener {
         }
     }
 
+    public static boolean isWearingFullSet(Player player, int helmetCMD, int chestplateCMD, int leggingsCMD, int bootsCMD)
+    {
+        ItemStack helmet = player.getInventory().getHelmet(), chestplate = player.getInventory().getChestplate(), leggings = player.getInventory().getLeggings(), boots = player.getInventory().getBoots();
+
+        if (helmet != null && chestplate != null && leggings != null && boots != null)
+        {
+            ItemMeta helmetMeta = helmet.getItemMeta(), chestplateMeta = chestplate.getItemMeta(), leggingsMeta = leggings.getItemMeta(), bootsMeta = boots.getItemMeta();
+            if (helmetMeta != null && chestplateMeta != null && leggingsMeta != null && bootsMeta != null)
+            {
+                if (helmetMeta.hasCustomModelData() && chestplateMeta.hasCustomModelData() && leggingsMeta.hasCustomModelData() && bootsMeta.hasCustomModelData())
+                {
+                    if (helmetMeta.getCustomModelData() == helmetCMD && chestplateMeta.getCustomModelData() == chestplateCMD && leggingsMeta.getCustomModelData() == leggingsCMD && bootsMeta.getCustomModelData() == bootsCMD)
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 }

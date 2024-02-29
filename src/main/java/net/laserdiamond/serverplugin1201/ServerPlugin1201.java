@@ -25,6 +25,8 @@ import net.laserdiamond.serverplugin1201.events.effects.Config.EffectProfileConf
 import net.laserdiamond.serverplugin1201.events.effects.Managers.EffectManager;
 import net.laserdiamond.serverplugin1201.items.armor.ArmorEquipStats;
 import net.laserdiamond.serverplugin1201.items.armor.Blaze.Config.BlazeArmorConfig;
+import net.laserdiamond.serverplugin1201.items.armor.StormLord.Components.EyeOfStormCooldown;
+import net.laserdiamond.serverplugin1201.items.armor.StormLord.Components.StormLordArmorListeners;
 import net.laserdiamond.serverplugin1201.items.armor.StormLord.Components.StormLordArmorManager;
 import net.laserdiamond.serverplugin1201.items.armor.StormLord.Config.StormLordArmorConfig;
 import net.laserdiamond.serverplugin1201.items.armor.Trims.Config.ArmorTrimConfig;
@@ -76,6 +78,7 @@ public final class ServerPlugin1201 extends JavaPlugin {
         createItemManagers();
         EnchantsClass.register();
         createTimers();
+        setUpCooldowns();
         getServer().getPluginManager().registerEvents(new PlayerJoinServer(this), this);
 
         // Register timers
@@ -93,6 +96,7 @@ public final class ServerPlugin1201 extends JavaPlugin {
         // Armor stats
         getServer().getPluginManager().registerEvents(new ArmorEquipStats(this),this);
         getServer().getPluginManager().registerEvents(new DefenseEvent(this),this);
+        registerStormArmorListeners();
 
         // Enchants
         getServer().getPluginManager().registerEvents(new EnchantListeners(this),this);
@@ -224,6 +228,9 @@ public final class ServerPlugin1201 extends JavaPlugin {
         manaRegen = new ManaRegen(this).runTaskTimer(this, 0L, 20L);
         effectTimer = new EffectTimer(this).runTaskTimer(this, 0L, 20L);
     }
+    private void setUpCooldowns() {
+        EyeOfStormCooldown.setUpCooldown();
+    }
 
     private void saveProfilesToConfigs() {
         effectManager.saveProfilesToConfig();
@@ -242,5 +249,9 @@ public final class ServerPlugin1201 extends JavaPlugin {
         if (effectTimer != null && !effectTimer.isCancelled()) {
             effectTimer.cancel();
         }
+    }
+
+    private void registerStormArmorListeners() {
+        getServer().getPluginManager().registerEvents(new StormLordArmorListeners(this),this);
     }
 }

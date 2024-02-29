@@ -3,6 +3,7 @@ package net.laserdiamond.serverplugin1201.items.armor.StormLord.Components;
 import com.google.common.collect.Multimap;
 import net.laserdiamond.serverplugin1201.ServerPlugin1201;
 import net.laserdiamond.serverplugin1201.enchants.Components.EnchantsClass;
+import net.laserdiamond.serverplugin1201.items.armor.ArmorEquipStats;
 import net.laserdiamond.serverplugin1201.items.armor.StormLord.Config.StormLordArmorConfig;
 import net.laserdiamond.serverplugin1201.items.management.ItemForger;
 import net.laserdiamond.serverplugin1201.items.management.ItemNameBuilder;
@@ -202,23 +203,23 @@ public class StormLordArmorManager implements ArmorFabricate {
 
             if (armorTypes.equals(ArmorTypes.HELMET)) {
                 itemForger = new ItemForger(Material.PLAYER_HEAD);
-                itemForger.setPlayerHeadSkin(HelmetURL, ArmorCMD.STORM_ARMOR_LORD.getHelmet(), ArmorCMD.STORM_ARMOR_LORD.getHelmet());
-                itemForger.setCustomModelData(ArmorCMD.STORM_ARMOR_LORD.getHelmet());
+                itemForger.setPlayerHeadSkin(HelmetURL, ArmorCMD.STORM_LORD_ARMOR.getHelmet(), ArmorCMD.STORM_LORD_ARMOR.getHelmet());
+                itemForger.setCustomModelData(ArmorCMD.STORM_LORD_ARMOR.getHelmet());
 
             } else if (armorTypes.equals(ArmorTypes.CHESTPLATE)) {
                 itemForger = new ItemForger(Material.LEATHER_CHESTPLATE);
                 itemForger.LeatherArmorColor(0,213,255);
-                itemForger.setCustomModelData(ArmorCMD.STORM_ARMOR_LORD.getChestplate());
+                itemForger.setCustomModelData(ArmorCMD.STORM_LORD_ARMOR.getChestplate());
 
             } else if (armorTypes.equals(ArmorTypes.LEGGINGS)) {
                 itemForger = new ItemForger(Material.LEATHER_LEGGINGS);
                 itemForger.LeatherArmorColor(0,160,191);
-                itemForger.setCustomModelData(ArmorCMD.STORM_ARMOR_LORD.getLeggings());
+                itemForger.setCustomModelData(ArmorCMD.STORM_LORD_ARMOR.getLeggings());
 
             } else if (armorTypes.equals(ArmorTypes.BOOTS)) {
                 itemForger = new ItemForger(Material.LEATHER_BOOTS);
                 itemForger.LeatherArmorColor(0,124,148);
-                itemForger.setCustomModelData(ArmorCMD.STORM_ARMOR_LORD.getBoots());
+                itemForger.setCustomModelData(ArmorCMD.STORM_LORD_ARMOR.getBoots());
 
             } else {
                 // TODO: Throw some error here or something idk
@@ -245,5 +246,12 @@ public class StormLordArmorManager implements ArmorFabricate {
         return itemForger;
     }
 
-
+    public static boolean isWearingFullSet(Player player)
+    {
+        if (ArmorEquipStats.isWearingFullSet(player, ArmorCMD.STORM_LORD_ARMOR.getHelmet(), ArmorCMD.STORM_LORD_ARMOR.getChestplate(), ArmorCMD.STORM_LORD_ARMOR.getLeggings(), ArmorCMD.STORM_LORD_ARMOR.getBoots()))
+        {
+            return true;
+        }
+        return false;
+    }
 }

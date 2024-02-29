@@ -3,24 +3,24 @@ package net.laserdiamond.serverplugin1201.events.Stats;
 import net.laserdiamond.serverplugin1201.ServerPlugin1201;
 import net.laserdiamond.serverplugin1201.stats.Components.Stats;
 import net.laserdiamond.serverplugin1201.stats.Manager.StatProfileManager;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.text.DecimalFormat;
 
 public class DamageEvent implements Listener {
 
-    private ServerPlugin1201 plugin;
-    private StatProfileManager statProfileManager;
+    private final ServerPlugin1201 plugin;
+    private final StatProfileManager statProfileManager;
+    public static final NamespacedKey magicDmgKey = new NamespacedKey("damage","magic");
 
     public DamageEvent(ServerPlugin1201 plugin) {
         this.plugin = plugin;
@@ -32,15 +32,14 @@ public class DamageEvent implements Listener {
 
         double damage = event.getDamage();
 
+        // Melee Damage
         if (event.getDamager() instanceof Player player) {
 
             Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).getStats();
 
             double baseMelee = stats.getBaseMeleeDamage();
-            double baseMagic = stats.getBaseMagicDamage();
 
             double meleeIncrease = 1 + stats.getMeleeDamage() * 0.01;
-            double magicIncrease = 1 + stats.getMagicDamage() * 0.01;
 
             EntityDamageEvent.DamageCause damageCause = event.getCause();
 
@@ -52,20 +51,47 @@ public class DamageEvent implements Listener {
 
         }
 
-        if (event.getDamager() instanceof Arrow arrow) {
+        // Magic Damage
+        if (event.getDamager() instanceof ThrownPotion thrownPotion)
+        {
+            if (thrownPotion.getShooter() instanceof Player player) // Check if shooter is a player
+            {
+                PotionMeta potionMeta = thrownPotion.getPotionMeta();
+                if (potionMeta.getPersistentDataContainer().get(magicDmgKey, PersistentDataType.DOUBLE) != null &&
+                        potionMeta.getPersistentDataContainer().has(magicDmgKey))
+                {
+                    // Increase damage based on magic stats
+                    Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).getStats();
+                    //double baseSpellDmg = potionMeta.getPersistentDataContainer().get(magicDmgKey, PersistentDataType.DOUBLE);
+                    double baseMagic = stats.getBaseMagicDamage();
+                    double magicIncrease = 1 + stats.getMagicDamage() * 0.01;
+                    double finalMagicDamage = (baseMagic + damage) * magicIncrease;
 
-            if (arrow.getShooter() instanceof Player player) {
+                    if (event.getEntity() instanceof LivingEntity)
+                    {
+                        event.setDamage(finalMagicDamage); // Set final damage
+                    }
+                }
 
+            }
+        }
+
+        // Range Damage
+        if (event.getDamager() instanceof Arrow arrow)
+        {
+            if (arrow.getShooter() instanceof Player player) // Check if shooter of arrow is a player
+            {
+                // Increase damage based on range stats
                 Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).getStats();
                 double baseRange = stats.getBaseRangeDamage();
                 double rangeIncrease = 1 + stats.getRangeDamage() * 0.01;
                 double finalArrowDamage = (baseRange + damage) * rangeIncrease;
 
-                if (event.getEntity() instanceof LivingEntity) {
+                if (event.getEntity() instanceof LivingEntity) // Check if hit entity is a living entity
+                {
+                    player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP,100,1); // Arrow ping sound
 
-                    // Arrow ping sound
-                    player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP,100,1);
-                    event.setDamage(finalArrowDamage);
+                    event.setDamage(finalArrowDamage); // Set final damage
 
                 }
             }
@@ -123,6 +149,5 @@ public class DamageEvent implements Listener {
             }
         }
     }
-
 
 }
