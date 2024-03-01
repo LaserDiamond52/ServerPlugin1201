@@ -31,8 +31,10 @@ public class ViewStats implements CommandExecutor {
                 }
 
                 ItemStack[] contents = statInventory.getContents();
+                ItemStack itemStack;
                 int i = 0;
-                for (ItemStack itemStack : contents) {
+                while (i < contents.length) {
+                    itemStack = contents[i];
                     if (itemStack == null) {
                         statInventory.setItem(i, MenuItems.createMenuItem(MenuItems.MenuItemEnum.BLANK_ITEM).toItemStack());
                     }
