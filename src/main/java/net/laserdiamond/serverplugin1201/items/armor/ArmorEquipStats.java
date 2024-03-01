@@ -118,7 +118,7 @@ public class ArmorEquipStats implements Listener {
 
         if (health != null) {
             stats.setHealth(currentHealth + health);
-            player.setMaxHealth(playerHealth + health);
+            playerHealthInstance.setBaseValue(playerHealth + health);
         }
         if (armor != null) {
             stats.setDefense(currentArmor + armor);
@@ -156,7 +156,7 @@ public class ArmorEquipStats implements Listener {
 
         if (health != null) {
             stats.setHealth(currentHealth - health);
-            player.setMaxHealth(playerHealth - health);
+            playerHealthInstance.setBaseValue(playerHealth - health);
         }
         if (armor != null) {
             stats.setDefense(currentArmor - armor);

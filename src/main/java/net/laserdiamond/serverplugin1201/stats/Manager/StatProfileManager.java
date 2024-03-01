@@ -8,6 +8,8 @@ import net.laserdiamond.serverplugin1201.items.armor.Trims.Manager.ArmorTrimStat
 import net.laserdiamond.serverplugin1201.stats.Components.StatProfile;
 import net.laserdiamond.serverplugin1201.stats.Components.Stats;
 import net.laserdiamond.serverplugin1201.stats.Config.BaseStatsConfig;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -51,6 +53,10 @@ public class StatProfileManager {
 
         StatProfile statProfile = new StatProfile(stats, enchantStats, armorTrimStats);
         statProfiles.put(player.getUniqueId(), statProfile);
+
+        AttributeInstance playerHealthInstance = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+        playerHealthInstance.setBaseValue(20);
+
         return statProfile;
     }
 

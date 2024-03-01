@@ -132,28 +132,32 @@ public enum ArmorCMD {
         // Index 2: Chestplate
         // Index 3: Helmet
 
-        ItemStack[] myArmorContents = new ItemStack[]{pInv.getHelmet(), pInv.getChestplate(), pInv.getLeggings(), pInv.getBoots()};
-
-
         int matchCount = 0;
         int i = 0;
-        ItemStack armorStack;
-        int hlmtToMatch = armorCMD.helmet;
-        int chstpltToMatch = armorCMD.chestplate;
-        int lggngsToMatch = armorCMD.leggings;
-        int btsToMatch = armorCMD.boots;
+        //ItemStack armorStack;
+        int[] cmdsToMatch = new int[]{armorCMD.helmet, armorCMD.chestplate, armorCMD.leggings, armorCMD.boots};
 
-        while (i < armorContents.length) {
-            armorStack = armorContents[i];
-            if (armorStack != null) {
+        for (ItemStack armorStack : armorContents)
+        {
+            if (armorStack != null)
+            {
                 ItemMeta armorMeta = armorStack.getItemMeta();
                 if (armorMeta != null && armorMeta.hasCustomModelData())
                 {
-                    player.sendMessage(i + " " + armorMeta.getDisplayName());
+                    int cmd = armorMeta.getCustomModelData();
+                    for (int cmdMatch : cmdsToMatch) {
+                        if (cmd == cmdMatch) {
+                            if (matchCount == 3) {
+                                break;
+                            } else {
+                                matchCount++;
+                            }
+
+                        }
+
+                    }
                 }
             }
-
-            i++;
         }
 
 
