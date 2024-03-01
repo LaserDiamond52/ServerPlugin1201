@@ -133,8 +133,6 @@ public enum ArmorCMD {
         // Index 3: Helmet
 
         int matchCount = 0;
-        int i = 0;
-        //ItemStack armorStack;
         int[] cmdsToMatch = new int[]{armorCMD.helmet, armorCMD.chestplate, armorCMD.leggings, armorCMD.boots};
 
         for (ItemStack armorStack : armorContents)
@@ -147,21 +145,20 @@ public enum ArmorCMD {
                     int cmd = armorMeta.getCustomModelData();
                     for (int cmdMatch : cmdsToMatch) {
                         if (cmd == cmdMatch) {
-                            if (matchCount == 3) {
+                            if (matchCount == 4) // Check for 4 because player will already have 3/4 on
+                            {
                                 break;
                             } else {
                                 matchCount++;
                             }
-
                         }
-
                     }
                 }
             }
         }
 
 
-        if (matchCount >= 3)
+        if (matchCount >= 4)
         {
             return true;
         }
