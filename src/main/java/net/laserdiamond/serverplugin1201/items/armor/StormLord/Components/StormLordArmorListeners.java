@@ -128,11 +128,19 @@ public class StormLordArmorListeners implements Listener {
 
         // Apply effect
 
+        if (ArmorCMD.isAnyArmorPiece(newItem, ArmorCMD.STORM_LORD_ARMOR))
+        {
+            if (ArmorCMD.isWearingThreePcs(player, ArmorCMD.STORM_LORD_ARMOR))
+            {
 
+            }
+        }
 
         // Remove effect
-        if (ArmorCMD.isAnyArmorPiece(oldItem, ArmorCMD.STORM_LORD_ARMOR)) {
-            if (player.hasPotionEffect(PotionEffectType.CONDUIT_POWER)) {
+        if (ArmorCMD.isAnyArmorPiece(oldItem, ArmorCMD.STORM_LORD_ARMOR))
+        {
+            if (player.hasPotionEffect(PotionEffectType.CONDUIT_POWER))
+            {
                 player.removePotionEffect(PotionEffectType.CONDUIT_POWER);
             }
         }

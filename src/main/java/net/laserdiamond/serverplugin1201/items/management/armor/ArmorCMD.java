@@ -125,79 +125,38 @@ public enum ArmorCMD {
     public static boolean isWearingThreePcs (Player player, ArmorCMD armorCMD) {
 
         PlayerInventory pInv = player.getInventory();
-        ItemStack helmet = pInv.getHelmet(), chestplate = pInv.getChestplate(), leggings = pInv.getLeggings(), boots = pInv.getBoots();
 
         ItemStack[] armorContents = pInv.getArmorContents();
+        // Index 0: Boots
+        // Index 1: Leggings
+        // Index 2: Chestplate
+        // Index 3: Helmet
+
+        ItemStack[] myArmorContents = new ItemStack[]{pInv.getHelmet(), pInv.getChestplate(), pInv.getLeggings(), pInv.getBoots()};
+
+
         int matchCount = 0;
+        int i = 0;
+        ItemStack armorStack;
         int hlmtToMatch = armorCMD.helmet;
         int chstpltToMatch = armorCMD.chestplate;
         int lggngsToMatch = armorCMD.leggings;
         int btsToMatch = armorCMD.boots;
-        ItemMeta armorPcMeta;
-        for (ItemStack armorPiece : armorContents)
-        {
-            if (armorPiece != null) {
 
-                // TODO: More checks may be needed. Not final
-                if (isAnyArmorPiece(armorPiece, armorCMD)) // Check if armorPiece is any armor piece we want to match
+        while (i < armorContents.length) {
+            armorStack = armorContents[i];
+            if (armorStack != null) {
+                ItemMeta armorMeta = armorStack.getItemMeta();
+                if (armorMeta != null && armorMeta.hasCustomModelData())
                 {
-                    if (matchCount == 0)
-                    {
-                        matchCount++;
-                    } else if (matchCount == 1)
-                    {
-                        matchCount++;
-                    } else if (matchCount == 2)
-                    {
-                        matchCount++;
-                    } else { // Break out of loop after attempts to match
-                        break;
-                    }
+                    player.sendMessage(i + " " + armorMeta.getDisplayName());
                 }
-
-                /*
-                armorPcMeta = armorPiece.getItemMeta();
-                if (armorPcMeta != null && armorPcMeta.hasCustomModelData())
-                {
-                    cmd = armorPcMeta.getCustomModelData();
-                    if (matchCount == 0)
-                    {
-                        if (cmd == armorCMD.helmet)
-                        {
-                            matchCount++;
-                        }
-                    }
-
-                    if (matchCount >= 0)
-                    {
-                        if (cmd == armorCMD.chestplate)
-                        {
-                            matchCount++;
-                        }
-                    }
-
-                    if (matchCount >= 1)
-                    {
-
-                    } else
-                    {
-                        break;
-                    }
-
-                    if (matchCount >= 2)
-                    {
-
-                    } else
-                    {
-                        break;
-                    }
-                }
-
-                 */
-
-
             }
+
+            i++;
         }
+
+
         if (matchCount >= 3)
         {
             return true;
