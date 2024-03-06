@@ -55,7 +55,7 @@ public class StatProfileManager {
         statProfiles.put(player.getUniqueId(), statProfile);
 
         AttributeInstance playerHealthInstance = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
-        playerHealthInstance.setBaseValue(20); // Set player base health (add skill point health here too)
+        playerHealthInstance.setBaseValue(20);
 
         return statProfile;
     }

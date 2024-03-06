@@ -34,7 +34,7 @@ public class HUD extends BukkitRunnable implements Listener {
 
         for (Player player : Bukkit.getOnlinePlayers()) {
 
-            Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).getStats();
+            Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).stats();
 
             double availableMana = stats.getAvailableMana();
             double maxMana = stats.getMaxMana();

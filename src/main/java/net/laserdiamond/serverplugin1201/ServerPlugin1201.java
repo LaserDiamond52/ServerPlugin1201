@@ -29,6 +29,8 @@ import net.laserdiamond.serverplugin1201.items.armor.StormLord.Components.EyeOfS
 import net.laserdiamond.serverplugin1201.items.armor.StormLord.Components.StormLordArmorListeners;
 import net.laserdiamond.serverplugin1201.items.armor.StormLord.Components.StormLordArmorManager;
 import net.laserdiamond.serverplugin1201.items.armor.StormLord.Config.StormLordArmorConfig;
+import net.laserdiamond.serverplugin1201.items.armor.Trims.Components.ArmorTrimMaterialStats;
+import net.laserdiamond.serverplugin1201.items.armor.Trims.Components.ArmorTrimPatternStats;
 import net.laserdiamond.serverplugin1201.items.armor.Trims.Config.ArmorTrimConfig;
 import net.laserdiamond.serverplugin1201.items.armor.Vanilla.Components.DiamondArmorManager;
 import net.laserdiamond.serverplugin1201.items.armor.Vanilla.Components.NetheriteArmorManager;
@@ -46,6 +48,8 @@ public final class ServerPlugin1201 extends JavaPlugin {
 
     private static ServerPlugin1201 plugin;
     private StatProfileManager statProfileManager;
+    private ArmorTrimMaterialStats armorTrimMaterialStats;
+    private ArmorTrimPatternStats armorTrimPatternStats;
     private EffectManager effectManager;
     private EffectProfileConfig effectProfileConfig;
     private BukkitTask displayHUDTimer;
@@ -129,6 +133,12 @@ public final class ServerPlugin1201 extends JavaPlugin {
 
     public StatProfileManager getStatProfileManager() {
         return statProfileManager;
+    }
+    public ArmorTrimMaterialStats getArmorTrimMaterialStats() {
+        return armorTrimMaterialStats;
+    }
+    public ArmorTrimPatternStats getArmorTrimPatternStats() {
+        return armorTrimPatternStats;
     }
     public EffectManager getEffectManager() {
         return effectManager;

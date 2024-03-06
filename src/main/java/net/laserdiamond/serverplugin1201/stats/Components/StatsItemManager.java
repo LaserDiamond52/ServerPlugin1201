@@ -24,9 +24,9 @@ public class StatsItemManager {
     private static final StatProfileManager statProfileManager = plugin.getStatProfileManager();
     public static List<String> createLore (Player player, StatsItem stat) {
 
-        Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).getStats();
-        EnchantStats enchantStats = statProfileManager.getStatProfile(player.getUniqueId()).getEnchantStats();
-        ArmorTrimStats armorTrimStats = statProfileManager.getStatProfile(player.getUniqueId()).getArmorTrimStats();
+        Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).stats();
+        EnchantStats enchantStats = statProfileManager.getStatProfile(player.getUniqueId()).enchantStats();
+        ArmorTrimStats armorTrimStats = statProfileManager.getStatProfile(player.getUniqueId()).armorTrimStats();
         ArmorTrimMaterialStats materialStats = armorTrimStats.getArmorTrimMaterialStats();
         ArmorTrimPatternStats patternStats = armorTrimStats.getArmorTrimPatternStats();
 
@@ -41,10 +41,10 @@ public class StatsItemManager {
         double baseMagic = stats.getBaseMagicDamage();
         double baseRange = stats.getBaseRangeDamage();
         double armor = stats.getDefense();
-        double fire_armor = stats.getFire_defense();
-        double explosion_armor = stats.getExplosion_defense();
-        double projectile_armor = stats.getProjectile_defense();
-        double magic_armor = stats.getMagic_defense();
+        double fire_armor = stats.getFireDefense();
+        double explosion_armor = stats.getExplosionDefense();
+        double projectile_armor = stats.getProjectileDefense();
+        double magic_armor = stats.getMagicDefense();
         double toughness = stats.getToughness();
         double maxHealth = player.getMaxHealth();
 

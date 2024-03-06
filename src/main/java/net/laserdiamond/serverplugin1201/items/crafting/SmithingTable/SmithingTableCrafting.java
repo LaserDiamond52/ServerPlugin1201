@@ -6,13 +6,11 @@ import net.laserdiamond.serverplugin1201.items.management.ItemForger;
 import net.laserdiamond.serverplugin1201.items.management.UpdateItem;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.PrepareSmithingEvent;
 import org.bukkit.inventory.*;
-import org.bukkit.inventory.meta.ArmorMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.trim.ArmorTrim;
 import org.bukkit.inventory.meta.trim.TrimMaterial;
@@ -160,9 +158,9 @@ public class SmithingTableCrafting implements Listener
                 for (SmithingTableRecipes.Recipes recipes : SmithingTableRecipes.Recipes.values())
                 {
                     ItemStack recipesResult = recipes.getResult();
-                    ItemStack equipment = recipes.getSmithingRecipe().getEquipmentItem();
-                    ItemStack material = recipes.getSmithingRecipe().getMaterialItem();
-                    ItemStack template = recipes.getSmithingRecipe().getTemplateItem();
+                    ItemStack equipment = recipes.getSmithingRecipe().equipmentItem();
+                    ItemStack material = recipes.getSmithingRecipe().materialItem();
+                    ItemStack template = recipes.getSmithingRecipe().templateItem();
 
                     if (resultItem != null && equipmentItemRawSlot != null && templateItemRawSlot != null && materialItemRawSlot != null)
                     {
