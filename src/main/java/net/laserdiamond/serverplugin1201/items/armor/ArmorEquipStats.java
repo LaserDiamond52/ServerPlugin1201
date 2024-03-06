@@ -104,7 +104,7 @@ public class ArmorEquipStats implements Listener {
     }
 
     private void addStats(Player player, Double health, Double armor, Double toughness, Double mana, Double meleeDamage, Double magicDamage, Double rangeDamage) {
-        Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).getStats();
+        Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).stats();
 
         AttributeInstance playerHealthInstance = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
         Double playerHealth = playerHealthInstance.getBaseValue();
@@ -142,7 +142,7 @@ public class ArmorEquipStats implements Listener {
     }
 
     private void removeStats(Player player, Double health, Double armor, Double toughness, Double mana, Double meleeDamage, Double magicDamage, Double rangeDamage) {
-        Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).getStats();
+        Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).stats();
 
         AttributeInstance playerHealthInstance = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
         Double playerHealth = playerHealthInstance.getBaseValue();
@@ -180,7 +180,7 @@ public class ArmorEquipStats implements Listener {
 
     private void addFortitude(Player player, Double fortitude) {
 
-        Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).getStats();
+        Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).stats();
 
         AttributeInstance playerKBResInstance = player.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE);
         Double playerKBRES = playerKBResInstance.getBaseValue();
@@ -193,7 +193,7 @@ public class ArmorEquipStats implements Listener {
 
     private void removeFortitude(Player player, Double fortitude) {
 
-        Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).getStats();
+        Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).stats();
 
         AttributeInstance playerKBResInstance = player.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE);
         Double playerKBRES = playerKBResInstance.getBaseValue();

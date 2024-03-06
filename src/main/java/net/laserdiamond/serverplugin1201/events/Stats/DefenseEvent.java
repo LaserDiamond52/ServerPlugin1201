@@ -35,12 +35,12 @@ public class DefenseEvent implements Listener {
 
         if (event.getEntity() instanceof Player player) {
 
-            Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).getStats();
+            Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).stats();
             double armor = stats.getDefense();
-            double fire_armor = stats.getFire_defense();
-            double explosion_armor = stats.getExplosion_defense();
-            double projectile_armor = stats.getProjectile_defense();
-            double magic_armor = stats.getMagic_defense();
+            double fire_armor = stats.getFireDefense();
+            double explosion_armor = stats.getExplosionDefense();
+            double projectile_armor = stats.getProjectileDefense();
+            double magic_armor = stats.getMagicDefense();
             double toughness = stats.getToughness();
 
             double originalDamage = event.getDamage();

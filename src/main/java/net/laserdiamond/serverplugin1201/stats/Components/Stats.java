@@ -12,14 +12,14 @@ public class Stats {
     private double baseMagicDamage;
     private double baseRangeDamage;
     private double defense;
-    private double fire_defense;
-    private double explosion_defense;
-    private double projectile_defense;
-    private double magic_defense;
+    private double fireDefense;
+    private double explosionDefense;
+    private double projectileDefense;
+    private double magicDefense;
     private double toughness;
     private double fortitude;
 
-    public Stats(double health, double meleeDamage, double magicDamage, double rangeDamage, double availableMana, double maxMana, double baseMeleeDamage, double baseMagicDamage, double baseRangeDamage, double defense, double fire_defense, double explosion_defense, double projectile_defense, double magic_defense, double toughness, double fortitude) {
+    public Stats(double health, double meleeDamage, double magicDamage, double rangeDamage, double availableMana, double maxMana, double baseMeleeDamage, double baseMagicDamage, double baseRangeDamage, double defense, double fireDefense, double explosionDefense, double projectileDefense, double magicDefense, double toughness, double fortitude) {
         this.health = health;
         this.meleeDamage = meleeDamage;
         this.magicDamage = magicDamage;
@@ -30,10 +30,10 @@ public class Stats {
         this.baseMagicDamage = baseMagicDamage;
         this.baseRangeDamage = baseRangeDamage;
         this.defense = defense;
-        this.fire_defense = fire_defense;
-        this.explosion_defense = explosion_defense;
-        this.projectile_defense = projectile_defense;
-        this.magic_defense = magic_defense;
+        this.fireDefense = fireDefense;
+        this.explosionDefense = explosionDefense;
+        this.projectileDefense = projectileDefense;
+        this.magicDefense = magicDefense;
         this.toughness = toughness;
         this.fortitude = fortitude;
     }
@@ -126,36 +126,36 @@ public class Stats {
         this.toughness = toughness;
     }
 
-    public double getFire_defense() {
-        return fire_defense;
+    public double getFireDefense() {
+        return fireDefense;
     }
 
-    public void setFire_defense(double fire_defense) {
-        this.fire_defense = fire_defense;
+    public void setFireDefense(double fireDefense) {
+        this.fireDefense = fireDefense;
     }
 
-    public double getExplosion_defense() {
-        return explosion_defense;
+    public double getExplosionDefense() {
+        return explosionDefense;
     }
 
-    public void setExplosion_defense(double explosion_defense) {
-        this.explosion_defense = explosion_defense;
+    public void setExplosionDefense(double explosionDefense) {
+        this.explosionDefense = explosionDefense;
     }
 
-    public double getProjectile_defense() {
-        return projectile_defense;
+    public double getProjectileDefense() {
+        return projectileDefense;
     }
 
-    public void setProjectile_defense(double projectile_defense) {
-        this.projectile_defense = projectile_defense;
+    public void setProjectileDefense(double projectileDefense) {
+        this.projectileDefense = projectileDefense;
     }
 
-    public double getMagic_defense() {
-        return magic_defense;
+    public double getMagicDefense() {
+        return magicDefense;
     }
 
-    public void setMagic_defense(double magic_defense) {
-        this.magic_defense = magic_defense;
+    public void setMagicDefense(double magicDefense) {
+        this.magicDefense = magicDefense;
     }
 
     public double getFortitude() {

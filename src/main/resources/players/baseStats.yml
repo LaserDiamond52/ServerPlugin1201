@@ -1,5 +1,8 @@
 ### Base Player stats when joining
 
+# Base health
+baseHealth: 20
+
 # Base melee damage %
 
 # Increases a player's melee damage by x%
@@ -49,6 +52,12 @@ baseMagicDefense: 0
 
 # Player's base toughness
 baseToughness: 0
+
+# Default Speed
+baseSpeed: 0.10000000149011612
+
+# Default Starvation Rate (ticks)
+starvationRate: 80
 
 # Player's base skill points
 

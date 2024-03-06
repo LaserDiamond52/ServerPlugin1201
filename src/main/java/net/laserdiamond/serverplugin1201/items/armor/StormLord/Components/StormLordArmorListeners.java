@@ -18,7 +18,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -66,7 +65,7 @@ public class StormLordArmorListeners implements Listener {
                 if (dropMeta != null && dropMeta.hasEnchant(EnchantsClass.THUNDER_STRIKE))
                 {
                     event.setCancelled(true);
-                    Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).getStats();
+                    Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).stats();
                     double availableMana = stats.getAvailableMana();
 
                     double thunderStrikeLvl = dropMeta.getEnchantLevel(EnchantsClass.THUNDER_STRIKE);

@@ -22,29 +22,37 @@ public class StatProfileManager {
     private BaseStatsConfig baseStatsConfig;
     private Map<UUID, StatProfile> statProfiles = new HashMap<>();
 
+    private final double[] baseStatsArray = new double[17];
+
     public StatProfileManager(ServerPlugin1201 plugin) {
         this.plugin = plugin;
         baseStatsConfig = plugin.getBaseStatsConfig();
+
+        baseStatsArray[0] = baseStatsConfig.getDouble("baseHealth");
+        baseStatsArray[1] = baseStatsConfig.getDouble("baseSpeed");
+        baseStatsArray[2] = baseStatsConfig.getDouble("starvationRate");
+
+        baseStatsArray[3] = baseStatsConfig.getDouble("meleeDamage");
+        baseStatsArray[4] = baseStatsConfig.getDouble("magicDamage");
+        baseStatsArray[5] = baseStatsConfig.getDouble("rangeDamage");
+        baseStatsArray[6] = baseStatsConfig.getDouble("availableMana");
+        baseStatsArray[7] = baseStatsConfig.getDouble("maxMana");
+        baseStatsArray[8] = baseStatsConfig.getDouble("baseMelee");
+        baseStatsArray[9] = baseStatsConfig.getDouble("baseMagic");
+        baseStatsArray[10] = baseStatsConfig.getDouble("baseRange");
+        baseStatsArray[11] = baseStatsConfig.getDouble("baseDefense");
+        baseStatsArray[12] = baseStatsConfig.getDouble("baseFireDefense");
+        baseStatsArray[13] = baseStatsConfig.getDouble("baseExplosionDefense");
+        baseStatsArray[14] = baseStatsConfig.getDouble("baseProjectileDefense");
+        baseStatsArray[15] = baseStatsConfig.getDouble("baseMagicDefense");
+        baseStatsArray[16]= baseStatsConfig.getDouble("baseToughness");
+
     }
 
-    public StatProfile createNewStatProfile(Player player) {
+    public StatProfile createNewStatProfile(Player player)
+    {
 
-        Double meleeDamage = baseStatsConfig.getDouble("meleeDamage");
-        Double magicDamage = baseStatsConfig.getDouble("magicDamage");
-        Double rangeDamage = baseStatsConfig.getDouble("rangeDamage");
-        Double availableMana = baseStatsConfig.getDouble("availableMana");
-        Double maxMana = baseStatsConfig.getDouble("maxMana");
-        Double baseMelee = baseStatsConfig.getDouble("baseMelee");
-        Double baseMagic = baseStatsConfig.getDouble("baseMagic");
-        Double baseRange = baseStatsConfig.getDouble("baseRange");
-        Double baseDefense = baseStatsConfig.getDouble("baseDefense");
-        Double baseFireDefense = baseStatsConfig.getDouble("baseFireDefense");
-        Double baseExplosionDefense = baseStatsConfig.getDouble("baseExplosionDefense");
-        Double baseProjectileDefense = baseStatsConfig.getDouble("baseProjectileDefense");
-        Double baseMagicDefense = baseStatsConfig.getDouble("baseMagicDefense");
-        Double baseToughness = baseStatsConfig.getDouble("baseToughness");
-
-        Stats stats = new Stats(0,meleeDamage,magicDamage, rangeDamage, availableMana, maxMana, baseMelee, baseMagic, baseRange, baseDefense, baseFireDefense, baseExplosionDefense, baseProjectileDefense, baseMagicDefense,baseToughness,0);
+        Stats stats = new Stats(0,baseStatsArray[3],baseStatsArray[4], baseStatsArray[5], baseStatsArray[6], baseStatsArray[7], baseStatsArray[8], baseStatsArray[9], baseStatsArray[10], baseStatsArray[11], baseStatsArray[12], baseStatsArray[13], baseStatsArray[14], baseStatsArray[15],baseStatsArray[16],0);
         EnchantStats enchantStats = new EnchantStats(0,0,0,0,0,0,0,0,0,0,0);
 
         ArmorTrimMaterialStats armorTrimMaterialStats = new ArmorTrimMaterialStats(0,0,0,0,0,0,0,0,0,0,0);
@@ -54,13 +62,19 @@ public class StatProfileManager {
         StatProfile statProfile = new StatProfile(stats, enchantStats, armorTrimStats);
         statProfiles.put(player.getUniqueId(), statProfile);
 
-        AttributeInstance playerHealthInstance = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
-        playerHealthInstance.setBaseValue(20);
+        AttributeInstance healthInstance = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+        healthInstance.setBaseValue(baseStatsArray[0]);
+
+        AttributeInstance speedInstance = player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED);
+        speedInstance.setBaseValue(baseStatsArray[1]);
+
+        player.setStarvationRate((int) baseStatsArray[2]);
 
         return statProfile;
     }
 
-    public StatProfile getStatProfile(UUID uuid) {
+    public StatProfile getStatProfile(UUID uuid)
+    {
         return statProfiles.get(uuid);
     }
 

@@ -1,7 +1,6 @@
 package net.laserdiamond.serverplugin1201.events.Stats;
 
 import net.laserdiamond.serverplugin1201.ServerPlugin1201;
-import net.laserdiamond.serverplugin1201.events.effects.Components.EffectDurations;
 import net.laserdiamond.serverplugin1201.events.effects.Components.Timers.ManaFreezeTimer;
 import net.laserdiamond.serverplugin1201.events.effects.Managers.EffectManager;
 import net.laserdiamond.serverplugin1201.stats.Components.Stats;
@@ -28,7 +27,7 @@ public class ManaRegen extends BukkitRunnable {
 
         for (Player player : Bukkit.getOnlinePlayers()) {
 
-            Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).getStats();
+            Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).stats();
 
             double availableMana = stats.getAvailableMana();
             double maxMana = stats.getMaxMana();

@@ -35,7 +35,7 @@ public class DamageEvent implements Listener {
         // Melee Damage
         if (event.getDamager() instanceof Player player) {
 
-            Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).getStats();
+            Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).stats();
 
             double baseMelee = stats.getBaseMeleeDamage();
 
@@ -61,7 +61,7 @@ public class DamageEvent implements Listener {
                         potionMeta.getPersistentDataContainer().has(magicDmgKey))
                 {
                     // Increase damage based on magic stats
-                    Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).getStats();
+                    Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).stats();
                     //double baseSpellDmg = potionMeta.getPersistentDataContainer().get(magicDmgKey, PersistentDataType.DOUBLE);
                     double baseMagic = stats.getBaseMagicDamage();
                     double magicIncrease = 1 + stats.getMagicDamage() * 0.01;
@@ -82,7 +82,7 @@ public class DamageEvent implements Listener {
             if (arrow.getShooter() instanceof Player player) // Check if shooter of arrow is a player
             {
                 // Increase damage based on range stats
-                Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).getStats();
+                Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).stats();
                 double baseRange = stats.getBaseRangeDamage();
                 double rangeIncrease = 1 + stats.getRangeDamage() * 0.01;
                 double finalArrowDamage = (baseRange + damage) * rangeIncrease;

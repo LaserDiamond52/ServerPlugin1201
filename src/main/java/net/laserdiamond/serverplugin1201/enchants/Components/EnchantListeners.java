@@ -54,8 +54,8 @@ public class EnchantListeners implements Listener {
         double arcane = enchantConfig.getDouble("arcane");
         double archer = enchantConfig.getDouble("archer");
 
-        Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).getStats();
-        EnchantStats enchantStats = statProfileManager.getStatProfile(player.getUniqueId()).getEnchantStats();
+        Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).stats();
+        EnchantStats enchantStats = statProfileManager.getStatProfile(player.getUniqueId()).enchantStats();
 
         if (newMeta != null) {
 
@@ -164,10 +164,10 @@ public class EnchantListeners implements Listener {
     private void addProtection(Stats stats, EnchantStats enchantStats, ItemMeta itemMeta, Double armor, Double fire_armor, Double explosion_armor, Double projectile_armor, Double magic_armor, Double toughness) {
 
         Double currentArmor = stats.getDefense();
-        Double currentFireArmor = stats.getFire_defense();
-        Double currentExplosionArmor = stats.getExplosion_defense();
-        Double currentProjectileArmor = stats.getProjectile_defense();
-        Double currentMagicArmor = stats.getMagic_defense();
+        Double currentFireArmor = stats.getFireDefense();
+        Double currentExplosionArmor = stats.getExplosionDefense();
+        Double currentProjectileArmor = stats.getProjectileDefense();
+        Double currentMagicArmor = stats.getMagicDefense();
         Double currentToughness = stats.getToughness();
 
         Double currentEnchantArmor = enchantStats.getEnchant_armor();
@@ -186,25 +186,25 @@ public class EnchantListeners implements Listener {
         if (itemMeta.hasEnchant(Enchantment.PROTECTION_FIRE)) {
             int protectionLvl = itemMeta.getEnchantLevel(Enchantment.PROTECTION_FIRE);
             Double finalProt = fire_armor * protectionLvl;
-            stats.setFire_defense(currentFireArmor + finalProt);
+            stats.setFireDefense(currentFireArmor + finalProt);
             enchantStats.setEnchant_fire_armor(currentEnchantFireArmor + finalProt);
         }
         if (itemMeta.hasEnchant(Enchantment.PROTECTION_EXPLOSIONS)) {
             int protectionLvl = itemMeta.getEnchantLevel(Enchantment.PROTECTION_EXPLOSIONS);
             Double finalProt = explosion_armor * protectionLvl;
-            stats.setExplosion_defense(currentExplosionArmor + finalProt);
+            stats.setExplosionDefense(currentExplosionArmor + finalProt);
             enchantStats.setEnchant_explosion_armor(currentEnchantExplosionArmor + finalProt);
         }
         if (itemMeta.hasEnchant(Enchantment.PROTECTION_PROJECTILE)) {
             int protectionLvl = itemMeta.getEnchantLevel(Enchantment.PROTECTION_PROJECTILE);
             Double finalProt = projectile_armor * protectionLvl;
-            stats.setProjectile_defense(currentProjectileArmor + finalProt);
+            stats.setProjectileDefense(currentProjectileArmor + finalProt);
             enchantStats.setEnchant_projectile_armor(currentEnchantProjectileArmor + finalProt);
         }
         if (itemMeta.hasEnchant(EnchantsClass.MAGIC_PROTECTION)) {
             int protectionLvl = itemMeta.getEnchantLevel(EnchantsClass.MAGIC_PROTECTION);
             Double finalProt = magic_armor * protectionLvl;
-            stats.setMagic_defense(currentMagicArmor + finalProt);
+            stats.setMagicDefense(currentMagicArmor + finalProt);
             enchantStats.setEnchant_magic_armor(currentEnchantMagicArmor + finalProt);
         }
         if (itemMeta.hasEnchant(EnchantsClass.TOUGHNESS)) {
@@ -219,10 +219,10 @@ public class EnchantListeners implements Listener {
     private void removeProtection(Stats stats, EnchantStats enchantStats, ItemMeta itemMeta, Double armor, Double fire_armor, Double explosion_armor, Double projectile_armor, Double magic_armor, Double toughness) {
 
         Double currentArmor = stats.getDefense();
-        Double currentFireArmor = stats.getFire_defense();
-        Double currentExplosionArmor = stats.getExplosion_defense();
-        Double currentProjectileArmor = stats.getProjectile_defense();
-        Double currentMagicArmor = stats.getMagic_defense();
+        Double currentFireArmor = stats.getFireDefense();
+        Double currentExplosionArmor = stats.getExplosionDefense();
+        Double currentProjectileArmor = stats.getProjectileDefense();
+        Double currentMagicArmor = stats.getMagicDefense();
         Double currentToughness = stats.getToughness();
 
         Double currentEnchantArmor = enchantStats.getEnchant_armor();
@@ -241,25 +241,25 @@ public class EnchantListeners implements Listener {
         if (itemMeta.hasEnchant(Enchantment.PROTECTION_FIRE)) {
             int protectionLvl = itemMeta.getEnchantLevel(Enchantment.PROTECTION_FIRE);
             Double finalProt = fire_armor * protectionLvl;
-            stats.setFire_defense(currentFireArmor - finalProt);
+            stats.setFireDefense(currentFireArmor - finalProt);
             enchantStats.setEnchant_fire_armor(currentEnchantFireArmor - finalProt);
         }
         if (itemMeta.hasEnchant(Enchantment.PROTECTION_EXPLOSIONS)) {
             int protectionLvl = itemMeta.getEnchantLevel(Enchantment.PROTECTION_EXPLOSIONS);
             Double finalProt = explosion_armor * protectionLvl;
-            stats.setExplosion_defense(currentExplosionArmor - finalProt);
+            stats.setExplosionDefense(currentExplosionArmor - finalProt);
             enchantStats.setEnchant_explosion_armor(currentEnchantExplosionArmor - finalProt);
         }
         if (itemMeta.hasEnchant(Enchantment.PROTECTION_PROJECTILE)) {
             int protectionLvl = itemMeta.getEnchantLevel(Enchantment.PROTECTION_PROJECTILE);
             Double finalProt = projectile_armor * protectionLvl;
-            stats.setProjectile_defense(currentProjectileArmor - finalProt);
+            stats.setProjectileDefense(currentProjectileArmor - finalProt);
             enchantStats.setEnchant_projectile_armor(currentEnchantProjectileArmor - finalProt);
         }
         if (itemMeta.hasEnchant(EnchantsClass.MAGIC_PROTECTION)) {
             int protectionLvl = itemMeta.getEnchantLevel(EnchantsClass.MAGIC_PROTECTION);
             Double finalProt = magic_armor * protectionLvl;
-            stats.setMagic_defense(currentMagicArmor - finalProt);
+            stats.setMagicDefense(currentMagicArmor - finalProt);
             enchantStats.setEnchant_magic_armor(currentEnchantMagicArmor - finalProt);
         }
         if (itemMeta.hasEnchant(EnchantsClass.TOUGHNESS)) {
