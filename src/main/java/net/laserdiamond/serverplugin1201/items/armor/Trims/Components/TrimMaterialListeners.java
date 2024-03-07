@@ -5,6 +5,7 @@ import com.destroystokyo.paper.event.player.PlayerPickupExperienceEvent;
 import net.laserdiamond.serverplugin1201.ServerPlugin1201;
 import net.laserdiamond.serverplugin1201.items.armor.Trims.Config.ArmorTrimConfig;
 import net.laserdiamond.serverplugin1201.stats.Components.Stats;
+import net.laserdiamond.serverplugin1201.stats.Config.BaseStatsConfig;
 import net.laserdiamond.serverplugin1201.stats.Manager.StatProfileManager;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
@@ -24,6 +25,7 @@ import org.bukkit.potion.PotionEffectType;
 public class TrimMaterialListeners implements Listener {
 
     private final ServerPlugin1201 plugin;
+    private final BaseStatsConfig baseStatsConfig;
     private final StatProfileManager statProfileManager;
     private final ArmorTrimConfig armorTrimConfig;
     private final double defaultPlayerSpeed;
@@ -34,11 +36,12 @@ public class TrimMaterialListeners implements Listener {
     public TrimMaterialListeners(ServerPlugin1201 plugin)
     {
         this.plugin = plugin;
+        baseStatsConfig = plugin.getBaseStatsConfig();
         statProfileManager = plugin.getStatProfileManager();
         armorTrimConfig = plugin.getArmorTrimConfig();
 
-        defaultPlayerSpeed = plugin.getConfig().getDouble("baseSpeed");
-        defaultPlayerStarvationRate = plugin.getConfig().getInt("playerDefaultStarvationRate");
+        defaultPlayerSpeed = baseStatsConfig.getDouble("baseSpeed");
+        defaultPlayerStarvationRate = baseStatsConfig.getInt("playerDefaultStarvationRate");
 
         materialStatArray[0] = defaultPlayerSpeed * (armorTrimConfig.getDouble("copperSpeed") * 0.01);
         materialStatArray[1] = defaultPlayerStarvationRate * (armorTrimConfig.getInt("goldSaturation") * 0.01);
@@ -98,15 +101,17 @@ public class TrimMaterialListeners implements Listener {
 
             if (trimMaterial.equals(TrimMaterial.COPPER))
             {
-                speedInstance.setBaseValue(playerSpeed + materialStatArray[0]);
+                //speedInstance.setBaseValue(playerSpeed + materialStatArray[0]);
                 trimMaterialStats.setCopperSpeed(trimMaterialStats.getCopperSpeed() + armorTrimConfig.getDouble("copperSpeed"));
+                //stats.setSpeed(stats.getSpeed() + armorTrimConfig.getDouble("copperSpeed"));
+                stats.setSpeed(player, stats.getSpeed(player) + armorTrimConfig.getDouble("copperSpeed"));
             }
             if (trimMaterial.equals(TrimMaterial.GOLD))
             {
                 trimMaterialStats.setGoldSaturationChance(trimMaterialStats.getGoldSaturationChance() + armorTrimConfig.getDouble("goldSaturation"));
 
                 // Set player's saturation rate here:
-                player.setStarvationRate((int) (player.getStarvationRate() + materialStatArray[1]));
+                stats.setStarvationRate(player, (int) (stats.getStarvationRate(player) + armorTrimConfig.getDouble("goldSaturation")));
             }
             if (trimMaterial.equals(TrimMaterial.IRON))
             {
@@ -178,15 +183,17 @@ public class TrimMaterialListeners implements Listener {
 
             if (trimMaterial.equals(TrimMaterial.COPPER))
             {
-                speedInstance.setBaseValue(playerSpeed - materialStatArray[0]);
+                //speedInstance.setBaseValue(playerSpeed - materialStatArray[0]);
                 trimMaterialStats.setCopperSpeed(trimMaterialStats.getCopperSpeed() - armorTrimConfig.getDouble("copperSpeed"));
+                //stats.setSpeed(stats.getSpeed() - armorTrimConfig.getDouble("copperSpeed"));
+                stats.setSpeed(player, stats.getSpeed(player) - armorTrimConfig.getDouble("copperSpeed"));
             }
             if (trimMaterial.equals(TrimMaterial.GOLD))
             {
                 trimMaterialStats.setGoldSaturationChance(trimMaterialStats.getGoldSaturationChance() - armorTrimConfig.getDouble("goldSaturation"));
 
                 // Set player's saturation rate here:
-                player.setStarvationRate((int) (player.getStarvationRate() - materialStatArray[1]));
+                stats.setStarvationRate(player, (int) (stats.getStarvationRate(player) - armorTrimConfig.getDouble("goldSaturation")));
             }
             if (trimMaterial.equals(TrimMaterial.IRON))
             {

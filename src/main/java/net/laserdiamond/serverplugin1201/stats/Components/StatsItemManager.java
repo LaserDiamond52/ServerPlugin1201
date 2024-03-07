@@ -46,6 +46,7 @@ public class StatsItemManager {
         double projectile_armor = stats.getProjectileDefense();
         double magic_armor = stats.getMagicDefense();
         double toughness = stats.getToughness();
+        double speed = stats.getSpeed(player);
         double maxHealth = player.getMaxHealth();
 
         // TODO: Enchantment Stats
@@ -227,6 +228,19 @@ public class StatsItemManager {
         } else if (stat.equals(StatsItem.SPEED)) {
 
             // TODO: make speed stat
+            lore.add(ChatColor.GRAY + "Current movement speed: " + stat.statColor + doubleDecimal.format(speed) + ChatColor.GRAY + "%");
+            lore.add(" ");
+
+            double speedPercent = speed - 100;
+
+            if (speed >= 100)
+            {
+                lore.add(ChatColor.GRAY + "You move " + stat.statColor + doubleDecimal.format(speedPercent) + ChatColor.GRAY + "% faster!");
+            } else
+            {
+                lore.add(ChatColor.GRAY + "You move " + stat.statColor + doubleDecimal.format(speedPercent) + ChatColor.GRAY + "% slower!");
+            }
+
         }
         lore.add(" ");
 

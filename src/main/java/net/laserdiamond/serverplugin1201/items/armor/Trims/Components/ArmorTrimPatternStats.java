@@ -2,7 +2,6 @@ package net.laserdiamond.serverplugin1201.items.armor.Trims.Components;
 
 public class ArmorTrimPatternStats {
 
-    private double[] patternStatArray = new double[16];
     private double sentryEmeralds;
     private double vexManaRegen;
     private double wildForagingExp;

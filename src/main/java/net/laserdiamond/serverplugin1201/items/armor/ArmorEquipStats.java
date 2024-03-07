@@ -4,6 +4,8 @@ import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import net.laserdiamond.serverplugin1201.ServerPlugin1201;
 import net.laserdiamond.serverplugin1201.items.management.ItemForger;
 import net.laserdiamond.serverplugin1201.items.management.ItemMappings;
+import net.laserdiamond.serverplugin1201.management.ItemStatKeys;
+import net.laserdiamond.serverplugin1201.stats.Components.LootStats;
 import net.laserdiamond.serverplugin1201.stats.Components.Stats;
 import net.laserdiamond.serverplugin1201.stats.Manager.StatProfileManager;
 import org.bukkit.Material;
@@ -42,16 +44,17 @@ public class ArmorEquipStats implements Listener {
                 HashMap<Integer, ItemForger> itemForgerHashMap = ItemMappings.itemForgerHashMap(itemStars);
                 ItemForger itemForger = itemForgerHashMap.get(newCMD);
 
-                Double health = itemForger.getHealth();
-                Double armor = itemForger.getArmor();
-                Double toughness = itemForger.getToughness();
-                Double fortitude = itemForger.getFortitude();
-                Double mana = itemForger.getMaxMana();
-                Double meleeDamage = itemForger.getMeleeDamage();
-                Double magicDamage = itemForger.getMagicDamage();
-                Double rangeDamage = itemForger.getRangeDamage();
+                Double health = itemForger.getItemStat(ItemStatKeys.HEALTH_KEY);
+                Double armor = itemForger.getItemStat(ItemStatKeys.ARMOR_KEY);
+                Double toughness = itemForger.getItemStat(ItemStatKeys.TOUGHNESS_KEY);
+                Double fortitude = itemForger.getItemStat(ItemStatKeys.FORTITUDE_KEY);
+                Double speed = itemForger.getItemStat(ItemStatKeys.SPEED_KEY);
+                Double mana = itemForger.getItemStat(ItemStatKeys.MAX_MANA_KEY);
+                Double meleeDamage = itemForger.getItemStat(ItemStatKeys.MELEE_DAMAGE_KEY);
+                Double magicDamage = itemForger.getItemStat(ItemStatKeys.MAGIC_DAMAGE_KEY);
+                Double rangeDamage = itemForger.getItemStat(ItemStatKeys.RANGE_DAMAGE_KEY);
 
-                addStats(player, health, armor, toughness, mana, meleeDamage, magicDamage, rangeDamage);
+                addStats(player, health, armor, toughness, speed, mana, meleeDamage, magicDamage, rangeDamage);
                 addFortitude(player, fortitude);
             } else {
                 // TODO: Equipping Vanilla Item (Excluding Netherite)
@@ -61,7 +64,7 @@ public class ArmorEquipStats implements Listener {
                         Double armor = values.getProtectionValue();
                         Double toughness = values.getToughnessValue();
 
-                        addStats(player, 0.0, armor, toughness, 0.0, 0.0, 0.0, 0.0);
+                        addStats(player, 0.0, armor, toughness, 0.0, 0.0, 0.0, 0.0,0.0);
                     }
                 }
             }
@@ -75,16 +78,17 @@ public class ArmorEquipStats implements Listener {
                 HashMap<Integer, ItemForger> itemForgerHashMap = ItemMappings.itemForgerHashMap(itemStars);
                 ItemForger itemForger = itemForgerHashMap.get(oldCMD);
 
-                Double health = itemForger.getHealth();
-                Double armor = itemForger.getArmor();
-                Double toughness = itemForger.getToughness();
-                Double fortitude = itemForger.getFortitude();
-                Double mana = itemForger.getMaxMana();
-                Double meleeDamage = itemForger.getMeleeDamage();
-                Double magicDamage = itemForger.getMagicDamage();
-                Double rangeDamage = itemForger.getRangeDamage();
+                Double health = itemForger.getItemStat(ItemStatKeys.HEALTH_KEY);
+                Double armor = itemForger.getItemStat(ItemStatKeys.ARMOR_KEY);
+                Double toughness = itemForger.getItemStat(ItemStatKeys.TOUGHNESS_KEY);
+                Double fortitude = itemForger.getItemStat(ItemStatKeys.FORTITUDE_KEY);
+                Double speed =  itemForger.getItemStat(ItemStatKeys.SPEED_KEY);
+                Double mana = itemForger.getItemStat(ItemStatKeys.MAX_MANA_KEY);
+                Double meleeDamage = itemForger.getItemStat(ItemStatKeys.MELEE_DAMAGE_KEY);
+                Double magicDamage = itemForger.getItemStat(ItemStatKeys.MAGIC_DAMAGE_KEY);
+                Double rangeDamage = itemForger.getItemStat(ItemStatKeys.RANGE_DAMAGE_KEY);
 
-                removeStats(player, health, armor, toughness, mana, meleeDamage, magicDamage, rangeDamage);
+                removeStats(player, health, armor, toughness, speed, mana, meleeDamage, magicDamage, rangeDamage);
                 removeFortitude(player, fortitude);
             } else {
                 // TODO: Removing Vanilla Item (Excluding Netherite)
@@ -94,7 +98,7 @@ public class ArmorEquipStats implements Listener {
                         Double armor = values.getProtectionValue();
                         Double toughness = values.getToughnessValue();
 
-                        removeStats(player, 0.0, armor, toughness, 0.0, 0.0, 0.0, 0.0);
+                        removeStats(player, 0.0, armor, toughness, 0.0, 0.0, 0.0, 0.0, 0.0);
                     }
                 }
             }
@@ -103,28 +107,29 @@ public class ArmorEquipStats implements Listener {
 
     }
 
-    private void addStats(Player player, Double health, Double armor, Double toughness, Double mana, Double meleeDamage, Double magicDamage, Double rangeDamage) {
+    private void addStats(Player player, Double health, Double armor, Double toughness, Double speed, Double mana, Double meleeDamage, Double magicDamage, Double rangeDamage) {
         Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).stats();
 
-        AttributeInstance playerHealthInstance = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
-        Double playerHealth = playerHealthInstance.getBaseValue();
-        Double currentHealth = stats.getHealth();
-        Double currentArmor = stats.getDefense();
-        Double currentToughness = stats.getToughness();
-        Double currentMana = stats.getMaxMana();
-        Double currentMeleeDamage = stats.getMeleeDamage();
-        Double currentMagicDamage = stats.getMagicDamage();
-        Double currentRangeDamage = stats.getRangeDamage();
+        double currentHealth = stats.getHealth(player);
+        double currentArmor = stats.getDefense();
+        double currentToughness = stats.getToughness();
+        double currentSpeed = stats.getSpeed(player);
+        double currentMana = stats.getMaxMana();
+        double currentMeleeDamage = stats.getMeleeDamage();
+        double currentMagicDamage = stats.getMagicDamage();
+        double currentRangeDamage = stats.getRangeDamage();
 
         if (health != null) {
-            stats.setHealth(currentHealth + health);
-            playerHealthInstance.setBaseValue(playerHealth + health);
+            stats.setHealth(player,currentHealth + health);
         }
         if (armor != null) {
             stats.setDefense(currentArmor + armor);
         }
         if (toughness != null) {
             stats.setToughness(currentToughness + toughness);
+        }
+        if (speed != null) {
+            stats.setSpeed(player, currentSpeed + speed);
         }
         if (mana != null) {
             stats.setMaxMana(currentMana + mana);
@@ -141,28 +146,29 @@ public class ArmorEquipStats implements Listener {
 
     }
 
-    private void removeStats(Player player, Double health, Double armor, Double toughness, Double mana, Double meleeDamage, Double magicDamage, Double rangeDamage) {
+    private void removeStats(Player player, Double health, Double armor, Double toughness, Double speed, Double mana, Double meleeDamage, Double magicDamage, Double rangeDamage) {
         Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).stats();
 
-        AttributeInstance playerHealthInstance = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
-        Double playerHealth = playerHealthInstance.getBaseValue();
-        Double currentHealth = stats.getHealth();
-        Double currentArmor = stats.getDefense();
-        Double currentToughness = stats.getToughness();
-        Double currentMana = stats.getMaxMana();
-        Double currentMeleeDamage = stats.getMeleeDamage();
-        Double currentMagicDamage = stats.getMagicDamage();
-        Double currentRangeDamage = stats.getRangeDamage();
+        double currentHealth = stats.getHealth(player);
+        double currentArmor = stats.getDefense();
+        double currentToughness = stats.getToughness();
+        double currentSpeed = stats.getSpeed(player);
+        double currentMana = stats.getMaxMana();
+        double currentMeleeDamage = stats.getMeleeDamage();
+        double currentMagicDamage = stats.getMagicDamage();
+        double currentRangeDamage = stats.getRangeDamage();
 
         if (health != null) {
-            stats.setHealth(currentHealth - health);
-            playerHealthInstance.setBaseValue(playerHealth - health);
+            stats.setHealth(player,currentHealth - health);
         }
         if (armor != null) {
             stats.setDefense(currentArmor - armor);
         }
         if (toughness != null) {
             stats.setToughness(currentToughness - toughness);
+        }
+        if (speed != null) {
+            stats.setSpeed(player, currentSpeed - speed);
         }
         if (mana != null) {
             stats.setMaxMana(currentMana - mana);
