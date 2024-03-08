@@ -25,6 +25,8 @@ public class StatsItemManager {
     public static List<String> createLore (Player player, StatsItem stat) {
 
         Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).stats();
+        DamageStats damageStats = statProfileManager.getStatProfile(player.getUniqueId()).damageStats();
+        DefenseStats defenseStats = statProfileManager.getStatProfile(player.getUniqueId()).defenseStats();
         EnchantStats enchantStats = statProfileManager.getStatProfile(player.getUniqueId()).enchantStats();
         ArmorTrimStats armorTrimStats = statProfileManager.getStatProfile(player.getUniqueId()).armorTrimStats();
         ArmorTrimMaterialStats materialStats = armorTrimStats.getArmorTrimMaterialStats();
@@ -33,21 +35,24 @@ public class StatsItemManager {
         DecimalFormat doubleDecimal = new DecimalFormat("0.00");
 
         // TODO: Base Stats
-        double meleeDamage = stats.getMeleeDamage();
-        double magicDamage = stats.getMagicDamage();
-        double rangeDamage = stats.getRangeDamage();
-        double maxMana = stats.getMaxMana();
-        double baseMelee = stats.getBaseMeleeDamage();
-        double baseMagic = stats.getBaseMagicDamage();
-        double baseRange = stats.getBaseRangeDamage();
-        double armor = stats.getDefense();
-        double fire_armor = stats.getFireDefense();
-        double explosion_armor = stats.getExplosionDefense();
-        double projectile_armor = stats.getProjectileDefense();
-        double magic_armor = stats.getMagicDefense();
-        double toughness = stats.getToughness();
-        double speed = stats.getSpeed(player);
         double maxHealth = player.getMaxHealth();
+        double speed = stats.getSpeed(player);
+        double maxMana = stats.getMaxMana();
+
+        double baseMelee = damageStats.getbMeleeDmg();
+        double baseMagic = damageStats.getbMagicDmg();
+        double baseRange = damageStats.getbRangeDmg();
+        double meleeDamage = damageStats.getpMeleeDmg();
+        double magicDamage = damageStats.getpMagicDmg();
+        double rangeDamage = damageStats.getpRangeDmg();
+
+        double armor = defenseStats.getDefense();
+        double fire_armor = defenseStats.getFireDefense();
+        double explosion_armor = defenseStats.getExplosionDefense();
+        double projectile_armor = defenseStats.getProjectileDefense();
+        double magic_armor = defenseStats.getMagicDefense();
+        double toughness = defenseStats.getToughness();
+
 
         // TODO: Enchantment Stats
         double enchant_armor = enchantStats.getEnchant_armor();

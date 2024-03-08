@@ -5,6 +5,8 @@ import net.laserdiamond.serverplugin1201.ServerPlugin1201;
 import net.laserdiamond.serverplugin1201.items.management.ItemForger;
 import net.laserdiamond.serverplugin1201.items.management.ItemMappings;
 import net.laserdiamond.serverplugin1201.management.ItemStatKeys;
+import net.laserdiamond.serverplugin1201.stats.Components.DamageStats;
+import net.laserdiamond.serverplugin1201.stats.Components.DefenseStats;
 import net.laserdiamond.serverplugin1201.stats.Components.LootStats;
 import net.laserdiamond.serverplugin1201.stats.Components.Stats;
 import net.laserdiamond.serverplugin1201.stats.Manager.StatProfileManager;
@@ -109,24 +111,26 @@ public class ArmorEquipStats implements Listener {
 
     private void addStats(Player player, Double health, Double armor, Double toughness, Double speed, Double mana, Double meleeDamage, Double magicDamage, Double rangeDamage) {
         Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).stats();
+        DamageStats damageStats = statProfileManager.getStatProfile(player.getUniqueId()).damageStats();
+        DefenseStats defenseStats = statProfileManager.getStatProfile(player.getUniqueId()).defenseStats();
 
         double currentHealth = stats.getHealth(player);
-        double currentArmor = stats.getDefense();
-        double currentToughness = stats.getToughness();
+        double currentArmor = defenseStats.getDefense();
+        double currentToughness = defenseStats.getToughness();
         double currentSpeed = stats.getSpeed(player);
         double currentMana = stats.getMaxMana();
-        double currentMeleeDamage = stats.getMeleeDamage();
-        double currentMagicDamage = stats.getMagicDamage();
-        double currentRangeDamage = stats.getRangeDamage();
+        double currentMeleeDamage = damageStats.getpMeleeDmg();
+        double currentMagicDamage = damageStats.getpMagicDmg();
+        double currentRangeDamage = damageStats.getpRangeDmg();
 
         if (health != null) {
             stats.setHealth(player,currentHealth + health);
         }
         if (armor != null) {
-            stats.setDefense(currentArmor + armor);
+            defenseStats.setDefense(currentArmor + armor);
         }
         if (toughness != null) {
-            stats.setToughness(currentToughness + toughness);
+            defenseStats.setToughness(currentToughness + toughness);
         }
         if (speed != null) {
             stats.setSpeed(player, currentSpeed + speed);
@@ -135,37 +139,42 @@ public class ArmorEquipStats implements Listener {
             stats.setMaxMana(currentMana + mana);
         }
         if (meleeDamage != null) {
-            stats.setMeleeDamage(currentMeleeDamage + meleeDamage);
+            //stats.setMeleeDamage(currentMeleeDamage + meleeDamage);
+            damageStats.setpMeleeDmg(currentMeleeDamage - meleeDamage);
         }
         if (magicDamage != null) {
-            stats.setMagicDamage(currentMagicDamage + magicDamage);
+            //stats.setMagicDamage(currentMagicDamage + magicDamage);
+            damageStats.setpMagicDmg(currentMagicDamage - magicDamage);
         }
         if (rangeDamage != null) {
-            stats.setRangeDamage(currentRangeDamage + rangeDamage);
+            //stats.setRangeDamage(currentRangeDamage + rangeDamage);
+            damageStats.setpRangeDmg(currentRangeDamage - rangeDamage);
         }
 
     }
 
     private void removeStats(Player player, Double health, Double armor, Double toughness, Double speed, Double mana, Double meleeDamage, Double magicDamage, Double rangeDamage) {
         Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).stats();
+        DamageStats damageStats = statProfileManager.getStatProfile(player.getUniqueId()).damageStats();
+        DefenseStats defenseStats = statProfileManager.getStatProfile(player.getUniqueId()).defenseStats();
 
         double currentHealth = stats.getHealth(player);
-        double currentArmor = stats.getDefense();
-        double currentToughness = stats.getToughness();
+        double currentArmor = defenseStats.getDefense();
+        double currentToughness = defenseStats.getToughness();
         double currentSpeed = stats.getSpeed(player);
         double currentMana = stats.getMaxMana();
-        double currentMeleeDamage = stats.getMeleeDamage();
-        double currentMagicDamage = stats.getMagicDamage();
-        double currentRangeDamage = stats.getRangeDamage();
+        double currentMeleeDamage = damageStats.getpMeleeDmg();
+        double currentMagicDamage = damageStats.getpMagicDmg();
+        double currentRangeDamage = damageStats.getbRangeDmg();
 
         if (health != null) {
             stats.setHealth(player,currentHealth - health);
         }
         if (armor != null) {
-            stats.setDefense(currentArmor - armor);
+            defenseStats.setDefense(currentArmor - armor);
         }
         if (toughness != null) {
-            stats.setToughness(currentToughness - toughness);
+            defenseStats.setToughness(currentToughness - toughness);
         }
         if (speed != null) {
             stats.setSpeed(player, currentSpeed - speed);
@@ -174,13 +183,16 @@ public class ArmorEquipStats implements Listener {
             stats.setMaxMana(currentMana - mana);
         }
         if (meleeDamage != null) {
-            stats.setMeleeDamage(currentMeleeDamage - meleeDamage);
+            //stats.setMeleeDamage(currentMeleeDamage - meleeDamage);
+            damageStats.setpMeleeDmg(currentMeleeDamage - meleeDamage);
         }
         if (magicDamage != null) {
-            stats.setMagicDamage(currentMagicDamage - magicDamage);
+            //stats.setMagicDamage(currentMagicDamage - magicDamage);
+            damageStats.setpMagicDmg(currentMagicDamage - magicDamage);
         }
         if (rangeDamage != null) {
-            stats.setRangeDamage(currentRangeDamage - rangeDamage);
+            //stats.setRangeDamage(currentRangeDamage - rangeDamage);
+            damageStats.setpRangeDmg(currentRangeDamage - rangeDamage);
         }
     }
 

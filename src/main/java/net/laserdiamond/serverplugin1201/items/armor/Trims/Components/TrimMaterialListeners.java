@@ -4,6 +4,8 @@ import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import com.destroystokyo.paper.event.player.PlayerPickupExperienceEvent;
 import net.laserdiamond.serverplugin1201.ServerPlugin1201;
 import net.laserdiamond.serverplugin1201.items.armor.Trims.Config.ArmorTrimConfig;
+import net.laserdiamond.serverplugin1201.stats.Components.DamageStats;
+import net.laserdiamond.serverplugin1201.stats.Components.DefenseStats;
 import net.laserdiamond.serverplugin1201.stats.Components.Stats;
 import net.laserdiamond.serverplugin1201.stats.Config.BaseStatsConfig;
 import net.laserdiamond.serverplugin1201.stats.Manager.StatProfileManager;
@@ -65,6 +67,8 @@ public class TrimMaterialListeners implements Listener {
         ItemMeta newMeta = newItem.getItemMeta(), oldMeta = oldItem.getItemMeta();
 
         Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).stats();
+        DamageStats damageStats = statProfileManager.getStatProfile(player.getUniqueId()).damageStats();
+        DefenseStats defenseStats = statProfileManager.getStatProfile(player.getUniqueId()).defenseStats();
         ArmorTrimMaterialStats trimMaterialStats = statProfileManager.getStatProfile(player.getUniqueId()).armorTrimStats().getArmorTrimMaterialStats();
 
         if (newMeta != null)
