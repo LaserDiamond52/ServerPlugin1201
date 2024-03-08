@@ -3,11 +3,13 @@ package net.laserdiamond.serverplugin1201.events.Stats;
 import net.laserdiamond.serverplugin1201.ServerPlugin1201;
 import net.laserdiamond.serverplugin1201.stats.Components.DamageStats;
 import net.laserdiamond.serverplugin1201.stats.Manager.StatProfileManager;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.entity.EntityDamageEvent;
 
 public class PlayerMagicDamageEvent extends Event implements Cancellable {
 
@@ -30,6 +32,9 @@ public class PlayerMagicDamageEvent extends Event implements Cancellable {
 
         double finalDamage = (bMagic + damage) * pMagicIncrease;
         livingEntity.damage(finalDamage, player);
+        EntityDamageEvent dmgEvent = new EntityDamageEvent(livingEntity, EntityDamageEvent.DamageCause.MAGIC, finalDamage);
+        livingEntity.setLastDamageCause(dmgEvent);
+        Bukkit.getPluginManager().callEvent(dmgEvent);
     }
 
     @Override
