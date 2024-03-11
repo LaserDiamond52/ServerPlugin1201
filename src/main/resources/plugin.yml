@@ -52,8 +52,8 @@ permissions:
     description: Allows players to use the skill menu
   serverplugin1201.resetskills:
     description: Allows player to reset skills
-  serverplugin1201.refillmana:
-    description: Allows players to refill mana instantly
+  serverplugin1201.mana:
+    description: Allows players to manipulate their mana
   serverplugin1201.effect:
     description: Allows players to grant plugin effects to themselves/others
 
@@ -88,3 +88,7 @@ commands:
     aliases:
       - viewstats
 
+  refillmana:
+    description: allows players to refill their mana instantly
+    usage: /<command> <arg>
+    permission: serverplugin1201.mana

@@ -1,20 +1,15 @@
 package net.laserdiamond.serverplugin1201.events;
 
-import com.destroystokyo.paper.event.entity.EntityKnockbackByEntityEvent;
 import net.laserdiamond.serverplugin1201.ServerPlugin1201;
 import net.laserdiamond.serverplugin1201.events.effects.Components.EffectProfile;
 import net.laserdiamond.serverplugin1201.events.effects.Managers.EffectManager;
 import net.laserdiamond.serverplugin1201.stats.Manager.StatProfileManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;

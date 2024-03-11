@@ -1,4 +1,4 @@
-package net.laserdiamond.serverplugin1201.mobs.management;
+package net.laserdiamond.serverplugin1201.entities.management;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Mob;

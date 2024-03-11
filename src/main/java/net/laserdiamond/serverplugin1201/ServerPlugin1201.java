@@ -4,21 +4,22 @@ import net.laserdiamond.serverplugin1201.commands.Effects.EffectsCommand;
 import net.laserdiamond.serverplugin1201.commands.Enchant.EnchantCommand;
 import net.laserdiamond.serverplugin1201.commands.GiveItems.GiveItemsCommand;
 import net.laserdiamond.serverplugin1201.commands.ViewProfiles.ViewStats;
+import net.laserdiamond.serverplugin1201.commands.fillMana;
 import net.laserdiamond.serverplugin1201.enchants.Components.EnchantListeners;
 import net.laserdiamond.serverplugin1201.enchants.Components.EnchantPlayerHeadHelmets;
 import net.laserdiamond.serverplugin1201.enchants.Components.EnchantsClass;
 import net.laserdiamond.serverplugin1201.enchants.Config.EnchantConfig;
 import net.laserdiamond.serverplugin1201.enchants.anvil.AnvilInvetoryGUI;
 import net.laserdiamond.serverplugin1201.events.CancelInventoryMovementMenus;
-import net.laserdiamond.serverplugin1201.events.Stats.DamageEvent;
-import net.laserdiamond.serverplugin1201.events.Stats.DefenseEvent;
+import net.laserdiamond.serverplugin1201.events.damage.DamageEvent;
+import net.laserdiamond.serverplugin1201.events.damage.ApplyDefense;
 import net.laserdiamond.serverplugin1201.events.effects.Components.Timers.ManaFreezeTimer;
 import net.laserdiamond.serverplugin1201.events.effects.Components.Timers.NecrosisTimer;
 import net.laserdiamond.serverplugin1201.events.effects.Components.Timers.ParalyzeTimer;
 import net.laserdiamond.serverplugin1201.events.effects.Components.Timers.VulnerableTimer;
 import net.laserdiamond.serverplugin1201.events.effects.Components.EffectEvents;
 import net.laserdiamond.serverplugin1201.events.HUD.HUD;
-import net.laserdiamond.serverplugin1201.events.Stats.ManaRegen;
+import net.laserdiamond.serverplugin1201.events.mana.ManaRegen;
 import net.laserdiamond.serverplugin1201.events.PlayerJoinServer;
 import net.laserdiamond.serverplugin1201.events.effects.Components.EffectTimer;
 import net.laserdiamond.serverplugin1201.events.effects.Config.EffectProfileConfig;
@@ -38,6 +39,7 @@ import net.laserdiamond.serverplugin1201.items.armor.Vanilla.Components.Netherit
 import net.laserdiamond.serverplugin1201.items.armor.Vanilla.Config.VanillaArmorConfig;
 import net.laserdiamond.serverplugin1201.items.crafting.SmithingTable.SmithingTableCrafting;
 import net.laserdiamond.serverplugin1201.items.management.ItemMappings;
+import net.laserdiamond.serverplugin1201.entities.healthDisplay.mobHealthDisplay;
 import net.laserdiamond.serverplugin1201.stats.Config.BaseStatsConfig;
 import net.laserdiamond.serverplugin1201.stats.Manager.StatProfileManager;
 import org.bukkit.Bukkit;
@@ -100,7 +102,7 @@ public final class ServerPlugin1201 extends JavaPlugin {
 
         // Armor stats
         getServer().getPluginManager().registerEvents(new ArmorEquipStats(this),this);
-        getServer().getPluginManager().registerEvents(new DefenseEvent(this),this);
+        getServer().getPluginManager().registerEvents(new ApplyDefense(this),this);
         getServer().getPluginManager().registerEvents(new TrimMaterialListeners(this),this);
         registerStormArmorListeners();
 
@@ -118,11 +120,15 @@ public final class ServerPlugin1201 extends JavaPlugin {
         // Anvil Inventory GUI
         getServer().getPluginManager().registerEvents(new AnvilInvetoryGUI(this),this);
 
+        // Mob names
+        getServer().getPluginManager().registerEvents(new mobHealthDisplay(this),this);
+
         // Register Commands
         getCommand("plugineffect").setExecutor(new EffectsCommand(this));
         getCommand("plugingive").setExecutor(new GiveItemsCommand(this));
         getCommand("pluginenchant").setExecutor(new EnchantCommand());
         getCommand("stats").setExecutor(new ViewStats());
+        getCommand("refillmana").setExecutor(new fillMana());
 
         getConfig().options().copyDefaults();
         saveDefaultConfig();

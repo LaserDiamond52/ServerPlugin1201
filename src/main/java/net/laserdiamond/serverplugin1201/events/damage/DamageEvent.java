@@ -1,21 +1,14 @@
-package net.laserdiamond.serverplugin1201.events.Stats;
+package net.laserdiamond.serverplugin1201.events.damage;
 
 import net.laserdiamond.serverplugin1201.ServerPlugin1201;
-import net.laserdiamond.serverplugin1201.stats.Components.DamageStats;
-import net.laserdiamond.serverplugin1201.stats.Components.Stats;
 import net.laserdiamond.serverplugin1201.stats.Manager.StatProfileManager;
 import org.bukkit.*;
-import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.scheduler.BukkitRunnable;
-
-import java.text.DecimalFormat;
+import org.bukkit.event.entity.EntityRegainHealthEvent;
 
 public class DamageEvent implements Listener {
 
@@ -28,6 +21,7 @@ public class DamageEvent implements Listener {
         statProfileManager = plugin.getStatProfileManager();
     }
 
+    /*
     @EventHandler
     public void damageStat(EntityDamageByEntityEvent event) {
 
@@ -45,12 +39,14 @@ public class DamageEvent implements Listener {
             EntityDamageEvent.DamageCause damageCause = event.getCause();
 
             if (damageCause.equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK) ||
-                    damageCause.equals(EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK)) {
+                    damageCause.equals(EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK))
+            {
                 double finalMeleeDamage = (baseMelee + damage) * meleeIncrease;
                 event.setDamage(finalMeleeDamage);
             }
 
         }
+
 
         // Magic Damage
         if (event.getDamager() instanceof ThrownPotion thrownPotion)
@@ -63,6 +59,8 @@ public class DamageEvent implements Listener {
                 {
                     // Increase damage based on magic stats
                     DamageStats damageStats = statProfileManager.getStatProfile(player.getUniqueId()).damageStats();
+
+                    /*
                     //double baseSpellDmg = potionMeta.getPersistentDataContainer().get(magicDmgKey, PersistentDataType.DOUBLE);
                     double baseMagic = damageStats.getbMagicDmg();
                     double magicIncrease = 1 + damageStats.getpMagicDmg() * 0.01;
@@ -72,10 +70,14 @@ public class DamageEvent implements Listener {
                     {
                         event.setDamage(finalMagicDamage); // Set final damage
                     }
+
+
                 }
 
             }
         }
+
+
 
         // Range Damage
         if (event.getDamager() instanceof Arrow arrow)
@@ -98,7 +100,34 @@ public class DamageEvent implements Listener {
             }
         }
     }
+    */
 
+    @EventHandler
+    public void damageStat(EntityDamageByEntityEvent event)
+    {
+
+    }
+    @EventHandler (priority = EventPriority.HIGHEST)
+    public void damageDisplay(EntityDamageEvent event) {
+
+        EntityHealthChangeTagEvent damageDisplayEvent = new EntityHealthChangeTagEvent(event.getEntity(), event.getCause(), event.getFinalDamage(), true);
+        Bukkit.getPluginManager().callEvent(damageDisplayEvent);
+
+        EntityHealthDisplayChangeEvent healthDisplayChangeEvent = new EntityHealthDisplayChangeEvent(event.getEntity(), event.getFinalDamage(), true);
+        Bukkit.getPluginManager().callEvent(healthDisplayChangeEvent);
+    }
+
+    @EventHandler (priority = EventPriority.HIGHEST)
+    public void healDisplay(EntityRegainHealthEvent event) {
+
+        EntityHealthChangeTagEvent damageTagEvent = new EntityHealthChangeTagEvent(event.getEntity(), event.getAmount(), false);
+        Bukkit.getPluginManager().callEvent(damageTagEvent);
+
+        EntityHealthDisplayChangeEvent healthDisplayChangeEvent = new EntityHealthDisplayChangeEvent(event.getEntity(), event.getAmount(), false);
+        Bukkit.getPluginManager().callEvent(healthDisplayChangeEvent);
+    }
+
+    /*
     @EventHandler (priority = EventPriority.HIGHEST)
     public void damageDisplay(EntityDamageEvent event) {
 
@@ -151,4 +180,5 @@ public class DamageEvent implements Listener {
         }
     }
 
+     */
 }

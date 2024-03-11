@@ -1,8 +1,7 @@
-package net.laserdiamond.serverplugin1201.events.Stats;
+package net.laserdiamond.serverplugin1201.events.damage;
 
 import net.laserdiamond.serverplugin1201.ServerPlugin1201;
 import net.laserdiamond.serverplugin1201.stats.Components.DefenseStats;
-import net.laserdiamond.serverplugin1201.stats.Components.Stats;
 import net.laserdiamond.serverplugin1201.stats.Manager.StatProfileManager;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -22,11 +21,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class DefenseEvent implements Listener {
+public class ApplyDefense implements Listener {
 
     private final ServerPlugin1201 plugin;
     private final StatProfileManager statProfileManager;
-    public DefenseEvent(ServerPlugin1201 plugin) {
+    public ApplyDefense(ServerPlugin1201 plugin) {
         this.plugin = plugin;
         this.statProfileManager = plugin.getStatProfileManager();
     }
