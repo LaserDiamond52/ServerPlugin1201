@@ -140,15 +140,15 @@ public class ArmorEquipStats implements Listener {
         }
         if (meleeDamage != null) {
             //stats.setMeleeDamage(currentMeleeDamage + meleeDamage);
-            damageStats.setpMeleeDmg(currentMeleeDamage - meleeDamage);
+            damageStats.setpMeleeDmg(currentMeleeDamage + meleeDamage);
         }
         if (magicDamage != null) {
             //stats.setMagicDamage(currentMagicDamage + magicDamage);
-            damageStats.setpMagicDmg(currentMagicDamage - magicDamage);
+            damageStats.setpMagicDmg(currentMagicDamage + magicDamage);
         }
         if (rangeDamage != null) {
             //stats.setRangeDamage(currentRangeDamage + rangeDamage);
-            damageStats.setpRangeDmg(currentRangeDamage - rangeDamage);
+            damageStats.setpRangeDmg(currentRangeDamage + rangeDamage);
         }
 
     }

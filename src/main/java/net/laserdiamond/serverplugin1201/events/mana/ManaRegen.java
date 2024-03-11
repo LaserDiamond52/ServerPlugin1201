@@ -1,4 +1,4 @@
-package net.laserdiamond.serverplugin1201.events.Stats;
+package net.laserdiamond.serverplugin1201.events.mana;
 
 import net.laserdiamond.serverplugin1201.ServerPlugin1201;
 import net.laserdiamond.serverplugin1201.events.effects.Components.Timers.ManaFreezeTimer;

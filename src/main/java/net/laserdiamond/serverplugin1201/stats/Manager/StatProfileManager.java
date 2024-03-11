@@ -51,9 +51,6 @@ public class StatProfileManager {
 
     public StatProfile createNewStatProfile(Player player)
     {
-        // player, health, speed, starve, luck, pMelee, pMagic, pRange, aMana, mMana, bMelee, bMagic, bRange, def, fireDef, explosionDef, projDef, magicDef, toughness, fortitude
-        //Stats stats = new Stats(player, baseStatsArray[0], baseStatsArray[1], baseStatsArray[2], baseStatsArray[3], baseStatsArray[4], baseStatsArray[5], baseStatsArray[6], baseStatsArray[7], baseStatsArray[8], baseStatsArray[9], baseStatsArray[10], baseStatsArray[11], baseStatsArray[12], baseStatsArray[13], baseStatsArray[14], baseStatsArray[15], baseStatsArray[16], baseStatsArray[17], 0);
-
         Stats stats = new Stats(player, baseStatsArray[0], baseStatsArray[1], baseStatsArray[2], baseStatsArray[3], baseStatsArray[7], baseStatsArray[8]);
         DamageStats damageStats = new DamageStats(baseStatsArray[9], baseStatsArray[10], baseStatsArray[11], baseStatsArray[4], baseStatsArray[5], baseStatsArray[6]);
         DefenseStats defenseStats = new DefenseStats(player, baseStatsArray[12], baseStatsArray[13], baseStatsArray[14], baseStatsArray[15], baseStatsArray[16], baseStatsArray[17],0);

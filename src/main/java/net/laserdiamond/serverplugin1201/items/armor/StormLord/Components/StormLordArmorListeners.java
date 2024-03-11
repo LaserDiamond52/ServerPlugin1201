@@ -3,17 +3,15 @@ package net.laserdiamond.serverplugin1201.items.armor.StormLord.Components;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import net.laserdiamond.serverplugin1201.ServerPlugin1201;
 import net.laserdiamond.serverplugin1201.enchants.Components.EnchantsClass;
-import net.laserdiamond.serverplugin1201.events.Stats.DamageEvent;
+import net.laserdiamond.serverplugin1201.events.damage.PlayerMagicDamageEvent;
 import net.laserdiamond.serverplugin1201.items.armor.StormLord.Config.StormLordArmorConfig;
 import net.laserdiamond.serverplugin1201.items.management.armor.ArmorCMD;
 import net.laserdiamond.serverplugin1201.management.messages.messages;
 import net.laserdiamond.serverplugin1201.stats.Components.Stats;
 import net.laserdiamond.serverplugin1201.stats.Manager.StatProfileManager;
-import org.bukkit.Color;
-import org.bukkit.Material;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.ThrownPotion;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryType;
@@ -21,7 +19,6 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffectType;
 
 public class StormLordArmorListeners implements Listener {
@@ -77,12 +74,17 @@ public class StormLordArmorListeners implements Listener {
                         {
                             stats.setAvailableMana(availableMana - manaCost);
 
-                            // Create thrown potion that will damage nearby entities
+                            // Create thrown potion that will damage entity
+
+                            /*
                             ThrownPotion magicPotion = player.getWorld().spawn(player.getLocation(), ThrownPotion.class);
                             magicPotion.setShooter(player); // MUST set shooter to player
                             magicPotion.setItem(new ItemStack(Material.AIR)); // Set thrown potion to air
                             magicPotion.getPotionMeta().getPersistentDataContainer().set(DamageEvent.magicDmgKey, PersistentDataType.DOUBLE, finalDamage);
                             magicPotion.getPotionMeta().setColor(Color.AQUA);
+
+                             */
+
 
                             for (LivingEntity livingEntity : player.getLocation().getNearbyLivingEntities(blastRadius)) // Get all living entities in blast radius
                             {
@@ -90,13 +92,14 @@ public class StormLordArmorListeners implements Listener {
 
                                 if (livingEntity != player) // Check if living entity is NOT player
                                 {
-                                    livingEntity.damage(finalDamage, magicPotion); // Damage living entity (remember shooter = player)
+                                    PlayerMagicDamageEvent playerMagicDamageEvent = new PlayerMagicDamageEvent(player, livingEntity, finalDamage, true);
+                                    Bukkit.getPluginManager().callEvent(playerMagicDamageEvent);
                                 }
                             }
 
-                            magicPotion.splash(); // Splash potion
+                            //magicPotion.splash(); // Splash potion
                             player.sendMessage(messages.abilityUse(abilityName));
-                            EyeOfStormCooldown.setCooldown(player, cooldown);
+                            EyeOfStormCooldown.setCooldown(player, 5);
                         } else {
                             player.sendMessage(messages.notEnoughMana());
                         }
