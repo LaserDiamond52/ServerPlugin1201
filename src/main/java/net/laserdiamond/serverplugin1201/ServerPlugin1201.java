@@ -31,6 +31,7 @@ import net.laserdiamond.serverplugin1201.items.armor.StormLord.Components.StormL
 import net.laserdiamond.serverplugin1201.items.armor.StormLord.Config.StormLordArmorConfig;
 import net.laserdiamond.serverplugin1201.items.armor.Trims.Components.ArmorTrimMaterialStats;
 import net.laserdiamond.serverplugin1201.items.armor.Trims.Components.ArmorTrimPatternStats;
+import net.laserdiamond.serverplugin1201.items.armor.Trims.Components.TrimMaterialListeners;
 import net.laserdiamond.serverplugin1201.items.armor.Trims.Config.ArmorTrimConfig;
 import net.laserdiamond.serverplugin1201.items.armor.Vanilla.Components.DiamondArmorManager;
 import net.laserdiamond.serverplugin1201.items.armor.Vanilla.Components.NetheriteArmorManager;
@@ -100,6 +101,7 @@ public final class ServerPlugin1201 extends JavaPlugin {
         // Armor stats
         getServer().getPluginManager().registerEvents(new ArmorEquipStats(this),this);
         getServer().getPluginManager().registerEvents(new DefenseEvent(this),this);
+        getServer().getPluginManager().registerEvents(new TrimMaterialListeners(this),this);
         registerStormArmorListeners();
 
         // Enchants

@@ -4,6 +4,7 @@ import net.laserdiamond.serverplugin1201.ServerPlugin1201;
 import net.laserdiamond.serverplugin1201.events.effects.Components.Timers.ManaFreezeTimer;
 import net.laserdiamond.serverplugin1201.events.effects.Components.Timers.NecrosisTimer;
 import net.laserdiamond.serverplugin1201.events.effects.Managers.EffectManager;
+import net.laserdiamond.serverplugin1201.stats.Components.DefenseStats;
 import net.laserdiamond.serverplugin1201.stats.Components.Stats;
 import net.laserdiamond.serverplugin1201.stats.Manager.StatProfileManager;
 import net.md_5.bungee.api.ChatMessageType;
@@ -35,6 +36,7 @@ public class HUD extends BukkitRunnable implements Listener {
         for (Player player : Bukkit.getOnlinePlayers()) {
 
             Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).stats();
+            DefenseStats defenseStats = statProfileManager.getStatProfile(player.getUniqueId()).defenseStats();
 
             double availableMana = stats.getAvailableMana();
             double maxMana = stats.getMaxMana();
@@ -42,8 +44,8 @@ public class HUD extends BukkitRunnable implements Listener {
             double currentHealth = player.getHealth();
             double maxHealth = player.getMaxHealth();
 
-            double armor = stats.getDefense();
-            double toughness = stats.getToughness();
+            double armor = defenseStats.getDefense();
+            double toughness = defenseStats.getToughness();
 
             DecimalFormat singleDecimalPlace = new DecimalFormat("0.0");
             DecimalFormat doubleDecimalPlace = new DecimalFormat("0.00");

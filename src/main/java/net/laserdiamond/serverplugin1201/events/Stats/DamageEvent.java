@@ -1,6 +1,7 @@
 package net.laserdiamond.serverplugin1201.events.Stats;
 
 import net.laserdiamond.serverplugin1201.ServerPlugin1201;
+import net.laserdiamond.serverplugin1201.stats.Components.DamageStats;
 import net.laserdiamond.serverplugin1201.stats.Components.Stats;
 import net.laserdiamond.serverplugin1201.stats.Manager.StatProfileManager;
 import org.bukkit.*;
@@ -35,11 +36,11 @@ public class DamageEvent implements Listener {
         // Melee Damage
         if (event.getDamager() instanceof Player player) {
 
-            Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).stats();
+            DamageStats damageStats = statProfileManager.getStatProfile(player.getUniqueId()).damageStats();
 
-            double baseMelee = stats.getBaseMeleeDamage();
+            double baseMelee = damageStats.getbMeleeDmg();
 
-            double meleeIncrease = 1 + stats.getMeleeDamage() * 0.01;
+            double meleeIncrease = 1 + damageStats.getpMeleeDmg() * 0.01;
 
             EntityDamageEvent.DamageCause damageCause = event.getCause();
 
@@ -61,10 +62,10 @@ public class DamageEvent implements Listener {
                         potionMeta.getPersistentDataContainer().has(magicDmgKey))
                 {
                     // Increase damage based on magic stats
-                    Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).stats();
+                    DamageStats damageStats = statProfileManager.getStatProfile(player.getUniqueId()).damageStats();
                     //double baseSpellDmg = potionMeta.getPersistentDataContainer().get(magicDmgKey, PersistentDataType.DOUBLE);
-                    double baseMagic = stats.getBaseMagicDamage();
-                    double magicIncrease = 1 + stats.getMagicDamage() * 0.01;
+                    double baseMagic = damageStats.getbMagicDmg();
+                    double magicIncrease = 1 + damageStats.getpMagicDmg() * 0.01;
                     double finalMagicDamage = (baseMagic + damage) * magicIncrease;
 
                     if (event.getEntity() instanceof LivingEntity)
@@ -82,9 +83,9 @@ public class DamageEvent implements Listener {
             if (arrow.getShooter() instanceof Player player) // Check if shooter of arrow is a player
             {
                 // Increase damage based on range stats
-                Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).stats();
-                double baseRange = stats.getBaseRangeDamage();
-                double rangeIncrease = 1 + stats.getRangeDamage() * 0.01;
+                DamageStats damageStats = statProfileManager.getStatProfile(player.getUniqueId()).damageStats();
+                double baseRange = damageStats.getbRangeDmg();
+                double rangeIncrease = 1 + damageStats.getpRangeDmg() * 0.01;
                 double finalArrowDamage = (baseRange + damage) * rangeIncrease;
 
                 if (event.getEntity() instanceof LivingEntity) // Check if hit entity is a living entity

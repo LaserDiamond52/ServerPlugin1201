@@ -1,6 +1,7 @@
 package net.laserdiamond.serverplugin1201.events.Stats;
 
 import net.laserdiamond.serverplugin1201.ServerPlugin1201;
+import net.laserdiamond.serverplugin1201.stats.Components.DefenseStats;
 import net.laserdiamond.serverplugin1201.stats.Components.Stats;
 import net.laserdiamond.serverplugin1201.stats.Manager.StatProfileManager;
 import org.bukkit.*;
@@ -23,8 +24,8 @@ import java.util.List;
 
 public class DefenseEvent implements Listener {
 
-    private ServerPlugin1201 plugin;
-    private StatProfileManager statProfileManager;
+    private final ServerPlugin1201 plugin;
+    private final StatProfileManager statProfileManager;
     public DefenseEvent(ServerPlugin1201 plugin) {
         this.plugin = plugin;
         this.statProfileManager = plugin.getStatProfileManager();
@@ -35,13 +36,13 @@ public class DefenseEvent implements Listener {
 
         if (event.getEntity() instanceof Player player) {
 
-            Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).stats();
-            double armor = stats.getDefense();
-            double fire_armor = stats.getFireDefense();
-            double explosion_armor = stats.getExplosionDefense();
-            double projectile_armor = stats.getProjectileDefense();
-            double magic_armor = stats.getMagicDefense();
-            double toughness = stats.getToughness();
+            DefenseStats defenseStats = statProfileManager.getStatProfile(player.getUniqueId()).defenseStats();
+            double armor = defenseStats.getDefense();
+            double fire_armor = defenseStats.getFireDefense();
+            double explosion_armor = defenseStats.getExplosionDefense();
+            double projectile_armor = defenseStats.getProjectileDefense();
+            double magic_armor = defenseStats.getMagicDefense();
+            double toughness = defenseStats.getToughness();
 
             double originalDamage = event.getDamage();
 
@@ -105,7 +106,7 @@ public class DefenseEvent implements Listener {
             int mainHandAmount = mainHand.getAmount();
             int offHandAmount = offHand.getAmount();
 
-            boolean isFatalDamage = finalDamage <= 0;
+            boolean isFatalDamage = (finalDamage <= 0);
 
             EntityResurrectEvent totemUseMainHand = new EntityResurrectEvent(player, EquipmentSlot.HAND);
             boolean callEvent = totemUseMainHand.callEvent();

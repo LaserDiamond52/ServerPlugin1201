@@ -54,7 +54,20 @@ baseMagicDefense: 0
 baseToughness: 0
 
 # Default Speed
-baseSpeed: 0.10000000149011612
+
+# Determines how much speed each point of speed should give
+# For reference, default Vanilla value is 0.10000000149011612
+
+baseSpeed: 0.1
+
+# Default Speed Points (%)
+
+# Determines the default speed in percent the player should start off with
+
+# Ex:
+# 100% = full value of baseSpeed
+# 150% = 50% faster speed based off baseSpeed
+baseSpeedPoints: 100
 
 # Default Starvation Rate (ticks)
 starvationRate: 80

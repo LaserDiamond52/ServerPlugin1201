@@ -2,7 +2,6 @@ package net.laserdiamond.serverplugin1201.items.armor.Trims.Components;
 
 public class ArmorTrimMaterialStats {
 
-    private double[] materialStatArray = new double[11];
     private double copperSpeed;
     private double goldSaturationChance;
     private double ironHealthBoost;
