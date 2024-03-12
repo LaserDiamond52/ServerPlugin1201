@@ -23,11 +23,11 @@ import java.util.List;
 
 public class ApplyDefense implements Listener {
 
-    private final ServerPlugin1201 plugin;
-    private final StatProfileManager statProfileManager;
+    private final ServerPlugin1201 PLUGIN;
+    private final StatProfileManager STAT_PROFILE_MANAGER;
     public ApplyDefense(ServerPlugin1201 plugin) {
-        this.plugin = plugin;
-        this.statProfileManager = plugin.getStatProfileManager();
+        this.PLUGIN = plugin;
+        this.STAT_PROFILE_MANAGER = plugin.getStatProfileManager();
     }
 
     @EventHandler (priority = EventPriority.MONITOR)
@@ -35,7 +35,7 @@ public class ApplyDefense implements Listener {
 
         if (event.getEntity() instanceof Player player) {
 
-            DefenseStats defenseStats = statProfileManager.getStatProfile(player.getUniqueId()).defenseStats();
+            DefenseStats defenseStats = STAT_PROFILE_MANAGER.getStatProfile(player.getUniqueId()).defenseStats();
             double armor = defenseStats.getDefense();
             double fire_armor = defenseStats.getFireDefense();
             double explosion_armor = defenseStats.getExplosionDefense();
@@ -47,7 +47,7 @@ public class ApplyDefense implements Listener {
 
             double finalArmor = 0;
 
-            if (fireArmorProtection.contains(event.getCause())) {
+            if (FIRE_DEFENSE_CAUSE.contains(event.getCause())) {
                 // Fire damage
 
                 // TODO USE FIRE ARMOR
@@ -55,7 +55,7 @@ public class ApplyDefense implements Listener {
                 //player.sendMessage("Fire armor: " + finalArmor);
 
 
-            } else if (explosionArmorProtection.contains(event.getCause())) {
+            } else if (EXPLOSION_DEFENSE_CAUSE.contains(event.getCause())) {
                 // Explosion damage
 
                 // TODO USE EXPLOSION ARMOR
@@ -63,28 +63,28 @@ public class ApplyDefense implements Listener {
                 //player.sendMessage("Explosion armor: " + finalArmor);
 
 
-            } else if (projectileArmorProtection.contains(event.getCause())) {
+            } else if (PROJECTILE_DEFENSE_CAUSE.contains(event.getCause())) {
                 // Projectile
 
                 // TODO USE PROJECTILE ARMOR
                 finalArmor = armor + projectile_armor;
                 //player.sendMessage("Projectile armor: " + finalArmor);
 
-            } else if (magicArmorProtection.contains(event.getCause())) {
+            } else if (MAGIC_DEFENSE_CAUSE.contains(event.getCause())) {
                 // Magic
 
                 // TODO USE MAGIC ARMOR
                 finalArmor = armor + magic_armor;
                 //player.sendMessage("Magic armor: " + finalArmor);
 
-            } else if (armorProtection.contains(event.getCause())) {
+            } else if (DEFENSE_CAUSE.contains(event.getCause())) {
                 // Normal
 
                 // TODO USE ARMOR
                 //player.sendMessage("Armor: " + armor);
                 finalArmor = armor;
 
-            } else if (toughnessProtection.contains(event.getCause())) {
+            } else if (TOUGHNESS_CAUSE.contains(event.getCause())) {
                 // Toughness
 
                 // TODO USE TOUGHNESS
@@ -192,85 +192,85 @@ public class ApplyDefense implements Listener {
         return damageReduction * damage;
     }
 
-    private final List<EntityDamageEvent.DamageCause> fireArmorProtection = new ArrayList<>();
+    private final List<EntityDamageEvent.DamageCause> FIRE_DEFENSE_CAUSE = new ArrayList<>();
     {
-        fireArmorProtection.add(EntityDamageEvent.DamageCause.FIRE);
-        fireArmorProtection.add(EntityDamageEvent.DamageCause.FIRE_TICK);
-        fireArmorProtection.add(EntityDamageEvent.DamageCause.LAVA);
-        fireArmorProtection.add(EntityDamageEvent.DamageCause.HOT_FLOOR);
+        FIRE_DEFENSE_CAUSE.add(EntityDamageEvent.DamageCause.FIRE);
+        FIRE_DEFENSE_CAUSE.add(EntityDamageEvent.DamageCause.FIRE_TICK);
+        FIRE_DEFENSE_CAUSE.add(EntityDamageEvent.DamageCause.LAVA);
+        FIRE_DEFENSE_CAUSE.add(EntityDamageEvent.DamageCause.HOT_FLOOR);
     }
 
-    private final List<EntityDamageEvent.DamageCause> explosionArmorProtection = new ArrayList<>();
+    private final List<EntityDamageEvent.DamageCause> EXPLOSION_DEFENSE_CAUSE = new ArrayList<>();
     {
-        explosionArmorProtection.add(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION);
-        explosionArmorProtection.add(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION);
+        EXPLOSION_DEFENSE_CAUSE.add(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION);
+        EXPLOSION_DEFENSE_CAUSE.add(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION);
     }
 
-    private final List<EntityDamageEvent.DamageCause> projectileArmorProtection = new ArrayList<>();
+    private final List<EntityDamageEvent.DamageCause> PROJECTILE_DEFENSE_CAUSE = new ArrayList<>();
     {
-        projectileArmorProtection.add(EntityDamageEvent.DamageCause.PROJECTILE);
+        PROJECTILE_DEFENSE_CAUSE.add(EntityDamageEvent.DamageCause.PROJECTILE);
     }
 
-    private final List<EntityDamageEvent.DamageCause> magicArmorProtection = new ArrayList<>();
+    private final List<EntityDamageEvent.DamageCause> MAGIC_DEFENSE_CAUSE = new ArrayList<>();
     {
-        magicArmorProtection.add(EntityDamageEvent.DamageCause.MAGIC);
+        MAGIC_DEFENSE_CAUSE.add(EntityDamageEvent.DamageCause.MAGIC);
     }
 
-    private final List<EntityDamageEvent.DamageCause> armorProtection = new ArrayList<>();
+    private final List<EntityDamageEvent.DamageCause> DEFENSE_CAUSE = new ArrayList<>();
     {
-        armorProtection.add(EntityDamageEvent.DamageCause.CONTACT);
-        armorProtection.add(EntityDamageEvent.DamageCause.ENTITY_ATTACK);
-        armorProtection.add(EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK);
-        armorProtection.add(EntityDamageEvent.DamageCause.LIGHTNING);
-        armorProtection.add(EntityDamageEvent.DamageCause.FALLING_BLOCK);
-        armorProtection.add(EntityDamageEvent.DamageCause.THORNS);
+        DEFENSE_CAUSE.add(EntityDamageEvent.DamageCause.CONTACT);
+        DEFENSE_CAUSE.add(EntityDamageEvent.DamageCause.ENTITY_ATTACK);
+        DEFENSE_CAUSE.add(EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK);
+        DEFENSE_CAUSE.add(EntityDamageEvent.DamageCause.LIGHTNING);
+        DEFENSE_CAUSE.add(EntityDamageEvent.DamageCause.FALLING_BLOCK);
+        DEFENSE_CAUSE.add(EntityDamageEvent.DamageCause.THORNS);
 
 
-        armorProtection.addAll(fireArmorProtection);
-        armorProtection.addAll(explosionArmorProtection);
-        armorProtection.addAll(projectileArmorProtection);
-        armorProtection.addAll(magicArmorProtection);
+        DEFENSE_CAUSE.addAll(FIRE_DEFENSE_CAUSE);
+        DEFENSE_CAUSE.addAll(EXPLOSION_DEFENSE_CAUSE);
+        DEFENSE_CAUSE.addAll(PROJECTILE_DEFENSE_CAUSE);
+        DEFENSE_CAUSE.addAll(MAGIC_DEFENSE_CAUSE);
     }
 
-    private final List<EntityDamageEvent.DamageCause> toughnessProtection = new ArrayList<>();
+    private final List<EntityDamageEvent.DamageCause> TOUGHNESS_CAUSE = new ArrayList<>();
     {
-        toughnessProtection.add(EntityDamageEvent.DamageCause.SONIC_BOOM);
+        TOUGHNESS_CAUSE.add(EntityDamageEvent.DamageCause.SONIC_BOOM);
 
-        toughnessProtection.addAll(armorProtection);
+        TOUGHNESS_CAUSE.addAll(DEFENSE_CAUSE);
     }
 
-    private final HashMap<EntityDamageEvent.DamageCause, String> deathNames = new HashMap<>();
+    private final HashMap<EntityDamageEvent.DamageCause, String> DEATH_MESSAGES = new HashMap<>();
     {
-        deathNames.put(EntityDamageEvent.DamageCause.KILL, " was subject to god's judgement");
-        deathNames.put(EntityDamageEvent.DamageCause.WORLD_BORDER, " wondered outside the confinements of the world");
-        deathNames.put(EntityDamageEvent.DamageCause.CONTACT, " died to a block");
-        deathNames.put(EntityDamageEvent.DamageCause.ENTITY_ATTACK, " was killed by an entity");
-        deathNames.put(EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK, " was killed by an entity's sweep");
-        deathNames.put(EntityDamageEvent.DamageCause.PROJECTILE, " was shot");
-        deathNames.put(EntityDamageEvent.DamageCause.SUFFOCATION, " suffocated in a wall");
-        deathNames.put(EntityDamageEvent.DamageCause.FALL, " hit the ground too hard");
-        deathNames.put(EntityDamageEvent.DamageCause.FIRE, " was roasted alive");
-        deathNames.put(EntityDamageEvent.DamageCause.FIRE_TICK, " was roasted alive");
-        deathNames.put(EntityDamageEvent.DamageCause.MELTING, " melted");
-        deathNames.put(EntityDamageEvent.DamageCause.LAVA, " tried to swim in lava");
-        deathNames.put(EntityDamageEvent.DamageCause.DROWNING, " forgot how to swim");
-        deathNames.put(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION, " blew up");
-        deathNames.put(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION, " blew up");
-        deathNames.put(EntityDamageEvent.DamageCause.VOID, " fell out of the world");
-        deathNames.put(EntityDamageEvent.DamageCause.LIGHTNING, " was struck by lightning");
-        deathNames.put(EntityDamageEvent.DamageCause.SUICIDE, " killed themself");
-        deathNames.put(EntityDamageEvent.DamageCause.STARVATION, " starved to death");
-        deathNames.put(EntityDamageEvent.DamageCause.POISON, " was poisoned");
-        deathNames.put(EntityDamageEvent.DamageCause.MAGIC, " was subject to witchcraft");
-        deathNames.put(EntityDamageEvent.DamageCause.WITHER, " withered away");
-        deathNames.put(EntityDamageEvent.DamageCause.FALLING_BLOCK, " was crushed by a block");
-        deathNames.put(EntityDamageEvent.DamageCause.THORNS, " got NO-YOU'D!");
-        deathNames.put(EntityDamageEvent.DamageCause.DRAGON_BREATH, " was roasted alive");
-        deathNames.put(EntityDamageEvent.DamageCause.CUSTOM, " ???");
-        deathNames.put(EntityDamageEvent.DamageCause.FLY_INTO_WALL, " experienced kinetic energy");
-        deathNames.put(EntityDamageEvent.DamageCause.HOT_FLOOR, " didn't want to play 'The Floor is Lava' anymore");
-        deathNames.put(EntityDamageEvent.DamageCause.CRAMMING, " was squeezed to death");
-        deathNames.put(EntityDamageEvent.DamageCause.FREEZE, " froze");
-        deathNames.put(EntityDamageEvent.DamageCause.SONIC_BOOM, " got their eardrums ruptured");
+        DEATH_MESSAGES.put(EntityDamageEvent.DamageCause.KILL, " was subject to god's judgement");
+        DEATH_MESSAGES.put(EntityDamageEvent.DamageCause.WORLD_BORDER, " wondered outside the confinements of the world");
+        DEATH_MESSAGES.put(EntityDamageEvent.DamageCause.CONTACT, " died to a block");
+        DEATH_MESSAGES.put(EntityDamageEvent.DamageCause.ENTITY_ATTACK, " was killed by an entity");
+        DEATH_MESSAGES.put(EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK, " was killed by an entity's sweep");
+        DEATH_MESSAGES.put(EntityDamageEvent.DamageCause.PROJECTILE, " was shot");
+        DEATH_MESSAGES.put(EntityDamageEvent.DamageCause.SUFFOCATION, " suffocated in a wall");
+        DEATH_MESSAGES.put(EntityDamageEvent.DamageCause.FALL, " hit the ground too hard");
+        DEATH_MESSAGES.put(EntityDamageEvent.DamageCause.FIRE, " was roasted alive");
+        DEATH_MESSAGES.put(EntityDamageEvent.DamageCause.FIRE_TICK, " was roasted alive");
+        DEATH_MESSAGES.put(EntityDamageEvent.DamageCause.MELTING, " melted");
+        DEATH_MESSAGES.put(EntityDamageEvent.DamageCause.LAVA, " tried to swim in lava");
+        DEATH_MESSAGES.put(EntityDamageEvent.DamageCause.DROWNING, " forgot how to swim");
+        DEATH_MESSAGES.put(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION, " blew up");
+        DEATH_MESSAGES.put(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION, " blew up");
+        DEATH_MESSAGES.put(EntityDamageEvent.DamageCause.VOID, " fell out of the world");
+        DEATH_MESSAGES.put(EntityDamageEvent.DamageCause.LIGHTNING, " was struck by lightning");
+        DEATH_MESSAGES.put(EntityDamageEvent.DamageCause.SUICIDE, " killed themself");
+        DEATH_MESSAGES.put(EntityDamageEvent.DamageCause.STARVATION, " starved to death");
+        DEATH_MESSAGES.put(EntityDamageEvent.DamageCause.POISON, " was poisoned");
+        DEATH_MESSAGES.put(EntityDamageEvent.DamageCause.MAGIC, " was subject to witchcraft");
+        DEATH_MESSAGES.put(EntityDamageEvent.DamageCause.WITHER, " withered away");
+        DEATH_MESSAGES.put(EntityDamageEvent.DamageCause.FALLING_BLOCK, " was crushed by a block");
+        DEATH_MESSAGES.put(EntityDamageEvent.DamageCause.THORNS, " got NO-YOU'D!");
+        DEATH_MESSAGES.put(EntityDamageEvent.DamageCause.DRAGON_BREATH, " was roasted alive");
+        DEATH_MESSAGES.put(EntityDamageEvent.DamageCause.CUSTOM, " ???");
+        DEATH_MESSAGES.put(EntityDamageEvent.DamageCause.FLY_INTO_WALL, " experienced kinetic energy");
+        DEATH_MESSAGES.put(EntityDamageEvent.DamageCause.HOT_FLOOR, " didn't want to play 'The Floor is Lava' anymore");
+        DEATH_MESSAGES.put(EntityDamageEvent.DamageCause.CRAMMING, " was squeezed to death");
+        DEATH_MESSAGES.put(EntityDamageEvent.DamageCause.FREEZE, " froze");
+        DEATH_MESSAGES.put(EntityDamageEvent.DamageCause.SONIC_BOOM, " got their eardrums ruptured");
     }
 }

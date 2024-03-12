@@ -24,7 +24,7 @@ public class EntityHealthChangeTagEvent extends EntityEvent implements Cancellab
      * <p>
      * Note: This DOES NOT damage the entity
      */
-    private final ServerPlugin1201 plugin = ServerPlugin1201.getInstance();
+    private final ServerPlugin1201 PLUGIN = ServerPlugin1201.getInstance();
     private double amount;
     private EntityDamageEvent.DamageCause damageCause;
     private boolean isDamage; // True = amount is damage; false = heal
@@ -49,7 +49,7 @@ public class EntityHealthChangeTagEvent extends EntityEvent implements Cancellab
         {
             Location loc = livingEntity.getEyeLocation().add(0,0.5,0);
 
-            int textLifeSpan = plugin.getConfig().getInt("damageDisplayLifeSpanTicks");
+            int textLifeSpan = PLUGIN.getConfig().getInt("damageDisplayLifeSpanTicks");
             TextDisplay damageDisplay = loc.getWorld().spawn(loc, TextDisplay.class);
             DecimalFormat doubleDecimal = new DecimalFormat("0.00");
             damageDisplay.setSeeThrough(true);
@@ -105,7 +105,7 @@ public class EntityHealthChangeTagEvent extends EntityEvent implements Cancellab
                         damageDisplay.remove();
                     }
                 }
-            }.runTaskTimer(plugin, 0L, 1L);
+            }.runTaskTimer(PLUGIN, 0L, 1L);
         }
 
     }
@@ -122,7 +122,7 @@ public class EntityHealthChangeTagEvent extends EntityEvent implements Cancellab
         {
             Location loc = livingEntity.getEyeLocation().add(0,0.5,0);
 
-            int textLifeSpan = plugin.getConfig().getInt("damageDisplayLifeSpanTicks");
+            int textLifeSpan = PLUGIN.getConfig().getInt("damageDisplayLifeSpanTicks");
             TextDisplay damageDisplay = loc.getWorld().spawn(loc, TextDisplay.class);
             DecimalFormat doubleDecimal = new DecimalFormat("0.00");
             damageDisplay.setSeeThrough(true);
@@ -151,7 +151,7 @@ public class EntityHealthChangeTagEvent extends EntityEvent implements Cancellab
                         damageDisplay.remove();
                     }
                 }
-            }.runTaskTimer(plugin, 0L, 1L);
+            }.runTaskTimer(PLUGIN, 0L, 1L);
         }
     }
 

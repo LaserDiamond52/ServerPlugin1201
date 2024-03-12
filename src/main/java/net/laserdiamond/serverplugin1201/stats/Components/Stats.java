@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 
 public class Stats {
 
-    private final ServerPlugin1201 plugin = ServerPlugin1201.getInstance();
+    private final ServerPlugin1201 PLUGIN = ServerPlugin1201.getInstance();
     private double health;
     private double meleeDamage;
     private double rangeDamage;
@@ -27,7 +27,7 @@ public class Stats {
     private double speed;
     private double starvationRate;
     private double luck;
-    private final double baseSpeed = plugin.getBaseStatsConfig().getDouble("baseSpeed");
+    private final double BASE_SPEED = PLUGIN.getBaseStatsConfig().getDouble("baseSpeed");
 
     public Stats(Player player, double health, double speed, double starvationRate, double luck, double meleeDamage, double magicDamage, double rangeDamage, double availableMana, double maxMana, double baseMeleeDamage, double baseMagicDamage, double baseRangeDamage, double defense, double fireDefense, double explosionDefense, double projectileDefense, double magicDefense, double toughness, double fortitude) {
 
@@ -36,7 +36,7 @@ public class Stats {
         this.health = health;
 
         AttributeInstance speedInstance = player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED);
-        speedInstance.setBaseValue(baseSpeed * speed * 0.01);
+        speedInstance.setBaseValue(BASE_SPEED * speed * 0.01);
         this.speed = speed;
 
         player.setStarvationRate((int) starvationRate);
@@ -70,7 +70,7 @@ public class Stats {
         this.health = health;
 
         AttributeInstance speedInstance = player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED);
-        speedInstance.setBaseValue(baseSpeed * speed * 0.01);
+        speedInstance.setBaseValue(BASE_SPEED * speed * 0.01);
         this.speed = speed;
 
         player.setStarvationRate((int) starvationRate);
@@ -220,13 +220,13 @@ public class Stats {
     public double getSpeed(Player player) {
         AttributeInstance speedInstance = player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED);
         double playerSpeed = speedInstance.getBaseValue();
-        speed = (playerSpeed / baseSpeed) * 100;
+        speed = (playerSpeed / BASE_SPEED) * 100;
         return speed;
     }
 
     public void setSpeed(Player player, double speed) {
         AttributeInstance speedInstance = player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED);
-        speedInstance.setBaseValue(baseSpeed * speed * 0.01);
+        speedInstance.setBaseValue(BASE_SPEED * speed * 0.01);
         this.speed = speed;
     }
 

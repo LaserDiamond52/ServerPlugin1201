@@ -10,11 +10,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.scoreboard.DisplaySlot;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.ScoreboardManager;
+import org.bukkit.scoreboard.*;
 
+import java.net.InetSocketAddress;
 import java.util.UUID;
 
 public class PlayerJoinServer implements Listener {
@@ -33,6 +31,24 @@ public class PlayerJoinServer implements Listener {
     public void PlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
+        /*
+         * Output player information to console
+         * <p>
+         * Determine whether this is a player you want to player in the server or not
+         */
+
+        Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + player.getName() + " has joined the game");
+        InetSocketAddress playerAddress = player.getAddress();
+        if (playerAddress != null)
+        {
+            Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Host Name: " + ChatColor.DARK_AQUA + playerAddress.getHostName());
+            Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Port: " + ChatColor.DARK_AQUA + playerAddress.getPort());
+            Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Address: " + ChatColor.DARK_AQUA + playerAddress.getAddress());
+            Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Virtual Host: " + ChatColor.DARK_AQUA + player.getVirtualHost());
+        } else
+        {
+            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "PLAYER ADDRESS IS NULL");
+        }
 
         // Create health display above player
         ScoreboardManager manager = Bukkit.getScoreboardManager();

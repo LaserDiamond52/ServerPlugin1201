@@ -24,6 +24,7 @@ import net.laserdiamond.serverplugin1201.events.PlayerJoinServer;
 import net.laserdiamond.serverplugin1201.events.effects.Components.EffectTimer;
 import net.laserdiamond.serverplugin1201.events.effects.Config.EffectProfileConfig;
 import net.laserdiamond.serverplugin1201.events.effects.Managers.EffectManager;
+import net.laserdiamond.serverplugin1201.events.mana.PlayerManaRegenEvent;
 import net.laserdiamond.serverplugin1201.items.armor.ArmorEquipStats;
 import net.laserdiamond.serverplugin1201.items.armor.Blaze.Config.BlazeArmorConfig;
 import net.laserdiamond.serverplugin1201.items.armor.StormLord.Components.EyeOfStormCooldown;
@@ -42,6 +43,8 @@ import net.laserdiamond.serverplugin1201.items.management.ItemMappings;
 import net.laserdiamond.serverplugin1201.entities.healthDisplay.mobHealthDisplay;
 import net.laserdiamond.serverplugin1201.stats.Config.BaseStatsConfig;
 import net.laserdiamond.serverplugin1201.stats.Manager.StatProfileManager;
+import net.laserdiamond.serverplugin1201.tunement.Config.TunementConfig;
+import net.laserdiamond.serverplugin1201.tunement.Manager.TunementProfileManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -51,6 +54,8 @@ public final class ServerPlugin1201 extends JavaPlugin {
 
     private static ServerPlugin1201 plugin;
     private StatProfileManager statProfileManager;
+    private TunementConfig tunementConfig;
+    private TunementProfileManager tunementProfileManager;
     private ArmorTrimMaterialStats armorTrimMaterialStats;
     private ArmorTrimPatternStats armorTrimPatternStats;
     private EffectManager effectManager;
@@ -90,6 +95,10 @@ public final class ServerPlugin1201 extends JavaPlugin {
 
         // Register timers
         createTasks();
+
+        // Mana Regen
+        //getServer().getPluginManager().registerEvents(new ManaRegen(this),this);
+
 
         // Refresh Items
         getServer().getPluginManager().registerEvents(new ItemMappings(this),this);
@@ -142,6 +151,9 @@ public final class ServerPlugin1201 extends JavaPlugin {
     public StatProfileManager getStatProfileManager() {
         return statProfileManager;
     }
+    public TunementProfileManager getTunementProfileManager() {
+        return tunementProfileManager;
+    }
     public ArmorTrimMaterialStats getArmorTrimMaterialStats() {
         return armorTrimMaterialStats;
     }
@@ -181,6 +193,9 @@ public final class ServerPlugin1201 extends JavaPlugin {
     public BaseStatsConfig getBaseStatsConfig() {
         return baseStatsConfig;
     }
+    public TunementConfig getTunementConfig() {
+        return tunementConfig;
+    }
     public EffectProfileConfig getEffectProfileConfig() {
         return effectProfileConfig;
     }
@@ -204,6 +219,9 @@ public final class ServerPlugin1201 extends JavaPlugin {
         baseStatsConfig = new BaseStatsConfig(this, "baseStats");
         baseStatsConfig.loadConfig();
 
+        tunementConfig = new TunementConfig(this, "tunement");
+        tunementConfig.loadConfig();
+
         effectProfileConfig = new EffectProfileConfig(this, "effectDurations");
         effectProfileConfig.loadConfig();
 
@@ -225,6 +243,8 @@ public final class ServerPlugin1201 extends JavaPlugin {
         stormLordArmorConfig.loadConfig();
     }
     private void createManagers() {
+        tunementProfileManager = new TunementProfileManager(this);
+
         statProfileManager = new StatProfileManager(this);
 
         effectManager = new EffectManager(this);
@@ -251,9 +271,13 @@ public final class ServerPlugin1201 extends JavaPlugin {
     }
 
     private void saveProfilesToConfigs() {
+        tunementProfileManager.saveToConfig();
+
         effectManager.saveProfilesToConfig();
     }
     private void saveConfigs() {
+        tunementConfig.saveConfig();
+
         effectProfileConfig.saveConfig();
     }
 

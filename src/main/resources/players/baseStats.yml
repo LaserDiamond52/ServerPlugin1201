@@ -74,6 +74,6 @@ starvationRate: 80
 
 # Player's base skill points
 
-# Base skill points when players first join
-baseSkillPoints: 0
+# Base tunement points when players first join
+baseTunementPoints: 5
 

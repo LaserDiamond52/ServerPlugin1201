@@ -1,9 +1,9 @@
 package net.laserdiamond.serverplugin1201.events.mana;
 
 import net.laserdiamond.serverplugin1201.ServerPlugin1201;
-import net.laserdiamond.serverplugin1201.stats.Components.DamageStats;
 import net.laserdiamond.serverplugin1201.stats.Components.Stats;
 import net.laserdiamond.serverplugin1201.stats.Manager.StatProfileManager;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
@@ -12,8 +12,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class PlayerManaRegenEvent extends PlayerEvent implements Cancellable {
 
-    private final ServerPlugin1201 plugin = ServerPlugin1201.getInstance();
-    private final StatProfileManager statProfileManager = plugin.getStatProfileManager();
+    private final ServerPlugin1201 PLUGIN = ServerPlugin1201.getInstance();
+    private final StatProfileManager STAT_PROFILE_MANAGER = PLUGIN.getStatProfileManager();
     private double manaAmount;
     private boolean isCancelled;
     private static final HandlerList HANDLER_LIST = new HandlerList();
@@ -22,19 +22,26 @@ public class PlayerManaRegenEvent extends PlayerEvent implements Cancellable {
         super(player);
         this.manaAmount = manaAmount;
 
-        Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).stats();
+        Stats stats = STAT_PROFILE_MANAGER.getStatProfile(player.getUniqueId()).stats();
         double availableMana = stats.getAvailableMana();
         double maxMana = stats.getMaxMana();
 
-        if (availableMana < maxMana)
+        long currentTime = System.currentTimeMillis();
+
+        if (!isCancelled)
         {
-            stats.setAvailableMana(availableMana + manaAmount);
+            if (availableMana < maxMana)
+            {
+                stats.setAvailableMana(availableMana + manaAmount);
+            }
+
+            if (availableMana + manaAmount > maxMana)
+            {
+                stats.setAvailableMana(maxMana);
+            }
         }
 
-        if (availableMana + manaAmount > maxMana)
-        {
-            stats.setAvailableMana(maxMana);
-        }
+
     }
 
 

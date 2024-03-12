@@ -14,7 +14,9 @@ import java.text.DecimalFormat;
 
 public class EntityHealthDisplayChangeEvent extends EntityEvent implements Cancellable {
 
-    private final ServerPlugin1201 plugin = ServerPlugin1201.getInstance();
+    /**
+     * This event is called when the health in the display name of a mob changes due to healing, damage, etc.
+     */
     private double amount; // Amount we want to change current health by
     private boolean isDamage; // true = damage; false = heal
     private boolean isCancelled;

@@ -1,6 +1,8 @@
 package net.laserdiamond.serverplugin1201.items.armor.Blaze.Components;
 
 import com.google.common.collect.Multimap;
+import net.laserdiamond.serverplugin1201.ServerPlugin1201;
+import net.laserdiamond.serverplugin1201.items.armor.Blaze.Config.BlazeArmorConfig;
 import net.laserdiamond.serverplugin1201.items.management.ItemForger;
 import net.laserdiamond.serverplugin1201.items.management.armor.ArmorFabricate;
 import net.laserdiamond.serverplugin1201.items.management.armor.ArmorTypes;
@@ -14,6 +16,14 @@ import java.util.HashMap;
 import java.util.List;
 
 public class BlazeArmorManager implements ArmorFabricate {
+
+    private ServerPlugin1201 plugin;
+    private BlazeArmorConfig armorConfig;
+
+    public BlazeArmorManager(ServerPlugin1201 plugin) {
+        this.plugin = plugin;
+        armorConfig = plugin.getBlazeArmorConfig();
+    }
 
     @Override
     public List<String> createLore(@NotNull ArmorTypes armorTypes, int stars) {
@@ -32,6 +42,8 @@ public class BlazeArmorManager implements ArmorFabricate {
 
     @Override
     public HashMap<ItemStatKeys, Double> createItemStats(@NotNull ArmorTypes armorTypes, int stars) {
+
+
         return null;
     }
 
