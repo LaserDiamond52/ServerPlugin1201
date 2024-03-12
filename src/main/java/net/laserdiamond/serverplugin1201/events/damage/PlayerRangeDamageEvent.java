@@ -31,7 +31,10 @@ public class PlayerRangeDamageEvent extends PlayerEvent implements Cancellable {
         this.target = target;
         this.isCancelled = false;
         this.inflictDamage = inflictDamage;
+    }
 
+    public static void run(final Player player, LivingEntity target, double damage, boolean inflictDamage)
+    {
         StatPlayer statPlayer = new StatPlayer(player);
         DamageStats damageStats = statPlayer.getDamageStats();
         double bRange = damageStats.getbRangeDmg();
@@ -47,9 +50,6 @@ public class PlayerRangeDamageEvent extends PlayerEvent implements Cancellable {
             double projectileDefense = defenseStats.getProjectileDefense();
             rangeDamage = ApplyDefense.finalDamage(defense + projectileDefense, rangeDamage); // Apply projectile defense armor
         }
-
-        EntityHealthDisplayChangeEvent entityHealthDisplayChangeEvent = new EntityHealthDisplayChangeEvent(target, rangeDamage, true);
-        Bukkit.getPluginManager().callEvent(entityHealthDisplayChangeEvent);
 
         if (inflictDamage)
         {

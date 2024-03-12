@@ -1,6 +1,6 @@
 package net.laserdiamond.serverplugin1201.events.effects.Components.Timers;
 
-import net.laserdiamond.serverplugin1201.management.messages.messages;
+import net.laserdiamond.serverplugin1201.management.messages.Messages;
 import org.bukkit.entity.LivingEntity;
 
 import java.util.HashMap;
@@ -18,7 +18,7 @@ public class ParalyzeTimer {
 
     public static void setTimer(LivingEntity livingEntity, int seconds, int amplifier) {
         double duration = System.currentTimeMillis() + (seconds * 1000);
-        livingEntity.sendMessage(messages.paralyzeMessage(seconds));
+        livingEntity.sendMessage(Messages.paralyzeMessage(seconds));
         paralyzeTimer.put(livingEntity.getUniqueId(), duration);
         paralyzeAmp.put(livingEntity.getUniqueId(), amplifier);
 

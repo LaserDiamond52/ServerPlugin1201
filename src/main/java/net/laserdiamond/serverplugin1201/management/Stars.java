@@ -7,7 +7,6 @@ public enum Stars {
     Stars(double boostPerStar) {
         this.boostPerStar = boostPerStar;
     }
-
     public double getBoostPerStar() {
         return boostPerStar;
     }

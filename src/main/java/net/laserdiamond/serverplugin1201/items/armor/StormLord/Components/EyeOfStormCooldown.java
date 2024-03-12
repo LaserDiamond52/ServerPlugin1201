@@ -2,7 +2,6 @@ package net.laserdiamond.serverplugin1201.items.armor.StormLord.Components;
 
 import net.laserdiamond.serverplugin1201.ServerPlugin1201;
 import net.laserdiamond.serverplugin1201.items.armor.StormLord.Config.StormLordArmorConfig;
-import net.laserdiamond.serverplugin1201.management.messages.messages;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -11,8 +10,8 @@ import java.util.UUID;
 public class EyeOfStormCooldown {
 
     private static HashMap<UUID, Double> cooldown;
-    private static ServerPlugin1201 plugin = ServerPlugin1201.getInstance();
-    private static StormLordArmorConfig armorConfig = plugin.getStormLordArmorConfig();
+    private static final ServerPlugin1201 PLUGIN = ServerPlugin1201.getInstance();
+    private static final StormLordArmorConfig ARMOR_CONFIG = PLUGIN.getStormLordArmorConfig();
     private static boolean displayReadyMessage = false;
 
     // How cooldown works

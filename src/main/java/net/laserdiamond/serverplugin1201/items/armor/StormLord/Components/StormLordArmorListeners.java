@@ -4,9 +4,10 @@ import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import net.laserdiamond.serverplugin1201.ServerPlugin1201;
 import net.laserdiamond.serverplugin1201.enchants.Components.EnchantsClass;
 import net.laserdiamond.serverplugin1201.events.damage.PlayerMagicDamageEvent;
+import net.laserdiamond.serverplugin1201.events.damage.PlayerMeleeDamageEvent;
 import net.laserdiamond.serverplugin1201.items.armor.StormLord.Config.StormLordArmorConfig;
 import net.laserdiamond.serverplugin1201.items.management.armor.ArmorCMD;
-import net.laserdiamond.serverplugin1201.management.messages.messages;
+import net.laserdiamond.serverplugin1201.management.messages.Messages;
 import net.laserdiamond.serverplugin1201.stats.Components.Stats;
 import net.laserdiamond.serverplugin1201.stats.Manager.StatProfileManager;
 import org.bukkit.Bukkit;
@@ -23,9 +24,9 @@ import org.bukkit.potion.PotionEffectType;
 
 public class StormLordArmorListeners implements Listener {
 
-    private ServerPlugin1201 plugin;
-    private StatProfileManager statProfileManager;
-    private StormLordArmorConfig armorConfig;
+    private final ServerPlugin1201 plugin;
+    private final StatProfileManager statProfileManager;
+    private final StormLordArmorConfig armorConfig;
 
     String abilityName;
     double manaCost, blastRadius, baseDamage;
@@ -42,7 +43,6 @@ public class StormLordArmorListeners implements Listener {
         blastRadius = armorConfig.getDouble("blastRadius");
         cooldown = armorConfig.getInt("cooldown");
         baseDamage = armorConfig.getDouble("baseDamage");
-
     }
 
     @EventHandler
@@ -94,18 +94,20 @@ public class StormLordArmorListeners implements Listener {
                                 {
                                     PlayerMagicDamageEvent playerMagicDamageEvent = new PlayerMagicDamageEvent(player, livingEntity, finalDamage, true);
                                     Bukkit.getPluginManager().callEvent(playerMagicDamageEvent);
+                                    if (!playerMagicDamageEvent.isCancelled())
+                                    {
+                                        PlayerMagicDamageEvent.run(player, livingEntity, finalDamage, true);
+                                    }
                                 }
                             }
 
                             //magicPotion.splash(); // Splash potion
-                            player.sendMessage(messages.abilityUse(abilityName));
+                            player.sendMessage(Messages.abilityUse(abilityName));
                             EyeOfStormCooldown.setCooldown(player, 5);
                         } else {
-                            player.sendMessage(messages.notEnoughMana());
+                            player.sendMessage(Messages.notEnoughMana());
                         }
-
                     }
-
                 }
             }
         }

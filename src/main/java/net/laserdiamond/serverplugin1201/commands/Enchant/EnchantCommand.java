@@ -3,7 +3,7 @@ package net.laserdiamond.serverplugin1201.commands.Enchant;
 import net.laserdiamond.serverplugin1201.enchants.Components.EnchantsClass;
 import net.laserdiamond.serverplugin1201.items.management.ItemForger;
 import net.laserdiamond.serverplugin1201.items.management.UpdateItem;
-import net.laserdiamond.serverplugin1201.management.messages.messages;
+import net.laserdiamond.serverplugin1201.management.messages.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -53,7 +53,7 @@ public class EnchantCommand implements CommandExecutor, TabExecutor {
                 }
             }
         } else {
-            sender.sendMessage(messages.notAllowedCommand());
+            sender.sendMessage(Messages.notAllowedCommand());
         }
 
         return true;

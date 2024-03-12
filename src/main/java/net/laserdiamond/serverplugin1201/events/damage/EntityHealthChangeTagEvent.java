@@ -24,10 +24,10 @@ public class EntityHealthChangeTagEvent extends EntityEvent implements Cancellab
      * <p>
      * Note: This DOES NOT damage the entity
      */
-    private final ServerPlugin1201 PLUGIN = ServerPlugin1201.getInstance();
-    private double amount;
+    private static final ServerPlugin1201 PLUGIN = ServerPlugin1201.getInstance();
+    private final double amount;
     private EntityDamageEvent.DamageCause damageCause;
-    private boolean isDamage; // True = amount is damage; false = heal
+    private final boolean isDamage;
     private boolean isCancelled;
     private static final HandlerList HANDLER_LIST = new HandlerList();
 
@@ -38,13 +38,32 @@ public class EntityHealthChangeTagEvent extends EntityEvent implements Cancellab
      * entity damage
      */
 
-    public EntityHealthChangeTagEvent(Entity target, EntityDamageEvent.DamageCause damageCause, double amount, boolean isDamage)
+    public EntityHealthChangeTagEvent(final Entity target, EntityDamageEvent.DamageCause damageCause, double amount, boolean isDamage)
     {
         super(target);
         this.damageCause = damageCause;
         this.amount = amount;
         this.isDamage = isDamage;
+    }
 
+    /**
+     * Displays a text display with damage/heal amount. No unique symbol to indicate damage type
+     */
+    public EntityHealthChangeTagEvent(Entity target, double amount, boolean isDamage) {
+        super(target);
+        this.amount = amount;
+        this.isDamage = isDamage;
+    }
+
+    /**
+     * A method that runs the event's intended function
+     * @param target The entity to run this event on
+     * @param damageCause The damage cause of the event
+     * @param amount The amount to change the entity's health tag by
+     * @param isDamage Is the result damage or healing?
+     */
+    public static void run(final Entity target, EntityDamageEvent.DamageCause damageCause, double amount, boolean isDamage)
+    {
         if (target instanceof LivingEntity livingEntity)
         {
             Location loc = livingEntity.getEyeLocation().add(0,0.5,0);
@@ -107,17 +126,16 @@ public class EntityHealthChangeTagEvent extends EntityEvent implements Cancellab
                 }
             }.runTaskTimer(PLUGIN, 0L, 1L);
         }
-
     }
 
     /**
-     * Displays a text display with damage/heal amount. No unique symbol to indicate damage type
+     * A method that runs the event's intended function
+     * @param target The entity to run this event on
+     * @param amount The amount to change the entity's health tag by
+     * @param isDamage is the result damage or healing?
      */
-    public EntityHealthChangeTagEvent(Entity target, double amount, boolean isDamage) {
-        super(target);
-        this.amount = amount;
-        this.isDamage = isDamage;
-
+    public static void run(final Entity target, double amount, boolean isDamage)
+    {
         if (target instanceof LivingEntity livingEntity)
         {
             Location loc = livingEntity.getEyeLocation().add(0,0.5,0);
@@ -176,27 +194,42 @@ public class EntityHealthChangeTagEvent extends EntityEvent implements Cancellab
         return HANDLER_LIST;
     }
 
+    /**
+     * Gets the amount of damage/healing
+     * @return The amount of damage/healing
+     */
     public double getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
-
+    /**
+     * Gets the cause of damage that was displayed
+     * @return
+     */
     public EntityDamageEvent.DamageCause getDamageCause() {
         return damageCause;
     }
 
-    public void setDamageCause(EntityDamageEvent.DamageCause damageCause) {
-        this.damageCause = damageCause;
-    }
-
+    /**
+     * Was the cause of the event damage?
+     * @return True if damage; false if healing
+     */
     public boolean isDamage() {
         return isDamage;
     }
 
-    public void setDamage(boolean damage) {
-        isDamage = damage;
+    // TODO: Use enum to store different entity attack types
+
+    // Specify reason in PlayerMagicDamage and PlayerRangeDamage events
+    // If reason is not specified, attack was melee
+
+    // Because reason was specified, it may be possible to fire the event with a specified entity attack reason from enum?
+
+    public enum EntityAttackType
+    {
+        MELEE,
+        MAGIC,
+        RANGE,
+        CUSTOM
     }
 }

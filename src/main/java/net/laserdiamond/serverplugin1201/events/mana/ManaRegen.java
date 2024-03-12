@@ -1,7 +1,6 @@
 package net.laserdiamond.serverplugin1201.events.mana;
 
 import net.laserdiamond.serverplugin1201.ServerPlugin1201;
-import net.laserdiamond.serverplugin1201.events.effects.Components.Timers.ManaFreezeTimer;
 import net.laserdiamond.serverplugin1201.events.effects.Managers.EffectManager;
 import net.laserdiamond.serverplugin1201.stats.Components.Stats;
 import net.laserdiamond.serverplugin1201.stats.Manager.StatProfileManager;
@@ -9,20 +8,19 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.plugin.RegisteredListener;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class ManaRegen extends BukkitRunnable implements Listener {
 
-    private final ServerPlugin1201 PLUGIN;
+    private final ServerPlugin1201 plugin;
 
-    private final StatProfileManager STAT_PROFILE_MANAGER;
-    private final EffectManager EFFECT_MANAGER;
+    private final StatProfileManager statProfileManager;
+    private final EffectManager effectManager;
 
     public ManaRegen(ServerPlugin1201 plugin) {
-        this.PLUGIN = plugin;
-        STAT_PROFILE_MANAGER = plugin.getStatProfileManager();
-        EFFECT_MANAGER = plugin.getEffectManager();
+        this.plugin = plugin;
+        statProfileManager = plugin.getStatProfileManager();
+        effectManager = plugin.getEffectManager();
     }
 
     @Override
@@ -30,7 +28,7 @@ public class ManaRegen extends BukkitRunnable implements Listener {
 
         for (Player player : Bukkit.getOnlinePlayers()) {
 
-            Stats stats = STAT_PROFILE_MANAGER.getStatProfile(player.getUniqueId()).stats();
+            Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).stats();
 
             double availableMana = stats.getAvailableMana();
             double maxMana = stats.getMaxMana();
@@ -42,6 +40,8 @@ public class ManaRegen extends BukkitRunnable implements Listener {
 
              */
 
+
+
             /*
             if (ManaFreezeTimer.hasNoEffect(player)) {
                 if (availableMana < maxMana) {
@@ -51,16 +51,21 @@ public class ManaRegen extends BukkitRunnable implements Listener {
 
              */
 
+            PlayerManaRegenEvent playerManaRegenEvent = new PlayerManaRegenEvent(player, PlayerManaRegenEvent.ManaRegenReason.REGEN, baseManaRegen);
+            Bukkit.getPluginManager().callEvent(playerManaRegenEvent);
+            if (!playerManaRegenEvent.isCancelled())
+            {
+                PlayerManaRegenEvent.run(player, baseManaRegen);
+            }
+
         }
     }
-
 
     @EventHandler
     public void manaRegenEvent(PlayerManaRegenEvent event)
     {
-        Player player = event.getPlayer();
 
-
-        // Cancel event if player has mana freeze
     }
+
+
 }

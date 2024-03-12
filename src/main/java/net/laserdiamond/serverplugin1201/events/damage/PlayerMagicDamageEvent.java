@@ -21,20 +21,23 @@ public class PlayerMagicDamageEvent extends PlayerEvent implements Cancellable {
      * <p>
      * Can choose whether the damage should be inflicted or not, but does not cancel the event
      */
-    private LivingEntity target;
+    private final LivingEntity target;
     private static final HandlerList HANDLER_LIST = new HandlerList();
     private double damage;
     private boolean isCancelled;
     private boolean inflictDamage;
 
-    public PlayerMagicDamageEvent(Player player, LivingEntity target, double damage, boolean inflictDamage)
+    public PlayerMagicDamageEvent(final Player player, LivingEntity target, double damage, boolean inflictDamage)
     {
         super(player);
         this.target = target;
         this.damage = damage;
         this.isCancelled = false;
         this.inflictDamage = inflictDamage;
+    }
 
+    public static void run(final Player player, LivingEntity target, double damage, boolean inflictDamage)
+    {
         StatPlayer statPlayer = new StatPlayer(player);
         DamageStats damageStats = statPlayer.getDamageStats();
         double bMagic = damageStats.getbMagicDmg();
@@ -51,22 +54,14 @@ public class PlayerMagicDamageEvent extends PlayerEvent implements Cancellable {
             magicDamage = ApplyDefense.finalDamage(defense + magicDefense, magicDamage); // Apply magic protection armor
         }
 
-        EntityHealthDisplayChangeEvent entityHealthDisplayChangeEvent = new EntityHealthDisplayChangeEvent(target, magicDamage, true);
-        Bukkit.getPluginManager().callEvent(entityHealthDisplayChangeEvent);
+        // TODO: May want to remove these
+        //EntityHealthDisplayChangeEvent entityHealthDisplayChangeEvent = new EntityHealthDisplayChangeEvent(target, magicDamage, true);
+        //Bukkit.getPluginManager().callEvent(entityHealthDisplayChangeEvent);
 
         if (inflictDamage)
         {
             target.damage(magicDamage, player);
         }
-
-
-
-        // TODO: Make Magic Damage Accurate + Display as magic damage
-        // 1. Check if target is a player
-        // 2. Get magic protection defense points and reduce damage accordingly
-        // 3. Display damage display
-        // 4. Find some way to figure out not to display other damage display?
-
     }
 
     @Override
@@ -94,10 +89,6 @@ public class PlayerMagicDamageEvent extends PlayerEvent implements Cancellable {
 
     public LivingEntity getTarget() {
         return target;
-    }
-
-    public void setTarget(LivingEntity target) {
-        this.target = target;
     }
 
     public boolean isInflictDamage() {

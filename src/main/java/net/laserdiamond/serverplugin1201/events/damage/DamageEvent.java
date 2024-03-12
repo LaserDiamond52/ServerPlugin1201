@@ -3,12 +3,19 @@ package net.laserdiamond.serverplugin1201.events.damage;
 import net.laserdiamond.serverplugin1201.ServerPlugin1201;
 import net.laserdiamond.serverplugin1201.stats.Manager.StatProfileManager;
 import org.bukkit.*;
+import org.bukkit.entity.Display;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.TextDisplay;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
+import org.bukkit.scheduler.BukkitRunnable;
+
+import java.text.DecimalFormat;
 
 public class DamageEvent implements Listener {
 
@@ -107,24 +114,87 @@ public class DamageEvent implements Listener {
     {
 
     }
+
+
     @EventHandler (priority = EventPriority.HIGHEST)
     public void damageDisplay(EntityDamageEvent event) {
 
+        Entity entity = event.getEntity();
+        EntityDamageEvent.DamageCause cause = event.getCause();
+        double finalDamage = event.getFinalDamage();
+
+        EntityHealthChangeTagEvent healthChangeTagEvent = new EntityHealthChangeTagEvent(entity, cause, finalDamage, true);
+        Bukkit.getPluginManager().callEvent(healthChangeTagEvent);
+        if (!healthChangeTagEvent.isCancelled())
+        {
+            EntityHealthChangeTagEvent.run(entity, cause, finalDamage, true);
+        }
+
+        runHealthDisplayChange(entity, finalDamage, true);
+
+        /*
+        EntityHealthDisplayChangeEvent healthDisplayChangeEvent = new EntityHealthDisplayChangeEvent(entity, finalDamage, true);
+        Bukkit.getPluginManager().callEvent(healthDisplayChangeEvent);
+        if (!healthDisplayChangeEvent.isCancelled())
+        {
+            EntityHealthDisplayChangeEvent.run(entity, finalDamage, false);
+        }
+
+         */
+
+        /*
         EntityHealthChangeTagEvent damageDisplayEvent = new EntityHealthChangeTagEvent(event.getEntity(), event.getCause(), event.getFinalDamage(), true);
         Bukkit.getPluginManager().callEvent(damageDisplayEvent);
 
         EntityHealthDisplayChangeEvent healthDisplayChangeEvent = new EntityHealthDisplayChangeEvent(event.getEntity(), event.getFinalDamage(), true);
         Bukkit.getPluginManager().callEvent(healthDisplayChangeEvent);
+
+         */
     }
 
     @EventHandler (priority = EventPriority.HIGHEST)
     public void healDisplay(EntityRegainHealthEvent event) {
 
+        Entity entity = event.getEntity();
+        double amount = event.getAmount();
+
+        EntityHealthChangeTagEvent healthChangeTagEvent = new EntityHealthChangeTagEvent(entity, amount, false);
+        Bukkit.getPluginManager().callEvent(healthChangeTagEvent);
+        if (!healthChangeTagEvent.isCancelled())
+        {
+            EntityHealthChangeTagEvent.run(entity, amount, false);
+        }
+
+        runHealthDisplayChange(entity, amount, false);
+
+        /*
+        EntityHealthDisplayChangeEvent healthDisplayChangeEvent = new EntityHealthDisplayChangeEvent(entity, amount, false);
+        Bukkit.getPluginManager().callEvent(healthDisplayChangeEvent);
+        if (!healthDisplayChangeEvent.isCancelled())
+        {
+            EntityHealthDisplayChangeEvent.run(entity, amount, false);
+        }
+
+         */
+
+        /*
         EntityHealthChangeTagEvent damageTagEvent = new EntityHealthChangeTagEvent(event.getEntity(), event.getAmount(), false);
         Bukkit.getPluginManager().callEvent(damageTagEvent);
 
         EntityHealthDisplayChangeEvent healthDisplayChangeEvent = new EntityHealthDisplayChangeEvent(event.getEntity(), event.getAmount(), false);
         Bukkit.getPluginManager().callEvent(healthDisplayChangeEvent);
+
+         */
+    }
+
+    private void runHealthDisplayChange(final Entity entity, double amount, boolean isDamage)
+    {
+        EntityHealthDisplayChangeEvent healthDisplayChangeEvent = new EntityHealthDisplayChangeEvent(entity, amount, isDamage);
+        Bukkit.getPluginManager().callEvent(healthDisplayChangeEvent);
+        if (!healthDisplayChangeEvent.isCancelled())
+        {
+            EntityHealthDisplayChangeEvent.run(entity, amount, isDamage);
+        }
     }
 
     /*

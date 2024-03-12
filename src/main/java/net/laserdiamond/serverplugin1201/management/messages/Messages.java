@@ -2,7 +2,7 @@ package net.laserdiamond.serverplugin1201.management.messages;
 
 import org.bukkit.ChatColor;
 
-public class messages {
+public class Messages {
 
     public static String notEnoughMana() {
         return ChatColor.RED + "Not enough mana";

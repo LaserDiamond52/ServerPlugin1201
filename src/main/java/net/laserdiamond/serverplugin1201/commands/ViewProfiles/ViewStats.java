@@ -2,7 +2,7 @@ package net.laserdiamond.serverplugin1201.commands.ViewProfiles;
 
 import net.laserdiamond.serverplugin1201.items.management.misc.MenuItems;
 import net.laserdiamond.serverplugin1201.stats.Components.StatsItemManager;
-import net.laserdiamond.serverplugin1201.management.messages.messages;
+import net.laserdiamond.serverplugin1201.management.messages.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -43,10 +43,10 @@ public class ViewStats implements CommandExecutor {
 
                 player.openInventory(statInventory);
             } else {
-                player.sendMessage(messages.notAllowedCommand());
+                player.sendMessage(Messages.notAllowedCommand());
             }
         } else {
-            sender.sendMessage(messages.notPlayerCommand());
+            sender.sendMessage(Messages.notPlayerCommand());
         }
 
         return true;

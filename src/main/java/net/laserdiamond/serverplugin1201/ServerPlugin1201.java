@@ -97,17 +97,16 @@ public final class ServerPlugin1201 extends JavaPlugin {
         createTasks();
 
         // Mana Regen
-        //getServer().getPluginManager().registerEvents(new ManaRegen(this),this);
-
+        getServer().getPluginManager().registerEvents(new ManaRegen(this),this);
 
         // Refresh Items
         getServer().getPluginManager().registerEvents(new ItemMappings(this),this);
 
-        // Effect events
-        getServer().getPluginManager().registerEvents(new EffectEvents(this),this);
-
         // Damage
         getServer().getPluginManager().registerEvents(new DamageEvent(this),this);
+
+        // Effect events
+        getServer().getPluginManager().registerEvents(new EffectEvents(this),this);
 
         // Armor stats
         getServer().getPluginManager().registerEvents(new ArmorEquipStats(this),this);

@@ -20,9 +20,9 @@ import java.text.DecimalFormat;
 
 public class HUD extends BukkitRunnable implements Listener {
 
-    private ServerPlugin1201 plugin;
-    private StatProfileManager statProfileManager;
-    private EffectManager effectManager;
+    private final ServerPlugin1201 plugin;
+    private final StatProfileManager statProfileManager;
+    private final EffectManager effectManager;
 
     public HUD(ServerPlugin1201 plugin) {
         this.plugin = plugin;

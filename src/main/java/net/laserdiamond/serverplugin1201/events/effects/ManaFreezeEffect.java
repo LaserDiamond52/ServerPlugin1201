@@ -2,7 +2,7 @@ package net.laserdiamond.serverplugin1201.events.effects;
 
 import net.laserdiamond.serverplugin1201.ServerPlugin1201;
 import net.laserdiamond.serverplugin1201.management.EffectKeys;
-import net.laserdiamond.serverplugin1201.management.messages.messages;
+import net.laserdiamond.serverplugin1201.management.messages.Messages;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -16,7 +16,7 @@ public class ManaFreezeEffect {
 
         EffectBoolean.setEffectBoolean(player, EffectKeys.MANA_FREEZE, true);
 
-        player.sendMessage(messages.manaFreezeMessage(durationSeconds));
+        player.sendMessage(Messages.manaFreezeMessage(durationSeconds));
 
         new BukkitRunnable() {
             int i = durationSeconds;

@@ -1,6 +1,6 @@
 package net.laserdiamond.serverplugin1201.events.effects.Components.Timers;
 
-import net.laserdiamond.serverplugin1201.management.messages.messages;
+import net.laserdiamond.serverplugin1201.management.messages.Messages;
 import org.bukkit.entity.LivingEntity;
 
 import java.util.HashMap;
@@ -18,7 +18,7 @@ public class ManaFreezeTimer {
 
     public static void setTimer(LivingEntity livingEntity, int seconds, int amplifier) {
         double duration = System.currentTimeMillis() + (seconds * 1000);
-        livingEntity.sendMessage(messages.manaFreezeMessage(seconds));
+        livingEntity.sendMessage(Messages.manaFreezeMessage(seconds));
         manaFreezeTimer.put(livingEntity.getUniqueId(), duration);
         manaFreezeAmp.put(livingEntity.getUniqueId(), amplifier);
 

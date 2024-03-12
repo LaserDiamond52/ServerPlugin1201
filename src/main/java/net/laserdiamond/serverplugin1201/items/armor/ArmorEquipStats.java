@@ -7,7 +7,6 @@ import net.laserdiamond.serverplugin1201.items.management.ItemMappings;
 import net.laserdiamond.serverplugin1201.management.ItemStatKeys;
 import net.laserdiamond.serverplugin1201.stats.Components.DamageStats;
 import net.laserdiamond.serverplugin1201.stats.Components.DefenseStats;
-import net.laserdiamond.serverplugin1201.stats.Components.LootStats;
 import net.laserdiamond.serverplugin1201.stats.Components.Stats;
 import net.laserdiamond.serverplugin1201.stats.Manager.StatProfileManager;
 import org.bukkit.Material;
@@ -23,8 +22,8 @@ import java.util.HashMap;
 
 public class ArmorEquipStats implements Listener {
 
-    private ServerPlugin1201 plugin;
-    private StatProfileManager statProfileManager;
+    private final ServerPlugin1201 plugin;
+    private final StatProfileManager statProfileManager;
     public ArmorEquipStats(ServerPlugin1201 plugin) {
         this.plugin = plugin;
         statProfileManager = plugin.getStatProfileManager();

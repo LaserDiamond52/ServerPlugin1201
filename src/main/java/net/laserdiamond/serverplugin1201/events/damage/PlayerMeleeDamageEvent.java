@@ -23,7 +23,7 @@ public class PlayerMeleeDamageEvent extends PlayerEvent implements Cancellable {
      * <p>
      * This event is mainly for melee attacks that involve ranged moves that scale with melee damage
      */
-    private LivingEntity target;
+    private final LivingEntity target;
     private double damage;
     private boolean inflictDamage;
     private boolean isCancelled;
@@ -35,7 +35,10 @@ public class PlayerMeleeDamageEvent extends PlayerEvent implements Cancellable {
         this.target = target;
         this.damage = damage;
         this.inflictDamage = inflictDamage;
+    }
 
+    public static void run(final Player player, LivingEntity target, double damage, boolean inflictDamage)
+    {
         StatPlayer statPlayer = new StatPlayer(player);
         DamageStats damageStats = statPlayer.getDamageStats();
         double pMelee = damageStats.getbMeleeDmg();
@@ -49,30 +52,12 @@ public class PlayerMeleeDamageEvent extends PlayerEvent implements Cancellable {
             DefenseStats defenseStats = statPlayerTarget.getDefenseStats();
             double defense = defenseStats.getDefense();
             meleeDamage = ApplyDefense.finalDamage(defense, meleeDamage); // Apply defense
-        } else if (target instanceof Mob mob)
-        {
-            if (player.getGameMode() != GameMode.CREATIVE || player.getGameMode() != GameMode.SPECTATOR)
-            {
-                if (mob instanceof IronGolem ironGolem)
-                {
-                    if (!ironGolem.isPlayerCreated())
-                    {
-                        mob.setTarget(player);
-                    }
-                } else {
-                    mob.setTarget(player);
-                }
-            }
         }
-
-        EntityHealthDisplayChangeEvent entityHealthDisplayChangeEvent = new EntityHealthDisplayChangeEvent(target, meleeDamage, true);
-        Bukkit.getPluginManager().callEvent(entityHealthDisplayChangeEvent);
 
         if (inflictDamage)
         {
             target.damage(meleeDamage, player);
         }
-
     }
 
     @Override
@@ -98,10 +83,6 @@ public class PlayerMeleeDamageEvent extends PlayerEvent implements Cancellable {
 
     public LivingEntity getTarget() {
         return target;
-    }
-
-    public void setTarget(LivingEntity target) {
-        this.target = target;
     }
 
     public double getDamage() {

@@ -13,32 +13,32 @@ import java.io.IOException;
 
 public class TunementConfig implements FileLoaderSaver {
 
-    private final ServerPlugin1201 PLUGIN;
-    private final File FOLDERS;
-    private final File FILE;
-    private final String FILE_NAME;
-    private final FileConfiguration CONFIG = new YamlConfiguration();
+    private final ServerPlugin1201 plugin;
+    private final File folders;
+    private final File file;
+    private final String fileName;
+    private final FileConfiguration config = new YamlConfiguration();
 
     public TunementConfig(ServerPlugin1201 plugin, String fileName) {
-        this.PLUGIN = plugin;
-        this.FILE_NAME = fileName;
-        FOLDERS = new File(plugin.getDataFolder(), File.separator + "players");
-        FILE = new File(FOLDERS, fileName + ".yml");
+        this.plugin = plugin;
+        this.fileName = fileName;
+        folders = new File(plugin.getDataFolder(), File.separator + "players");
+        file = new File(folders, fileName + ".yml");
     }
     @Override
     public void loadConfig() {
-        if (!FILE.exists())
+        if (!file.exists())
         {
             Bukkit.getConsoleSender().sendMessage(ChatColor.BLUE + "No existing Tunement file found!");
             Bukkit.getConsoleSender().sendMessage(ChatColor.BLUE + "Creating new Tunement file...");
-            FILE.getParentFile().mkdirs();
-            PLUGIN.saveResource("players" + File.separator + FILE_NAME + ".yml", false);
+            file.getParentFile().mkdirs();
+            plugin.saveResource("players" + File.separator + fileName + ".yml", false);
         } else {
             Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Found existing tunment file!");
         }
         try {
             Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "Loading tunement file...");
-            CONFIG.load(FILE);
+            config.load(file);
         } catch (IOException | InvalidConfigurationException exception)
         {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "ERROR WHILE LOADING TUNEMENT FILE");
@@ -48,13 +48,13 @@ public class TunementConfig implements FileLoaderSaver {
 
     @Override
     public FileConfiguration getConfig() {
-        return CONFIG;
+        return config;
     }
 
     @Override
     public void saveConfig() {
         try {
-            CONFIG.save(FILE);
+            config.save(file);
             Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Saved Tunement config to file!");
         } catch (IOException exception)
         {

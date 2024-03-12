@@ -1,6 +1,5 @@
 package net.laserdiamond.serverplugin1201.events.damage;
 
-import net.laserdiamond.serverplugin1201.ServerPlugin1201;
 import net.laserdiamond.serverplugin1201.entities.management.Mobs;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
@@ -17,16 +16,25 @@ public class EntityHealthDisplayChangeEvent extends EntityEvent implements Cance
     /**
      * This event is called when the health in the display name of a mob changes due to healing, damage, etc.
      */
-    private double amount; // Amount we want to change current health by
-    private boolean isDamage; // true = damage; false = heal
+    private final double amount;
+    private final boolean isDamage;
     private boolean isCancelled;
     private static final HandlerList HANDLER_LIST = new HandlerList();
 
-    public EntityHealthDisplayChangeEvent(Entity entity, double amount, boolean isDamage) {
+    public EntityHealthDisplayChangeEvent(final Entity entity, double amount, boolean isDamage) {
         super(entity);
         this.amount = amount;
         this.isDamage = isDamage;
+    }
 
+    /**
+     * A method that runs the event's intended function
+     * @param entity The entity to run this event on
+     * @param amount The amount of health changed on the entity
+     * @param isDamage Was the amount of health changed damage or healing?
+     */
+    public static void run(final Entity entity, double amount, boolean isDamage)
+    {
         DecimalFormat doubleDecimalPlace = new DecimalFormat("0.00");
 
         if (entity instanceof Mob mob)
@@ -49,7 +57,6 @@ public class EntityHealthDisplayChangeEvent extends EntityEvent implements Cance
         }
     }
 
-
     @Override
     public boolean isCancelled() {
         return isCancelled;
@@ -69,19 +76,19 @@ public class EntityHealthDisplayChangeEvent extends EntityEvent implements Cance
         return HANDLER_LIST;
     }
 
+    /**
+     * Gets the amount of health changed in the entity's health name tag
+     * @return The amount of health changed
+     */
     public double getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
-
+    /**
+     * Was the result of the event from damage or healing?
+     * @return True if damage; false if healing
+     */
     public boolean isDamage() {
         return isDamage;
-    }
-
-    public void setDamage(boolean damage) {
-        isDamage = damage;
     }
 }

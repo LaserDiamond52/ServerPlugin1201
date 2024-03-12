@@ -1,7 +1,7 @@
 package net.laserdiamond.serverplugin1201.commands;
 
 import net.laserdiamond.serverplugin1201.ServerPlugin1201;
-import net.laserdiamond.serverplugin1201.management.messages.messages;
+import net.laserdiamond.serverplugin1201.management.messages.Messages;
 import net.laserdiamond.serverplugin1201.stats.Components.Stats;
 import net.laserdiamond.serverplugin1201.stats.Manager.StatProfileManager;
 import org.bukkit.Bukkit;
@@ -53,7 +53,7 @@ public class fillMana implements CommandExecutor, TabExecutor {
             }
         } else
         {
-            sender.sendMessage(messages.notAllowedCommand());
+            sender.sendMessage(Messages.notAllowedCommand());
         }
         return true;
     }
