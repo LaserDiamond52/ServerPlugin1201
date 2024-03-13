@@ -33,7 +33,6 @@ public class ManaRegen extends BukkitRunnable implements Listener {
             double availableMana = stats.getAvailableMana();
             double maxMana = stats.getMaxMana();
             double baseManaRegen = maxMana/50;
-
             /*
             EffectDurations effectDurations = effectManager.getEffectProfile(player.getUniqueId()).getEffectDurations();
             int manaFreezeDuration = effectDurations.getManaFreezeDuration();

@@ -42,4 +42,13 @@ public class Messages {
         return ChatColor.GOLD + abilityName + " " + ChatColor.GREEN + "used!";
     }
 
+    public static String abilityCooldown(String abilityName)
+    {
+        return ChatColor.RED + abilityName + " is on cooldown";
+    }
+
+    public static String cancelledSpellMsg()
+    {
+        return ChatColor.RED + "You are unable to cast spells";
+    }
 }

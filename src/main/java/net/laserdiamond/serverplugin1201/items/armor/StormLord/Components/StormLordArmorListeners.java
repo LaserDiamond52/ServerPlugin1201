@@ -45,6 +45,7 @@ public class StormLordArmorListeners implements Listener {
         baseDamage = armorConfig.getDouble("baseDamage");
     }
 
+    /*
     @EventHandler
     public void eyeOfTheStorm(PlayerDropItemEvent event) {
 
@@ -76,16 +77,6 @@ public class StormLordArmorListeners implements Listener {
 
                             // Create thrown potion that will damage entity
 
-                            /*
-                            ThrownPotion magicPotion = player.getWorld().spawn(player.getLocation(), ThrownPotion.class);
-                            magicPotion.setShooter(player); // MUST set shooter to player
-                            magicPotion.setItem(new ItemStack(Material.AIR)); // Set thrown potion to air
-                            magicPotion.getPotionMeta().getPersistentDataContainer().set(DamageEvent.magicDmgKey, PersistentDataType.DOUBLE, finalDamage);
-                            magicPotion.getPotionMeta().setColor(Color.AQUA);
-
-                             */
-
-
                             for (LivingEntity livingEntity : player.getLocation().getNearbyLivingEntities(blastRadius)) // Get all living entities in blast radius
                             {
                                 livingEntity.getWorld().strikeLightningEffect(livingEntity.getLocation()); // Strike lightning on entities
@@ -112,6 +103,7 @@ public class StormLordArmorListeners implements Listener {
             }
         }
     }
+    */
 
     @EventHandler
     public void conduitPower(PlayerArmorChangeEvent event) {

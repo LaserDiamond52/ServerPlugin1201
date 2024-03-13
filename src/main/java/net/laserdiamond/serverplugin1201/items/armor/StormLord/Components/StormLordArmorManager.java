@@ -3,6 +3,10 @@ package net.laserdiamond.serverplugin1201.items.armor.StormLord.Components;
 import com.google.common.collect.Multimap;
 import net.laserdiamond.serverplugin1201.ServerPlugin1201;
 import net.laserdiamond.serverplugin1201.enchants.Components.EnchantsClass;
+import net.laserdiamond.serverplugin1201.entities.player.StatPlayer;
+import net.laserdiamond.serverplugin1201.events.damage.PlayerMagicDamageEvent;
+import net.laserdiamond.serverplugin1201.events.mana.PlayerManaRegenEvent;
+import net.laserdiamond.serverplugin1201.events.mana.PlayerSpellCastEvent;
 import net.laserdiamond.serverplugin1201.items.armor.ArmorEquipStats;
 import net.laserdiamond.serverplugin1201.items.armor.StormLord.Config.StormLordArmorConfig;
 import net.laserdiamond.serverplugin1201.items.management.ItemForger;
@@ -13,28 +17,30 @@ import net.laserdiamond.serverplugin1201.items.management.armor.ArmorFabricate;
 import net.laserdiamond.serverplugin1201.items.management.armor.ArmorTypes;
 import net.laserdiamond.serverplugin1201.management.ItemStatKeys;
 import net.laserdiamond.serverplugin1201.management.Stars;
+import net.laserdiamond.serverplugin1201.management.messages.Messages;
+import net.laserdiamond.serverplugin1201.stats.Components.Stats;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.entity.Item;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.eclipse.sisu.space.ClassFinder;
+import org.eclipse.sisu.space.ClassSpace;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.net.URL;
+import java.util.*;
 
 public class StormLordArmorManager implements ArmorFabricate {
 
-    private final StormLordArmorConfig armorConfig;
-    public StormLordArmorManager(ServerPlugin1201 plugin) {
-        armorConfig = plugin.getStormLordArmorConfig();
-
-    }
+    private static final ServerPlugin1201 PLUGIN = ServerPlugin1201.getInstance();
+    private static final StormLordArmorConfig ARMOR_CONFIG = PLUGIN.getStormLordArmorConfig();
     private final double starBonus = Stars.STARS.getBoostPerStar();
 
     @Override
@@ -44,11 +50,11 @@ public class StormLordArmorManager implements ArmorFabricate {
 
         List<String> lore = new ArrayList<>();
 
-        int blastRadius = armorConfig.getInt("blastRadius");
-        int weaknessLvl = armorConfig.getInt("weaknessLvl");
-        double weaknessDuration = armorConfig.getDouble("weaknessDuration");
-        int cooldown = armorConfig.getInt("cooldown");
-        double manaCost = armorConfig.getDouble("manaCost");
+        int blastRadius = ARMOR_CONFIG.getInt("blastRadius");
+        int weaknessLvl = ARMOR_CONFIG.getInt("weaknessLvl");
+        double weaknessDuration = ARMOR_CONFIG.getDouble("weaknessDuration");
+        int cooldown = ARMOR_CONFIG.getInt("cooldown");
+        double manaCost = ARMOR_CONFIG.getDouble("manaCost");
 
         lore.add(" ");
         if (itemStatKeysMap != null) {
@@ -102,13 +108,13 @@ public class StormLordArmorManager implements ArmorFabricate {
 
         List<String> lore = new ArrayList<>();
 
-        int blastRadius = armorConfig.getInt("blastRadius");
-        int weaknessLvl = armorConfig.getInt("weaknessLvl");
-        double weaknessDuration = armorConfig.getDouble("weaknessDuration");
-        int cooldown = armorConfig.getInt("cooldown");
-        double manaCost = armorConfig.getDouble("manaCost");
+        int blastRadius = ARMOR_CONFIG.getInt("blastRadius");
+        int weaknessLvl = ARMOR_CONFIG.getInt("weaknessLvl");
+        double weaknessDuration = ARMOR_CONFIG.getDouble("weaknessDuration");
+        int cooldown = ARMOR_CONFIG.getInt("cooldown");
+        double manaCost = ARMOR_CONFIG.getDouble("manaCost");
 
-        double baseDamage = armorConfig.getDouble("baseDamage");
+        double baseDamage = ARMOR_CONFIG.getDouble("baseDamage");
         if (player.getInventory().getItemInMainHand().getItemMeta() != null) {
             ItemMeta itemMeta = player.getInventory().getItemInMainHand().getItemMeta();
             if (itemMeta.hasEnchant(EnchantsClass.THUNDER_STRIKE)) {
@@ -157,7 +163,7 @@ public class StormLordArmorManager implements ArmorFabricate {
         ItemStack item = new ItemStack(Material.STONE_SWORD);
         ItemMeta itemMeta = item.getItemMeta();
 
-        double knockbackRes = armorConfig.getDouble("knockBackRes") * 0.1;
+        double knockbackRes = ARMOR_CONFIG.getDouble("knockBackRes") * 0.1;
 
         AttributeModifier knockbackResModifier = new AttributeModifier(UUID.randomUUID(), "generic.knockbackRes", knockbackRes, AttributeModifier.Operation.ADD_NUMBER, armorTypes.getEquipmentSlot());
         itemMeta.addAttributeModifier(Attribute.GENERIC_KNOCKBACK_RESISTANCE, knockbackResModifier);
@@ -172,12 +178,12 @@ public class StormLordArmorManager implements ArmorFabricate {
 
         String armorPiece = armorTypes.getName();
 
-        double mana = armorConfig.getDouble(armorPiece + "Mana") * (1 + stars * starBonus);
-        double magicDamage = armorConfig.getDouble(armorPiece + "MagicDamage") * (1 + stars * starBonus);
-        double health = armorConfig.getDouble(armorPiece + "Health") * (1 + stars * starBonus);
-        double armor = armorConfig.getDouble(armorPiece + "Armor") * (1 + stars * starBonus);
-        double toughness = armorConfig.getDouble("toughness");
-        double fortitude = armorConfig.getDouble("fortitude");
+        double mana = ARMOR_CONFIG.getDouble(armorPiece + "Mana") * (1 + stars * starBonus);
+        double magicDamage = ARMOR_CONFIG.getDouble(armorPiece + "MagicDamage") * (1 + stars * starBonus);
+        double health = ARMOR_CONFIG.getDouble(armorPiece + "Health") * (1 + stars * starBonus);
+        double armor = ARMOR_CONFIG.getDouble(armorPiece + "Armor") * (1 + stars * starBonus);
+        double toughness = ARMOR_CONFIG.getDouble("toughness");
+        double fortitude = ARMOR_CONFIG.getDouble("fortitude");
 
         HashMap<ItemStatKeys, Double> itemStatKeysDoubleHashMap = new HashMap<>();
         itemStatKeysDoubleHashMap.put(ItemStatKeys.MAX_MANA_KEY, mana);
@@ -199,7 +205,7 @@ public class StormLordArmorManager implements ArmorFabricate {
         try {
             String armorName = armorPieceString.substring(0,1).toUpperCase() + armorPieceString.substring(1);
 
-            String HelmetURL = armorConfig.getString("HelmetURL");
+            String HelmetURL = ARMOR_CONFIG.getString("HelmetURL");
 
             if (armorTypes.equals(ArmorTypes.HELMET)) {
                 itemForger = new ItemForger(Material.PLAYER_HEAD);
@@ -253,5 +259,65 @@ public class StormLordArmorManager implements ArmorFabricate {
             return true;
         }
         return false;
+    }
+
+    public static void castEyeOfStorm(Player player, int enchantLvl)
+    {
+        StatPlayer statPlayer = new StatPlayer(player);
+        Stats stats = statPlayer.getStats();
+        String abilityName = ARMOR_CONFIG.getString("abilityName");
+        double availableMana = stats.getAvailableMana();
+        double manaCost = ARMOR_CONFIG.getDouble("manaCost");
+        int cooldown = ARMOR_CONFIG.getInt("cooldown");
+        double baseDamage = ARMOR_CONFIG.getDouble("baseDamage");
+        double blastRadius = ARMOR_CONFIG.getDouble("blastRadius");
+
+        PlayerSpellCastEvent spellCastEvent = new PlayerSpellCastEvent(player, manaCost);
+        double eventManaCost = spellCastEvent.getManaCost();
+
+
+
+        if (isWearingFullSet(player))
+        {
+
+            double finalDamage = baseDamage + Math.pow(enchantLvl, 2);
+            if (EyeOfStormCooldown.checkCooldown(player))
+            {
+                Bukkit.getPluginManager().callEvent(spellCastEvent);
+                if (availableMana > eventManaCost)
+                {
+                    if (!spellCastEvent.isCancelled())
+                    {
+                        stats.setAvailableMana(availableMana - eventManaCost);
+
+                        for (LivingEntity livingEntity : player.getLocation().getNearbyLivingEntities(blastRadius))
+                        {
+                            livingEntity.getWorld().strikeLightningEffect(livingEntity.getLocation());
+                            if (livingEntity != player)
+                            {
+                                PlayerMagicDamageEvent magicDamageEvent = new PlayerMagicDamageEvent(player, livingEntity, finalDamage, true);
+                                Bukkit.getPluginManager().callEvent(magicDamageEvent);
+                                if (!magicDamageEvent.isCancelled())
+                                {
+                                    PlayerMagicDamageEvent.run(player, livingEntity, finalDamage, true);
+                                }
+                            }
+                        }
+
+                        EyeOfStormCooldown.setCooldown(player, 5);
+                        player.sendMessage(Messages.abilityUse(abilityName));
+                    } else
+                    {
+                        player.sendMessage(Messages.cancelledSpellMsg());
+                    }
+
+                } else
+                {
+                    player.sendMessage(Messages.notEnoughMana());
+                }
+            } else {
+                player.sendMessage(Messages.abilityCooldown(abilityName));
+            }
+        }
     }
 }

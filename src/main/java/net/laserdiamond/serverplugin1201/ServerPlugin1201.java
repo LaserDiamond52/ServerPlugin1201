@@ -11,6 +11,7 @@ import net.laserdiamond.serverplugin1201.enchants.Components.EnchantsClass;
 import net.laserdiamond.serverplugin1201.enchants.Config.EnchantConfig;
 import net.laserdiamond.serverplugin1201.enchants.anvil.AnvilInvetoryGUI;
 import net.laserdiamond.serverplugin1201.events.CancelInventoryMovementMenus;
+import net.laserdiamond.serverplugin1201.events.SpellCastListeners;
 import net.laserdiamond.serverplugin1201.events.damage.DamageEvent;
 import net.laserdiamond.serverplugin1201.events.damage.ApplyDefense;
 import net.laserdiamond.serverplugin1201.events.effects.Components.Timers.ManaFreezeTimer;
@@ -56,8 +57,6 @@ public final class ServerPlugin1201 extends JavaPlugin {
     private StatProfileManager statProfileManager;
     private TunementConfig tunementConfig;
     private TunementProfileManager tunementProfileManager;
-    private ArmorTrimMaterialStats armorTrimMaterialStats;
-    private ArmorTrimPatternStats armorTrimPatternStats;
     private EffectManager effectManager;
     private EffectProfileConfig effectProfileConfig;
     private BukkitTask displayHUDTimer;
@@ -131,6 +130,9 @@ public final class ServerPlugin1201 extends JavaPlugin {
         // Mob names
         getServer().getPluginManager().registerEvents(new mobHealthDisplay(this),this);
 
+        // Spell Casts
+        getServer().getPluginManager().registerEvents(new SpellCastListeners(this),this);
+
         // Register Commands
         getCommand("plugineffect").setExecutor(new EffectsCommand(this));
         getCommand("plugingive").setExecutor(new GiveItemsCommand(this));
@@ -152,12 +154,6 @@ public final class ServerPlugin1201 extends JavaPlugin {
     }
     public TunementProfileManager getTunementProfileManager() {
         return tunementProfileManager;
-    }
-    public ArmorTrimMaterialStats getArmorTrimMaterialStats() {
-        return armorTrimMaterialStats;
-    }
-    public ArmorTrimPatternStats getArmorTrimPatternStats() {
-        return armorTrimPatternStats;
     }
     public EffectManager getEffectManager() {
         return effectManager;
@@ -252,7 +248,7 @@ public final class ServerPlugin1201 extends JavaPlugin {
     private void createItemManagers() {
         diamondArmorManager = new DiamondArmorManager(this);
         netheriteArmorManager = new NetheriteArmorManager(this);
-        stormLordArmorManager = new StormLordArmorManager(this);
+        stormLordArmorManager = new StormLordArmorManager();
     }
     private void createTimers() {
         ManaFreezeTimer.setupTimer();
