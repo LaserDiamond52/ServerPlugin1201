@@ -64,6 +64,7 @@ public final class ServerPlugin1201 extends JavaPlugin {
     private BukkitTask displayHUDTimer;
     private BukkitTask manaRegen;
     private BukkitTask effectTimer;
+    private BukkitTask abilityTimer;
 
     private BaseStatsConfig baseStatsConfig;
     private EnchantConfig enchantConfig;
@@ -271,6 +272,7 @@ public final class ServerPlugin1201 extends JavaPlugin {
         displayHUDTimer = new HUD(this).runTaskTimer(this, 0L, 1L);
         manaRegen = new ManaRegen(this).runTaskTimer(this, 0L, 20L);
         effectTimer = new EffectTimer(this).runTaskTimer(this, 0L, 20L);
+        abilityTimer = new SpellCastListeners(this).runTaskTimer(this, 0L, 1L);
     }
     private void setUpCooldowns() {
         EyeOfStormCooldown.setUpCooldown();
@@ -300,6 +302,9 @@ public final class ServerPlugin1201 extends JavaPlugin {
         }
         if (effectTimer != null && !effectTimer.isCancelled()) {
             effectTimer.cancel();
+        }
+        if (abilityTimer != null && !abilityTimer.isCancelled()) {
+            abilityTimer.cancel();
         }
     }
 

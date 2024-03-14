@@ -21,8 +21,8 @@ public class SpellCasting {
         void onDropItemCast(PlayerDropItemEvent event);
     }
 
-    public interface SneakingSpell
+    public interface runnableSpell
     {
-        void onSneakCast(Player player);
+        void onActivate(Player player, int timer);
     }
 }

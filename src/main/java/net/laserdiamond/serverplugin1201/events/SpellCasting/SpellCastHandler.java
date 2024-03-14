@@ -15,6 +15,7 @@ public @interface SpellCastHandler
      * <li>RIGHT_CLICK
      * <li>LEFT_CLICK
      * <li>DROP_ITEM
+     * <li>RUNNABLE
      * </ol>
      *
      * @return The spellCastType

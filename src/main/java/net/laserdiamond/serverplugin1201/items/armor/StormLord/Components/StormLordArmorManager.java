@@ -258,67 +258,6 @@ public class StormLordArmorManager implements ArmorFabricate, SpellCastListener,
         return false;
     }
 
-
-
-    public static void castEyeOfStorm(Player player, int enchantLvl)
-    {
-        StatPlayer statPlayer = new StatPlayer(player);
-        Stats stats = statPlayer.getStats();
-        String abilityName = ARMOR_CONFIG.getString("abilityName");
-        double availableMana = stats.getAvailableMana();
-        double manaCost = ARMOR_CONFIG.getDouble("manaCost");
-        int cooldown = ARMOR_CONFIG.getInt("cooldown");
-        double baseDamage = ARMOR_CONFIG.getDouble("baseDamage");
-        double blastRadius = ARMOR_CONFIG.getDouble("blastRadius");
-
-        PlayerSpellCastEvent spellCastEvent = new PlayerSpellCastEvent(player, manaCost);
-        double eventManaCost = spellCastEvent.getManaCost();
-
-        if (isWearingFullSet(player))
-        {
-
-            double finalDamage = baseDamage + Math.pow(enchantLvl, 2);
-            if (EyeOfStormCooldown.checkCooldown(player))
-            {
-                Bukkit.getPluginManager().callEvent(spellCastEvent);
-                if (availableMana > eventManaCost)
-                {
-                    if (!spellCastEvent.isCancelled())
-                    {
-                        stats.setAvailableMana(availableMana - eventManaCost);
-
-                        for (LivingEntity livingEntity : player.getLocation().getNearbyLivingEntities(blastRadius))
-                        {
-                            livingEntity.getWorld().strikeLightningEffect(livingEntity.getLocation());
-                            if (livingEntity != player)
-                            {
-                                PlayerMagicDamageEvent magicDamageEvent = new PlayerMagicDamageEvent(player, livingEntity, finalDamage, true);
-                                Bukkit.getPluginManager().callEvent(magicDamageEvent);
-                                if (!magicDamageEvent.isCancelled())
-                                {
-                                    PlayerMagicDamageEvent.run(player, livingEntity, finalDamage, true);
-                                }
-                            }
-                        }
-
-                        EyeOfStormCooldown.setCooldown(player, 5);
-                        player.sendMessage(Messages.abilityUse(abilityName));
-                    } else
-                    {
-                        player.sendMessage(Messages.cancelledSpellMsg());
-                    }
-
-                } else
-                {
-                    player.sendMessage(Messages.notEnoughMana());
-                }
-            } else {
-                player.sendMessage(Messages.abilityCooldown(abilityName));
-            }
-        }
-    }
-
-
     @SpellCastHandler(spellCastType = SpellCastType.DROP_ITEM)
     @Override
     public void onDropItemCast(PlayerDropItemEvent event) {
@@ -343,9 +282,9 @@ public class StormLordArmorManager implements ArmorFabricate, SpellCastListener,
             event.setCancelled(true);
             if (EyeOfStormCooldown.checkCooldown(player))
             {
+                Bukkit.getPluginManager().callEvent(spellCastEvent);
                 if (availableMana > eventCost)
                 {
-                    Bukkit.getPluginManager().callEvent(spellCastEvent);
                     if (!spellCastEvent.isCancelled())
                     {
                         stats.setAvailableMana(availableMana - eventCost);

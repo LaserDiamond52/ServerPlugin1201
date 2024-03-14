@@ -1,36 +1,61 @@
 package net.laserdiamond.serverplugin1201.events.SpellCasting;
 
 import net.laserdiamond.serverplugin1201.ServerPlugin1201;
-import net.laserdiamond.serverplugin1201.enchants.Components.EnchantsClass;
-import net.laserdiamond.serverplugin1201.events.SpellCasting.*;
-import net.laserdiamond.serverplugin1201.stats.Manager.StatProfileManager;
-import org.bukkit.enchantments.Enchantment;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
 import java.util.*;
 
-public class SpellCastListeners implements Listener {
+public class SpellCastListeners extends BukkitRunnable implements Listener {
 
     private final ServerPlugin1201 plugin;
-    private final StatProfileManager statProfileManager;
 
     public SpellCastListeners(ServerPlugin1201 plugin)
     {
         this.plugin = plugin;
-        statProfileManager = plugin.getStatProfileManager();
 
     }
 
+    /**
+     * BukkitRunnable for Sneaking/Passive spells/abilities
+     */
+
+    private int timer = 0;
+
+    @Override
+    public void run()
+    {
+        for (Player player : Bukkit.getServer().getOnlinePlayers())
+        {
+            timer++;
+            try {
+                PlayerRunnableSpell(player);
+            } catch (InvocationTargetException | IllegalAccessException e) {
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "!ERROR WHILE TRYING TO ACTIVATE SPELL/ABILITY!");
+                throw new RuntimeException(e);
+            }
+            if (timer >= 20)
+            {
+                timer = 0;
+            }
+        }
+    }
+
+    /**
+     * Event handler for registered click spells/abilities
+     * @param event
+     * @throws InvocationTargetException
+     * @throws IllegalAccessException
+     */
     @EventHandler
     public void castSpellClick(PlayerInteractEvent event) throws InvocationTargetException, IllegalAccessException {
 
@@ -46,6 +71,14 @@ public class SpellCastListeners implements Listener {
         }
     }
 
+    /**
+     * Event handler for registered drop spells/abilities
+     * @param event
+     * @throws InvocationTargetException
+     * @throws IllegalAccessException
+     * @throws InstantiationException
+     * @throws NoSuchMethodException
+     */
     @EventHandler
     public void castSpellDrop(PlayerDropItemEvent event) throws InvocationTargetException, IllegalAccessException, InstantiationException, NoSuchMethodException {
         Player player = event.getPlayer();
@@ -94,4 +127,23 @@ public class SpellCastListeners implements Listener {
         }
     }
 
+    private void PlayerRunnableSpell(Player player) throws InvocationTargetException, IllegalAccessException {
+        List<SpellCastListener> listeners = plugin.getSpellCastListeners();
+        for (SpellCastListener listener : listeners)
+        {
+            for (Method method : listener.getClass().getDeclaredMethods())
+            {
+                if (method.isAnnotationPresent(SpellCastHandler.class))
+                {
+                    SpellCastHandler annotation = method.getAnnotation(SpellCastHandler.class);
+                    {
+                        if (annotation.spellCastType() == SpellCastType.RUNNABLE)
+                        {
+                            method.invoke(listener, player);
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
