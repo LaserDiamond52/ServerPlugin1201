@@ -3,7 +3,14 @@ package net.laserdiamond.serverplugin1201.events;
 import net.laserdiamond.serverplugin1201.ServerPlugin1201;
 import net.laserdiamond.serverplugin1201.events.effects.Components.EffectProfile;
 import net.laserdiamond.serverplugin1201.events.effects.Managers.EffectManager;
+import net.laserdiamond.serverplugin1201.stats.Components.DamageStats;
+import net.laserdiamond.serverplugin1201.stats.Components.DefenseStats;
+import net.laserdiamond.serverplugin1201.stats.Components.StatProfile;
+import net.laserdiamond.serverplugin1201.stats.Components.Stats;
 import net.laserdiamond.serverplugin1201.stats.Manager.StatProfileManager;
+import net.laserdiamond.serverplugin1201.tunement.Components.TunementProfile;
+import net.laserdiamond.serverplugin1201.tunement.Components.TunementStats;
+import net.laserdiamond.serverplugin1201.tunement.Manager.TunementProfileManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -17,13 +24,13 @@ import java.util.UUID;
 
 public class PlayerJoinServer implements Listener {
 
-    private ServerPlugin1201 plugin;
-    private StatProfileManager statProfileManager;
-    private EffectManager effectManager;
+    private final StatProfileManager statProfileManager;
+    private final TunementProfileManager tunementProfileManager;
+    private final EffectManager effectManager;
 
     public PlayerJoinServer(ServerPlugin1201 plugin) {
-        this.plugin = plugin;
         statProfileManager = plugin.getStatProfileManager();
+        tunementProfileManager = plugin.getTunementProfileManager();
         effectManager = plugin.getEffectManager();
     }
 
@@ -68,7 +75,40 @@ public class PlayerJoinServer implements Listener {
         }
 
         // Create/load profiles player will need on the server
-        statProfileManager.createNewStatProfile(player);
+        StatProfile statProfile = statProfileManager.createNewStatProfile(player);
+
+        /*
+        TunementProfile tunementProfile = TunementProfile.createTunementProfile(player);
+        Stats stats  = statProfile.stats();
+        DamageStats damageStats = statProfile.damageStats();
+        DefenseStats defenseStats = statProfile.defenseStats();
+        double statHealth = stats.getHealth();
+        double statSpeed = stats.getSpeed();
+        double statMana = stats.getMaxMana();
+        double statDefense = defenseStats.getDefense();
+        double statbMelee = damageStats.getbMeleeDmg();
+        double statbMagic = damageStats.getbMagicDmg();
+        double statbRange = damageStats.getbRangeDmg();
+
+        TunementStats tunementStats = tunementProfile.tunementStats();
+        double tuneHealth = tunementStats.getHealth();
+        double tuneDefense = tunementStats.getDefense();
+        double tuneSpeed = tunementStats.getSpeed();
+        double tuneMana = tunementStats.getMana();
+        double tuneMelee = tunementStats.getMelee();
+        double tuneMagic = tunementStats.getMagic();
+        double tuneRange = tunementStats.getRange();
+
+        stats.setHealth(statHealth + tuneHealth);
+        stats.setSpeed(statSpeed + tuneSpeed);
+        stats.setMaxMana(statMana + tuneMana);
+        defenseStats.setDefense(statDefense + tuneDefense);
+        damageStats.setbMeleeDmg(statbMelee + tuneMelee);
+        damageStats.setbMagicDmg(statbMagic + tuneMagic);
+        damageStats.setbRangeDmg(statbRange + tuneRange);
+
+         */
+
 
         EffectProfile effectProfile = effectManager.getEffectProfile(player.getUniqueId());
         if (effectProfile == null) {

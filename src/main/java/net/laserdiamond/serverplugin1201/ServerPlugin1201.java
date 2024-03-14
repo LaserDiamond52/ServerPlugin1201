@@ -11,7 +11,7 @@ import net.laserdiamond.serverplugin1201.enchants.Components.EnchantsClass;
 import net.laserdiamond.serverplugin1201.enchants.Config.EnchantConfig;
 import net.laserdiamond.serverplugin1201.enchants.anvil.AnvilInvetoryGUI;
 import net.laserdiamond.serverplugin1201.events.CancelInventoryMovementMenus;
-import net.laserdiamond.serverplugin1201.events.SpellCastListeners;
+import net.laserdiamond.serverplugin1201.events.SpellCasting.SpellCastListeners;
 import net.laserdiamond.serverplugin1201.events.damage.DamageEvent;
 import net.laserdiamond.serverplugin1201.events.damage.ApplyDefense;
 import net.laserdiamond.serverplugin1201.events.effects.Components.Timers.ManaFreezeTimer;
@@ -25,15 +25,12 @@ import net.laserdiamond.serverplugin1201.events.PlayerJoinServer;
 import net.laserdiamond.serverplugin1201.events.effects.Components.EffectTimer;
 import net.laserdiamond.serverplugin1201.events.effects.Config.EffectProfileConfig;
 import net.laserdiamond.serverplugin1201.events.effects.Managers.EffectManager;
-import net.laserdiamond.serverplugin1201.events.mana.PlayerManaRegenEvent;
 import net.laserdiamond.serverplugin1201.items.armor.ArmorEquipStats;
 import net.laserdiamond.serverplugin1201.items.armor.Blaze.Config.BlazeArmorConfig;
 import net.laserdiamond.serverplugin1201.items.armor.StormLord.Components.EyeOfStormCooldown;
 import net.laserdiamond.serverplugin1201.items.armor.StormLord.Components.StormLordArmorListeners;
 import net.laserdiamond.serverplugin1201.items.armor.StormLord.Components.StormLordArmorManager;
 import net.laserdiamond.serverplugin1201.items.armor.StormLord.Config.StormLordArmorConfig;
-import net.laserdiamond.serverplugin1201.items.armor.Trims.Components.ArmorTrimMaterialStats;
-import net.laserdiamond.serverplugin1201.items.armor.Trims.Components.ArmorTrimPatternStats;
 import net.laserdiamond.serverplugin1201.items.armor.Trims.Components.TrimMaterialListeners;
 import net.laserdiamond.serverplugin1201.items.armor.Trims.Config.ArmorTrimConfig;
 import net.laserdiamond.serverplugin1201.items.armor.Vanilla.Components.DiamondArmorManager;
@@ -42,6 +39,8 @@ import net.laserdiamond.serverplugin1201.items.armor.Vanilla.Config.VanillaArmor
 import net.laserdiamond.serverplugin1201.items.crafting.SmithingTable.SmithingTableCrafting;
 import net.laserdiamond.serverplugin1201.items.management.ItemMappings;
 import net.laserdiamond.serverplugin1201.entities.healthDisplay.mobHealthDisplay;
+import net.laserdiamond.serverplugin1201.events.SpellCasting.SpellCastListener;
+import net.laserdiamond.serverplugin1201.management.RegisterSpellCaster;
 import net.laserdiamond.serverplugin1201.stats.Config.BaseStatsConfig;
 import net.laserdiamond.serverplugin1201.stats.Manager.StatProfileManager;
 import net.laserdiamond.serverplugin1201.tunement.Config.TunementConfig;
@@ -50,6 +49,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public final class ServerPlugin1201 extends JavaPlugin {
 
@@ -74,6 +76,7 @@ public final class ServerPlugin1201 extends JavaPlugin {
     private StormLordArmorConfig stormLordArmorConfig;
     private StormLordArmorManager stormLordArmorManager;
 
+    private List<SpellCastListener> spellCastListeners = new ArrayList<>();
 
     @Override
     public void onEnable() {
@@ -140,6 +143,9 @@ public final class ServerPlugin1201 extends JavaPlugin {
         getCommand("stats").setExecutor(new ViewStats());
         getCommand("refillmana").setExecutor(new fillMana());
 
+        // TODO: Test Spell Caster
+        registerAbilities();
+
         getConfig().options().copyDefaults();
         saveDefaultConfig();
         reloadConfig();
@@ -168,6 +174,10 @@ public final class ServerPlugin1201 extends JavaPlugin {
         return stormLordArmorManager;
     }
 
+    public List<SpellCastListener> getSpellCastListeners()
+    {
+        return spellCastListeners;
+    }
     @Override
     public void onDisable() {
         // Plugin shutdown logic
@@ -239,6 +249,7 @@ public final class ServerPlugin1201 extends JavaPlugin {
     }
     private void createManagers() {
         tunementProfileManager = new TunementProfileManager(this);
+        tunementProfileManager.loadFromConfig();
 
         statProfileManager = new StatProfileManager(this);
 
@@ -263,6 +274,10 @@ public final class ServerPlugin1201 extends JavaPlugin {
     }
     private void setUpCooldowns() {
         EyeOfStormCooldown.setUpCooldown();
+    }
+    private void registerAbilities()
+    {
+        RegisterSpellCaster.registerListener(new StormLordArmorManager(), this);
     }
 
     private void saveProfilesToConfigs() {

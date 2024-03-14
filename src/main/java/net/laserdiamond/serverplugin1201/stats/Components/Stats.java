@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 public class Stats {
 
     private final ServerPlugin1201 PLUGIN = ServerPlugin1201.getInstance();
+    private final Player player;
     private double health;
     private double meleeDamage;
     private double rangeDamage;
@@ -29,7 +30,10 @@ public class Stats {
     private double luck;
     private final double BASE_SPEED = PLUGIN.getBaseStatsConfig().getDouble("baseSpeed");
 
+    @Deprecated
     public Stats(Player player, double health, double speed, double starvationRate, double luck, double meleeDamage, double magicDamage, double rangeDamage, double availableMana, double maxMana, double baseMeleeDamage, double baseMagicDamage, double baseRangeDamage, double defense, double fireDefense, double explosionDefense, double projectileDefense, double magicDefense, double toughness, double fortitude) {
+
+        this.player = player;
 
         AttributeInstance healthInstance = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
         healthInstance.setBaseValue(health);
@@ -65,6 +69,8 @@ public class Stats {
 
     public Stats(Player player, double health, double speed, double starvationRate, double luck, double availableMana, double maxMana)
     {
+        this.player = player;
+
         AttributeInstance healthInstance = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
         healthInstance.setBaseValue(health);
         this.health = health;
@@ -84,14 +90,18 @@ public class Stats {
         this.maxMana = maxMana;
     }
 
+    public Player getPlayer()
+    {
+        return player;
+    }
 
-    public double getHealth(Player player) {
+    public double getHealth() {
         AttributeInstance healthInstance = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
         health = healthInstance.getBaseValue();
         return health;
     }
 
-    public void setHealth(Player player, double health) {
+    public void setHealth(double health) {
         AttributeInstance healthInstance = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
         healthInstance.setBaseValue(health);
         this.health = health;
@@ -217,36 +227,36 @@ public class Stats {
         this.fortitude = fortitude;
     }
 
-    public double getSpeed(Player player) {
+    public double getSpeed() {
         AttributeInstance speedInstance = player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED);
         double playerSpeed = speedInstance.getBaseValue();
         speed = (playerSpeed / BASE_SPEED) * 100;
         return speed;
     }
 
-    public void setSpeed(Player player, double speed) {
+    public void setSpeed(double speed) {
         AttributeInstance speedInstance = player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED);
         speedInstance.setBaseValue(BASE_SPEED * speed * 0.01);
         this.speed = speed;
     }
 
-    public double getStarvationRate(Player player) {
+    public double getStarvationRate() {
         starvationRate = player.getStarvationRate();
         return starvationRate;
     }
 
-    public void setStarvationRate(Player player, int starvationRate) {
+    public void setStarvationRate(int starvationRate) {
         player.setStarvationRate(starvationRate);
         this.starvationRate = starvationRate;
     }
 
-    public double getLuck(Player player) {
+    public double getLuck() {
         AttributeInstance luckInstance = player.getAttribute(Attribute.GENERIC_LUCK);
         luck = luckInstance.getBaseValue();
         return luck;
     }
 
-    public void setLuck(Player player, double luck) {
+    public void setLuck(double luck) {
         AttributeInstance luckInstance = player.getAttribute(Attribute.GENERIC_LUCK);
         luckInstance.setBaseValue(luck);
         this.luck = luck;

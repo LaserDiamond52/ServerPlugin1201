@@ -36,7 +36,7 @@ public class StatsItemManager {
 
         // TODO: Base Stats
         double maxHealth = player.getMaxHealth();
-        double speed = stats.getSpeed(player);
+        double speed = stats.getSpeed();
         double maxMana = stats.getMaxMana();
 
         double baseMelee = damageStats.getbMeleeDmg();

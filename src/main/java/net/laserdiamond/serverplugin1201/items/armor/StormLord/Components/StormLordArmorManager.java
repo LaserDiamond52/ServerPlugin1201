@@ -5,7 +5,6 @@ import net.laserdiamond.serverplugin1201.ServerPlugin1201;
 import net.laserdiamond.serverplugin1201.enchants.Components.EnchantsClass;
 import net.laserdiamond.serverplugin1201.entities.player.StatPlayer;
 import net.laserdiamond.serverplugin1201.events.damage.PlayerMagicDamageEvent;
-import net.laserdiamond.serverplugin1201.events.mana.PlayerManaRegenEvent;
 import net.laserdiamond.serverplugin1201.events.mana.PlayerSpellCastEvent;
 import net.laserdiamond.serverplugin1201.items.armor.ArmorEquipStats;
 import net.laserdiamond.serverplugin1201.items.armor.StormLord.Config.StormLordArmorConfig;
@@ -15,6 +14,7 @@ import net.laserdiamond.serverplugin1201.items.management.PluginItemRarity;
 import net.laserdiamond.serverplugin1201.items.management.armor.ArmorCMD;
 import net.laserdiamond.serverplugin1201.items.management.armor.ArmorFabricate;
 import net.laserdiamond.serverplugin1201.items.management.armor.ArmorTypes;
+import net.laserdiamond.serverplugin1201.events.SpellCasting.*;
 import net.laserdiamond.serverplugin1201.management.ItemStatKeys;
 import net.laserdiamond.serverplugin1201.management.Stars;
 import net.laserdiamond.serverplugin1201.management.messages.Messages;
@@ -24,20 +24,17 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.eclipse.sisu.space.ClassFinder;
-import org.eclipse.sisu.space.ClassSpace;
 import org.jetbrains.annotations.NotNull;
 
-import java.net.URL;
 import java.util.*;
 
-public class StormLordArmorManager implements ArmorFabricate {
+
+public class StormLordArmorManager implements ArmorFabricate, SpellCastListener, SpellCasting.DropItemSpell {
 
     private static final ServerPlugin1201 PLUGIN = ServerPlugin1201.getInstance();
     private static final StormLordArmorConfig ARMOR_CONFIG = PLUGIN.getStormLordArmorConfig();
@@ -261,6 +258,8 @@ public class StormLordArmorManager implements ArmorFabricate {
         return false;
     }
 
+
+
     public static void castEyeOfStorm(Player player, int enchantLvl)
     {
         StatPlayer statPlayer = new StatPlayer(player);
@@ -274,8 +273,6 @@ public class StormLordArmorManager implements ArmorFabricate {
 
         PlayerSpellCastEvent spellCastEvent = new PlayerSpellCastEvent(player, manaCost);
         double eventManaCost = spellCastEvent.getManaCost();
-
-
 
         if (isWearingFullSet(player))
         {
@@ -318,6 +315,70 @@ public class StormLordArmorManager implements ArmorFabricate {
             } else {
                 player.sendMessage(Messages.abilityCooldown(abilityName));
             }
+        }
+    }
+
+
+    @SpellCastHandler(spellCastType = SpellCastType.DROP_ITEM)
+    @Override
+    public void onDropItemCast(PlayerDropItemEvent event) {
+        Player player = event.getPlayer();
+        StatPlayer statPlayer = new StatPlayer(player);
+        Stats stats = statPlayer.getStats();
+        String abilityName = ARMOR_CONFIG.getString("abilityName");
+        double availableMana = stats.getAvailableMana();
+        double manaCost = ARMOR_CONFIG.getDouble("manaCost");
+        int cooldown = ARMOR_CONFIG.getInt("cooldown");
+        double baseDamage = ARMOR_CONFIG.getDouble("baseDamage");
+        double blastRadius = ARMOR_CONFIG.getDouble("blastRadius");
+
+        PlayerSpellCastEvent spellCastEvent = new PlayerSpellCastEvent(player, manaCost);
+        double eventCost = spellCastEvent.getManaCost();
+
+        ItemStack droppedItem = event.getItemDrop().getItemStack();
+        ItemMeta droppedMeta = droppedItem.getItemMeta();
+
+        if (isWearingFullSet(player) && droppedMeta != null && droppedMeta.hasEnchant(EnchantsClass.THUNDER_STRIKE))
+        {
+            event.setCancelled(true);
+            if (EyeOfStormCooldown.checkCooldown(player))
+            {
+                if (availableMana > eventCost)
+                {
+                    Bukkit.getPluginManager().callEvent(spellCastEvent);
+                    if (!spellCastEvent.isCancelled())
+                    {
+                        stats.setAvailableMana(availableMana - eventCost);
+
+                        int enchantLvl = droppedMeta.getEnchantLevel(EnchantsClass.THUNDER_STRIKE);
+                        double finalDamage = baseDamage + Math.pow(enchantLvl, 2);
+
+                        for (LivingEntity livingEntity : player.getLocation().getNearbyLivingEntities(blastRadius))
+                        {
+                            livingEntity.getWorld().strikeLightningEffect(livingEntity.getLocation());
+                            if (livingEntity != player)
+                            {
+                                PlayerMagicDamageEvent magicDamageEvent = new PlayerMagicDamageEvent(player, livingEntity, finalDamage, true);
+                                Bukkit.getPluginManager().callEvent(magicDamageEvent);
+                                if (!magicDamageEvent.isCancelled())
+                                {
+                                    PlayerMagicDamageEvent.run(player, livingEntity, finalDamage, true);
+                                }
+                            }
+                        }
+
+                        EyeOfStormCooldown.setCooldown(player, cooldown);
+                        player.sendMessage(Messages.abilityUse(abilityName));
+                    }
+                } else
+                {
+                    player.sendMessage(Messages.notEnoughMana());
+                }
+            } else
+            {
+                player.sendMessage(Messages.abilityCooldown(abilityName));
+            }
+
         }
     }
 }
