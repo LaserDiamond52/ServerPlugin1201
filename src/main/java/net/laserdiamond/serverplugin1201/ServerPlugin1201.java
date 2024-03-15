@@ -52,6 +52,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public final class ServerPlugin1201 extends JavaPlugin {
 
@@ -77,7 +78,7 @@ public final class ServerPlugin1201 extends JavaPlugin {
     private StormLordArmorConfig stormLordArmorConfig;
     private StormLordArmorManager stormLordArmorManager;
 
-    private List<SpellCastListener> spellCastListeners = new ArrayList<>();
+    private final List<SpellCastListener> spellCastListeners = new ArrayList<>();
 
     @Override
     public void onEnable() {
@@ -144,7 +145,7 @@ public final class ServerPlugin1201 extends JavaPlugin {
         getCommand("stats").setExecutor(new ViewStats());
         getCommand("refillmana").setExecutor(new fillMana());
 
-        // TODO: Test Spell Caster
+        // TODO: Test Spell Casters
         registerAbilities();
 
         getConfig().options().copyDefaults();
@@ -279,7 +280,8 @@ public final class ServerPlugin1201 extends JavaPlugin {
     }
     private void registerAbilities()
     {
-        RegisterSpellCaster.registerListener(new StormLordArmorManager(), this);
+        RegisterSpellCaster.registerListener(new EnchantListeners(this),this);
+        RegisterSpellCaster.registerListener(stormLordArmorManager, this);
     }
 
     private void saveProfilesToConfigs() {

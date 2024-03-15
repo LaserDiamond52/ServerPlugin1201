@@ -69,7 +69,7 @@ public class TrimMaterialListeners implements Listener {
         Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).stats();
         DamageStats damageStats = statProfileManager.getStatProfile(player.getUniqueId()).damageStats();
         DefenseStats defenseStats = statProfileManager.getStatProfile(player.getUniqueId()).defenseStats();
-        ArmorTrimMaterialStats trimMaterialStats = statProfileManager.getStatProfile(player.getUniqueId()).armorTrimStats().getArmorTrimMaterialStats();
+        ArmorTrimMaterialStats trimMaterialStats = statProfileManager.getStatProfile(player.getUniqueId()).armorTrimStats().armorTrimMaterialStats();
 
         if (newMeta != null)
         {
@@ -259,7 +259,7 @@ public class TrimMaterialListeners implements Listener {
         ExperienceOrb expOrb = event.getExperienceOrb();
         int expAmount = expOrb.getExperience();
 
-        ArmorTrimMaterialStats trimMaterialStats = statProfileManager.getStatProfile(player.getUniqueId()).armorTrimStats().getArmorTrimMaterialStats();
+        ArmorTrimMaterialStats trimMaterialStats = statProfileManager.getStatProfile(player.getUniqueId()).armorTrimStats().armorTrimMaterialStats();
         double lapisBonusExpPlayer = 1 + (trimMaterialStats.getLapisBonusExp() * 0.01);
 
         expOrb.setExperience((int) (expAmount * lapisBonusExpPlayer));
@@ -270,7 +270,7 @@ public class TrimMaterialListeners implements Listener {
     {
         if (event.getEntity() instanceof Player player)
         {
-            ArmorTrimMaterialStats trimMaterialStats = statProfileManager.getStatProfile(player.getUniqueId()).armorTrimStats().getArmorTrimMaterialStats();
+            ArmorTrimMaterialStats trimMaterialStats = statProfileManager.getStatProfile(player.getUniqueId()).armorTrimStats().armorTrimMaterialStats();
             double redstonePotionBonusPlayer = 1 + (trimMaterialStats.getRedstoneBonusPotion() * 0.01);
 
             PotionEffect newEffect = event.getNewEffect();

@@ -28,9 +28,18 @@ public class EnchantsClass {
     public static final Enchantment MELEE_DAMAGE = new EnchantmentWrapper("meleedamage", "Strength", 1, 3, EnchantmentTarget.ARMOR_TORSO, false, damageConflicting());
     public static final Enchantment MAGIC_DAMAGE = new EnchantmentWrapper("magicdamage", "Arcane", 1, 3, EnchantmentTarget.ARMOR_TORSO, false, damageConflicting());
     public static final Enchantment RANGE_DAMAGE = new EnchantmentWrapper("rangedamage", "Archer", 1, 3, EnchantmentTarget.ARMOR_TORSO, false, damageConflicting());
+    public static final Enchantment HEALTH = new EnchantmentWrapper("health", "Growth", 1, 5, EnchantmentTarget.ARMOR, false);
+    public static final Enchantment NIGH_VISION = new EnchantmentWrapper("nightvision", "Night Vision", 1, 1, EnchantmentTarget.ARMOR_HEAD, false);
+    public static final Enchantment SPEED = new EnchantmentWrapper("speed", "Quick Feet", 1, 5, EnchantmentTarget.ARMOR_FEET, false);
+    public static final Enchantment REACH = new EnchantmentWrapper("reach", "Reach", 1, 3, EnchantmentTarget.WEAPON, false);
+    public static final Enchantment ARMOR_MINING_FORTUNE = new EnchantmentWrapper("armorminingfortune", "Miner", 1, 3, EnchantmentTarget.ARMOR, false);
+    public static final Enchantment ARMOR_FORAGING_FORTUNE = new EnchantmentWrapper("armorforagingfortune", "Forager", 1, 3, EnchantmentTarget.ARMOR, false);
+    public static final Enchantment ARMOR_FISHING_FORTUNE = new EnchantmentWrapper("armorfishingfortune", "Fisherman", 1, 3, EnchantmentTarget.ARMOR, false);
+
+
     public static void register() {
 
-        List<Enchantment> enchantsClasses = Arrays.stream(Enchantment.values()).collect(Collectors.toList());
+        List<Enchantment> enchantsClasses = Arrays.stream(Enchantment.values()).toList();
 
         boolean registeredGlint = enchantsClasses.contains(EnchantsClass.GLINT);
         boolean registeredGlow = enchantsClasses.contains(EnchantsClass.GLOW);
@@ -43,6 +52,13 @@ public class EnchantsClass {
         boolean registeredMeleeDamage = enchantsClasses.contains(MELEE_DAMAGE);
         boolean registeredMagicDamage = enchantsClasses.contains(MAGIC_DAMAGE);
         boolean registeredRangeDamage = enchantsClasses.contains(RANGE_DAMAGE);
+        boolean registeredHealth = enchantsClasses.contains(HEALTH);
+        boolean registeredNightVision = enchantsClasses.contains(NIGH_VISION);
+        boolean registeredSpeed = enchantsClasses.contains(SPEED);
+        boolean registeredReach = enchantsClasses.contains(REACH);
+        boolean registeredMiner = enchantsClasses.contains(ARMOR_MINING_FORTUNE);
+        boolean registeredForager = enchantsClasses.contains(ARMOR_FORAGING_FORTUNE);
+        boolean registeredFisherman = enchantsClasses.contains(ARMOR_FISHING_FORTUNE);
 
         if (!registeredGlint) {
             registerEnchantment(GLINT);
@@ -76,6 +92,34 @@ public class EnchantsClass {
         }
         if (!registeredRangeDamage) {
             registerEnchantment(RANGE_DAMAGE);
+        }
+        if (!registeredHealth)
+        {
+            registerEnchantment(HEALTH);
+        }
+        if (!registeredSpeed)
+        {
+            registerEnchantment(SPEED);
+        }
+        if (!registeredNightVision)
+        {
+            registerEnchantment(NIGH_VISION);
+        }
+        if (!registeredReach)
+        {
+            registerEnchantment(REACH);
+        }
+        if (!registeredMiner)
+        {
+            registerEnchantment(ARMOR_MINING_FORTUNE);
+        }
+        if(!registeredForager)
+        {
+            registerEnchantment(ARMOR_FORAGING_FORTUNE);
+        }
+        if (!registeredFisherman)
+        {
+            registerEnchantment(ARMOR_FISHING_FORTUNE);
         }
 
     }

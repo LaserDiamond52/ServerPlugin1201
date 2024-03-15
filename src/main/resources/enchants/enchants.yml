@@ -21,3 +21,10 @@ strength: 0.25
 arcane: 0.25
 archer: 0.25
 
+speed: 10
+reachRange: 0.25
+
+minerFortune: 5
+foragerFortune: 5
+fishermanFortune: 5
+

@@ -6,7 +6,16 @@ import net.laserdiamond.serverplugin1201.events.SpellCasting.SpellCastListeners;
 
 import java.util.List;
 
+/**
+ * This class is used to add classes to a list that have implemented the SpellCastListener Interface
+ * <p>
+ * Classes should not be registered unless they contain a spell/ability that should be used
+ *
+ */
+
 public class RegisterSpellCaster {
+
+
 
     public static void registerListener(SpellCastListener spellCastListener, ServerPlugin1201 plugin)
     {

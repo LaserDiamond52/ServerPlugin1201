@@ -8,8 +8,9 @@ public class DamageStats {
     private double pMeleeDmg;
     private double pMagicDmg;
     private double pRangeDmg;
+    private double reach;
 
-    public DamageStats(double bMeleeDmg, double bMagicDmg, double bRangeDmg, double pMeleeDmg, double pMagicDmg, double pRangeDmg)
+    public DamageStats(double bMeleeDmg, double bMagicDmg, double bRangeDmg, double pMeleeDmg, double pMagicDmg, double pRangeDmg, double reach)
     {
         this.bMeleeDmg = bMeleeDmg;
         this.bMagicDmg = bMagicDmg;
@@ -17,6 +18,7 @@ public class DamageStats {
         this.pMeleeDmg = pMeleeDmg;
         this.pMagicDmg = pMagicDmg;
         this.pRangeDmg = pRangeDmg;
+        this.reach = reach;
     }
 
     public double getbMeleeDmg() {
@@ -65,5 +67,13 @@ public class DamageStats {
 
     public void setpRangeDmg(double pRangeDmg) {
         this.pRangeDmg = pRangeDmg;
+    }
+
+    public double getReach() {
+        return reach;
+    }
+
+    public void setReach(double reach) {
+        this.reach = reach;
     }
 }

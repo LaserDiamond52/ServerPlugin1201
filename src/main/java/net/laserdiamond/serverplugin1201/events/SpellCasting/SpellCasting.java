@@ -21,7 +21,7 @@ public class SpellCasting {
         void onDropItemCast(PlayerDropItemEvent event);
     }
 
-    public interface runnableSpell
+    public interface RunnableSpell
     {
         void onActivate(Player player, int timer);
     }

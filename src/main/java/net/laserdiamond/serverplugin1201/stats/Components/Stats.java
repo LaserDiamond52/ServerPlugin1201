@@ -107,26 +107,32 @@ public class Stats {
         this.health = health;
     }
 
+    @Deprecated
     public double getMeleeDamage() {
         return meleeDamage;
     }
 
+    @Deprecated
     public void setMeleeDamage(double meleeDamage) {
         this.meleeDamage = meleeDamage;
     }
 
+    @Deprecated
     public double getMagicDamage() {
         return magicDamage;
     }
 
+    @Deprecated
     public void setMagicDamage(double magicDamage) {
         this.magicDamage = magicDamage;
     }
 
+    @Deprecated
     public double getRangeDamage() {
         return rangeDamage;
     }
 
+    @Deprecated
     public void setRangeDamage(double rangeDamage) {
         this.rangeDamage = rangeDamage;
     }
@@ -147,82 +153,102 @@ public class Stats {
         this.maxMana = maxMana;
     }
 
+    @Deprecated
     public double getBaseMeleeDamage() {
         return baseMeleeDamage;
     }
 
+    @Deprecated
     public void setBaseMeleeDamage(double baseMeleeDamage) {
         this.baseMeleeDamage = baseMeleeDamage;
     }
 
+    @Deprecated
     public double getBaseMagicDamage() {
         return baseMagicDamage;
     }
 
+    @Deprecated
     public void setBaseMagicDamage(double baseMagicDamage) {
         this.baseMagicDamage = baseMagicDamage;
     }
 
+    @Deprecated
     public double getBaseRangeDamage() {
         return baseRangeDamage;
     }
 
+    @Deprecated
     public void setBaseRangeDamage(double baseRangeDamage) {
         this.baseRangeDamage = baseRangeDamage;
     }
 
+    @Deprecated
     public double getDefense() {
         return defense;
     }
 
+    @Deprecated
     public void setDefense(double defense) {
         this.defense = defense;
     }
 
+    @Deprecated
     public double getToughness() {
         return toughness;
     }
 
+    @Deprecated
     public void setToughness(double toughness) {
         this.toughness = toughness;
     }
 
+    @Deprecated
     public double getFireDefense() {
         return fireDefense;
     }
 
+    @Deprecated
     public void setFireDefense(double fireDefense) {
         this.fireDefense = fireDefense;
     }
 
+    @Deprecated
     public double getExplosionDefense() {
         return explosionDefense;
     }
 
+    @Deprecated
     public void setExplosionDefense(double explosionDefense) {
         this.explosionDefense = explosionDefense;
     }
 
+    @Deprecated
     public double getProjectileDefense() {
         return projectileDefense;
     }
 
+    @Deprecated
     public void setProjectileDefense(double projectileDefense) {
         this.projectileDefense = projectileDefense;
     }
 
+    @Deprecated
     public double getMagicDefense() {
         return magicDefense;
     }
 
+    @Deprecated
     public void setMagicDefense(double magicDefense) {
         this.magicDefense = magicDefense;
     }
 
+    @Deprecated
     public double getFortitude() {
         return fortitude;
     }
 
+    @Deprecated
     public void setFortitude(double fortitude) {
         this.fortitude = fortitude;
     }

@@ -3,7 +3,11 @@ package net.laserdiamond.serverplugin1201.enchants.Components;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import net.laserdiamond.serverplugin1201.ServerPlugin1201;
 import net.laserdiamond.serverplugin1201.enchants.Config.EnchantConfig;
-import net.laserdiamond.serverplugin1201.stats.Components.Stats;
+import net.laserdiamond.serverplugin1201.events.SpellCasting.SpellCastHandler;
+import net.laserdiamond.serverplugin1201.events.SpellCasting.SpellCastListener;
+import net.laserdiamond.serverplugin1201.events.SpellCasting.SpellCastType;
+import net.laserdiamond.serverplugin1201.events.SpellCasting.SpellCasting;
+import net.laserdiamond.serverplugin1201.stats.Components.*;
 import net.laserdiamond.serverplugin1201.stats.Manager.StatProfileManager;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
@@ -11,8 +15,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -21,11 +27,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class EnchantListeners implements Listener {
+public class EnchantListeners implements Listener, SpellCastListener, SpellCasting.RunnableSpell, SpellCasting.LeftClickSpell {
 
-    private ServerPlugin1201 plugin;
-    private StatProfileManager statProfileManager;
-    private EnchantConfig enchantConfig;
+    private final ServerPlugin1201 plugin;
+    private final StatProfileManager statProfileManager;
+    private final EnchantConfig enchantConfig;
     private final Map<UUID, Integer> ThunderStrikeProfiles = new HashMap<>();
 
     public EnchantListeners(ServerPlugin1201 plugin) {
@@ -54,23 +60,29 @@ public class EnchantListeners implements Listener {
         double arcane = enchantConfig.getDouble("arcane");
         double archer = enchantConfig.getDouble("archer");
 
-        Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).stats();
-        EnchantStats enchantStats = statProfileManager.getStatProfile(player.getUniqueId()).enchantStats();
+        double speed = enchantConfig.getDouble("speed");
+        double minerFortune = enchantConfig.getDouble("minerFortune");
+        double foragerFortune = enchantConfig.getDouble("foragerFortune");
+        double fishermanFortune = enchantConfig.getDouble("fishermanFortune");
+
+        StatProfile statProfile = statProfileManager.getStatProfile(player.getUniqueId());
 
         if (newMeta != null) {
 
-            addProtection(stats, enchantStats, newMeta, protectionArmor, fireProtectionArmor, explosionProtectionArmor, blastProtectionArmor, magicProtectionArmor, toughnessArmor);
-            addManaPool(stats, enchantStats, newMeta, manaPool);
-            addDamage(stats, enchantStats, newMeta, strength, arcane, archer);
-
+            addProtection(statProfile, newMeta, protectionArmor, fireProtectionArmor, explosionProtectionArmor, blastProtectionArmor, magicProtectionArmor, toughnessArmor);
+            addManaPool(statProfile, newMeta, manaPool);
+            addDamage(statProfile, newMeta, strength, arcane, archer);
+            addSpeed(statProfile, newMeta, speed);
+            addFortunes(statProfile, newMeta, minerFortune, foragerFortune, fishermanFortune);
         }
 
         if (oldMeta != null) {
 
-            removeProtection(stats, enchantStats, oldMeta, protectionArmor, fireProtectionArmor, explosionProtectionArmor, blastProtectionArmor, magicProtectionArmor, toughnessArmor);
-            removeManaPool(stats, enchantStats, oldMeta, manaPool);
-            removeDamage(stats, enchantStats, oldMeta, strength, arcane, archer);
-
+            removeProtection(statProfile, oldMeta, protectionArmor, fireProtectionArmor, explosionProtectionArmor, blastProtectionArmor, magicProtectionArmor, toughnessArmor);
+            removeManaPool(statProfile, oldMeta, manaPool);
+            removeDamage(statProfile, oldMeta, strength, arcane, archer);
+            removeSpeed(statProfile, oldMeta, speed);
+            removeFortunes(statProfile, oldMeta, minerFortune, foragerFortune, fishermanFortune);
         }
     }
 
@@ -161,199 +173,308 @@ public class EnchantListeners implements Listener {
         }
     }
 
-    private void addProtection(Stats stats, EnchantStats enchantStats, ItemMeta itemMeta, Double armor, Double fire_armor, Double explosion_armor, Double projectile_armor, Double magic_armor, Double toughness) {
+    private void addProtection(StatProfile statProfile, ItemMeta itemMeta, Double armor, Double fire_armor, Double explosion_armor, Double projectile_armor, Double magic_armor, Double toughness) {
 
-        Double currentArmor = stats.getDefense();
-        Double currentFireArmor = stats.getFireDefense();
-        Double currentExplosionArmor = stats.getExplosionDefense();
-        Double currentProjectileArmor = stats.getProjectileDefense();
-        Double currentMagicArmor = stats.getMagicDefense();
-        Double currentToughness = stats.getToughness();
+        DefenseStats defenseStats = statProfile.defenseStats();
+        EnchantStats enchantStats = statProfile.enchantStats();
 
-        Double currentEnchantArmor = enchantStats.getEnchant_armor();
-        Double currentEnchantFireArmor = enchantStats.getEnchant_fire_armor();
-        Double currentEnchantExplosionArmor = enchantStats.getEnchant_explosion_armor();
-        Double currentEnchantProjectileArmor = enchantStats.getEnchant_projectile_armor();
-        Double currentEnchantMagicArmor = enchantStats.getEnchant_magic_armor();
-        Double currentEnchantToughness = enchantStats.getEnchant_toughness();
+        Double currentArmor = defenseStats.getDefense();
+        Double currentFireArmor = defenseStats.getFireDefense();
+        Double currentExplosionArmor = defenseStats.getExplosionDefense();
+        Double currentProjectileArmor = defenseStats.getProjectileDefense();
+        Double currentMagicArmor = defenseStats.getMagicDefense();
+        Double currentToughness = defenseStats.getToughness();
 
-        if (itemMeta.hasEnchant(Enchantment.PROTECTION_ENVIRONMENTAL)) {
-            int protectionLvl = itemMeta.getEnchantLevel(Enchantment.PROTECTION_ENVIRONMENTAL);
-            Double finalProt = armor * protectionLvl;
-            stats.setDefense(currentArmor + finalProt);
-            enchantStats.setEnchant_armor(currentEnchantArmor + finalProt);
-        }
-        if (itemMeta.hasEnchant(Enchantment.PROTECTION_FIRE)) {
-            int protectionLvl = itemMeta.getEnchantLevel(Enchantment.PROTECTION_FIRE);
-            Double finalProt = fire_armor * protectionLvl;
-            stats.setFireDefense(currentFireArmor + finalProt);
-            enchantStats.setEnchant_fire_armor(currentEnchantFireArmor + finalProt);
-        }
-        if (itemMeta.hasEnchant(Enchantment.PROTECTION_EXPLOSIONS)) {
-            int protectionLvl = itemMeta.getEnchantLevel(Enchantment.PROTECTION_EXPLOSIONS);
-            Double finalProt = explosion_armor * protectionLvl;
-            stats.setExplosionDefense(currentExplosionArmor + finalProt);
-            enchantStats.setEnchant_explosion_armor(currentEnchantExplosionArmor + finalProt);
-        }
-        if (itemMeta.hasEnchant(Enchantment.PROTECTION_PROJECTILE)) {
-            int protectionLvl = itemMeta.getEnchantLevel(Enchantment.PROTECTION_PROJECTILE);
-            Double finalProt = projectile_armor * protectionLvl;
-            stats.setProjectileDefense(currentProjectileArmor + finalProt);
-            enchantStats.setEnchant_projectile_armor(currentEnchantProjectileArmor + finalProt);
-        }
-        if (itemMeta.hasEnchant(EnchantsClass.MAGIC_PROTECTION)) {
-            int protectionLvl = itemMeta.getEnchantLevel(EnchantsClass.MAGIC_PROTECTION);
-            Double finalProt = magic_armor * protectionLvl;
-            stats.setMagicDefense(currentMagicArmor + finalProt);
-            enchantStats.setEnchant_magic_armor(currentEnchantMagicArmor + finalProt);
-        }
-        if (itemMeta.hasEnchant(EnchantsClass.TOUGHNESS)) {
-            int toughnessLvl = itemMeta.getEnchantLevel(EnchantsClass.TOUGHNESS);
-            Double finalToughness = toughness * toughnessLvl;
-            stats.setToughness(currentToughness + finalToughness);
-            enchantStats.setEnchant_toughness(currentEnchantToughness + finalToughness);
-        }
-
-    }
-
-    private void removeProtection(Stats stats, EnchantStats enchantStats, ItemMeta itemMeta, Double armor, Double fire_armor, Double explosion_armor, Double projectile_armor, Double magic_armor, Double toughness) {
-
-        Double currentArmor = stats.getDefense();
-        Double currentFireArmor = stats.getFireDefense();
-        Double currentExplosionArmor = stats.getExplosionDefense();
-        Double currentProjectileArmor = stats.getProjectileDefense();
-        Double currentMagicArmor = stats.getMagicDefense();
-        Double currentToughness = stats.getToughness();
-
-        Double currentEnchantArmor = enchantStats.getEnchant_armor();
-        Double currentEnchantFireArmor = enchantStats.getEnchant_fire_armor();
-        Double currentEnchantExplosionArmor = enchantStats.getEnchant_explosion_armor();
-        Double currentEnchantProjectileArmor = enchantStats.getEnchant_projectile_armor();
-        Double currentEnchantMagicArmor = enchantStats.getEnchant_magic_armor();
-        Double currentEnchantToughness = enchantStats.getEnchant_toughness();
+        Double currentEnchantArmor = enchantStats.getDefense();
+        Double currentEnchantFireArmor = enchantStats.getFireDefense();
+        Double currentEnchantExplosionArmor = enchantStats.getExplosionDefense();
+        Double currentEnchantProjectileArmor = enchantStats.getProjectileDefense();
+        Double currentEnchantMagicArmor = enchantStats.getMagicDefense();
+        Double currentEnchantToughness = enchantStats.getToughness();
 
         if (itemMeta.hasEnchant(Enchantment.PROTECTION_ENVIRONMENTAL)) {
             int protectionLvl = itemMeta.getEnchantLevel(Enchantment.PROTECTION_ENVIRONMENTAL);
             Double finalProt = armor * protectionLvl;
-            stats.setDefense(currentArmor - finalProt);
-            enchantStats.setEnchant_armor(currentEnchantArmor - finalProt);
+            defenseStats.setDefense(currentArmor + finalProt);
+            enchantStats.setDefense(currentEnchantArmor + finalProt);
         }
         if (itemMeta.hasEnchant(Enchantment.PROTECTION_FIRE)) {
             int protectionLvl = itemMeta.getEnchantLevel(Enchantment.PROTECTION_FIRE);
             Double finalProt = fire_armor * protectionLvl;
-            stats.setFireDefense(currentFireArmor - finalProt);
-            enchantStats.setEnchant_fire_armor(currentEnchantFireArmor - finalProt);
+            defenseStats.setFireDefense(currentFireArmor + finalProt);
+            enchantStats.setFireDefense(currentEnchantFireArmor + finalProt);
         }
         if (itemMeta.hasEnchant(Enchantment.PROTECTION_EXPLOSIONS)) {
             int protectionLvl = itemMeta.getEnchantLevel(Enchantment.PROTECTION_EXPLOSIONS);
             Double finalProt = explosion_armor * protectionLvl;
-            stats.setExplosionDefense(currentExplosionArmor - finalProt);
-            enchantStats.setEnchant_explosion_armor(currentEnchantExplosionArmor - finalProt);
+            defenseStats.setExplosionDefense(currentExplosionArmor + finalProt);
+            enchantStats.setExplosionDefense(currentEnchantExplosionArmor + finalProt);
         }
         if (itemMeta.hasEnchant(Enchantment.PROTECTION_PROJECTILE)) {
             int protectionLvl = itemMeta.getEnchantLevel(Enchantment.PROTECTION_PROJECTILE);
             Double finalProt = projectile_armor * protectionLvl;
-            stats.setProjectileDefense(currentProjectileArmor - finalProt);
-            enchantStats.setEnchant_projectile_armor(currentEnchantProjectileArmor - finalProt);
+            defenseStats.setProjectileDefense(currentProjectileArmor + finalProt);
+            enchantStats.setProjectileDefense(currentEnchantProjectileArmor + finalProt);
         }
         if (itemMeta.hasEnchant(EnchantsClass.MAGIC_PROTECTION)) {
             int protectionLvl = itemMeta.getEnchantLevel(EnchantsClass.MAGIC_PROTECTION);
             Double finalProt = magic_armor * protectionLvl;
-            stats.setMagicDefense(currentMagicArmor - finalProt);
-            enchantStats.setEnchant_magic_armor(currentEnchantMagicArmor - finalProt);
+            defenseStats.setMagicDefense(currentMagicArmor + finalProt);
+            enchantStats.setMagicDefense(currentEnchantMagicArmor + finalProt);
         }
         if (itemMeta.hasEnchant(EnchantsClass.TOUGHNESS)) {
             int toughnessLvl = itemMeta.getEnchantLevel(EnchantsClass.TOUGHNESS);
             Double finalToughness = toughness * toughnessLvl;
-            stats.setToughness(currentToughness - finalToughness);
-            enchantStats.setEnchant_toughness(currentEnchantToughness - finalToughness);
+            defenseStats.setToughness(currentToughness + finalToughness);
+            enchantStats.setToughness(currentEnchantToughness + finalToughness);
         }
 
     }
 
-    private void addManaPool(Stats stats, EnchantStats enchantStats, ItemMeta itemMeta, Double mana) {
+    private void removeProtection(StatProfile statProfile, ItemMeta itemMeta, Double armor, Double fire_armor, Double explosion_armor, Double projectile_armor, Double magic_armor, Double toughness) {
+
+        DefenseStats defenseStats = statProfile.defenseStats();
+        EnchantStats enchantStats = statProfile.enchantStats();
+
+        Double currentArmor = defenseStats.getDefense();
+        Double currentFireArmor = defenseStats.getFireDefense();
+        Double currentExplosionArmor = defenseStats.getExplosionDefense();
+        Double currentProjectileArmor = defenseStats.getProjectileDefense();
+        Double currentMagicArmor = defenseStats.getMagicDefense();
+        Double currentToughness = defenseStats.getToughness();
+
+        Double currentEnchantArmor = enchantStats.getDefense();
+        Double currentEnchantFireArmor = enchantStats.getFireDefense();
+        Double currentEnchantExplosionArmor = enchantStats.getExplosionDefense();
+        Double currentEnchantProjectileArmor = enchantStats.getProjectileDefense();
+        Double currentEnchantMagicArmor = enchantStats.getMagicDefense();
+        Double currentEnchantToughness = enchantStats.getToughness();
+
+        if (itemMeta.hasEnchant(Enchantment.PROTECTION_ENVIRONMENTAL)) {
+            int protectionLvl = itemMeta.getEnchantLevel(Enchantment.PROTECTION_ENVIRONMENTAL);
+            Double finalProt = armor * protectionLvl;
+            defenseStats.setDefense(currentArmor - finalProt);
+            enchantStats.setDefense(currentEnchantArmor - finalProt);
+        }
+        if (itemMeta.hasEnchant(Enchantment.PROTECTION_FIRE)) {
+            int protectionLvl = itemMeta.getEnchantLevel(Enchantment.PROTECTION_FIRE);
+            Double finalProt = fire_armor * protectionLvl;
+            defenseStats.setFireDefense(currentFireArmor - finalProt);
+            enchantStats.setFireDefense(currentEnchantFireArmor - finalProt);
+        }
+        if (itemMeta.hasEnchant(Enchantment.PROTECTION_EXPLOSIONS)) {
+            int protectionLvl = itemMeta.getEnchantLevel(Enchantment.PROTECTION_EXPLOSIONS);
+            Double finalProt = explosion_armor * protectionLvl;
+            defenseStats.setExplosionDefense(currentExplosionArmor - finalProt);
+            enchantStats.setExplosionDefense(currentEnchantExplosionArmor - finalProt);
+        }
+        if (itemMeta.hasEnchant(Enchantment.PROTECTION_PROJECTILE)) {
+            int protectionLvl = itemMeta.getEnchantLevel(Enchantment.PROTECTION_PROJECTILE);
+            Double finalProt = projectile_armor * protectionLvl;
+            defenseStats.setProjectileDefense(currentProjectileArmor - finalProt);
+            enchantStats.setProjectileDefense(currentEnchantProjectileArmor - finalProt);
+        }
+        if (itemMeta.hasEnchant(EnchantsClass.MAGIC_PROTECTION)) {
+            int protectionLvl = itemMeta.getEnchantLevel(EnchantsClass.MAGIC_PROTECTION);
+            Double finalProt = magic_armor * protectionLvl;
+            defenseStats.setMagicDefense(currentMagicArmor - finalProt);
+            enchantStats.setMagicDefense(currentEnchantMagicArmor - finalProt);
+        }
+        if (itemMeta.hasEnchant(EnchantsClass.TOUGHNESS)) {
+            int toughnessLvl = itemMeta.getEnchantLevel(EnchantsClass.TOUGHNESS);
+            Double finalToughness = toughness * toughnessLvl;
+            defenseStats.setToughness(currentToughness - finalToughness);
+            enchantStats.setToughness(currentEnchantToughness - finalToughness);
+        }
+
+    }
+
+    private void addManaPool(StatProfile statProfile, ItemMeta itemMeta, Double mana) {
+
+        Stats stats = statProfile.stats();
+        EnchantStats enchantStats = statProfile.enchantStats();
 
         Double currentMaxMana = stats.getMaxMana();
-        Double currentEnchantMana = enchantStats.getEnchant_mana();
+        Double currentEnchantMana = enchantStats.getMana();
 
         if (itemMeta.hasEnchant(EnchantsClass.MANA_POOL)) {
             int manaLvl = itemMeta.getEnchantLevel(EnchantsClass.MANA_POOL);
             Double finalMana = mana * manaLvl;
             stats.setMaxMana(currentMaxMana + finalMana);
-            enchantStats.setEnchant_mana(currentEnchantMana + finalMana);
+            enchantStats.setMana(currentEnchantMana + finalMana);
         }
     }
 
-    private void removeManaPool(Stats stats, EnchantStats enchantStats, ItemMeta itemMeta, Double mana) {
+    private void removeManaPool(StatProfile statProfile, ItemMeta itemMeta, Double mana) {
+
+        Stats stats = statProfile.stats();
+        EnchantStats enchantStats = statProfile.enchantStats();
 
         Double currentMaxMana = stats.getMaxMana();
-        Double currentEnchantMana = enchantStats.getEnchant_mana();
+        Double currentEnchantMana = enchantStats.getMana();
 
         if (itemMeta.hasEnchant(EnchantsClass.MANA_POOL)) {
             int manaLvl = itemMeta.getEnchantLevel(EnchantsClass.MANA_POOL);
             Double finalMana = mana * manaLvl;
             stats.setMaxMana(currentMaxMana - finalMana);
-            enchantStats.setEnchant_mana(currentEnchantMana - finalMana);
+            enchantStats.setMana(currentEnchantMana - finalMana);
         }
     }
 
-    private void addDamage(Stats stats, EnchantStats enchantStats, ItemMeta itemMeta, Double strength, Double arcane, Double archer) {
+    private void addDamage(StatProfile statProfile, ItemMeta itemMeta, Double strength, Double arcane, Double archer) {
 
-        Double currentBaseMelee = stats.getBaseMeleeDamage();
-        Double currentBaseMagic = stats.getBaseMagicDamage();
-        Double currentBaseRange = stats.getBaseRangeDamage();
+        DamageStats damageStats = statProfile.damageStats();
+        EnchantStats enchantStats = statProfile.enchantStats();
 
-        Double currentEnchantMelee = enchantStats.getEnchant_base_melee();
-        Double currentEnchantMagic = enchantStats.getEnchant_base_magic();
-        Double currentEnchantRange = enchantStats.getEnchant_base_range();
+        Double currentBaseMelee = damageStats.getbMeleeDmg();
+        Double currentBaseMagic = damageStats.getbMagicDmg();
+        Double currentBaseRange = damageStats.getbRangeDmg();
+
+        Double currentEnchantMelee = enchantStats.getBaseMelee();
+        Double currentEnchantMagic = enchantStats.getBaseMagic();
+        Double currentEnchantRange = enchantStats.getBaseRange();
 
         if (itemMeta.hasEnchant(EnchantsClass.MELEE_DAMAGE)) {
             int meleeLvl = itemMeta.getEnchantLevel(EnchantsClass.MELEE_DAMAGE);
             Double finalStrength = meleeLvl * strength;
-            stats.setBaseMeleeDamage(currentBaseMelee + finalStrength);
-            enchantStats.setEnchant_base_melee(currentEnchantMelee + finalStrength);
+            damageStats.setbMeleeDmg(currentBaseMelee + finalStrength);
+            enchantStats.setBaseMelee(currentEnchantMelee + finalStrength);
         }
         if (itemMeta.hasEnchant(EnchantsClass.MAGIC_DAMAGE)) {
             int magicLvl = itemMeta.getEnchantLevel(EnchantsClass.MAGIC_DAMAGE);
             Double finalMagic = magicLvl * arcane;
-            stats.setBaseMagicDamage(currentBaseMagic + finalMagic);
-            enchantStats.setEnchant_base_magic(currentEnchantMagic + finalMagic);
+            damageStats.setbMagicDmg(currentBaseMagic + finalMagic);
+            enchantStats.setBaseMagic(currentEnchantMagic + finalMagic);
         }
         if (itemMeta.hasEnchant(EnchantsClass.RANGE_DAMAGE)) {
             int rangeLvl = itemMeta.getEnchantLevel(EnchantsClass.RANGE_DAMAGE);
             Double finalRange = rangeLvl * archer;
-            stats.setBaseRangeDamage(currentBaseRange + finalRange);
-            enchantStats.setEnchant_base_range(currentEnchantRange + finalRange);
+            damageStats.setbRangeDmg(currentBaseRange + finalRange);
+            enchantStats.setBaseRange(currentEnchantRange + finalRange);
         }
     }
 
-    private void removeDamage(Stats stats, EnchantStats enchantStats, ItemMeta itemMeta, Double strength, Double arcane, Double archer) {
+    private void removeDamage(StatProfile statProfile, ItemMeta itemMeta, Double strength, Double arcane, Double archer) {
 
-        Double currentBaseMelee = stats.getBaseMeleeDamage();
-        Double currentBaseMagic = stats.getBaseMagicDamage();
-        Double currentBaseRange = stats.getBaseRangeDamage();
+        DamageStats damageStats = statProfile.damageStats();
+        EnchantStats enchantStats = statProfile.enchantStats();
 
-        Double currentEnchantMelee = enchantStats.getEnchant_base_melee();
-        Double currentEnchantMagic = enchantStats.getEnchant_base_magic();
-        Double currentEnchantRange = enchantStats.getEnchant_base_range();
+        Double currentBaseMelee = damageStats.getbMeleeDmg();
+        Double currentBaseMagic = damageStats.getbMagicDmg();
+        Double currentBaseRange = damageStats.getbRangeDmg();
+
+        Double currentEnchantMelee = enchantStats.getBaseMelee();
+        Double currentEnchantMagic = enchantStats.getBaseMagic();
+        Double currentEnchantRange = enchantStats.getBaseRange();
 
         if (itemMeta.hasEnchant(EnchantsClass.MELEE_DAMAGE)) {
             int meleeLvl = itemMeta.getEnchantLevel(EnchantsClass.MELEE_DAMAGE);
             Double finalStrength = meleeLvl * strength;
-            stats.setBaseMeleeDamage(currentBaseMelee - finalStrength);
-            enchantStats.setEnchant_base_melee(currentEnchantMelee - finalStrength);
+            damageStats.setbMeleeDmg(currentBaseMelee - finalStrength);
+            enchantStats.setBaseMelee(currentEnchantMelee - finalStrength);
         }
         if (itemMeta.hasEnchant(EnchantsClass.MAGIC_DAMAGE)) {
             int magicLvl = itemMeta.getEnchantLevel(EnchantsClass.MAGIC_DAMAGE);
             Double finalMagic = magicLvl * arcane;
-            stats.setBaseMagicDamage(currentBaseMagic - finalMagic);
-            enchantStats.setEnchant_base_magic(currentEnchantMagic - finalMagic);
+            damageStats.setbMagicDmg(currentBaseMagic - finalMagic);
+            enchantStats.setBaseMagic(currentEnchantMagic - finalMagic);
         }
         if (itemMeta.hasEnchant(EnchantsClass.RANGE_DAMAGE)) {
             int rangeLvl = itemMeta.getEnchantLevel(EnchantsClass.RANGE_DAMAGE);
             Double finalRange = rangeLvl * archer;
-            stats.setBaseRangeDamage(currentBaseRange - finalRange);
-            enchantStats.setEnchant_base_range(currentEnchantRange - finalRange);
+            damageStats.setbRangeDmg(currentBaseRange - finalRange);
+            enchantStats.setBaseRange(currentEnchantRange - finalRange);
         }
+    }
+
+    private void addSpeed(StatProfile statProfile, ItemMeta itemMeta, Double speed)
+    {
+        Stats stats = statProfile.stats();
+
+        if (itemMeta.hasEnchant(EnchantsClass.SPEED))
+        {
+            stats.setSpeed(stats.getSpeed() + speed);
+        }
+    }
+
+    private void removeSpeed(StatProfile statProfile, ItemMeta itemMeta, Double speed)
+    {
+        Stats stats = statProfile.stats();
+
+        if (itemMeta.hasEnchant(EnchantsClass.SPEED))
+        {
+            stats.setSpeed(stats.getSpeed() - speed);
+        }
+    }
+
+    private void addFortunes(StatProfile statProfile, ItemMeta itemMeta, Double minerFortune, Double foragerFortune, Double fishermanFortune)
+    {
+        LootStats lootStats = statProfile.lootStats();
+
+        if (itemMeta.hasEnchant(EnchantsClass.ARMOR_MINING_FORTUNE))
+        {
+            lootStats.setBonusOreLoot(lootStats.getBonusOreLoot() + minerFortune);
+        }
+        if (itemMeta.hasEnchant(EnchantsClass.ARMOR_FORAGING_FORTUNE))
+        {
+            lootStats.setBonusWoodLoot(lootStats.getBonusWoodLoot() + foragerFortune);
+        }
+        if (itemMeta.hasEnchant(EnchantsClass.ARMOR_FISHING_FORTUNE))
+        {
+            lootStats.setFishingLoot(lootStats.getFishingLoot() + fishermanFortune);
+        }
+    }
+    private void removeFortunes(StatProfile statProfile, ItemMeta itemMeta, Double minerFortune, Double foragerFortune, Double fishermanFortune)
+    {
+        LootStats lootStats = statProfile.lootStats();
+
+        if (itemMeta.hasEnchant(EnchantsClass.ARMOR_MINING_FORTUNE))
+        {
+            lootStats.setBonusOreLoot(lootStats.getBonusOreLoot() - minerFortune);
+        }
+        if (itemMeta.hasEnchant(EnchantsClass.ARMOR_FORAGING_FORTUNE))
+        {
+            lootStats.setBonusWoodLoot(lootStats.getBonusWoodLoot() - foragerFortune);
+        }
+        if (itemMeta.hasEnchant(EnchantsClass.ARMOR_FISHING_FORTUNE))
+        {
+            lootStats.setFishingLoot(lootStats.getFishingLoot() - fishermanFortune);
+        }
+    }
+
+    /**
+     * SpellCastHandler that grants enchantments with passive abilities their ability
+     * @param player The player that is casting the ability/spell
+     * @param timer The time interval at which something should happen (max: 20 ticks)
+     */
+    @SpellCastHandler(spellCastType = SpellCastType.RUNNABLE)
+    @Override
+    public void onActivate(Player player, int timer)
+    {
+        PlayerInventory playerInventory = player.getInventory();
+
+        ItemStack helmet = playerInventory.getHelmet();
+        if (helmet != null)
+        {
+            ItemMeta helmetMeta = helmet.getItemMeta();
+            if (helmetMeta != null && helmetMeta.hasEnchants())
+            {
+                if (helmetMeta.hasEnchant(EnchantsClass.NIGH_VISION))
+                {
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 100, 0));
+                }
+            }
+        }
+    }
+
+    /**
+     * SpellCastHandler that grants enchantments with left-click abilities their abilities
+     * @param event The event that is being passed through
+     */
+    @SpellCastHandler(spellCastType = SpellCastType.LEFT_CLICK)
+    @Override
+    public void onLeftClickCast(PlayerInteractEvent event)
+    {
+
     }
 }

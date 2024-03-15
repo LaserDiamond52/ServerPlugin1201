@@ -29,8 +29,8 @@ public class StatsItemManager {
         DefenseStats defenseStats = statProfileManager.getStatProfile(player.getUniqueId()).defenseStats();
         EnchantStats enchantStats = statProfileManager.getStatProfile(player.getUniqueId()).enchantStats();
         ArmorTrimStats armorTrimStats = statProfileManager.getStatProfile(player.getUniqueId()).armorTrimStats();
-        ArmorTrimMaterialStats materialStats = armorTrimStats.getArmorTrimMaterialStats();
-        ArmorTrimPatternStats patternStats = armorTrimStats.getArmorTrimPatternStats();
+        ArmorTrimMaterialStats materialStats = armorTrimStats.armorTrimMaterialStats();
+        ArmorTrimPatternStats patternStats = armorTrimStats.armorTrimPatternStats();
 
         DecimalFormat doubleDecimal = new DecimalFormat("0.00");
 
@@ -55,17 +55,17 @@ public class StatsItemManager {
 
 
         // TODO: Enchantment Stats
-        double enchant_armor = enchantStats.getEnchant_armor();
-        double enchant_fire_armor = enchantStats.getEnchant_armor();
-        double enchant_explosion_armor = enchantStats.getEnchant_armor();
-        double enchant_projectile_armor = enchantStats.getEnchant_armor();
-        double enchant_magic_armor = enchantStats.getEnchant_armor();
-        double enchant_toughness = enchantStats.getEnchant_armor();
-        double enchant_base_melee = enchantStats.getEnchant_armor();
-        double enchant_base_magic = enchantStats.getEnchant_armor();
-        double enchant_base_range = enchantStats.getEnchant_armor();
-        double enchant_base_mana = enchantStats.getEnchant_armor();
-        double enchant_health = enchantStats.getEnchant_health();
+        double enchant_armor = enchantStats.getDefense();
+        double enchant_fire_armor = enchantStats.getDefense();
+        double enchant_explosion_armor = enchantStats.getDefense();
+        double enchant_projectile_armor = enchantStats.getDefense();
+        double enchant_magic_armor = enchantStats.getDefense();
+        double enchant_toughness = enchantStats.getDefense();
+        double enchant_base_melee = enchantStats.getDefense();
+        double enchant_base_magic = enchantStats.getDefense();
+        double enchant_base_range = enchantStats.getDefense();
+        double enchant_base_mana = enchantStats.getDefense();
+        double enchant_health = enchantStats.getHealth();
 
         // TODO: Tuning Menu
 

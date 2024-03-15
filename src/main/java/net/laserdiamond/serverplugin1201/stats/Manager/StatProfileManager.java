@@ -96,10 +96,10 @@ public class StatProfileManager {
 
 
         Stats stats = new Stats(player, health, speed, bStarvation, bLuck, availableMana, mana);
-        DamageStats damageStats = new DamageStats(bMelee, bMagic, bRange, pMelee, pMagic, pRange);
+        DamageStats damageStats = new DamageStats(bMelee, bMagic, bRange, pMelee, pMagic, pRange,0);
         DefenseStats defenseStats = new DefenseStats(player, defense, baseFireDefense, baseExplosionDefense, baseProjectileDefense, baseMagicDefense, baseToughness, 0);
-        LootStats lootStats = new LootStats(0,0,0,0);
-        EnchantStats enchantStats = new EnchantStats(0,0,0,0,0,0,0,0,0,0,0);
+        LootStats lootStats = new LootStats(0,0,0,0,0);
+        EnchantStats enchantStats = new EnchantStats(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
 
         ArmorTrimMaterialStats armorTrimMaterialStats = new ArmorTrimMaterialStats(0,0,0,0,0,0,0,0,0,0,0);
         ArmorTrimPatternStats armorTrimPatternStats = new ArmorTrimPatternStats(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);

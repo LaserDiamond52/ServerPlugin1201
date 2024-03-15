@@ -2,117 +2,187 @@ package net.laserdiamond.serverplugin1201.enchants.Components;
 
 public class EnchantStats {
 
-    private double enchant_armor;
-    private double enchant_fire_armor;
-    private double enchant_explosion_armor;
-    private double enchant_projectile_armor;
-    private double enchant_magic_armor;
-    private double enchant_toughness;
-    private double enchant_base_melee;
-    private double enchant_base_magic;
-    private double enchant_base_range;
-    private double enchant_mana;
-    private double enchant_health;
+    private double defense;
+    private double fireDefense;
+    private double explosionDefense;
+    private double projectileDefense;
+    private double magicDefense;
+    private double toughness;
+    private double baseMelee;
+    private double baseMagic;
+    private double baseRange;
+    private double mana;
+    private double health;
+    private double reach;
+    private double speed;
+    private double mobLoot;
+    private double oreLoot;
+    private double woodLoot;
+    private double digLoot;
+    private double fishingLoot;
 
-    public EnchantStats(double enchant_armor, double enchant_fire_armor, double enchant_explosion_armor, double enchant_projectile_armor, double enchant_magic_armor, double enchant_toughness, double enchant_base_melee, double enchant_base_magic, double enchant_base_range, double enchant_mana, double enchant_health) {
-        this.enchant_armor = enchant_armor;
-        this.enchant_fire_armor = enchant_fire_armor;
-        this.enchant_explosion_armor = enchant_explosion_armor;
-        this.enchant_projectile_armor = enchant_projectile_armor;
-        this.enchant_magic_armor = enchant_magic_armor;
-        this.enchant_toughness = enchant_toughness;
-        this.enchant_base_melee = enchant_base_melee;
-        this.enchant_base_magic = enchant_base_magic;
-        this.enchant_base_range = enchant_base_range;
-        this.enchant_mana = enchant_mana;
-        this.enchant_health = enchant_health;
+    public EnchantStats(double defense, double fireDefense, double explosionDefense, double projectileDefense, double magicDefense, double toughness, double baseMelee, double baseMagic, double baseRange, double mana, double health, double reach, double speed, double mobLoot, double oreLoot, double woodLoot, double digLoot, double fishingLoot) {
+        this.defense = defense;
+        this.fireDefense = fireDefense;
+        this.explosionDefense = explosionDefense;
+        this.projectileDefense = projectileDefense;
+        this.magicDefense = magicDefense;
+        this.toughness = toughness;
+        this.baseMelee = baseMelee;
+        this.baseMagic = baseMagic;
+        this.baseRange = baseRange;
+        this.mana = mana;
+        this.health = health;
+        this.reach = reach;
+        this.speed = speed;
+        this.mobLoot = mobLoot;
+        this.oreLoot = oreLoot;
+        this.woodLoot = woodLoot;
+        this.digLoot = digLoot;
+        this.fishingLoot = fishingLoot;
     }
 
-    public double getEnchant_armor() {
-        return enchant_armor;
+    public double getDefense() {
+        return defense;
     }
 
-    public void setEnchant_armor(double enchant_armor) {
-        this.enchant_armor = enchant_armor;
+    public void setDefense(double defense) {
+        this.defense = defense;
     }
 
-    public double getEnchant_fire_armor() {
-        return enchant_fire_armor;
+    public double getFireDefense() {
+        return fireDefense;
     }
 
-    public void setEnchant_fire_armor(double enchant_fire_armor) {
-        this.enchant_fire_armor = enchant_fire_armor;
+    public void setFireDefense(double fireDefense) {
+        this.fireDefense = fireDefense;
     }
 
-    public double getEnchant_explosion_armor() {
-        return enchant_explosion_armor;
+    public double getExplosionDefense() {
+        return explosionDefense;
     }
 
-    public void setEnchant_explosion_armor(double enchant_explosion_armor) {
-        this.enchant_explosion_armor = enchant_explosion_armor;
+    public void setExplosionDefense(double explosionDefense) {
+        this.explosionDefense = explosionDefense;
     }
 
-    public double getEnchant_projectile_armor() {
-        return enchant_projectile_armor;
+    public double getProjectileDefense() {
+        return projectileDefense;
     }
 
-    public void setEnchant_projectile_armor(double enchant_projectile_armor) {
-        this.enchant_projectile_armor = enchant_projectile_armor;
+    public void setProjectileDefense(double projectileDefense) {
+        this.projectileDefense = projectileDefense;
     }
 
-    public double getEnchant_magic_armor() {
-        return enchant_magic_armor;
+    public double getMagicDefense() {
+        return magicDefense;
     }
 
-    public void setEnchant_magic_armor(double enchant_magic_armor) {
-        this.enchant_magic_armor = enchant_magic_armor;
+    public void setMagicDefense(double magicDefense) {
+        this.magicDefense = magicDefense;
     }
 
-    public double getEnchant_toughness() {
-        return enchant_toughness;
+    public double getToughness() {
+        return toughness;
     }
 
-    public void setEnchant_toughness(double enchant_toughness) {
-        this.enchant_toughness = enchant_toughness;
+    public void setToughness(double toughness) {
+        this.toughness = toughness;
     }
 
-    public double getEnchant_base_melee() {
-        return enchant_base_melee;
+    public double getBaseMelee() {
+        return baseMelee;
     }
 
-    public void setEnchant_base_melee(double enchant_base_melee) {
-        this.enchant_base_melee = enchant_base_melee;
+    public void setBaseMelee(double baseMelee) {
+        this.baseMelee = baseMelee;
     }
 
-    public double getEnchant_base_magic() {
-        return enchant_base_magic;
+    public double getBaseMagic() {
+        return baseMagic;
     }
 
-    public void setEnchant_base_magic(double enchant_base_magic) {
-        this.enchant_base_magic = enchant_base_magic;
+    public void setBaseMagic(double baseMagic) {
+        this.baseMagic = baseMagic;
     }
 
-    public double getEnchant_base_range() {
-        return enchant_base_range;
+    public double getBaseRange() {
+        return baseRange;
     }
 
-    public void setEnchant_base_range(double enchant_base_range) {
-        this.enchant_base_range = enchant_base_range;
+    public void setBaseRange(double baseRange) {
+        this.baseRange = baseRange;
     }
 
-    public double getEnchant_mana() {
-        return enchant_mana;
+    public double getMana() {
+        return mana;
     }
 
-    public void setEnchant_mana(double enchant_mana) {
-        this.enchant_mana = enchant_mana;
+    public void setMana(double mana) {
+        this.mana = mana;
     }
 
-    public double getEnchant_health() {
-        return enchant_health;
+    public double getHealth() {
+        return health;
     }
 
-    public void setEnchant_health(double enchant_health) {
-        this.enchant_health = enchant_health;
+    public void setHealth(double health) {
+        this.health = health;
+    }
+
+    public double getReach() {
+        return reach;
+    }
+
+    public void setReach(double reach) {
+        this.reach = reach;
+    }
+
+    public double getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(double speed) {
+        this.speed = speed;
+    }
+
+    public double getOreLoot() {
+        return oreLoot;
+    }
+
+    public void setOreLoot(double oreLoot) {
+        this.oreLoot = oreLoot;
+    }
+
+    public double getWoodLoot() {
+        return woodLoot;
+    }
+
+    public void setWoodLoot(double woodLoot) {
+        this.woodLoot = woodLoot;
+    }
+
+    public double getFishingLoot() {
+        return fishingLoot;
+    }
+
+    public void setFishingLoot(double fishingLoot) {
+        this.fishingLoot = fishingLoot;
+    }
+
+    public double getMobLoot() {
+        return mobLoot;
+    }
+
+    public void setMobLoot(double mobLoot) {
+        this.mobLoot = mobLoot;
+    }
+
+    public double getDigLoot() {
+        return digLoot;
+    }
+
+    public void setDigLoot(double digLoot) {
+        this.digLoot = digLoot;
     }
 }
