@@ -110,7 +110,7 @@ public class ItemForger {
         return this;
     }
 
-    public void setPlayerHeadSkin(@NotNull String url, int mostSigBits, int leastSigBits) {
+    public ItemForger setPlayerHeadSkin(@NotNull String url, int mostSigBits, int leastSigBits) {
 
         try {
             SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
@@ -139,7 +139,7 @@ public class ItemForger {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Could not cast item to 'SkullMeta'!");
             exception.printStackTrace();
         }
-
+        return this;
     }
 
     public ItemForger setCustomModelData(int CustomModelData) {
@@ -536,11 +536,13 @@ public class ItemForger {
         return this;
     }
 
+    @Deprecated
     public Double getHealth() {
         ItemMeta itemMeta = itemStack.getItemMeta();
         return itemMeta.getPersistentDataContainer().get(healthKey, PersistentDataType.DOUBLE);
     }
 
+    @Deprecated
     public ItemForger setHealth(double healthPoints) {
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.getPersistentDataContainer().set(healthKey, PersistentDataType.DOUBLE, healthPoints);
@@ -548,11 +550,13 @@ public class ItemForger {
         return this;
     }
 
+    @Deprecated
     public Double getArmor() {
         ItemMeta itemMeta = itemStack.getItemMeta();
         return itemMeta.getPersistentDataContainer().get(armorKey, PersistentDataType.DOUBLE);
     }
 
+    @Deprecated
     public ItemForger setArmor(double armorPoints) {
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.getPersistentDataContainer().set(armorKey, PersistentDataType.DOUBLE, armorPoints);
@@ -560,11 +564,13 @@ public class ItemForger {
         return this;
     }
 
+    @Deprecated
     public Double getToughness() {
         ItemMeta itemMeta = itemStack.getItemMeta();
         return itemMeta.getPersistentDataContainer().get(toughnessKey, PersistentDataType.DOUBLE);
     }
 
+    @Deprecated
     public ItemForger setToughness(double toughnessPoints) {
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.getPersistentDataContainer().set(toughnessKey, PersistentDataType.DOUBLE, toughnessPoints);
@@ -572,11 +578,13 @@ public class ItemForger {
         return this;
     }
 
+    @Deprecated
     public Double getFortitude() {
         ItemMeta itemMeta = itemStack.getItemMeta();
         return itemMeta.getPersistentDataContainer().get(fortitudeKey, PersistentDataType.DOUBLE);
     }
 
+    @Deprecated
     public ItemForger setFortitude(double fortitudePoints) {
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.getPersistentDataContainer().set(fortitudeKey, PersistentDataType.DOUBLE, fortitudePoints);
@@ -584,11 +592,13 @@ public class ItemForger {
         return this;
     }
 
+    @Deprecated
     public Double getMaxMana() {
         ItemMeta itemMeta = itemStack.getItemMeta();
         return itemMeta.getPersistentDataContainer().get(maxManaKey, PersistentDataType.DOUBLE);
     }
 
+    @Deprecated
     public ItemForger setMaxMana(double manaPoints) {
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.getPersistentDataContainer().set(maxManaKey, PersistentDataType.DOUBLE, manaPoints);
@@ -596,11 +606,13 @@ public class ItemForger {
         return this;
     }
 
+    @Deprecated
     public Double getMeleeDamage() {
         ItemMeta itemMeta = itemStack.getItemMeta();
         return itemMeta.getPersistentDataContainer().get(meleeDamageKey, PersistentDataType.DOUBLE);
     }
 
+    @Deprecated
     public ItemForger setMeleeDamage(double meleeDamagePoints) {
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.getPersistentDataContainer().set(meleeDamageKey, PersistentDataType.DOUBLE, meleeDamagePoints);
@@ -608,11 +620,13 @@ public class ItemForger {
         return this;
     }
 
+    @Deprecated
     public Double getMagicDamage() {
         ItemMeta itemMeta = itemStack.getItemMeta();
         return itemMeta.getPersistentDataContainer().get(magicDamageKey, PersistentDataType.DOUBLE);
     }
 
+    @Deprecated
     public ItemForger setMagicDamage(double magicDamagePoints) {
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.getPersistentDataContainer().set(magicDamageKey, PersistentDataType.DOUBLE, magicDamagePoints);
@@ -620,11 +634,13 @@ public class ItemForger {
         return this;
     }
 
+    @Deprecated
     public Double getRangeDamage() {
         ItemMeta itemMeta = itemStack.getItemMeta();
         return itemMeta.getPersistentDataContainer().get(rangeDamageKey, PersistentDataType.DOUBLE);
     }
 
+    @Deprecated
     public ItemForger setRangeDamage(double rangeDamagePoints) {
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.getPersistentDataContainer().set(rangeDamageKey, PersistentDataType.DOUBLE, rangeDamagePoints);

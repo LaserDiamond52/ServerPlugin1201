@@ -11,7 +11,9 @@ import net.laserdiamond.serverplugin1201.enchants.Components.EnchantsClass;
 import net.laserdiamond.serverplugin1201.enchants.Config.EnchantConfig;
 import net.laserdiamond.serverplugin1201.enchants.anvil.AnvilInvetoryGUI;
 import net.laserdiamond.serverplugin1201.events.CancelInventoryMovementMenus;
-import net.laserdiamond.serverplugin1201.events.SpellCasting.SpellCastListeners;
+import net.laserdiamond.serverplugin1201.events.abilities.AbilityCastType;
+import net.laserdiamond.serverplugin1201.events.abilities.AbilityHandler;
+import net.laserdiamond.serverplugin1201.events.abilities.AbilityListeners;
 import net.laserdiamond.serverplugin1201.events.damage.DamageEvent;
 import net.laserdiamond.serverplugin1201.events.damage.ApplyDefense;
 import net.laserdiamond.serverplugin1201.events.effects.Components.Timers.ManaFreezeTimer;
@@ -39,8 +41,8 @@ import net.laserdiamond.serverplugin1201.items.armor.Vanilla.Config.VanillaArmor
 import net.laserdiamond.serverplugin1201.items.crafting.SmithingTable.SmithingTableCrafting;
 import net.laserdiamond.serverplugin1201.items.management.ItemMappings;
 import net.laserdiamond.serverplugin1201.entities.healthDisplay.mobHealthDisplay;
-import net.laserdiamond.serverplugin1201.events.SpellCasting.SpellCastListener;
-import net.laserdiamond.serverplugin1201.management.RegisterSpellCaster;
+import net.laserdiamond.serverplugin1201.events.abilities.AbilityListener;
+import net.laserdiamond.serverplugin1201.management.RegisterAbilityCaster;
 import net.laserdiamond.serverplugin1201.stats.Config.BaseStatsConfig;
 import net.laserdiamond.serverplugin1201.stats.Manager.StatProfileManager;
 import net.laserdiamond.serverplugin1201.tunement.Config.TunementConfig;
@@ -50,9 +52,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public final class ServerPlugin1201 extends JavaPlugin {
 
@@ -78,7 +80,12 @@ public final class ServerPlugin1201 extends JavaPlugin {
     private StormLordArmorConfig stormLordArmorConfig;
     private StormLordArmorManager stormLordArmorManager;
 
-    private final List<SpellCastListener> spellCastListeners = new ArrayList<>();
+    private final List<AbilityListener> abilityListeners = new ArrayList<>();
+    private final List<Method> rightClickAbilities = new ArrayList<>();
+    private final List<Method> leftClickAbilities = new ArrayList<>();
+    private final List<Method> dropItemAbilities = new ArrayList<>();
+    private final List<Method> attackEntityAbilities = new ArrayList<>();
+    private final List<Method> runnableAbilities = new ArrayList<>();
 
     @Override
     public void onEnable() {
@@ -136,7 +143,7 @@ public final class ServerPlugin1201 extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new mobHealthDisplay(this),this);
 
         // Spell Casts
-        getServer().getPluginManager().registerEvents(new SpellCastListeners(this),this);
+        getServer().getPluginManager().registerEvents(new AbilityListeners(this),this);
 
         // Register Commands
         getCommand("plugineffect").setExecutor(new EffectsCommand(this));
@@ -146,7 +153,7 @@ public final class ServerPlugin1201 extends JavaPlugin {
         getCommand("refillmana").setExecutor(new fillMana());
 
         // TODO: Test Spell Casters
-        registerAbilities();
+        addAbilities();
 
         getConfig().options().copyDefaults();
         saveDefaultConfig();
@@ -176,9 +183,31 @@ public final class ServerPlugin1201 extends JavaPlugin {
         return stormLordArmorManager;
     }
 
-    public List<SpellCastListener> getSpellCastListeners()
+    public List<AbilityListener> getAbilityListeners()
     {
-        return spellCastListeners;
+        return abilityListeners;
+    }
+    public List<Method> getAbilityMethods(AbilityCastType abilityCastType)
+    {
+        switch (abilityCastType)
+        {
+            case RIGHT_CLICK -> {
+                return rightClickAbilities;
+            }
+            case LEFT_CLICK -> {
+                return leftClickAbilities;
+            }
+            case DROP_ITEM -> {
+                return dropItemAbilities;
+            }
+            case RUNNABLE -> {
+                return runnableAbilities;
+            }
+            case ATTACK_ENTITY -> {
+                return attackEntityAbilities;
+            }
+        }
+        return new ArrayList<>();
     }
     @Override
     public void onDisable() {
@@ -273,15 +302,33 @@ public final class ServerPlugin1201 extends JavaPlugin {
         displayHUDTimer = new HUD(this).runTaskTimer(this, 0L, 1L);
         manaRegen = new ManaRegen(this).runTaskTimer(this, 0L, 20L);
         effectTimer = new EffectTimer(this).runTaskTimer(this, 0L, 20L);
-        abilityTimer = new SpellCastListeners(this).runTaskTimer(this, 0L, 1L);
+        abilityTimer = new AbilityListeners(this).runTaskTimer(this, 0L, 1L);
     }
     private void setUpCooldowns() {
         EyeOfStormCooldown.setUpCooldown();
     }
-    private void registerAbilities()
+    private void addAbilities()
     {
-        RegisterSpellCaster.registerListener(new EnchantListeners(this),this);
-        RegisterSpellCaster.registerListener(stormLordArmorManager, this);
+        RegisterAbilityCaster.addListener(new EnchantListeners(this),this);
+        RegisterAbilityCaster.addListener(stormLordArmorManager, this);
+
+        /*
+        for (AbilityListener abilityListener : abilityListeners)
+        {
+            for (Method method : abilityListener.getClass().getDeclaredMethods())
+            {
+                AbilityHandler annotation = method.getAnnotation(AbilityHandler.class);
+                switch (annotation.abilityCastType())
+                {
+                    case RIGHT_CLICK -> rightClickAbilities.add(method);
+                    case LEFT_CLICK -> leftClickAbilities.add(method);
+                    case DROP_ITEM -> dropItemAbilities.add(method);
+                    case RUNNABLE -> runnableAbilities.add(method);
+                    case ATTACK_ENTITY -> attackEntityAbilities.add(method);
+                }
+            }
+        }
+         */
     }
 
     private void saveProfilesToConfigs() {

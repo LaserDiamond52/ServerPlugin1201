@@ -7,7 +7,7 @@ import net.laserdiamond.serverplugin1201.stats.Components.StatProfile;
 import net.laserdiamond.serverplugin1201.stats.Components.Stats;
 import org.jetbrains.annotations.NotNull;
 
-public enum PlayerTrimMaterialStats {
+public enum PlayerTrimMaterialStatKeys {
 
     COPPER,
     GOLD,
@@ -20,7 +20,7 @@ public enum PlayerTrimMaterialStats {
     DIAMOND,
     NETHERITE;
 
-    public static void add(@NotNull StatProfile statProfile, @NotNull  PlayerTrimMaterialStats materialStatKey, double amount)
+    public static void add(@NotNull StatProfile statProfile, @NotNull PlayerTrimMaterialStatKeys materialStatKey, double amount)
     {
         Stats stats = statProfile.stats();
         DamageStats damageStats = statProfile.damageStats();
@@ -66,7 +66,7 @@ public enum PlayerTrimMaterialStats {
         }
     }
 
-    public static void remove(@NotNull StatProfile statProfile, @NotNull  PlayerTrimMaterialStats materialStatKey, double amount)
+    public static void remove(@NotNull StatProfile statProfile, @NotNull PlayerTrimMaterialStatKeys materialStatKey, double amount)
     {
         Stats stats = statProfile.stats();
         DamageStats damageStats = statProfile.damageStats();

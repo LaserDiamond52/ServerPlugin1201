@@ -1,4 +1,4 @@
-package net.laserdiamond.serverplugin1201.events.SpellCasting;
+package net.laserdiamond.serverplugin1201.events.abilities;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,10 +7,10 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface SpellCastHandler
+public @interface AbilityHandler
 {
     /**
-     * Define how a spell is triggered:
+     * Define how an ability is triggered:
      * <ol>
      * <li>RIGHT_CLICK
      * <li>LEFT_CLICK
@@ -18,7 +18,7 @@ public @interface SpellCastHandler
      * <li>RUNNABLE
      * </ol>
      *
-     * @return The spellCastType
+     * @return The abilityCastType
      */
-    SpellCastType spellCastType();
+    AbilityCastType abilityCastType();
 }

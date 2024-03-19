@@ -3,7 +3,7 @@ package net.laserdiamond.serverplugin1201.stats.Components.PlayerStatKeys;
 import net.laserdiamond.serverplugin1201.stats.Components.*;
 import org.jetbrains.annotations.NotNull;
 
-public enum PlayerStats {
+public enum PlayerStatKeys {
 
     HEALTH,
     SPEED,
@@ -29,14 +29,14 @@ public enum PlayerStats {
     DIG_LOOT,
     FISHING_LOOT;
 
-    public static void add(@NotNull StatProfile statProfile, @NotNull PlayerStats playerStats, double amount)
+    public static void add(@NotNull StatProfile statProfile, @NotNull PlayerStatKeys playerStatKeys, double amount)
     {
         Stats stats = statProfile.stats();
         DamageStats damageStats = statProfile.damageStats();
         DefenseStats defenseStats = statProfile.defenseStats();
         LootStats lootStats = statProfile.lootStats();
 
-        switch (playerStats)
+        switch (playerStatKeys)
         {
             case HEALTH -> stats.setHealth(stats.getHealth() + amount);
             case SPEED -> stats.setSpeed(stats.getSpeed() + amount);
@@ -64,14 +64,14 @@ public enum PlayerStats {
         }
     }
 
-    public static void remove(StatProfile statProfile, PlayerStats playerStats, double amount)
+    public static void remove(StatProfile statProfile, PlayerStatKeys playerStatKeys, double amount)
     {
         Stats stats = statProfile.stats();
         DamageStats damageStats = statProfile.damageStats();
         DefenseStats defenseStats = statProfile.defenseStats();
         LootStats lootStats = statProfile.lootStats();
 
-        switch (playerStats)
+        switch (playerStatKeys)
         {
             case HEALTH -> stats.setHealth(stats.getHealth() - amount);
             case SPEED -> stats.setSpeed(stats.getSpeed() - amount);

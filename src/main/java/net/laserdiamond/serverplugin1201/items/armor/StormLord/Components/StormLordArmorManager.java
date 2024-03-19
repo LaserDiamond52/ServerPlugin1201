@@ -14,7 +14,7 @@ import net.laserdiamond.serverplugin1201.items.management.PluginItemRarity;
 import net.laserdiamond.serverplugin1201.items.management.armor.ArmorCMD;
 import net.laserdiamond.serverplugin1201.items.management.armor.ArmorFabricate;
 import net.laserdiamond.serverplugin1201.items.management.armor.ArmorTypes;
-import net.laserdiamond.serverplugin1201.events.SpellCasting.*;
+import net.laserdiamond.serverplugin1201.events.abilities.*;
 import net.laserdiamond.serverplugin1201.management.ItemStatKeys;
 import net.laserdiamond.serverplugin1201.management.Stars;
 import net.laserdiamond.serverplugin1201.management.messages.Messages;
@@ -34,7 +34,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 
-public class StormLordArmorManager implements ArmorFabricate, SpellCastListener, SpellCasting.DropItemSpell {
+public class StormLordArmorManager implements ArmorFabricate, AbilityCasting.DropItemSpell {
 
     private static final ServerPlugin1201 PLUGIN = ServerPlugin1201.getInstance();
     private static final StormLordArmorConfig ARMOR_CONFIG = PLUGIN.getStormLordArmorConfig();
@@ -197,7 +197,7 @@ public class StormLordArmorManager implements ArmorFabricate, SpellCastListener,
 
         String armorPieceString = armorTypes.getName();
 
-        ItemForger itemForger = new ItemForger(Material.PLAYER_HEAD);
+        ItemForger itemForger = new ItemForger(Material.AIR);
 
         try {
             String armorName = armorPieceString.substring(0,1).toUpperCase() + armorPieceString.substring(1);
@@ -205,41 +205,38 @@ public class StormLordArmorManager implements ArmorFabricate, SpellCastListener,
             String HelmetURL = ARMOR_CONFIG.getString("HelmetURL");
 
             if (armorTypes.equals(ArmorTypes.HELMET)) {
-                itemForger = new ItemForger(Material.PLAYER_HEAD);
-                itemForger.setPlayerHeadSkin(HelmetURL, ArmorCMD.STORM_LORD_ARMOR.getHelmet(), ArmorCMD.STORM_LORD_ARMOR.getHelmet());
-                itemForger.setCustomModelData(ArmorCMD.STORM_LORD_ARMOR.getHelmet());
+                itemForger = new ItemForger(Material.PLAYER_HEAD)
+                        .setPlayerHeadSkin(HelmetURL, ArmorCMD.STORM_LORD_ARMOR.getHelmet(), ArmorCMD.STORM_LORD_ARMOR.getHelmet())
+                        .setCustomModelData(ArmorCMD.STORM_LORD_ARMOR.getHelmet());
 
             } else if (armorTypes.equals(ArmorTypes.CHESTPLATE)) {
-                itemForger = new ItemForger(Material.LEATHER_CHESTPLATE);
-                itemForger.LeatherArmorColor(0,213,255);
-                itemForger.setCustomModelData(ArmorCMD.STORM_LORD_ARMOR.getChestplate());
+                itemForger = new ItemForger(Material.LEATHER_CHESTPLATE)
+                        .LeatherArmorColor(0,213,255)
+                        .setCustomModelData(ArmorCMD.STORM_LORD_ARMOR.getChestplate());
 
             } else if (armorTypes.equals(ArmorTypes.LEGGINGS)) {
-                itemForger = new ItemForger(Material.LEATHER_LEGGINGS);
-                itemForger.LeatherArmorColor(0,160,191);
-                itemForger.setCustomModelData(ArmorCMD.STORM_LORD_ARMOR.getLeggings());
+                itemForger = new ItemForger(Material.LEATHER_LEGGINGS)
+                        .LeatherArmorColor(0,160,191)
+                        .setCustomModelData(ArmorCMD.STORM_LORD_ARMOR.getLeggings());
 
             } else if (armorTypes.equals(ArmorTypes.BOOTS)) {
-                itemForger = new ItemForger(Material.LEATHER_BOOTS);
-                itemForger.LeatherArmorColor(0,124,148);
-                itemForger.setCustomModelData(ArmorCMD.STORM_LORD_ARMOR.getBoots());
+                itemForger = new ItemForger(Material.LEATHER_BOOTS)
+                        .LeatherArmorColor(0,124,148)
+                        .setCustomModelData(ArmorCMD.STORM_LORD_ARMOR.getBoots());
 
             } else {
                 // TODO: Throw some error here or something idk
                 throw new IllegalArgumentException(ChatColor.RED + "Not armor piece type: " + armorPieceString);
             }
 
-            itemForger.setName(ItemNameBuilder.name("Storm Lord " + armorName, stars));
-            itemForger.setStars(stars);
-            itemForger.setLore(createLore(armorTypes, stars));
-            itemForger.setAttributeModifiers(createAttributes(armorTypes, stars), false);
-            //itemForger.setRarity(PluginItemRarity.Rarity.LEGENDARY);
-            itemForger.setRarity(PluginItemRarity.Rarity.FABLED);
-            itemForger.setUnbreakable();
-            itemForger.setFireResistant();
-            //itemForger.setItemTypeKey(armorPiece);
-
-            itemForger.setItemStats(createItemStats(armorTypes, stars));
+            itemForger.setName(ItemNameBuilder.name("Storm Lord " + armorName, stars))
+                    .setStars(stars)
+                    .setLore(createLore(armorTypes, stars))
+                    //.setAttributeModifiers(createAttributes(armorTypes, stars), false)
+                    .setRarity(PluginItemRarity.Rarity.FABLED)
+                    .setUnbreakable()
+                    .setFireResistant()
+                    .setItemStats(createItemStats(armorTypes, stars));
 
         } catch (NullPointerException exception) {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Something about this item is null: " + itemForger.getName());
@@ -258,7 +255,7 @@ public class StormLordArmorManager implements ArmorFabricate, SpellCastListener,
         return false;
     }
 
-    @SpellCastHandler(spellCastType = SpellCastType.DROP_ITEM)
+    @AbilityHandler(abilityCastType = AbilityCastType.DROP_ITEM)
     @Override
     public void onDropItemCast(PlayerDropItemEvent event) {
         Player player = event.getPlayer();
