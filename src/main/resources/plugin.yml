@@ -78,7 +78,7 @@ commands:
 
   pluginenchant:
     description: enchants the player's mainhand with the specified enchantment at the specified level
-    usage: /<command> <arg> <arg>
+    usage: /<command> <arg> <arg> <arg>
     permission: serverplugin1201.enchant
 
   stats:

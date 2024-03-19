@@ -21,14 +21,25 @@ import java.util.List;
 
 public class EnchantCommand implements CommandExecutor, TabExecutor {
 
+    /**
+     * A custom enchantment command that can enchant your item with enchantments from the plugin and vanilla enchantments
+     * @param sender Source of the command
+     * @param command Command which was executed
+     * @param label Alias of the command which was used
+     * @param args Passed command arguments
+     * @return True if the command was executed, false if it wasn't
+     */
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-
-        if (sender.hasPermission("serverplugin1201.enchant")) {
-            if (args.length == 0) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args)
+    {
+        if (sender.hasPermission("serverplugin1201.enchant"))
+        {
+            if (args.length == 0)
+            {
                 sender.sendMessage(ChatColor.RED + "Please specify a target");
-            } else if (args.length == 1) {
+            } else if (args.length == 1)
+            {
                 sender.sendMessage(ChatColor.RED + "Please specify an enchantment");
 
             } else if (args.length == 2) {
@@ -39,11 +50,13 @@ public class EnchantCommand implements CommandExecutor, TabExecutor {
                 }
 
 
-            } else if (args.length == 3) {
+            } else if (args.length == 3)
+            {
                 Player target = Bukkit.getPlayer(args[0]);
                 String inputEnchantName = args[1];
                 String inputLevel = args[2];
-                if (target != null) {
+                if (target != null)
+                {
                     try {
                         int level = Integer.parseInt(inputLevel);
                         enchant(sender, target, inputEnchantName, level);
@@ -52,19 +65,23 @@ public class EnchantCommand implements CommandExecutor, TabExecutor {
                     }
                 }
             }
-        } else {
+        } else
+        {
             sender.sendMessage(Messages.notAllowedCommand());
         }
 
         return true;
     }
 
-    private void enchant(CommandSender sender, Player target, String input, int levelInput) {
+    private void enchant(CommandSender sender, Player target, String input, int levelInput)
+    {
 
-        try {
+        try
+        {
             Enchantment enchantToAdd = EnchantsClass.EnchantEnum.of(input);
             ItemStack mainHand = target.getInventory().getItemInMainHand();
-            if (enchantToAdd.getItemTarget().includes(mainHand)) {
+            if (enchantToAdd.getItemTarget().includes(mainHand))
+            {
                 ItemForger mainHandForger = new ItemForger(mainHand);
                 int finalLevel = Math.min(enchantToAdd.getMaxLevel(), levelInput);
                 mainHandForger.addEnchant(enchantToAdd, finalLevel);
@@ -79,20 +96,25 @@ public class EnchantCommand implements CommandExecutor, TabExecutor {
     }
 
     @Override
-    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args)
+    {
 
         List<String> argsList = new ArrayList<>();
-        if (sender.hasPermission("serverplugin1201.enchant")) {
+        if (sender.hasPermission("serverplugin1201.enchant"))
+        {
 
-            if (args.length == 1) {
+            if (args.length == 1)
+            {
                 // TODO: Offer target
-                for (Player player : Bukkit.getOnlinePlayers()) {
+                for (Player player : Bukkit.getOnlinePlayers())
+                {
                     String playerName = player.getName();
                     argsList.add(playerName);
                 }
             } else if (args.length == 2) {
                 // TODO: Offer enchant
-                for (EnchantsClass.EnchantEnum enchantEnum : EnchantsClass.EnchantEnum.values()) {
+                for (EnchantsClass.EnchantEnum enchantEnum : EnchantsClass.EnchantEnum.values())
+                {
                     String enchantArgName = enchantEnum.getCommandName();
                     argsList.add(enchantArgName);
 
@@ -100,14 +122,17 @@ public class EnchantCommand implements CommandExecutor, TabExecutor {
 
             } else if (args.length == 3) {
                 // TODO: Offer enchant level
-                for (EnchantsClass.EnchantEnum enchantEnum : EnchantsClass.EnchantEnum.values()) {
+                for (EnchantsClass.EnchantEnum enchantEnum : EnchantsClass.EnchantEnum.values())
+                {
                     String argName = enchantEnum.getCommandName();
 
-                    if (argName.equals(args[1])) {
+                    if (argName.equals(args[1]))
+                    {
                         Enchantment enchantment = enchantEnum.getEnchantment();
                         int maxLvl = enchantment.getMaxLevel();
                         int startLvl = enchantment.getStartLevel() - 1;
-                        for (int i = maxLvl; i > startLvl; i--) {
+                        for (int i = maxLvl; i > startLvl; i--)
+                        {
                             argsList.add("" + i);
                         }
                     }

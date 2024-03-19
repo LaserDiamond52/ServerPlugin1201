@@ -5,6 +5,8 @@ import net.laserdiamond.serverplugin1201.items.armor.Vanilla.Components.DiamondA
 import net.laserdiamond.serverplugin1201.items.armor.Vanilla.Components.NetheriteArmorManager;
 import net.laserdiamond.serverplugin1201.items.crafting.SmithingTable.SmithingRecipe;
 import net.laserdiamond.serverplugin1201.items.management.armor.ArmorTypes;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ArmorMeta;
@@ -15,7 +17,6 @@ import org.bukkit.inventory.meta.trim.ArmorTrim;
 public class SmithingTableRecipes {
 
     private static final ServerPlugin1201 plugin = ServerPlugin1201.getInstance();
-    private static final DiamondArmorManager diamondArmorManager = plugin.getDiamondArmorManager();
     private static final NetheriteArmorManager netheriteArmorManager = plugin.getNetheriteArmorManager();
 
 
@@ -28,7 +29,7 @@ public class SmithingTableRecipes {
         NETHERITE_HOE (new SmithingRecipe(new ItemStack(Material.DIAMOND_HOE), new ItemStack(Material.NETHERITE_INGOT,1), new ItemStack(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE,1)), new ItemStack(Material.NETHERITE_HOE)),
         NETHERITE_BOOTS (new SmithingRecipe(new ItemStack(Material.DIAMOND_BOOTS), new ItemStack(Material.NETHERITE_INGOT,1), new ItemStack(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE,1)), netheriteArmorManager.createArmorPiece(ArmorTypes.BOOTS,0).toItemStack()),
         NETHERITE_LEGGINGS (new SmithingRecipe(new ItemStack(Material.DIAMOND_LEGGINGS), new ItemStack(Material.NETHERITE_INGOT,1), new ItemStack(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE,1)), netheriteArmorManager.createArmorPiece(ArmorTypes.LEGGINGS,0).toItemStack()),
-        NETHERITE_CHESTPLATE (new SmithingRecipe(new ItemStack(Material.DIAMOND_CHESTPLATE), new ItemStack(Material.NETHERITE_INGOT,1), new ItemStack(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE,1)), netheriteArmorManager.createArmorPiece(ArmorTypes.CHESTPLATE,0).toItemStack()),
+        NETHERITE_CHESTPLATE (new SmithingRecipe(new ItemStack(Material.DIAMOND_CHESTPLATE), new ItemStack(Material.NETHERITE_INGOT,3), new ItemStack(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE,1)), netheriteArmorManager.createArmorPiece(ArmorTypes.CHESTPLATE,0).toItemStack()),
         NETHERITE_HELMET (new SmithingRecipe(new ItemStack(Material.DIAMOND_HELMET), new ItemStack(Material.NETHERITE_INGOT,1), new ItemStack(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE,1)), netheriteArmorManager.createArmorPiece(ArmorTypes.HELMET,0).toItemStack());
 
         private final SmithingRecipe smithingRecipe;
@@ -81,15 +82,15 @@ public class SmithingTableRecipes {
                         {
                             if (equipmentInputMeta.getCustomModelData() == recipeEquipment.getItemMeta().getCustomModelData())
                             {
-                                matchCount++;
+                                matchCount++; // Matching item found, add 1 to counter
                             }
                         } else if (!equipmentInputMeta.hasCustomModelData() && !recipeEquipment.getItemMeta().hasCustomModelData())
                         {
-                            matchCount++;
+                            matchCount++; // Matching item found, add 1 to counter
                         }
                     }
                 }
-                if (matchCount < 1)
+                if (matchCount < 1) // If matchCount is less than 1, skip to next iteration
                 {
                     continue;
                 }
@@ -103,16 +104,16 @@ public class SmithingTableRecipes {
                             {
                                 if (materialInputMeta.getCustomModelData() == recipeMaterial.getItemMeta().getCustomModelData())
                                 {
-                                    matchCount++;
+                                    matchCount++; // Matching item found, add 1 to counter
                                 }
                             } else if (!materialInputMeta.hasCustomModelData() && !recipeMaterial.getItemMeta().hasCustomModelData())
                             {
-                                matchCount++;
+                                matchCount++; // Matching item found, add 1 to counter
                             }
                         }
                     }
                 }
-                if (matchCount < 2)
+                if (matchCount < 2) // If matchCount is less than 2, skip to next iteration
                 {
                     continue;
                 }
@@ -126,12 +127,12 @@ public class SmithingTableRecipes {
                             {
                                 if (templateInputMeta.getCustomModelData() == recipeTemplate.getItemMeta().getCustomModelData())
                                 {
-                                    outputResult = recipes.result;
+                                    outputResult = recipes.result; // All three inputs are matching items, generate result
                                     break;
                                 }
                             } else if (!templateInputMeta.hasCustomModelData() && !recipeTemplate.getItemMeta().hasCustomModelData())
                             {
-                                outputResult = recipes.result;
+                                outputResult = recipes.result; // All three inputs are matching items, generate result
                                 break;
                             }
                         }

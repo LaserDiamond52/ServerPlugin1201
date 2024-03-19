@@ -77,39 +77,6 @@ public class PlayerJoinServer implements Listener {
         // Create/load profiles player will need on the server
         StatProfile statProfile = statProfileManager.createNewStatProfile(player);
 
-        /*
-        TunementProfile tunementProfile = TunementProfile.createTunementProfile(player);
-        Stats stats  = statProfile.stats();
-        DamageStats damageStats = statProfile.damageStats();
-        DefenseStats defenseStats = statProfile.defenseStats();
-        double statHealth = stats.getHealth();
-        double statSpeed = stats.getSpeed();
-        double statMana = stats.getMaxMana();
-        double statDefense = defenseStats.getDefense();
-        double statbMelee = damageStats.getbMeleeDmg();
-        double statbMagic = damageStats.getbMagicDmg();
-        double statbRange = damageStats.getbRangeDmg();
-
-        TunementStats tunementStats = tunementProfile.tunementStats();
-        double tuneHealth = tunementStats.getHealth();
-        double tuneDefense = tunementStats.getDefense();
-        double tuneSpeed = tunementStats.getSpeed();
-        double tuneMana = tunementStats.getMana();
-        double tuneMelee = tunementStats.getMelee();
-        double tuneMagic = tunementStats.getMagic();
-        double tuneRange = tunementStats.getRange();
-
-        stats.setHealth(statHealth + tuneHealth);
-        stats.setSpeed(statSpeed + tuneSpeed);
-        stats.setMaxMana(statMana + tuneMana);
-        defenseStats.setDefense(statDefense + tuneDefense);
-        damageStats.setbMeleeDmg(statbMelee + tuneMelee);
-        damageStats.setbMagicDmg(statbMagic + tuneMagic);
-        damageStats.setbRangeDmg(statbRange + tuneRange);
-
-         */
-
-
         EffectProfile effectProfile = effectManager.getEffectProfile(player.getUniqueId());
         if (effectProfile == null) {
             effectManager.createNewProfile(player);

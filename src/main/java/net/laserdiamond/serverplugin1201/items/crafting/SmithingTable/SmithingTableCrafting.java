@@ -95,8 +95,6 @@ public class SmithingTableCrafting implements Listener
 
             ItemStack resultTestStack = SmithingTableRecipes.Recipes.createResultTest(equipmentInput, materialInput, templateInput);
             event.setResult(resultTestStack);
-            //ItemStack resultItemStack = SmithingTableRecipes.Recipes.createResult(equipmentInput, materialInput, templateInput);
-            //event.setResult(resultItemStack);
         }
 
         // Try to make armor trim

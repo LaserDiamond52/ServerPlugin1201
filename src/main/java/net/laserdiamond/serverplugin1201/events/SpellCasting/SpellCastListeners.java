@@ -34,19 +34,19 @@ public class SpellCastListeners extends BukkitRunnable implements Listener {
     @Override
     public void run()
     {
+        timer++;
         for (Player player : Bukkit.getServer().getOnlinePlayers())
         {
-            timer++;
             try {
-                PlayerRunnableSpell(player);
+                PlayerRunnableSpell(player, timer);
             } catch (InvocationTargetException | IllegalAccessException e) {
                 Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "!ERROR WHILE TRYING TO ACTIVATE SPELL/ABILITY!");
                 throw new RuntimeException(e);
             }
-            if (timer >= 20)
-            {
-                timer = 0;
-            }
+        }
+        if (timer >= 20)
+        {
+            timer = 0;
         }
     }
 
@@ -127,7 +127,7 @@ public class SpellCastListeners extends BukkitRunnable implements Listener {
         }
     }
 
-    private void PlayerRunnableSpell(Player player) throws InvocationTargetException, IllegalAccessException {
+    private void PlayerRunnableSpell(Player player, int timer) throws InvocationTargetException, IllegalAccessException {
         List<SpellCastListener> listeners = plugin.getSpellCastListeners();
         for (SpellCastListener listener : listeners)
         {
@@ -139,7 +139,7 @@ public class SpellCastListeners extends BukkitRunnable implements Listener {
                     {
                         if (annotation.spellCastType() == SpellCastType.RUNNABLE)
                         {
-                            method.invoke(listener, player);
+                            method.invoke(listener, player, timer);
                         }
                     }
                 }
