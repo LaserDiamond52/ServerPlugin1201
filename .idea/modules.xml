@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/serverplugin1201.iml" filepath="$PROJECT_DIR$/serverplugin1201.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ventureplugin.iml" filepath="$PROJECT_DIR$/ventureplugin.iml" />
     </modules>
   </component>
 </project>

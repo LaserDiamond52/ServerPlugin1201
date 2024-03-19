@@ -5,11 +5,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>net.laserdiamond</groupId>
-  <artifactId>serverplugin1201</artifactId>
+  <artifactId>ventureplugin</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>ServerPlugin1201</name>
+  <name>VenturePlugin</name>
 
   <properties>
     <java.version>1.8</java.version>

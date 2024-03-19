@@ -1,65 +1,65 @@
-name: ServerPlugin1201
+name: VenturePlugin
 version: '${project.version}'
-main: net.laserdiamond.serverplugin1201.ServerPlugin1201
+main: net.laserdiamond.ventureplugin.VenturePlugin
 api-version: '1.20'
 authors: [ LaserDiamond52 ]
-description: Server Plugin for Minecraft Server (1.20.1)
+description: Venture Plugin for Minecraft Server (1.20.1)
 
 permissions:
 
-  serverplugin1201.breakblock:
+  ventureplugin.breakblock:
     description: Allows players to break blocks
-  serverplugin1201.placeblock:
+  ventureplugin.placeblock:
     description: Allows players to placee blocks
-  serverplugin1201.harvestblock:
+  ventureplugin.harvestblock:
     description: Allows players to harvest blocks
-  serverplugin1201.pickupitem:
+  ventureplugin.pickupitem:
     description: Allows players to pick up items
-  serverplugin1201.dropitem:
+  ventureplugin.dropitem:
     description: Allows players to drop items
 
-  serverplugin1201.armorstand:
+  ventureplugin.armorstand:
     description: Allows players to interact with armor stands
-  serverplugin1201.interact:
+  ventureplugin.interact:
     description: Allows players to interact with entities
-  serverplugin1201.shearentity:
+  ventureplugin.shearentity:
     description: Allows players to shear entities
 
-  serverplugin1201.move:
+  ventureplugin.move:
     description: Allows players to move
-  serverplugin1201.changemainhand:
+  ventureplugin.changemainhand:
     description: Allows players to change their mainhand
-  serverplugin1201.swaphands:
+  ventureplugin.swaphands:
     description: Allows players to swap between their main and offhand
-  serverplugin1201.portaltravel:
+  ventureplugin.portaltravel:
     description: Allows players to travel through portals to other dimensions
-  serverplugin1201.changegamemode:
+  ventureplugin.changegamemode:
     description: Allows players to change their gamemode
 
-  serverplugin1201.chat:
+  ventureplugin.chat:
     description: Allows players to chat
-  serverplugin1201.executecommands:
+  ventureplugin.executecommands:
     description: Allows players to execute commands
 
-  serverplugin1201.giveitems:
+  ventureplugin.giveitems:
     description: Allows players to give themselves items from this plugin
 
-  serverplugin1201.skills:
+  ventureplugin.skills:
     description: Allows players to view their skills
-  serverplugin1201.stats:
+  ventureplugin.stats:
     description: Allows players to see their stats
-  serverplugin1201.tuningmenu:
+  ventureplugin.tuningmenu:
     description: Allows players to use the skill menu
-  serverplugin1201.resetskills:
+  ventureplugin.resetskills:
     description: Allows player to reset skills
-  serverplugin1201.mana:
+  ventureplugin.mana:
     description: Allows players to manipulate their mana
-  serverplugin1201.effect:
+  ventureplugin.effect:
     description: Allows players to grant plugin effects to themselves/others
 
-  serverplugin1201.experiencereset:
+  ventureplugin.experiencereset:
     description: Allows players to reset experience levels
-  serverplugin1201.enchant:
+  ventureplugin.enchant:
     description: Gives access to the /pluginenchant command and its aliases
 
 commands:

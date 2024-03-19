@@ -4,7 +4,7 @@ knockBackRes: 1
 auraBaseDamage: 5
 abilityDuration: 5
 abilityCooldown: 5
-manaCost: 80
+manaCost: 30
 abilityName: Blazing Aura
 
 
