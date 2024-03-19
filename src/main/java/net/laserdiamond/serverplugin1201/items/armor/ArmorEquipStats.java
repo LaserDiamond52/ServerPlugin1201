@@ -7,6 +7,7 @@ import net.laserdiamond.serverplugin1201.items.management.ItemMappings;
 import net.laserdiamond.serverplugin1201.management.ItemStatKeys;
 import net.laserdiamond.serverplugin1201.stats.Components.DamageStats;
 import net.laserdiamond.serverplugin1201.stats.Components.DefenseStats;
+import net.laserdiamond.serverplugin1201.stats.Components.StatProfile;
 import net.laserdiamond.serverplugin1201.stats.Components.Stats;
 import net.laserdiamond.serverplugin1201.stats.Manager.StatProfileManager;
 import org.bukkit.Material;
@@ -33,13 +34,14 @@ public class ArmorEquipStats implements Listener {
     public void ArmorChange(PlayerArmorChangeEvent event) {
 
         Player player = event.getPlayer();
+        StatProfile statProfile = statProfileManager.getStatProfile(player.getUniqueId());
 
         ItemStack newItem = event.getNewItem(), oldItem = event.getOldItem();
         ItemMeta newMeta = newItem.getItemMeta(), oldMeta = oldItem.getItemMeta();
 
         if (newMeta != null) {
             if (newMeta.hasCustomModelData()) {
-                // TODO: Equipping custom item (Includes Netherite)
+                // Equipping custom item (Includes Netherite)
                 int newCMD = newMeta.getCustomModelData();
                 int itemStars = ItemForger.getItemStars(newItem);
                 HashMap<Integer, ItemForger> itemForgerHashMap = ItemMappings.itemForgerHashMap(itemStars);
@@ -55,21 +57,20 @@ public class ArmorEquipStats implements Listener {
                 Double magicDamage = itemForger.getItemStat(ItemStatKeys.MAGIC_DAMAGE_KEY);
                 Double rangeDamage = itemForger.getItemStat(ItemStatKeys.RANGE_DAMAGE_KEY);
 
-                addStats(player, health, armor, toughness, speed, mana, meleeDamage, magicDamage, rangeDamage);
+                addStats(statProfile, health, armor, toughness, speed, mana, meleeDamage, magicDamage, rangeDamage);
                 addFortitude(player, fortitude);
             } else {
-                // TODO: Equipping Vanilla Item (Excluding Netherite)
+                // Equipping Vanilla Item (Excluding Netherite)
                 Material newMaterial = newItem.getType();
                 for (VanillaArmorValues values : VanillaArmorValues.values()) {
                     if (values.getMaterial().equals(newMaterial)) {
                         Double armor = values.getProtectionValue();
                         Double toughness = values.getToughnessValue();
 
-                        addStats(player, 0.0, armor, toughness, 0.0, 0.0, 0.0, 0.0,0.0);
+                        addStats(statProfile, 0.0, armor, toughness, 0.0, 0.0, 0.0, 0.0,0.0);
                     }
                 }
             }
-
         }
         if (oldMeta != null) {
             if (oldMeta.hasCustomModelData()) {
@@ -89,7 +90,7 @@ public class ArmorEquipStats implements Listener {
                 Double magicDamage = itemForger.getItemStat(ItemStatKeys.MAGIC_DAMAGE_KEY);
                 Double rangeDamage = itemForger.getItemStat(ItemStatKeys.RANGE_DAMAGE_KEY);
 
-                removeStats(player, health, armor, toughness, speed, mana, meleeDamage, magicDamage, rangeDamage);
+                removeStats(statProfile, health, armor, toughness, speed, mana, meleeDamage, magicDamage, rangeDamage);
                 removeFortitude(player, fortitude);
             } else {
                 // TODO: Removing Vanilla Item (Excluding Netherite)
@@ -99,19 +100,17 @@ public class ArmorEquipStats implements Listener {
                         Double armor = values.getProtectionValue();
                         Double toughness = values.getToughnessValue();
 
-                        removeStats(player, 0.0, armor, toughness, 0.0, 0.0, 0.0, 0.0, 0.0);
+                        removeStats(statProfile, 0.0, armor, toughness, 0.0, 0.0, 0.0, 0.0, 0.0);
                     }
                 }
             }
-
         }
-
     }
 
-    private void addStats(Player player, Double health, Double armor, Double toughness, Double speed, Double mana, Double meleeDamage, Double magicDamage, Double rangeDamage) {
-        Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).stats();
-        DamageStats damageStats = statProfileManager.getStatProfile(player.getUniqueId()).damageStats();
-        DefenseStats defenseStats = statProfileManager.getStatProfile(player.getUniqueId()).defenseStats();
+    private void addStats(StatProfile statProfile, Double health, Double armor, Double toughness, Double speed, Double mana, Double meleeDamage, Double magicDamage, Double rangeDamage) {
+        Stats stats = statProfile.stats();
+        DamageStats damageStats = statProfile.damageStats();
+        DefenseStats defenseStats = statProfile.defenseStats();
 
         double currentHealth = stats.getHealth();
         double currentArmor = defenseStats.getDefense();
@@ -138,24 +137,21 @@ public class ArmorEquipStats implements Listener {
             stats.setMaxMana(currentMana + mana);
         }
         if (meleeDamage != null) {
-            //stats.setMeleeDamage(currentMeleeDamage + meleeDamage);
             damageStats.setpMeleeDmg(currentMeleeDamage + meleeDamage);
         }
         if (magicDamage != null) {
-            //stats.setMagicDamage(currentMagicDamage + magicDamage);
             damageStats.setpMagicDmg(currentMagicDamage + magicDamage);
         }
         if (rangeDamage != null) {
-            //stats.setRangeDamage(currentRangeDamage + rangeDamage);
             damageStats.setpRangeDmg(currentRangeDamage + rangeDamage);
         }
 
     }
 
-    private void removeStats(Player player, Double health, Double armor, Double toughness, Double speed, Double mana, Double meleeDamage, Double magicDamage, Double rangeDamage) {
-        Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).stats();
-        DamageStats damageStats = statProfileManager.getStatProfile(player.getUniqueId()).damageStats();
-        DefenseStats defenseStats = statProfileManager.getStatProfile(player.getUniqueId()).defenseStats();
+    private void removeStats(StatProfile statProfile, Double health, Double armor, Double toughness, Double speed, Double mana, Double meleeDamage, Double magicDamage, Double rangeDamage) {
+        Stats stats = statProfile.stats();
+        DamageStats damageStats = statProfile.damageStats();
+        DefenseStats defenseStats = statProfile.defenseStats();
 
         double currentHealth = stats.getHealth();
         double currentArmor = defenseStats.getDefense();
@@ -182,42 +178,33 @@ public class ArmorEquipStats implements Listener {
             stats.setMaxMana(currentMana - mana);
         }
         if (meleeDamage != null) {
-            //stats.setMeleeDamage(currentMeleeDamage - meleeDamage);
             damageStats.setpMeleeDmg(currentMeleeDamage - meleeDamage);
         }
         if (magicDamage != null) {
-            //stats.setMagicDamage(currentMagicDamage - magicDamage);
             damageStats.setpMagicDmg(currentMagicDamage - magicDamage);
         }
         if (rangeDamage != null) {
-            //stats.setRangeDamage(currentRangeDamage - rangeDamage);
             damageStats.setpRangeDmg(currentRangeDamage - rangeDamage);
         }
     }
 
     private void addFortitude(Player player, Double fortitude) {
 
-        Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).stats();
-
-        AttributeInstance playerKBResInstance = player.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE);
-        Double playerKBRES = playerKBResInstance.getBaseValue();
-        Double currentFortitude = stats.getFortitude();
+        DefenseStats defenseStats = statProfileManager.getStatProfile(player.getUniqueId()).defenseStats();
+        Double currentFortitude = defenseStats.getFortitude(player);
 
         if (fortitude != null) {
-            playerKBResInstance.setBaseValue(playerKBRES + currentFortitude);
+            defenseStats.setFortitude(player, currentFortitude + fortitude);
         }
     }
 
     private void removeFortitude(Player player, Double fortitude) {
 
-        Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).stats();
-
-        AttributeInstance playerKBResInstance = player.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE);
-        Double playerKBRES = playerKBResInstance.getBaseValue();
-        Double currentFortitude = stats.getFortitude();
+        DefenseStats defenseStats = statProfileManager.getStatProfile(player.getUniqueId()).defenseStats();
+        Double currentFortitude = defenseStats.getFortitude(player);
 
         if (fortitude != null) {
-            playerKBResInstance.setBaseValue(playerKBRES - currentFortitude);
+            defenseStats.setFortitude(player, currentFortitude - fortitude);
         }
     }
 

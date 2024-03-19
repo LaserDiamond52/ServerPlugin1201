@@ -1,6 +1,6 @@
 package net.laserdiamond.serverplugin1201.stats.Components.PlayerStatKeys;
 
-public enum PlayerTrimPatternStats {
+public enum PlayerTrimPatternStatKeys {
 
     SENTRY,
     VEX,

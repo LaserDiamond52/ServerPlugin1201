@@ -1,27 +1,27 @@
-package net.laserdiamond.serverplugin1201.events.SpellCasting;
+package net.laserdiamond.serverplugin1201.events.abilities;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-public class SpellCasting {
+public class AbilityCasting {
 
-    public interface RightClickSpell
+    public interface RightClickSpell extends AbilityListener
     {
         void onRightClickCast(PlayerInteractEvent event);
     }
 
-    public interface LeftClickSpell
+    public interface LeftClickSpell extends AbilityListener
     {
         void onLeftClickCast(PlayerInteractEvent event);
     }
 
-    public interface DropItemSpell
+    public interface DropItemSpell extends AbilityListener
     {
         void onDropItemCast(PlayerDropItemEvent event);
     }
 
-    public interface RunnableSpell
+    public interface RunnableSpell extends AbilityListener
     {
         void onActivate(Player player, int timer);
     }

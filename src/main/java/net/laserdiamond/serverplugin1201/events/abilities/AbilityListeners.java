@@ -1,4 +1,4 @@
-package net.laserdiamond.serverplugin1201.events.SpellCasting;
+package net.laserdiamond.serverplugin1201.events.abilities;
 
 import net.laserdiamond.serverplugin1201.ServerPlugin1201;
 import org.bukkit.Bukkit;
@@ -15,18 +15,18 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
-public class SpellCastListeners extends BukkitRunnable implements Listener {
+public class AbilityListeners extends BukkitRunnable implements Listener {
 
     private final ServerPlugin1201 plugin;
 
-    public SpellCastListeners(ServerPlugin1201 plugin)
+    public AbilityListeners(ServerPlugin1201 plugin)
     {
         this.plugin = plugin;
 
     }
 
     /**
-     * BukkitRunnable for Sneaking/Passive spells/abilities
+     * BukkitRunnable for Sneaking/Passive abilities
      */
 
     private int timer = 0;
@@ -38,7 +38,7 @@ public class SpellCastListeners extends BukkitRunnable implements Listener {
         {
             timer++;
             try {
-                PlayerRunnableSpell(player);
+                PlayerRunnableSpell(player, timer);
             } catch (InvocationTargetException | IllegalAccessException e) {
                 Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "!ERROR WHILE TRYING TO ACTIVATE SPELL/ABILITY!");
                 throw new RuntimeException(e);
@@ -51,7 +51,7 @@ public class SpellCastListeners extends BukkitRunnable implements Listener {
     }
 
     /**
-     * Event handler for registered click spells/abilities
+     * Event handler for registered click abilities
      * @param event
      * @throws InvocationTargetException
      * @throws IllegalAccessException
@@ -61,18 +61,18 @@ public class SpellCastListeners extends BukkitRunnable implements Listener {
 
         if (event.getAction().isRightClick())
         {
-            PlayerClickItemSpell(SpellCastType.RIGHT_CLICK, event);
+            PlayerClickItemSpell(AbilityCastType.RIGHT_CLICK, event);
         }
 
         if (event.getAction().isLeftClick())
         {
-            PlayerClickItemSpell(SpellCastType.LEFT_CLICK, event);
+            PlayerClickItemSpell(AbilityCastType.LEFT_CLICK, event);
 
         }
     }
 
     /**
-     * Event handler for registered drop spells/abilities
+     * Event handler for registered drop abilities
      * @param event
      * @throws InvocationTargetException
      * @throws IllegalAccessException
@@ -92,15 +92,16 @@ public class SpellCastListeners extends BukkitRunnable implements Listener {
     }
 
     private void PlayerDropItemSpell(PlayerDropItemEvent event) throws InvocationTargetException, IllegalAccessException {
-        List<SpellCastListener> listeners = plugin.getSpellCastListeners();
-        for (SpellCastListener listener : listeners)
+
+        List<AbilityListener> listeners = plugin.getAbilityListeners();
+        for (AbilityListener listener : listeners)
         {
             for (Method method : listener.getClass().getDeclaredMethods())
             {
-                if (method.isAnnotationPresent(SpellCastHandler.class))
+                if (method.isAnnotationPresent(AbilityHandler.class))
                 {
-                    SpellCastHandler annotation = method.getAnnotation(SpellCastHandler.class);
-                    if (annotation.spellCastType() == SpellCastType.DROP_ITEM)
+                    AbilityHandler annotation = method.getAnnotation(AbilityHandler.class);
+                    if (annotation.abilityCastType() == AbilityCastType.DROP_ITEM)
                     {
                         method.invoke(listener, event);
                     }
@@ -109,16 +110,16 @@ public class SpellCastListeners extends BukkitRunnable implements Listener {
         }
     }
 
-    private void PlayerClickItemSpell(SpellCastType spellCastType, PlayerInteractEvent event) throws InvocationTargetException, IllegalAccessException {
-        List<SpellCastListener> listeners = plugin.getSpellCastListeners();
-        for (SpellCastListener listener : listeners)
+    private void PlayerClickItemSpell(AbilityCastType abilityCastType, PlayerInteractEvent event) throws InvocationTargetException, IllegalAccessException {
+        List<AbilityListener> listeners = plugin.getAbilityListeners();
+        for (AbilityListener listener : listeners)
         {
             for (Method method : listener.getClass().getDeclaredMethods())
             {
-                if (method.isAnnotationPresent(SpellCastHandler.class))
+                if (method.isAnnotationPresent(AbilityHandler.class))
                 {
-                    SpellCastHandler annotation = method.getAnnotation(SpellCastHandler.class);
-                    if (annotation.spellCastType() == spellCastType)
+                    AbilityHandler annotation = method.getAnnotation(AbilityHandler.class);
+                    if (annotation.abilityCastType() == abilityCastType)
                     {
                         method.invoke(listener, event);
                     }
@@ -127,19 +128,19 @@ public class SpellCastListeners extends BukkitRunnable implements Listener {
         }
     }
 
-    private void PlayerRunnableSpell(Player player) throws InvocationTargetException, IllegalAccessException {
-        List<SpellCastListener> listeners = plugin.getSpellCastListeners();
-        for (SpellCastListener listener : listeners)
+    private void PlayerRunnableSpell(Player player, int timer) throws InvocationTargetException, IllegalAccessException {
+        List<AbilityListener> listeners = plugin.getAbilityListeners();
+        for (AbilityListener listener : listeners)
         {
             for (Method method : listener.getClass().getDeclaredMethods())
             {
-                if (method.isAnnotationPresent(SpellCastHandler.class))
+                if (method.isAnnotationPresent(AbilityHandler.class))
                 {
-                    SpellCastHandler annotation = method.getAnnotation(SpellCastHandler.class);
+                    AbilityHandler annotation = method.getAnnotation(AbilityHandler.class);
                     {
-                        if (annotation.spellCastType() == SpellCastType.RUNNABLE)
+                        if (annotation.abilityCastType() == AbilityCastType.RUNNABLE)
                         {
-                            method.invoke(listener, player);
+                            method.invoke(listener, player, timer);
                         }
                     }
                 }
