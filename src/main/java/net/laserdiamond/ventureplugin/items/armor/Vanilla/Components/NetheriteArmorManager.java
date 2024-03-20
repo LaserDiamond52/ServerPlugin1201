@@ -41,6 +41,11 @@ public class NetheriteArmorManager extends VentureArmorSet {
     }
 
     @Override
+    public ArmorCMD setArmorCMD() {
+        return ArmorCMD.NETHERITE_ARMOR;
+    }
+
+    @Override
     public GetVarFile config() {
         return null;
     }

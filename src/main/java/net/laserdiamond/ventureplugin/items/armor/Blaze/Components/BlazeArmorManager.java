@@ -32,8 +32,8 @@ public class BlazeArmorManager extends VentureArmorSet implements AbilityCasting
     }
 
     @Override
-    public ArmorCMDWrapper armorPieceCMD() {
-        return new ArmorCMDWrapper(ArmorCMD.BLAZE_ARMOR.getHelmet(), ArmorCMD.BLAZE_ARMOR.getChestplate(), ArmorCMD.BLAZE_ARMOR.getLeggings(), ArmorCMD.BLAZE_ARMOR.getBoots());
+    public ArmorCMD setArmorCMD() {
+        return ArmorCMD.BLAZE_ARMOR;
     }
 
     @Override

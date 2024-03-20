@@ -26,14 +26,7 @@ public abstract class VentureArmorSet extends VentureStatItem {
 
     public abstract String armorSetName();
 
-    /**
-     * The custom model data for the armor set locally
-     * @return A wrapper object that contains the custom model data for each armor piece
-     */
-    public ArmorCMDWrapper armorPieceCMD()
-    {
-        return new ArmorCMDWrapper(null, null, null, null);
-    }
+    public abstract ArmorCMD setArmorCMD();
 
     /**
      * Sets the armor color for leather armor
@@ -64,7 +57,7 @@ public abstract class VentureArmorSet extends VentureStatItem {
      */
     public final int[] sigBits()
     {
-        return new int[]{armorPieceCMD().getHelmet(), armorPieceCMD().getHelmet()};
+        return new int[]{setArmorCMD().getHelmet(), setArmorCMD().getHelmet()};
     }
 
     /**
@@ -149,13 +142,13 @@ public abstract class VentureArmorSet extends VentureStatItem {
             switch (armorPieceTypes)
             {
                 case HELMET -> itemForger = new ItemForger(Material.LEATHER_HELMET)
-                        .setCustomModelData(armorPieceCMD().getHelmet());
+                        .setCustomModelData(setArmorCMD().getHelmet());
                 case CHESTPLATE -> itemForger = new ItemForger(Material.LEATHER_CHESTPLATE)
-                        .setCustomModelData(armorPieceCMD().getChestplate());
+                        .setCustomModelData(setArmorCMD().getChestplate());
                 case LEGGINGS -> itemForger = new ItemForger(Material.LEATHER_LEGGINGS)
-                        .setCustomModelData(armorPieceCMD().getLeggings());
+                        .setCustomModelData(setArmorCMD().getLeggings());
                 case BOOTS -> itemForger = new ItemForger(Material.LEATHER_BOOTS)
-                        .setCustomModelData(armorPieceCMD().getBoots());
+                        .setCustomModelData(setArmorCMD().getBoots());
             }
 
             itemForger.setName(ItemNameBuilder.name(armorSetName() + " " + armorName, stars))
@@ -178,7 +171,7 @@ public abstract class VentureArmorSet extends VentureStatItem {
         switch (armorPieceTypes)
         {
             case HELMET -> {
-                itemForger = new ItemForger(helmet).setCustomModelData(armorPieceCMD().getHelmet());
+                itemForger = new ItemForger(helmet).setCustomModelData(setArmorCMD().getHelmet());
                 switch (helmet)
                 {
                     case PLAYER_HEAD -> itemForger.setPlayerHeadSkin(playerHeadSkin(), sigBits()[0], sigBits()[1]);
@@ -186,21 +179,21 @@ public abstract class VentureArmorSet extends VentureStatItem {
                 }
             }
             case CHESTPLATE -> {
-                itemForger = new ItemForger(chestplate).setCustomModelData(armorPieceCMD().getChestplate());
+                itemForger = new ItemForger(chestplate).setCustomModelData(setArmorCMD().getChestplate());
                 if (chestplate.equals(Material.LEATHER_CHESTPLATE))
                 {
                     itemForger.LeatherArmorColor(setArmorColor(armorPieceTypes));
                 }
             }
             case LEGGINGS -> {
-                itemForger = new ItemForger(leggings).setCustomModelData(armorPieceCMD().getLeggings());
+                itemForger = new ItemForger(leggings).setCustomModelData(setArmorCMD().getLeggings());
                 if (chestplate.equals(Material.LEATHER_LEGGINGS))
                 {
                     itemForger.LeatherArmorColor(setArmorColor(armorPieceTypes));
                 }
             }
             case BOOTS -> {
-                itemForger = new ItemForger(boots).setCustomModelData(armorPieceCMD().getBoots());
+                itemForger = new ItemForger(boots).setCustomModelData(setArmorCMD().getBoots());
                 if (chestplate.equals(Material.LEATHER_BOOTS))
                 {
                     itemForger.LeatherArmorColor(setArmorColor(armorPieceTypes));
@@ -217,6 +210,6 @@ public abstract class VentureArmorSet extends VentureStatItem {
      */
     public final boolean isWearingFullSet(Player player)
     {
-        return ArmorEquipStats.isWearingFullSet(player, armorPieceCMD().getHelmet(), armorPieceCMD().getChestplate(), armorPieceCMD().getLeggings(), armorPieceCMD().getBoots());
+        return ArmorEquipStats.isWearingFullSet(player, setArmorCMD().getHelmet(), setArmorCMD().getChestplate(), setArmorCMD().getLeggings(), setArmorCMD().getBoots());
     }
 }

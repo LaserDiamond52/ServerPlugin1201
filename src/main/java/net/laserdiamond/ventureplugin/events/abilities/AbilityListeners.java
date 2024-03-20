@@ -18,11 +18,16 @@ import java.util.*;
 public class AbilityListeners extends BukkitRunnable implements Listener {
 
     private final VenturePlugin plugin;
+    private final HashMap<AbilityListener, Method> rightClickAbility, leftClickAbility, dropItemAbility, runnableAbility, attackAbility;
 
     public AbilityListeners(VenturePlugin plugin)
     {
         this.plugin = plugin;
-
+        rightClickAbility = new HashMap<>();
+        leftClickAbility = new HashMap<>();
+        dropItemAbility = new HashMap<>();
+        runnableAbility = new HashMap<>();
+        attackAbility = new HashMap<>();
     }
 
     /**
@@ -61,13 +66,14 @@ public class AbilityListeners extends BukkitRunnable implements Listener {
 
         if (event.getAction().isRightClick())
         {
-            PlayerClickItemSpell(AbilityCastType.RIGHT_CLICK, event);
+            runClickAbility(rightClickAbility, AbilityCastType.RIGHT_CLICK, event);
+            //PlayerClickItemSpell(AbilityCastType.RIGHT_CLICK, event);
         }
 
         if (event.getAction().isLeftClick())
         {
-            PlayerClickItemSpell(AbilityCastType.LEFT_CLICK, event);
-
+            runClickAbility(leftClickAbility, AbilityCastType.LEFT_CLICK, event);
+            //PlayerClickItemSpell(AbilityCastType.LEFT_CLICK, event);
         }
     }
 
@@ -87,10 +93,12 @@ public class AbilityListeners extends BukkitRunnable implements Listener {
 
         if (invType == InventoryType.CRAFTING || invType == InventoryType.CREATIVE)
         {
-            PlayerDropItemSpell(event);
+            //PlayerDropItemSpell(event);
+            dropItemAbility(event);
         }
     }
 
+    @Deprecated
     private void PlayerDropItemSpell(PlayerDropItemEvent event) throws InvocationTargetException, IllegalAccessException {
 
         List<AbilityListener> listeners = plugin.getAbilityListeners();
@@ -110,6 +118,38 @@ public class AbilityListeners extends BukkitRunnable implements Listener {
         }
     }
 
+    private void dropItemAbility(PlayerDropItemEvent event) throws InvocationTargetException, IllegalAccessException
+    {
+        List<AbilityListener> listeners = plugin.getAbilityListeners();
+        if (dropItemAbility.isEmpty())
+        {
+            for (AbilityListener listener : listeners)
+            {
+                for (Method method : listener.getClass().getDeclaredMethods())
+                {
+                    if (method.isAnnotationPresent(AbilityHandler.class))
+                    {
+                        AbilityHandler annotation = method.getAnnotation(AbilityHandler.class);
+                        if (annotation.abilityCastType() == AbilityCastType.DROP_ITEM)
+                        {
+                            dropItemAbility.put(listener, method);
+                            method.invoke(listener, event);
+                        }
+                    }
+                }
+            }
+        } else
+        {
+            for (AbilityListener listener : dropItemAbility.keySet())
+            {
+                Method method = dropItemAbility.get(listener);
+                method.invoke(listener, event);
+            }
+        }
+
+    }
+
+    @Deprecated
     private void PlayerClickItemSpell(AbilityCastType abilityCastType, PlayerInteractEvent event) throws InvocationTargetException, IllegalAccessException {
         List<AbilityListener> listeners = plugin.getAbilityListeners();
         for (AbilityListener listener : listeners)
@@ -128,6 +168,7 @@ public class AbilityListeners extends BukkitRunnable implements Listener {
         }
     }
 
+    @Deprecated
     private void PlayerRunnableSpell(Player player, int timer) throws InvocationTargetException, IllegalAccessException {
         List<AbilityListener> listeners = plugin.getAbilityListeners();
         for (AbilityListener listener : listeners)
@@ -144,6 +185,35 @@ public class AbilityListeners extends BukkitRunnable implements Listener {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    private void runClickAbility(HashMap<AbilityListener, Method> abilities, AbilityCastType abilityCastType, PlayerInteractEvent event) throws InvocationTargetException, IllegalAccessException {
+        List<AbilityListener> listeners = plugin.getAbilityListeners();
+        if (abilities.isEmpty())
+        {
+            for (AbilityListener listener : listeners)
+            {
+                for (Method method : listener.getClass().getDeclaredMethods())
+                {
+                    if (method.isAnnotationPresent(AbilityHandler.class))
+                    {
+                        AbilityHandler annotation = method.getAnnotation(AbilityHandler.class);
+                        if (annotation.abilityCastType() == abilityCastType)
+                        {
+                            abilities.put(listener, method);
+                            method.invoke(listener, event);
+                        }
+                    }
+                }
+            }
+        } else
+        {
+            for (AbilityListener listener : abilities.keySet())
+            {
+                Method method = abilities.get(listener);
+                method.invoke(listener, event);
             }
         }
     }

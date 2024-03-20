@@ -12,6 +12,7 @@ import net.laserdiamond.ventureplugin.items.util.ItemForger;
 import net.laserdiamond.ventureplugin.items.util.ItemNameBuilder;
 import net.laserdiamond.ventureplugin.items.util.VentureItemRarity;
 import net.laserdiamond.ventureplugin.items.util.armor.ArmorCMD;
+import net.laserdiamond.ventureplugin.items.util.armor.ArmorCMDWrapper;
 import net.laserdiamond.ventureplugin.items.util.armor.ArmorPieceTypes;
 import net.laserdiamond.ventureplugin.events.abilities.*;
 import net.laserdiamond.ventureplugin.items.util.armor.VentureArmorSet;
@@ -42,6 +43,11 @@ public class StormLordArmorManager extends VentureArmorSet implements AbilityCas
     @Override
     public @NotNull String armorSetName() {
         return "Storm Lord ";
+    }
+
+    @Override
+    public ArmorCMD setArmorCMD() {
+        return ArmorCMD.STORM_LORD_ARMOR;
     }
 
     @Override
