@@ -7,6 +7,7 @@ import net.laserdiamond.ventureplugin.items.util.ItemForger;
 import net.laserdiamond.ventureplugin.items.util.armor.*;
 import net.laserdiamond.ventureplugin.util.File.GetVarFile;
 import net.laserdiamond.ventureplugin.util.VentureItemStatKeys;
+import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
@@ -37,6 +38,27 @@ public class BlazeArmorManager extends VentureArmorSet implements AbilityCasting
     }
 
     @Override
+    public Material setArmorPieceMaterial(ArmorPieceTypes armorPieceTypes) {
+        Material material = null;
+        switch (armorPieceTypes)
+        {
+            case HELMET -> {
+                material = Material.PLAYER_HEAD;
+            }
+            case CHESTPLATE -> {
+                material = Material.LEATHER_CHESTPLATE;
+            }
+            case LEGGINGS -> {
+                material = Material.LEATHER_LEGGINGS;
+            }
+            case BOOTS -> {
+                material = Material.LEATHER_BOOTS;
+            }
+        }
+        return material;
+    }
+
+    @Override
     public List<String> createLore(@NotNull ArmorPieceTypes armorPieceTypes, int stars) {
         return null;
     }
@@ -56,6 +78,8 @@ public class BlazeArmorManager extends VentureArmorSet implements AbilityCasting
 
         return null;
     }
+
+
 
     @Override
     public ItemForger createArmorPiece(@NotNull ArmorPieceTypes armorPieceTypes, int stars) {

@@ -7,6 +7,7 @@ import net.laserdiamond.ventureplugin.items.armor.Vanilla.Components.NetheriteAr
 import net.laserdiamond.ventureplugin.items.util.armor.ArmorPieceTypes;
 import net.laserdiamond.ventureplugin.items.util.misc.MenuItems;
 import net.laserdiamond.ventureplugin.stats.Components.StatsItemManager;
+import net.laserdiamond.ventureplugin.util.ItemRegistryKey;
 import org.bukkit.ChatColor;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.HumanEntity;
@@ -30,16 +31,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ItemMappings implements Listener {
+@Deprecated
+public class ItemForgerRegistry implements Listener {
 
     private VenturePlugin plugin;
     private static NetheriteArmorManager netheriteArmorManager;
     private static StormLordArmorManager stormLordArmorManager;
+    private final HashMap<String, ItemForger> giveItemCommandMap;
+    private final HashMap<ItemRegistryKey, ItemForger> itemForgerRegistryMap;
+    private final HashMap<ItemRegistryKey, ItemForger> playerItemForgerRegistryMap;
 
-    public ItemMappings(VenturePlugin plugin) {
+    public ItemForgerRegistry(VenturePlugin plugin) {
         this.plugin = plugin;
         netheriteArmorManager = plugin.getNetheriteArmorManager();
         stormLordArmorManager = plugin.getStormArmorManager();
+        giveItemCommandMap = new HashMap<>();
+        itemForgerRegistryMap = new HashMap<>();
+        playerItemForgerRegistryMap = new HashMap<>();
     }
     public static HashMap<Integer, ItemForger> itemForgerHashMap(int stars) {
 
@@ -141,7 +149,7 @@ public class ItemMappings implements Listener {
         }
         return enchantString;
     }
-    public static List<String> enchantStrings(Map<Enchantment, Integer> enchants) {
+    public static List<String> enchantLore(Map<Enchantment, Integer> enchants) {
 
         List<String> enchantLore = new ArrayList<>();
         String enchantString;
@@ -455,10 +463,25 @@ public class ItemMappings implements Listener {
         return blackList;
     }
 
+    public HashMap<String, ItemForger> getGiveItemCommandMap() {
+        return giveItemCommandMap;
+    }
+
+    public HashMap<ItemRegistryKey, ItemForger> getItemForgerRegistryMap() {
+        return itemForgerRegistryMap;
+    }
+
+    public HashMap<ItemRegistryKey, ItemForger> getPlayerItemForgerRegistryMap() {
+        return playerItemForgerRegistryMap;
+    }
+
+
+
     // TODO: Item maps for /giveitem command
 
 
     // Item Mappings for "plugingive" command
+    @Deprecated
     public enum ItemMaps {
 
 

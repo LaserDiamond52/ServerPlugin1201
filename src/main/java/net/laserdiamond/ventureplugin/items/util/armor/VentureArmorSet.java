@@ -1,13 +1,15 @@
 package net.laserdiamond.ventureplugin.items.util.armor;
 
 import com.google.common.collect.Multimap;
+import net.laserdiamond.ventureplugin.VenturePlugin;
 import net.laserdiamond.ventureplugin.items.armor.ArmorEquipStats;
 import net.laserdiamond.ventureplugin.items.util.ItemForger;
+import net.laserdiamond.ventureplugin.items.util.ItemForgerRegistry;
 import net.laserdiamond.ventureplugin.items.util.ItemNameBuilder;
 import net.laserdiamond.ventureplugin.items.util.VentureStatItem;
+import net.laserdiamond.ventureplugin.util.ItemRegistry;
+import net.laserdiamond.ventureplugin.util.ItemRegistryKey;
 import net.laserdiamond.ventureplugin.util.VentureItemStatKeys;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
@@ -19,14 +21,33 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Abstract class for Venture Armor Sets
+ * An abstract class that represents a Venture plugin armor set
  */
 public abstract class VentureArmorSet extends VentureStatItem {
 
+    private VenturePlugin instance()
+    {
+        return VenturePlugin.getInstance();
+    }
 
+    /**
+     * The name of the armor set
+     * @return The name of the armor set
+     */
     public abstract String armorSetName();
 
+    /**
+     * Sets the custom model data for the armor set
+     * @return ArmorCMD enum object containing the custom model data for each armor piece
+     */
     public abstract ArmorCMD setArmorCMD();
+
+    /**
+     * Sets the material for all armor pieces
+     * @param armorPieceTypes The armor piece type
+     * @return The material for the armor piece type
+     */
+    public abstract Material setArmorPieceMaterial(ArmorPieceTypes armorPieceTypes);
 
     /**
      * Sets the armor color for leather armor
@@ -108,15 +129,15 @@ public abstract class VentureArmorSet extends VentureStatItem {
         double speed = config().getDouble(armorPiece + "Speed") * (1 + stars * this.starBonus);
 
         HashMap<VentureItemStatKeys, Double> itemStatKeysDoubleHashMap = new HashMap<>();
-        itemStatKeysDoubleHashMap.put(VentureItemStatKeys.MELEE_DAMAGE_KEY, meleeDamage);
-        itemStatKeysDoubleHashMap.put(VentureItemStatKeys.RANGE_DAMAGE_KEY, rangeDamage);
-        itemStatKeysDoubleHashMap.put(VentureItemStatKeys.MAGIC_DAMAGE_KEY, magicDamage);
-        itemStatKeysDoubleHashMap.put(VentureItemStatKeys.MAX_MANA_KEY, mana);
-        itemStatKeysDoubleHashMap.put(VentureItemStatKeys.HEALTH_KEY, health);
-        itemStatKeysDoubleHashMap.put(VentureItemStatKeys.ARMOR_KEY, armor);
-        itemStatKeysDoubleHashMap.put(VentureItemStatKeys.TOUGHNESS_KEY, toughness);
-        itemStatKeysDoubleHashMap.put(VentureItemStatKeys.FORTITUDE_KEY, fortitude);
-        itemStatKeysDoubleHashMap.put(VentureItemStatKeys.SPEED_KEY, speed);
+        itemStatKeysDoubleHashMap.put(VentureItemStatKeys.ARMOR_MELEE_DAMAGE_KEY, meleeDamage);
+        itemStatKeysDoubleHashMap.put(VentureItemStatKeys.ARMOR_RANGE_DAMAGE_KEY, rangeDamage);
+        itemStatKeysDoubleHashMap.put(VentureItemStatKeys.ARMOR_MAGIC_DAMAGE_KEY, magicDamage);
+        itemStatKeysDoubleHashMap.put(VentureItemStatKeys.ARMOR_MAX_MANA_KEY, mana);
+        itemStatKeysDoubleHashMap.put(VentureItemStatKeys.ARMOR_HEALTH_KEY, health);
+        itemStatKeysDoubleHashMap.put(VentureItemStatKeys.ARMOR_DEFENSE_KEY, armor);
+        itemStatKeysDoubleHashMap.put(VentureItemStatKeys.ARMOR_TOUGHNESS_KEY, toughness);
+        itemStatKeysDoubleHashMap.put(VentureItemStatKeys.ARMOR_FORTITUDE_KEY, fortitude);
+        itemStatKeysDoubleHashMap.put(VentureItemStatKeys.ARMOR_SPEED_KEY, speed);
 
         return itemStatKeysDoubleHashMap;
     }
@@ -125,80 +146,82 @@ public abstract class VentureArmorSet extends VentureStatItem {
      * Creates the Armor Piece for the item as an ItemForger instance
      * @param armorPieceTypes The armor piece type
      * @param stars The amount of stars the item has
-     * @return The Venture armor Piece as an ItemForger instance
+     * @return The Venture armor piece as an ItemForger instance
      */
     @Deprecated
     public abstract ItemForger createArmorPiece(@NotNull ArmorPieceTypes armorPieceTypes, int stars);
 
     // TODO: Advanced Armor set piece generator
-    public ItemForger createLeatherArmorSet(@NotNull ArmorPieceTypes armorPieceTypes, int stars)
+
+    /**
+     * Creates an instance of the armor piece
+     * @param armorPieceTypes The armor piece type
+     * @param stars The amount of stars the item has
+     * @return The armor piece as an ItemForger instance
+     */
+    public ItemForger createArmorSet(@NotNull ArmorPieceTypes armorPieceTypes, int stars)
     {
         String armorPieceString = armorPieceTypes.getName();
-        ItemForger itemForger = new ItemForger(Material.AIR);
+        String armorName = armorPieceString.substring(0,1).toUpperCase() + armorPieceString.substring(1);
+        ItemForger itemForger = new ItemForger(setArmorPieceMaterial(armorPieceTypes))
+                .setName(ItemNameBuilder.name(armorSetName() + " " + armorName, stars))
+                .setStars(stars)
+                .setLore(createLore(armorPieceTypes, stars))
+                .setRarity(rarity())
+                .setUnbreakable(isUnbreakable())
+                .setFireResistant(isFireResistant())
+                .setItemStats(createVentureStats(armorPieceTypes, stars))
+                .setAttributeModifiers(createAttributes(armorPieceTypes, stars), true);
 
-        try {
-            String armorName = armorPieceString.substring(0,1).toUpperCase() + armorPieceString.substring(1);
-
-            switch (armorPieceTypes)
-            {
-                case HELMET -> itemForger = new ItemForger(Material.LEATHER_HELMET)
-                        .setCustomModelData(setArmorCMD().getHelmet());
-                case CHESTPLATE -> itemForger = new ItemForger(Material.LEATHER_CHESTPLATE)
-                        .setCustomModelData(setArmorCMD().getChestplate());
-                case LEGGINGS -> itemForger = new ItemForger(Material.LEATHER_LEGGINGS)
-                        .setCustomModelData(setArmorCMD().getLeggings());
-                case BOOTS -> itemForger = new ItemForger(Material.LEATHER_BOOTS)
-                        .setCustomModelData(setArmorCMD().getBoots());
-            }
-
-            itemForger.setName(ItemNameBuilder.name(armorSetName() + " " + armorName, stars))
-                    .setStars(stars)
-                    .setLore(createLore(armorPieceTypes, stars))
-                    .setRarity(rarity())
-                    .setUnbreakable(isUnbreakable())
-                    .setFireResistant(isFireResistant())
-                    .setItemStats(createVentureStats(armorPieceTypes, stars));
-        } catch (NullPointerException e)
+        switch (setArmorPieceMaterial(armorPieceTypes))
         {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Something about this item is null: " + itemForger.getName());
-            e.printStackTrace();
+            case PLAYER_HEAD -> itemForger.setPlayerHeadSkin(playerHeadSkin(), sigBits()[0], sigBits()[1]);
+            case LEATHER_HELMET, LEATHER_CHESTPLATE, LEATHER_LEGGINGS, LEATHER_BOOTS -> itemForger.LeatherArmorColor(setArmorColor(armorPieceTypes));
+        }
+
+        switch (armorPieceTypes)
+        {
+            case HELMET -> itemForger.setCustomModelData(setArmorCMD().getHelmet());
+            case CHESTPLATE -> itemForger.setCustomModelData(setArmorCMD().getChestplate());
+            case LEGGINGS -> itemForger.setCustomModelData(setArmorCMD().getLeggings());
+            case BOOTS -> itemForger.setCustomModelData(setArmorCMD().getBoots());
         }
         return itemForger;
     }
 
-    private ItemForger createArmorSet(ItemForger itemForger, ArmorPieceTypes armorPieceTypes, Material helmet, Material chestplate, Material leggings, Material boots)
+    /**
+     * Creates a player instance of the armor piece
+     * @param player The player that will determine the armor's properties
+     * @param armorPieceTypes The armor piece type
+     * @param stars The stars the armor piece will have
+     * @return The armor piece as an ItemForger instance
+     */
+    public ItemForger createPlayerArmorSet(Player player, @NotNull ArmorPieceTypes armorPieceTypes, int stars)
     {
+        String armorPieceString = armorPieceTypes.getName();
+        String armorName = armorPieceString.substring(0,1).toUpperCase() + armorPieceString.substring(1);
+        ItemForger itemForger = new ItemForger(setArmorPieceMaterial(armorPieceTypes))
+                .setName(ItemNameBuilder.name(armorSetName() + " " + armorName, stars))
+                .setStars(stars)
+                .setLore(createPlayerLore(player, armorPieceTypes, stars))
+                .setRarity(rarity())
+                .setUnbreakable(isUnbreakable())
+                .setFireResistant(isFireResistant())
+                .setItemStats(createVentureStats(armorPieceTypes, stars))
+                .setAttributeModifiers(createAttributes(armorPieceTypes, stars), true);
+
+        switch (setArmorPieceMaterial(armorPieceTypes))
+        {
+            case PLAYER_HEAD -> itemForger.setPlayerHeadSkin(playerHeadSkin(), sigBits()[0], sigBits()[1]);
+            case LEATHER_HELMET, LEATHER_CHESTPLATE, LEATHER_LEGGINGS, LEATHER_BOOTS -> itemForger.LeatherArmorColor(setArmorColor(armorPieceTypes));
+        }
+
         switch (armorPieceTypes)
         {
-            case HELMET -> {
-                itemForger = new ItemForger(helmet).setCustomModelData(setArmorCMD().getHelmet());
-                switch (helmet)
-                {
-                    case PLAYER_HEAD -> itemForger.setPlayerHeadSkin(playerHeadSkin(), sigBits()[0], sigBits()[1]);
-                    case LEATHER_HELMET -> itemForger.LeatherArmorColor(setArmorColor(armorPieceTypes));
-                }
-            }
-            case CHESTPLATE -> {
-                itemForger = new ItemForger(chestplate).setCustomModelData(setArmorCMD().getChestplate());
-                if (chestplate.equals(Material.LEATHER_CHESTPLATE))
-                {
-                    itemForger.LeatherArmorColor(setArmorColor(armorPieceTypes));
-                }
-            }
-            case LEGGINGS -> {
-                itemForger = new ItemForger(leggings).setCustomModelData(setArmorCMD().getLeggings());
-                if (chestplate.equals(Material.LEATHER_LEGGINGS))
-                {
-                    itemForger.LeatherArmorColor(setArmorColor(armorPieceTypes));
-                }
-            }
-            case BOOTS -> {
-                itemForger = new ItemForger(boots).setCustomModelData(setArmorCMD().getBoots());
-                if (chestplate.equals(Material.LEATHER_BOOTS))
-                {
-                    itemForger.LeatherArmorColor(setArmorColor(armorPieceTypes));
-                }
-            }
+            case HELMET -> itemForger.setCustomModelData(setArmorCMD().getHelmet());
+            case CHESTPLATE -> itemForger.setCustomModelData(setArmorCMD().getChestplate());
+            case LEGGINGS -> itemForger.setCustomModelData(setArmorCMD().getLeggings());
+            case BOOTS -> itemForger.setCustomModelData(setArmorCMD().getBoots());
         }
         return itemForger;
     }
@@ -211,5 +234,57 @@ public abstract class VentureArmorSet extends VentureStatItem {
     public final boolean isWearingFullSet(Player player)
     {
         return ArmorEquipStats.isWearingFullSet(player, setArmorCMD().getHelmet(), setArmorCMD().getChestplate(), setArmorCMD().getLeggings(), setArmorCMD().getBoots());
+    }
+
+    /**
+     * Registers the armor set to be automatically refreshed when updated and to the giveitem command
+     */
+    public void registerArmorSet()
+    {
+        ItemRegistry registry = new ItemRegistry(instance());
+        HashMap<ItemRegistryKey, ItemForger> registryMap = registry.getItemRegistryMap();
+
+        int maxStars = instance().getConfig().getInt("maxStars");
+
+
+        for (int i = 0; i < maxStars; i++)
+        {
+            for (ArmorPieceTypes armorPieceTypes : ArmorPieceTypes.values())
+            {
+                ItemRegistryKey key = new ItemRegistryKey(createArmorSet(armorPieceTypes, i).getCustomModelData(), i);
+                registryMap.put(key, createArmorSet(armorPieceTypes, i));
+            }
+        }
+
+        HashMap<String, ItemForger> nameMap = registry.getItemCommandNameMap();
+        for (ArmorPieceTypes armorPieceTypes : ArmorPieceTypes.values())
+        {
+            ItemForger armorItem = createArmorSet(armorPieceTypes, 0);
+            String armorPieceTypeName = armorPieceTypes.getName();
+            String commandName = (armorSetName() + armorPieceTypeName).toLowerCase().replace(" ", "_");
+
+            nameMap.put(commandName, armorItem);
+        }
+
+    }
+
+    // TODO: Finish player armor registry (or figure out at least)
+    @Deprecated
+    public void registerArmorSetPlayer(Player player)
+    {
+        ItemForgerRegistry registry = new ItemForgerRegistry(instance());
+        HashMap<ItemRegistryKey, ItemForger> registryPlayerMap = registry.getPlayerItemForgerRegistryMap();
+
+        int maxStars = instance().getConfig().getInt("maxStars");
+
+
+        for (int i = 0; i < maxStars; i++)
+        {
+            for (ArmorPieceTypes armorPieceTypes : ArmorPieceTypes.values())
+            {
+                ItemRegistryKey key = new ItemRegistryKey(createArmorSet(armorPieceTypes, i).getCustomModelData(), i);
+                registryPlayerMap.put(key, createPlayerArmorSet(player, armorPieceTypes, i));
+            }
+        }
     }
 }

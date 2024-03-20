@@ -38,14 +38,14 @@ public class ItemForger {
     private static final NamespacedKey rarityKey = ItemPropertiesKeys.RARITY_KEY.getKey();
     private static final NamespacedKey starsKey = ItemPropertiesKeys.STARS_KEY.getKey();
     private final NamespacedKey fireResistanceKey = ItemPropertiesKeys.FIRE_RESISTANCE_KEY.getKey();
-    private final NamespacedKey healthKey = VentureItemStatKeys.HEALTH_KEY.getKey();
-    private final NamespacedKey armorKey = VentureItemStatKeys.ARMOR_KEY.getKey();
-    private final NamespacedKey toughnessKey = VentureItemStatKeys.TOUGHNESS_KEY.getKey();
-    private final NamespacedKey fortitudeKey = VentureItemStatKeys.FORTITUDE_KEY.getKey();
-    private final NamespacedKey maxManaKey = VentureItemStatKeys.MAX_MANA_KEY.getKey();
-    private final NamespacedKey meleeDamageKey = VentureItemStatKeys.MELEE_DAMAGE_KEY.getKey();
-    private final NamespacedKey magicDamageKey = VentureItemStatKeys.MAGIC_DAMAGE_KEY.getKey();
-    private final NamespacedKey rangeDamageKey = VentureItemStatKeys.RANGE_DAMAGE_KEY.getKey();
+    private final NamespacedKey healthKey = VentureItemStatKeys.ARMOR_HEALTH_KEY.getKey();
+    private final NamespacedKey armorKey = VentureItemStatKeys.ARMOR_DEFENSE_KEY.getKey();
+    private final NamespacedKey toughnessKey = VentureItemStatKeys.ARMOR_TOUGHNESS_KEY.getKey();
+    private final NamespacedKey fortitudeKey = VentureItemStatKeys.ARMOR_FORTITUDE_KEY.getKey();
+    private final NamespacedKey maxManaKey = VentureItemStatKeys.ARMOR_MAX_MANA_KEY.getKey();
+    private final NamespacedKey meleeDamageKey = VentureItemStatKeys.ARMOR_MELEE_DAMAGE_KEY.getKey();
+    private final NamespacedKey magicDamageKey = VentureItemStatKeys.ARMOR_MAGIC_DAMAGE_KEY.getKey();
+    private final NamespacedKey rangeDamageKey = VentureItemStatKeys.ARMOR_RANGE_DAMAGE_KEY.getKey();
     private static final NamespacedKey itemTypeKey = ItemPropertiesKeys.ITEM_TYPE.getKey();
 
     private final int maxStars = plugin.getConfig().getInt("maxStars");

@@ -3,7 +3,7 @@ package net.laserdiamond.ventureplugin.items.armor;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import net.laserdiamond.ventureplugin.VenturePlugin;
 import net.laserdiamond.ventureplugin.items.util.ItemForger;
-import net.laserdiamond.ventureplugin.items.util.ItemMappings;
+import net.laserdiamond.ventureplugin.items.util.ItemForgerRegistry;
 import net.laserdiamond.ventureplugin.util.VentureItemStatKeys;
 import net.laserdiamond.ventureplugin.stats.Components.DamageStats;
 import net.laserdiamond.ventureplugin.stats.Components.DefenseStats;
@@ -42,18 +42,18 @@ public class ArmorEquipStats implements Listener {
                 // Equipping custom item (Includes Netherite)
                 int newCMD = newMeta.getCustomModelData();
                 int itemStars = ItemForger.getItemStars(newItem);
-                HashMap<Integer, ItemForger> itemForgerHashMap = ItemMappings.itemForgerHashMap(itemStars);
+                HashMap<Integer, ItemForger> itemForgerHashMap = ItemForgerRegistry.itemForgerHashMap(itemStars);
                 ItemForger itemForger = itemForgerHashMap.get(newCMD);
 
-                Double health = itemForger.getItemStat(VentureItemStatKeys.HEALTH_KEY);
-                Double armor = itemForger.getItemStat(VentureItemStatKeys.ARMOR_KEY);
-                Double toughness = itemForger.getItemStat(VentureItemStatKeys.TOUGHNESS_KEY);
-                Double fortitude = itemForger.getItemStat(VentureItemStatKeys.FORTITUDE_KEY);
-                Double speed = itemForger.getItemStat(VentureItemStatKeys.SPEED_KEY);
-                Double mana = itemForger.getItemStat(VentureItemStatKeys.MAX_MANA_KEY);
-                Double meleeDamage = itemForger.getItemStat(VentureItemStatKeys.MELEE_DAMAGE_KEY);
-                Double magicDamage = itemForger.getItemStat(VentureItemStatKeys.MAGIC_DAMAGE_KEY);
-                Double rangeDamage = itemForger.getItemStat(VentureItemStatKeys.RANGE_DAMAGE_KEY);
+                Double health = itemForger.getItemStat(VentureItemStatKeys.ARMOR_HEALTH_KEY);
+                Double armor = itemForger.getItemStat(VentureItemStatKeys.ARMOR_DEFENSE_KEY);
+                Double toughness = itemForger.getItemStat(VentureItemStatKeys.ARMOR_TOUGHNESS_KEY);
+                Double fortitude = itemForger.getItemStat(VentureItemStatKeys.ARMOR_FORTITUDE_KEY);
+                Double speed = itemForger.getItemStat(VentureItemStatKeys.ARMOR_SPEED_KEY);
+                Double mana = itemForger.getItemStat(VentureItemStatKeys.ARMOR_MAX_MANA_KEY);
+                Double meleeDamage = itemForger.getItemStat(VentureItemStatKeys.ARMOR_MELEE_DAMAGE_KEY);
+                Double magicDamage = itemForger.getItemStat(VentureItemStatKeys.ARMOR_MAGIC_DAMAGE_KEY);
+                Double rangeDamage = itemForger.getItemStat(VentureItemStatKeys.ARMOR_RANGE_DAMAGE_KEY);
 
                 addStats(statProfile, health, armor, toughness, speed, mana, meleeDamage, magicDamage, rangeDamage);
                 addFortitude(player, fortitude);
@@ -75,18 +75,18 @@ public class ArmorEquipStats implements Listener {
                 // TODO: Removing custom item (Includes Netherite)
                 int oldCMD = oldMeta.getCustomModelData();
                 int itemStars = ItemForger.getItemStars(oldItem);
-                HashMap<Integer, ItemForger> itemForgerHashMap = ItemMappings.itemForgerHashMap(itemStars);
+                HashMap<Integer, ItemForger> itemForgerHashMap = ItemForgerRegistry.itemForgerHashMap(itemStars);
                 ItemForger itemForger = itemForgerHashMap.get(oldCMD);
 
-                Double health = itemForger.getItemStat(VentureItemStatKeys.HEALTH_KEY);
-                Double armor = itemForger.getItemStat(VentureItemStatKeys.ARMOR_KEY);
-                Double toughness = itemForger.getItemStat(VentureItemStatKeys.TOUGHNESS_KEY);
-                Double fortitude = itemForger.getItemStat(VentureItemStatKeys.FORTITUDE_KEY);
-                Double speed =  itemForger.getItemStat(VentureItemStatKeys.SPEED_KEY);
-                Double mana = itemForger.getItemStat(VentureItemStatKeys.MAX_MANA_KEY);
-                Double meleeDamage = itemForger.getItemStat(VentureItemStatKeys.MELEE_DAMAGE_KEY);
-                Double magicDamage = itemForger.getItemStat(VentureItemStatKeys.MAGIC_DAMAGE_KEY);
-                Double rangeDamage = itemForger.getItemStat(VentureItemStatKeys.RANGE_DAMAGE_KEY);
+                Double health = itemForger.getItemStat(VentureItemStatKeys.ARMOR_HEALTH_KEY);
+                Double armor = itemForger.getItemStat(VentureItemStatKeys.ARMOR_DEFENSE_KEY);
+                Double toughness = itemForger.getItemStat(VentureItemStatKeys.ARMOR_TOUGHNESS_KEY);
+                Double fortitude = itemForger.getItemStat(VentureItemStatKeys.ARMOR_FORTITUDE_KEY);
+                Double speed =  itemForger.getItemStat(VentureItemStatKeys.ARMOR_SPEED_KEY);
+                Double mana = itemForger.getItemStat(VentureItemStatKeys.ARMOR_MAX_MANA_KEY);
+                Double meleeDamage = itemForger.getItemStat(VentureItemStatKeys.ARMOR_MELEE_DAMAGE_KEY);
+                Double magicDamage = itemForger.getItemStat(VentureItemStatKeys.ARMOR_MAGIC_DAMAGE_KEY);
+                Double rangeDamage = itemForger.getItemStat(VentureItemStatKeys.ARMOR_RANGE_DAMAGE_KEY);
 
                 removeStats(statProfile, health, armor, toughness, speed, mana, meleeDamage, magicDamage, rangeDamage);
                 removeFortitude(player, fortitude);

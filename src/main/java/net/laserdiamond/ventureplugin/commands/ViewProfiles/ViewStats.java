@@ -1,5 +1,6 @@
 package net.laserdiamond.ventureplugin.commands.ViewProfiles;
 
+import net.laserdiamond.ventureplugin.VenturePlugin;
 import net.laserdiamond.ventureplugin.items.util.misc.MenuItems;
 import net.laserdiamond.ventureplugin.stats.Components.StatsItemManager;
 import net.laserdiamond.ventureplugin.util.messages.Messages;
@@ -14,7 +15,6 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public class ViewStats implements CommandExecutor {
-
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {

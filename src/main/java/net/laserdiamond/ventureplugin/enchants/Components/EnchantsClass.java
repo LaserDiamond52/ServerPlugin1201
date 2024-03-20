@@ -7,15 +7,12 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class EnchantsClass {
 
     public static ArrayList<Enchantment> custom_enchants = new ArrayList<>();
-
+    public static HashMap<Enchantment, String> EnchantmentNames = new HashMap<>();
     public static final Enchantment GLINT = new EnchantmentWrapper("glint", "", 1,1, EnchantmentTarget.ALL, false);
     public static final Enchantment GLOW = new EnchantmentWrapper("glow", "Glow", 1,2, EnchantmentTarget.WEAPON, false, aspectConflicting());
     public static final Enchantment VENOMOUS_ASPECT = new EnchantmentWrapper("venomousaspect", "Venomous Aspect", 1, 2, EnchantmentTarget.WEAPON, true, aspectConflicting());
@@ -28,7 +25,7 @@ public class EnchantsClass {
     public static final Enchantment MAGIC_DAMAGE = new EnchantmentWrapper("magicdamage", "Arcane", 1, 3, EnchantmentTarget.ARMOR_TORSO, false, damageConflicting());
     public static final Enchantment RANGE_DAMAGE = new EnchantmentWrapper("rangedamage", "Archer", 1, 3, EnchantmentTarget.ARMOR_TORSO, false, damageConflicting());
     public static final Enchantment HEALTH = new EnchantmentWrapper("health", "Growth", 1, 5, EnchantmentTarget.ARMOR, false);
-    public static final Enchantment NIGH_VISION = new EnchantmentWrapper("nightvision", "Night Vision", 1, 1, EnchantmentTarget.ARMOR_HEAD, false);
+    public static final Enchantment NIGHT_VISION = new EnchantmentWrapper("nightvision", "Night Vision", 1, 1, EnchantmentTarget.ARMOR_HEAD, false);
     public static final Enchantment SPEED = new EnchantmentWrapper("speed", "Quick Feet", 1, 5, EnchantmentTarget.ARMOR_FEET, false);
     public static final Enchantment REACH = new EnchantmentWrapper("reach", "Reach", 1, 3, EnchantmentTarget.WEAPON, false);
     public static final Enchantment ARMOR_MINING_FORTUNE = new EnchantmentWrapper("armorminingfortune", "Miner", 1, 3, EnchantmentTarget.ARMOR, false);
@@ -52,7 +49,7 @@ public class EnchantsClass {
         boolean registeredMagicDamage = enchantsClasses.contains(MAGIC_DAMAGE);
         boolean registeredRangeDamage = enchantsClasses.contains(RANGE_DAMAGE);
         boolean registeredHealth = enchantsClasses.contains(HEALTH);
-        boolean registeredNightVision = enchantsClasses.contains(NIGH_VISION);
+        boolean registeredNightVision = enchantsClasses.contains(NIGHT_VISION);
         boolean registeredSpeed = enchantsClasses.contains(SPEED);
         boolean registeredReach = enchantsClasses.contains(REACH);
         boolean registeredMiner = enchantsClasses.contains(ARMOR_MINING_FORTUNE);
@@ -102,7 +99,7 @@ public class EnchantsClass {
         }
         if (!registeredNightVision)
         {
-            registerEnchantment(NIGH_VISION);
+            registerEnchantment(NIGHT_VISION);
         }
         if (!registeredReach)
         {
@@ -121,6 +118,50 @@ public class EnchantsClass {
             registerEnchantment(ARMOR_FISHING_FORTUNE);
         }
 
+        EnchantmentNames.put(Enchantment.PROTECTION_ENVIRONMENTAL, "Protection");
+        EnchantmentNames.put(Enchantment.PROTECTION_FIRE, "Fire Protection");
+        EnchantmentNames.put(Enchantment.PROTECTION_FALL, "Feather Falling");
+        EnchantmentNames.put(Enchantment.PROTECTION_EXPLOSIONS, "Blast Protection");
+        EnchantmentNames.put(Enchantment.PROTECTION_PROJECTILE, "Projectile Protection");
+        EnchantmentNames.put(Enchantment.OXYGEN, "Respiration");
+        EnchantmentNames.put(Enchantment.WATER_WORKER, "Aqua Affinity");
+        EnchantmentNames.put(Enchantment.THORNS, "Thorns");
+        EnchantmentNames.put(Enchantment.DEPTH_STRIDER, "Depth Strider");
+        EnchantmentNames.put(Enchantment.FROST_WALKER, "Frost Walker");
+        EnchantmentNames.put(Enchantment.BINDING_CURSE, "Curse of Binding");
+        EnchantmentNames.put(Enchantment.DAMAGE_ALL, "Sharpness");
+        EnchantmentNames.put(Enchantment.DAMAGE_UNDEAD, "Smite");
+        EnchantmentNames.put(Enchantment.DAMAGE_ARTHROPODS, "Bane of Arthropods");
+        EnchantmentNames.put(Enchantment.KNOCKBACK, "Knockback");
+        EnchantmentNames.put(Enchantment.FIRE_ASPECT, "Fire Aspect");
+        EnchantmentNames.put(Enchantment.LOOT_BONUS_MOBS, "Looting");
+        EnchantmentNames.put(Enchantment.SWEEPING_EDGE, "Sweeping Edge");
+        EnchantmentNames.put(Enchantment.DIG_SPEED, "Efficiency");
+        EnchantmentNames.put(Enchantment.SILK_TOUCH, "Silk Touch");
+        EnchantmentNames.put(Enchantment.DURABILITY, "Unbreaking");
+        EnchantmentNames.put(Enchantment.LOOT_BONUS_BLOCKS, "Fortune");
+        EnchantmentNames.put(Enchantment.ARROW_DAMAGE, "Power");
+        EnchantmentNames.put(Enchantment.ARROW_KNOCKBACK, "Punch");
+        EnchantmentNames.put(Enchantment.ARROW_FIRE, "Flame");
+        EnchantmentNames.put(Enchantment.ARROW_INFINITE, "Infinity");
+        EnchantmentNames.put(Enchantment.LUCK, "Luck");
+        EnchantmentNames.put(Enchantment.LURE, "Lure");
+        EnchantmentNames.put(Enchantment.LOYALTY, "Loyalty");
+        EnchantmentNames.put(Enchantment.IMPALING, "Impaling");
+        EnchantmentNames.put(Enchantment.RIPTIDE, "Riptide");
+        EnchantmentNames.put(Enchantment.CHANNELING, "Channeling");
+        EnchantmentNames.put(Enchantment.MULTISHOT, "Multishot");
+        EnchantmentNames.put(Enchantment.QUICK_CHARGE, "Quick Charge");
+        EnchantmentNames.put(Enchantment.PIERCING, "Piercing");
+        EnchantmentNames.put(Enchantment.MENDING, "Mending");
+        EnchantmentNames.put(Enchantment.VANISHING_CURSE, "Curse of Vanishing");
+        EnchantmentNames.put(Enchantment.SOUL_SPEED, "Soul Speed");
+        EnchantmentNames.put(Enchantment.SWIFT_SNEAK, "Swift Sneak");
+
+        for (Enchantment enchantment : custom_enchants)
+        {
+            EnchantmentNames.put(enchantment, enchantment.getName());
+        }
     }
 
     public static void registerEnchantment(Enchantment enchantment) {
@@ -174,79 +215,6 @@ public class EnchantsClass {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "ERROR WHILE UNREGISTERING ENCHANTMENTS");
             exception.printStackTrace();
         }
-    }
-
-    public static HashMap<Enchantment, String> EnchantmentNames = new HashMap<>();
-    static {
-        // Don't need For Loop if you manually rename all enchants
-            /*
-            for (Enchantment enchantment : Enchantment.values()) {
-                EnchantmentNames.put(enchantment, enchantment.getKey().toString());
-            }
-
-             */
-        EnchantmentNames.put(Enchantment.PROTECTION_ENVIRONMENTAL, "Protection");
-        EnchantmentNames.put(Enchantment.PROTECTION_FIRE, "Fire Protection");
-        EnchantmentNames.put(Enchantment.PROTECTION_FALL, "Feather Falling");
-        EnchantmentNames.put(Enchantment.PROTECTION_EXPLOSIONS, "Blast Protection");
-        EnchantmentNames.put(Enchantment.PROTECTION_PROJECTILE, "Projectile Protection");
-        EnchantmentNames.put(Enchantment.OXYGEN, "Respiration");
-        EnchantmentNames.put(Enchantment.WATER_WORKER, "Aqua Affinity");
-        EnchantmentNames.put(Enchantment.THORNS, "Thorns");
-        EnchantmentNames.put(Enchantment.DEPTH_STRIDER, "Depth Strider");
-        EnchantmentNames.put(Enchantment.FROST_WALKER, "Frost Walker");
-        EnchantmentNames.put(Enchantment.BINDING_CURSE, "Curse of Binding");
-        EnchantmentNames.put(Enchantment.DAMAGE_ALL, "Sharpness");
-        EnchantmentNames.put(Enchantment.DAMAGE_UNDEAD, "Smite");
-        EnchantmentNames.put(Enchantment.DAMAGE_ARTHROPODS, "Bane of Arthropods");
-        EnchantmentNames.put(Enchantment.KNOCKBACK, "Knockback");
-        EnchantmentNames.put(Enchantment.FIRE_ASPECT, "Fire Aspect");
-        EnchantmentNames.put(Enchantment.LOOT_BONUS_MOBS, "Looting");
-        EnchantmentNames.put(Enchantment.SWEEPING_EDGE, "Sweeping Edge");
-        EnchantmentNames.put(Enchantment.DIG_SPEED, "Efficiency");
-        EnchantmentNames.put(Enchantment.SILK_TOUCH, "Silk Touch");
-        EnchantmentNames.put(Enchantment.DURABILITY, "Unbreaking");
-        EnchantmentNames.put(Enchantment.LOOT_BONUS_BLOCKS, "Fortune");
-        EnchantmentNames.put(Enchantment.ARROW_DAMAGE, "Power");
-        EnchantmentNames.put(Enchantment.ARROW_KNOCKBACK, "Punch");
-        EnchantmentNames.put(Enchantment.ARROW_FIRE, "Flame");
-        EnchantmentNames.put(Enchantment.ARROW_INFINITE, "Infinity");
-        EnchantmentNames.put(Enchantment.LUCK, "Luck");
-        EnchantmentNames.put(Enchantment.LURE, "Lure");
-        EnchantmentNames.put(Enchantment.LOYALTY, "Loyalty");
-        EnchantmentNames.put(Enchantment.IMPALING, "Impaling");
-        EnchantmentNames.put(Enchantment.RIPTIDE, "Riptide");
-        EnchantmentNames.put(Enchantment.CHANNELING, "Channeling");
-        EnchantmentNames.put(Enchantment.MULTISHOT, "Multishot");
-        EnchantmentNames.put(Enchantment.QUICK_CHARGE, "Quick Charge");
-        EnchantmentNames.put(Enchantment.PIERCING, "Piercing");
-        EnchantmentNames.put(Enchantment.MENDING, "Mending");
-        EnchantmentNames.put(Enchantment.VANISHING_CURSE, "Curse of Vanishing");
-        EnchantmentNames.put(Enchantment.SOUL_SPEED, "Soul Speed");
-        EnchantmentNames.put(Enchantment.SWIFT_SNEAK, "Swift Sneak");
-
-        /*
-        for (Enchantment customEnchant : custom_enchants) {
-            EnchantmentNames.put(customEnchant, customEnchant.getKey().toString());
-
-        }
-
-         */
-
-
-        EnchantmentNames.put(GLOW, "Glow");
-        EnchantmentNames.put(VENOMOUS_ASPECT, "Venomous Aspect");
-        EnchantmentNames.put(DECAY, "Decay");
-        EnchantmentNames.put(THUNDER_STRIKE, "Thunder Strike");
-        EnchantmentNames.put(MAGIC_PROTECTION, "Magic Protection");
-        EnchantmentNames.put(TOUGHNESS, "Toughness");
-        EnchantmentNames.put(MANA_POOL, "Mana Pool");
-        EnchantmentNames.put(MELEE_DAMAGE, "Strength");
-        EnchantmentNames.put(MAGIC_DAMAGE, "Arcane");
-        EnchantmentNames.put(RANGE_DAMAGE, "Archer");
-
-
-
     }
 
     public static HashMap<Integer, Enchantment> playerHeadEnchantmentTable = new HashMap<>();
@@ -323,6 +291,60 @@ public class EnchantsClass {
         return conflicting;
     }
 
+    public static List<String> enchantLore(Map<Enchantment, Integer> enchants) {
+
+        List<String> enchantLore = new ArrayList<>();
+        String enchantString;
+        for (Enchantment enchantment : enchants.keySet()) {
+            String enchantmentName = EnchantsClass.EnchantmentNames.get(enchantment);
+            int enchantLvl = enchants.get(enchantment);
+
+            if (enchantLvl == enchantment.getMaxLevel()) {
+                // Enchant is Max Level
+
+                // Check if is curse enchantment
+                if (enchantment.isCursed()) {
+                    enchantString = ChatColor.RED + enchantmentName + " " + enchantLvl;
+                } else {
+                    enchantString = ChatColor.GOLD + enchantmentName + " " + enchantLvl;
+                }
+
+            } else if (enchantLvl > enchantment.getMaxLevel()) {
+                // Enchant is over Max Level
+
+                // Check if is curse enchantment
+                if (enchantment.isCursed()) {
+                    enchantString = ChatColor.RED + enchantmentName + " " + enchantLvl;
+                } else {
+                    enchantString = ChatColor.LIGHT_PURPLE + enchantmentName + " " + enchantLvl;
+                }
+
+            } else if (enchantLvl > enchantment.getStartLevel() && enchantLvl < enchantment.getMaxLevel()) {
+                // Enchant is greater than start level, but lower than the max level
+
+                // Check if is curse enchantment
+                if (enchantment.isCursed()) {
+                    enchantString = ChatColor.RED + enchantmentName + " " + enchantLvl;
+                } else {
+                    enchantString = ChatColor.DARK_PURPLE + enchantmentName + " " + enchantLvl;
+                }
+
+            } else {
+                // Enchantment is the start level
+
+                // Check if is curse enchantment
+                if (enchantment.isCursed()) {
+                    enchantString = ChatColor.RED + enchantmentName + " " + enchantLvl;
+                } else {
+                    enchantString = ChatColor.GRAY + enchantmentName + " " + enchantLvl;
+                }
+            }
+            enchantLore.add(enchantString);
+        }
+
+        return enchantLore;
+    }
+
     public enum EnchantEnum {
 
         PROTECTION (Enchantment.PROTECTION_ENVIRONMENTAL, "protection"),
@@ -369,9 +391,17 @@ public class EnchantsClass {
         MAGIC_PROTECTION (EnchantsClass.MAGIC_PROTECTION, "magic_protection"),
         TOUGHNESS (EnchantsClass.TOUGHNESS, "toughness"),
         MANA_POOL (EnchantsClass.MANA_POOL, "mana_pool"),
-        STRENGTH (MELEE_DAMAGE, "strength"),
-        ARCANE (MAGIC_DAMAGE, "arcane"),
-        ARCHER (RANGE_DAMAGE, "archer");
+        STRENGTH (EnchantsClass.MELEE_DAMAGE, "strength"),
+        ARCANE (EnchantsClass.MAGIC_DAMAGE, "arcane"),
+        ARCHER (EnchantsClass.RANGE_DAMAGE, "archer"),
+        HEALTH (EnchantsClass.HEALTH, "health"),
+        NIGHT_VISION (EnchantsClass.NIGHT_VISION, "night_vision"),
+        SPEED (EnchantsClass.SPEED, "speed"),
+        REACH (EnchantsClass.REACH, "reach"),
+        ARMOR_MINING_FORTUNE (EnchantsClass.ARMOR_MINING_FORTUNE, "miner"),
+        ARMOR_FORAGING_FORTUNE (EnchantsClass.ARMOR_FORAGING_FORTUNE, "forager"),
+        ARMOR_FISHING_FORTUNE (EnchantsClass.ARMOR_FISHING_FORTUNE, "fishing");
+
 
         private final Enchantment enchantment;
         private final String commandName;

@@ -46,8 +46,21 @@ public class NetheriteArmorManager extends VentureArmorSet {
     }
 
     @Override
+    public Material setArmorPieceMaterial(ArmorPieceTypes armorPieceTypes) {
+        Material material = null;
+        switch (armorPieceTypes)
+        {
+            case HELMET -> material = Material.NETHERITE_HELMET;
+            case CHESTPLATE -> material = Material.NETHERITE_CHESTPLATE;
+            case LEGGINGS -> material = Material.NETHERITE_LEGGINGS;
+            case BOOTS -> material = Material.NETHERITE_BOOTS;
+        }
+        return material;
+    }
+
+    @Override
     public GetVarFile config() {
-        return null;
+        return armorConfig;
     }
 
     @Override
@@ -56,7 +69,7 @@ public class NetheriteArmorManager extends VentureArmorSet {
 
         double fireArmorMult = armorConfig.getDouble("NetheriteFireArmorMultiplier");
         HashMap<VentureItemStatKeys, Double> stats = createItemStats(armorPieceTypes, stars);
-        double armor = stats.get(VentureItemStatKeys.ARMOR_KEY);
+        double armor = stats.get(VentureItemStatKeys.ARMOR_DEFENSE_KEY);
         double fireArmor = armor * fireArmorMult;
         List<String> lore = new ArrayList<>();
 
@@ -105,9 +118,9 @@ public class NetheriteArmorManager extends VentureArmorSet {
         double fortitude = armorConfig.getDouble(armorSetName() + armorPieceTypes.getName() + "Fortitude");
 
         HashMap<VentureItemStatKeys, Double> stats = new HashMap<>();
-        stats.put(VentureItemStatKeys.ARMOR_KEY, armor);
-        stats.put(VentureItemStatKeys.TOUGHNESS_KEY, toughness);
-        stats.put(VentureItemStatKeys.FORTITUDE_KEY, fortitude);
+        stats.put(VentureItemStatKeys.ARMOR_DEFENSE_KEY, armor);
+        stats.put(VentureItemStatKeys.ARMOR_TOUGHNESS_KEY, toughness);
+        stats.put(VentureItemStatKeys.ARMOR_FORTITUDE_KEY, fortitude);
 
         return stats;
     }

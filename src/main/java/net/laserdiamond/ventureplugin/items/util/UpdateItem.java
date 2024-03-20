@@ -33,24 +33,20 @@ public class UpdateItem {
             if (itemMeta != null) {
 
                 // Trim Lore
-                try {
-                    ArmorMeta armorMeta = (ArmorMeta) itemMeta;
+                if (itemMeta instanceof ArmorMeta armorMeta)
+                {
                     List<String> trimLore = TrimLore.createLore(armorMeta);
                     newLore.addAll(trimLore);
-
-                } catch (ClassCastException ignored) {
                 }
 
                 // Enchant Lore
-                for (Enchantment enchantment : itemMeta.getEnchants().keySet()) {
-                    newLore.add(ItemMappings.enchantString(enchantment, itemMeta));
-                }
+                newLore.addAll(ItemForgerRegistry.enchantLore(itemMeta.getEnchants()));
 
                 // Item Lore
                 if (itemMeta.hasCustomModelData()) {
 
                     Integer stars = ItemForger.getItemStars(itemStack);
-                    HashMap<Integer, ItemForger> itemProfiles = ItemMappings.itemForgerHashMap(stars);
+                    HashMap<Integer, ItemForger> itemProfiles = ItemForgerRegistry.itemForgerHashMap(stars);
 
                     try {
 
@@ -96,7 +92,7 @@ public class UpdateItem {
 
                 // Enchant Lore
                 for (Enchantment enchantment : itemMeta.getEnchants().keySet()) {
-                    newLore.add(ItemMappings.enchantString(enchantment, itemMeta));
+                    newLore.add(ItemForgerRegistry.enchantString(enchantment, itemMeta));
 
                 }
 
@@ -104,8 +100,8 @@ public class UpdateItem {
                 if (itemMeta.hasCustomModelData()) {
 
                     Integer stars = ItemForger.getItemStars(itemStack);
-                    HashMap<Integer, ItemForger> itemProfiles = ItemMappings.itemForgerHashMap(stars);
-                    HashMap<Integer, List<String>> playerLoreProfiles = ItemMappings.itemLoreHashMapPlayer(stars, player);
+                    HashMap<Integer, ItemForger> itemProfiles = ItemForgerRegistry.itemForgerHashMap(stars);
+                    HashMap<Integer, List<String>> playerLoreProfiles = ItemForgerRegistry.itemLoreHashMapPlayer(stars, player);
 
                     try {
 
@@ -154,7 +150,7 @@ public class UpdateItem {
                     if (itemMeta.hasCustomModelData()) {
 
                         Integer stars = ItemForger.getItemStars(itemStack);
-                        HashMap<Integer, ItemForger> itemProfiles = ItemMappings.itemForgerHashMap(stars);
+                        HashMap<Integer, ItemForger> itemProfiles = ItemForgerRegistry.itemForgerHashMap(stars);
 
                         try {
                             ItemForger itemForger = itemProfiles.get(itemMeta.getCustomModelData());
@@ -200,7 +196,7 @@ public class UpdateItem {
 
                         Integer stars = ItemForger.getItemStars(itemStack);
 
-                        HashMap<Integer, ItemForger> itemForgerProfiles = ItemMappings.itemForgerHashMap(stars);
+                        HashMap<Integer, ItemForger> itemForgerProfiles = ItemForgerRegistry.itemForgerHashMap(stars);
 
                         try {
                             ItemForger itemForger = itemForgerProfiles.get(itemMeta.getCustomModelData());

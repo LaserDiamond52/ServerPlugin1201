@@ -5,15 +5,15 @@ import org.bukkit.NamespacedKey;
 
 public enum VentureItemStatKeys {
 
-    MELEE_DAMAGE_KEY (new NamespacedKey("itemdata", "melee_damage"), ChatColor.GRAY + "Melee Damage: +", ChatColor.RED),
-    RANGE_DAMAGE_KEY (new NamespacedKey("itemdata", "range_damage"), ChatColor.GRAY + "Range Damage: +", ChatColor.DARK_PURPLE),
-    MAGIC_DAMAGE_KEY (new NamespacedKey("itemdata", "magic_damage"), ChatColor.GRAY + "Magic Damage: +", ChatColor.AQUA),
-    MAX_MANA_KEY (new NamespacedKey("itemdata", "max_mana"), ChatColor.GRAY + "Mana: +", ChatColor.BLUE),
-    HEALTH_KEY (new NamespacedKey("itemdata", "health"), ChatColor.GRAY + "Health: +", ChatColor.RED),
-    ARMOR_KEY (new NamespacedKey("itemdata", "armor"), ChatColor.GRAY + "Armor: +", ChatColor.GREEN),
-    TOUGHNESS_KEY (new NamespacedKey("itemdata", "toughness"), ChatColor.GRAY + "Toughness: +", ChatColor.GREEN),
-    FORTITUDE_KEY (new NamespacedKey("itemdata", "fortitude"), ChatColor.GRAY + "Fortitude: +", ChatColor.DARK_GREEN),
-    SPEED_KEY (new NamespacedKey("itemdata", "speed"), ChatColor.GRAY + "Speed: +", ChatColor.WHITE);
+    ARMOR_MELEE_DAMAGE_KEY(new NamespacedKey("armor_data", "melee_damage"), ChatColor.GRAY + "Melee Damage: +", ChatColor.RED),
+    ARMOR_RANGE_DAMAGE_KEY(new NamespacedKey("armor_data", "range_damage"), ChatColor.GRAY + "Range Damage: +", ChatColor.DARK_PURPLE),
+    ARMOR_MAGIC_DAMAGE_KEY(new NamespacedKey("armor_data", "magic_damage"), ChatColor.GRAY + "Magic Damage: +", ChatColor.AQUA),
+    ARMOR_MAX_MANA_KEY(new NamespacedKey("armor_data", "max_mana"), ChatColor.GRAY + "Mana: +", ChatColor.BLUE),
+    ARMOR_HEALTH_KEY(new NamespacedKey("armor_data", "health"), ChatColor.GRAY + "Health: +", ChatColor.RED),
+    ARMOR_DEFENSE_KEY(new NamespacedKey("armor_data", "armor"), ChatColor.GRAY + "Armor: +", ChatColor.GREEN),
+    ARMOR_TOUGHNESS_KEY(new NamespacedKey("armor_data", "toughness"), ChatColor.GRAY + "Toughness: +", ChatColor.GREEN),
+    ARMOR_FORTITUDE_KEY(new NamespacedKey("armor_data", "fortitude"), ChatColor.GRAY + "Fortitude: +", ChatColor.DARK_GREEN),
+    ARMOR_SPEED_KEY(new NamespacedKey("armor_data", "speed"), ChatColor.GRAY + "Speed: +", ChatColor.WHITE);
 
     private final NamespacedKey key;
     private final String displayName;
@@ -27,7 +27,7 @@ public enum VentureItemStatKeys {
 
     public static boolean isPercentageStat(VentureItemStatKeys ventureItemStatKeys) {
 
-        if (ventureItemStatKeys.equals(MELEE_DAMAGE_KEY) || ventureItemStatKeys.equals(RANGE_DAMAGE_KEY) || ventureItemStatKeys.equals(MAGIC_DAMAGE_KEY)) {
+        if (ventureItemStatKeys.equals(ARMOR_MELEE_DAMAGE_KEY) || ventureItemStatKeys.equals(ARMOR_RANGE_DAMAGE_KEY) || ventureItemStatKeys.equals(ARMOR_MAGIC_DAMAGE_KEY)) {
             return true;
         }
         return false;

@@ -477,7 +477,7 @@ public class EnchantListeners implements Listener, AbilityListener, AbilityCasti
             ItemMeta helmetMeta = helmet.getItemMeta();
             if (helmetMeta != null && helmetMeta.hasEnchants())
             {
-                if (helmetMeta.hasEnchant(EnchantsClass.NIGH_VISION))
+                if (helmetMeta.hasEnchant(EnchantsClass.NIGHT_VISION))
                 {
                     player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 100, 0));
                 }

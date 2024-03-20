@@ -6,13 +6,11 @@ import net.laserdiamond.ventureplugin.enchants.Components.EnchantsClass;
 import net.laserdiamond.ventureplugin.entities.player.StatPlayer;
 import net.laserdiamond.ventureplugin.events.damage.PlayerMagicDamageEvent;
 import net.laserdiamond.ventureplugin.events.mana.PlayerSpellCastEvent;
-import net.laserdiamond.ventureplugin.items.armor.ArmorEquipStats;
 import net.laserdiamond.ventureplugin.items.armor.StormLord.Config.StormLordArmorConfig;
 import net.laserdiamond.ventureplugin.items.util.ItemForger;
 import net.laserdiamond.ventureplugin.items.util.ItemNameBuilder;
 import net.laserdiamond.ventureplugin.items.util.VentureItemRarity;
 import net.laserdiamond.ventureplugin.items.util.armor.ArmorCMD;
-import net.laserdiamond.ventureplugin.items.util.armor.ArmorCMDWrapper;
 import net.laserdiamond.ventureplugin.items.util.armor.ArmorPieceTypes;
 import net.laserdiamond.ventureplugin.events.abilities.*;
 import net.laserdiamond.ventureplugin.items.util.armor.VentureArmorSet;
@@ -37,12 +35,12 @@ import java.util.*;
 
 public class StormLordArmorManager extends VentureArmorSet implements AbilityCasting.DropItemSpell {
 
-    private static final VenturePlugin PLUGIN = VenturePlugin.getInstance();
-    private static final StormLordArmorConfig ARMOR_CONFIG = PLUGIN.getStormLordArmorConfig();
+    private final VenturePlugin plugin = VenturePlugin.getInstance();
+    private final StormLordArmorConfig armorConfig = plugin.getStormLordArmorConfig();
 
     @Override
     public @NotNull String armorSetName() {
-        return "Storm Lord ";
+        return "Storm Lord";
     }
 
     @Override
@@ -51,8 +49,21 @@ public class StormLordArmorManager extends VentureArmorSet implements AbilityCas
     }
 
     @Override
+    public Material setArmorPieceMaterial(ArmorPieceTypes armorPieceTypes) {
+        Material material = null;
+        switch (armorPieceTypes)
+        {
+            case HELMET -> material = Material.PLAYER_HEAD;
+            case CHESTPLATE -> material = Material.LEATHER_CHESTPLATE;
+            case LEGGINGS -> material = Material.LEATHER_LEGGINGS;
+            case BOOTS -> material = Material.LEATHER_BOOTS;
+        }
+        return material;
+    }
+
+    @Override
     public GetVarFile config() {
-        return PLUGIN.getStormLordArmorConfig();
+        return plugin.getStormLordArmorConfig();
     }
 
     @Override
@@ -159,7 +170,7 @@ public class StormLordArmorManager extends VentureArmorSet implements AbilityCas
         ItemStack item = new ItemStack(Material.STONE_SWORD);
         ItemMeta itemMeta = item.getItemMeta();
 
-        double knockbackRes = ARMOR_CONFIG.getDouble("knockBackRes") * 0.1;
+        double knockbackRes = armorConfig.getDouble("knockBackRes") * 0.1;
 
         AttributeModifier knockbackResModifier = new AttributeModifier(UUID.randomUUID(), "generic.knockbackRes", knockbackRes, AttributeModifier.Operation.ADD_NUMBER, armorPieceTypes.getEquipmentSlot());
         itemMeta.addAttributeModifier(Attribute.GENERIC_KNOCKBACK_RESISTANCE, knockbackResModifier);
@@ -181,12 +192,12 @@ public class StormLordArmorManager extends VentureArmorSet implements AbilityCas
         double fortitude = config().getDouble("fortitude");
 
         HashMap<VentureItemStatKeys, Double> itemStatKeysDoubleHashMap = new HashMap<>();
-        itemStatKeysDoubleHashMap.put(VentureItemStatKeys.MAX_MANA_KEY, mana);
-        itemStatKeysDoubleHashMap.put(VentureItemStatKeys.MAGIC_DAMAGE_KEY, magicDamage);
-        itemStatKeysDoubleHashMap.put(VentureItemStatKeys.HEALTH_KEY, health);
-        itemStatKeysDoubleHashMap.put(VentureItemStatKeys.ARMOR_KEY, armor);
-        itemStatKeysDoubleHashMap.put(VentureItemStatKeys.TOUGHNESS_KEY, toughness);
-        itemStatKeysDoubleHashMap.put(VentureItemStatKeys.FORTITUDE_KEY, fortitude);
+        itemStatKeysDoubleHashMap.put(VentureItemStatKeys.ARMOR_MAX_MANA_KEY, mana);
+        itemStatKeysDoubleHashMap.put(VentureItemStatKeys.ARMOR_MAGIC_DAMAGE_KEY, magicDamage);
+        itemStatKeysDoubleHashMap.put(VentureItemStatKeys.ARMOR_HEALTH_KEY, health);
+        itemStatKeysDoubleHashMap.put(VentureItemStatKeys.ARMOR_DEFENSE_KEY, armor);
+        itemStatKeysDoubleHashMap.put(VentureItemStatKeys.ARMOR_TOUGHNESS_KEY, toughness);
+        itemStatKeysDoubleHashMap.put(VentureItemStatKeys.ARMOR_FORTITUDE_KEY, fortitude);
         return itemStatKeysDoubleHashMap;
     }
 
@@ -246,12 +257,12 @@ public class StormLordArmorManager extends VentureArmorSet implements AbilityCas
         Player player = event.getPlayer();
         StatPlayer statPlayer = new StatPlayer(player);
         Stats stats = statPlayer.getStats();
-        String abilityName = ARMOR_CONFIG.getString("abilityName");
+        String abilityName = armorConfig.getString("abilityName");
         double availableMana = stats.getAvailableMana();
-        double manaCost = ARMOR_CONFIG.getDouble("manaCost");
-        int cooldown = ARMOR_CONFIG.getInt("cooldown");
-        double baseDamage = ARMOR_CONFIG.getDouble("baseDamage");
-        double blastRadius = ARMOR_CONFIG.getDouble("blastRadius");
+        double manaCost = armorConfig.getDouble("manaCost");
+        int cooldown = armorConfig.getInt("cooldown");
+        double baseDamage = armorConfig.getDouble("baseDamage");
+        double blastRadius = armorConfig.getDouble("blastRadius");
 
         PlayerSpellCastEvent spellCastEvent = new PlayerSpellCastEvent(player, manaCost);
         double eventCost = spellCastEvent.getManaCost();

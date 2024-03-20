@@ -36,7 +36,7 @@ import net.laserdiamond.ventureplugin.items.armor.Trims.Config.ArmorTrimConfig;
 import net.laserdiamond.ventureplugin.items.armor.Vanilla.Components.NetheriteArmorManager;
 import net.laserdiamond.ventureplugin.items.armor.Vanilla.Config.VanillaArmorConfig;
 import net.laserdiamond.ventureplugin.items.crafting.SmithingTable.SmithingTableCrafting;
-import net.laserdiamond.ventureplugin.items.util.ItemMappings;
+import net.laserdiamond.ventureplugin.items.util.ItemForgerRegistry;
 import net.laserdiamond.ventureplugin.entities.healthDisplay.mobHealthDisplay;
 import net.laserdiamond.ventureplugin.events.abilities.AbilityListener;
 import net.laserdiamond.ventureplugin.util.RegisterAbilityCaster;
@@ -107,7 +107,7 @@ public final class VenturePlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ManaRegen(this),this);
 
         // Refresh Items
-        getServer().getPluginManager().registerEvents(new ItemMappings(this),this);
+        getServer().getPluginManager().registerEvents(new ItemForgerRegistry(this),this);
 
         // Damage
         getServer().getPluginManager().registerEvents(new DamageEvent(this),this);
