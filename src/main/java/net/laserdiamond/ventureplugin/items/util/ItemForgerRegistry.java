@@ -62,8 +62,8 @@ public class ItemForgerRegistry implements Listener {
         // Armor Items
         for (ArmorPieceTypes armorPieceTypes : ArmorPieceTypes.values()) {
 
-            itemForgerHashMap.put(netheriteArmorManager.createArmorPiece(armorPieceTypes, stars).getCustomModelData(), netheriteArmorManager.createArmorPiece(armorPieceTypes, stars));
-            itemForgerHashMap.put(stormLordArmorManager.createArmorPiece(armorPieceTypes, stars).getCustomModelData(), stormLordArmorManager.createArmorPiece(armorPieceTypes, stars));
+            //itemForgerHashMap.put(netheriteArmorManager.createArmorPiece(armorPieceTypes, stars).getCustomModelData(), netheriteArmorManager.createArmorPiece(armorPieceTypes, stars));
+            //itemForgerHashMap.put(stormLordArmorManager.createArmorPiece(armorPieceTypes, stars).getCustomModelData(), stormLordArmorManager.createArmorPiece(armorPieceTypes, stars));
         }
 
 
@@ -89,7 +89,7 @@ public class ItemForgerRegistry implements Listener {
 
         // Armor Items
         for (ArmorPieceTypes armorPieceTypes : ArmorPieceTypes.values()) {
-            itemLoreHashMapPlayer.put(stormLordArmorManager.createArmorPiece(armorPieceTypes, stars).getCustomModelData(), stormLordArmorManager.createPlayerLore(player, armorPieceTypes, stars));
+            //itemLoreHashMapPlayer.put(stormLordArmorManager.createArmorPiece(armorPieceTypes, stars).getCustomModelData(), stormLordArmorManager.createPlayerLore(player, armorPieceTypes, stars));
         }
 
         // Weapons/Tools
@@ -484,7 +484,7 @@ public class ItemForgerRegistry implements Listener {
     @Deprecated
     public enum ItemMaps {
 
-
+        /*
         NETHERITE_BOOTS (netheriteArmorManager.createArmorPiece(ArmorPieceTypes.BOOTS, 0), "netherite_boots"),
         NETHERITE_LEGGINGS (netheriteArmorManager.createArmorPiece(ArmorPieceTypes.LEGGINGS, 0), "netherite_leggings"),
         NETHERITE_CHESTPLATE (netheriteArmorManager.createArmorPiece(ArmorPieceTypes.CHESTPLATE, 0), "netherite_chestplate"),
@@ -493,7 +493,9 @@ public class ItemForgerRegistry implements Listener {
         STORM_LORD_BOOTS (stormLordArmorManager.createArmorPiece(ArmorPieceTypes.BOOTS, 0), "storm_lord_boots"),
         STORM_LORD_LEGGINGS (stormLordArmorManager.createArmorPiece(ArmorPieceTypes.LEGGINGS, 0),"storm_lord_leggings"),
         STORM_LORD_CHESTPLATE (stormLordArmorManager.createArmorPiece(ArmorPieceTypes.CHESTPLATE, 0), "storm_lord_chestplate"),
-        STORM_LORD_HELMET (stormLordArmorManager.createArmorPiece(ArmorPieceTypes.HELMET,0), "storm_lord_helmet");
+        STORM_LORD_HELMET (stormLordArmorManager.createArmorPiece(ArmorPieceTypes.HELMET,0), "storm_lord_helmet")
+        */
+        ;
 
         private final ItemForger itemForger;
         private final String name;

@@ -15,16 +15,25 @@ helmetMana: 120
 helmetHealth: 4
 helmetArmor: 3
 
+chestplateRed: 0
+chestplateGreen: 213
+chestplateBlue: 255
 chestplateMagicDamage : 10
 chestplateMana: 100
 chestplateHealth: 7
 chestplateArmor: 8
 
+leggingsRed: 0
+leggingsGreen: 160
+leggingsBlue: 191
 leggingsMagicDamage: 10
 leggingsMana: 100
 leggingsHealth: 5
 leggingsArmor: 6
 
+bootsRed: 0
+bootsGreen: 124
+bootsBlue: 148
 bootsMagicDamage: 10
 bootsMana: 100
 bootsHealth: 4

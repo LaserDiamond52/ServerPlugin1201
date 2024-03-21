@@ -12,6 +12,7 @@ import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
@@ -294,6 +295,15 @@ public class ItemForger {
         return false;
     }
 
+    public ItemForger addAttributeModifer(String name, double amount, Attribute attribute, AttributeModifier.Operation operation, EquipmentSlot equipmentSlot)
+    {
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        AttributeModifier attributeModifier = new AttributeModifier(UUID.randomUUID(), name, amount, operation, equipmentSlot);
+        addAttributeModifier(attribute, attributeModifier);
+        itemStack.setItemMeta(itemMeta);
+        return this;
+    }
+
     public ItemForger addAttributeModifier(Attribute attribute, AttributeModifier attributeModifier) {
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.addAttributeModifier(attribute, attributeModifier);
@@ -310,6 +320,14 @@ public class ItemForger {
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.setAttributeModifiers(attributeModifiers);
         if (hideAttributes) itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        itemStack.setItemMeta(itemMeta);
+        return this;
+    }
+
+    public ItemForger removeAttributeModifiers(Attribute attribute)
+    {
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        itemMeta.removeAttributeModifier(attribute);
         itemStack.setItemMeta(itemMeta);
         return this;
     }

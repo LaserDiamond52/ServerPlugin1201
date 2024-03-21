@@ -35,10 +35,9 @@ import net.laserdiamond.ventureplugin.items.armor.StormLord.Config.StormLordArmo
 import net.laserdiamond.ventureplugin.items.armor.Trims.Components.TrimMaterialListeners;
 import net.laserdiamond.ventureplugin.items.armor.Trims.Config.ArmorTrimConfig;
 import net.laserdiamond.ventureplugin.items.armor.Vanilla.Components.NetheriteArmorManager;
-import net.laserdiamond.ventureplugin.items.armor.Vanilla.Config.VanillaArmorConfig;
+import net.laserdiamond.ventureplugin.items.armor.Vanilla.Config.NetheriteArmorConfig;
 import net.laserdiamond.ventureplugin.items.crafting.SmithingTable.SmithingTableCrafting;
 import net.laserdiamond.ventureplugin.items.util.ItemForger;
-import net.laserdiamond.ventureplugin.items.util.ItemForgerRegistry;
 import net.laserdiamond.ventureplugin.entities.healthDisplay.mobHealthDisplay;
 import net.laserdiamond.ventureplugin.events.abilities.AbilityListener;
 import net.laserdiamond.ventureplugin.util.ItemRegistry;
@@ -80,7 +79,7 @@ public final class VenturePlugin extends JavaPlugin {
     private HashMap<ItemRegistryKey, ItemForger> playerItemRegistry;
 
     private NetheriteArmorManager netheriteArmorManager;
-    private VanillaArmorConfig vanillaArmorConfig;
+    private NetheriteArmorConfig netheriteArmorConfig;
     private BlazeArmorConfig blazeArmorConfig;
     private BlazeArmorManager blazeArmorManager;
     private StormLordArmorConfig stormLordArmorConfig;
@@ -198,6 +197,7 @@ public final class VenturePlugin extends JavaPlugin {
     {
         return abilityListeners;
     }
+    // TODO: Make ability listeners register from the class they originate from
     public List<Method> getAbilityMethods(AbilityCastType abilityCastType)
     {
         switch (abilityCastType)
@@ -252,8 +252,8 @@ public final class VenturePlugin extends JavaPlugin {
     public ArmorTrimConfig getArmorTrimConfig() {
         return armorTrimConfig;
     }
-    public VanillaArmorConfig getVanillaArmorConfig() {
-        return vanillaArmorConfig;
+    public NetheriteArmorConfig getNetheriteArmorConfig() {
+        return netheriteArmorConfig;
     }
     public BlazeArmorConfig getBlazeArmorConfig() {
         return blazeArmorConfig;
@@ -280,8 +280,8 @@ public final class VenturePlugin extends JavaPlugin {
     }
 
     private void createItemConfigs() {
-        vanillaArmorConfig = new VanillaArmorConfig(this, "vanilla_armor");
-        vanillaArmorConfig.loadConfig();
+        netheriteArmorConfig = new NetheriteArmorConfig(this, "netherite");
+        netheriteArmorConfig.loadConfig();
 
         blazeArmorConfig = new BlazeArmorConfig(this, "blaze");
         blazeArmorConfig.loadConfig();
@@ -299,7 +299,7 @@ public final class VenturePlugin extends JavaPlugin {
         effectManager.loadProfilesFromConfig();
     }
     private void createItemManagers() {
-        netheriteArmorManager = new NetheriteArmorManager(this);
+        netheriteArmorManager = new NetheriteArmorManager();
         blazeArmorManager = new BlazeArmorManager();
         stormLordArmorManager = new StormLordArmorManager();
     }

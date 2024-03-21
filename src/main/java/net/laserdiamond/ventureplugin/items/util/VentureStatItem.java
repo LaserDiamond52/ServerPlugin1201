@@ -55,6 +55,7 @@ public abstract class VentureStatItem {
             List<String> statLore = ItemForger.createStatLore(statMap);
             baseLore.addAll(statLore);
         }
+        baseLore.add(" ");
         return baseLore;
     }
 

@@ -7,7 +7,6 @@ import net.laserdiamond.ventureplugin.items.util.ItemForger;
 import net.laserdiamond.ventureplugin.items.util.ItemForgerRegistry;
 import net.laserdiamond.ventureplugin.items.util.ItemNameBuilder;
 import net.laserdiamond.ventureplugin.items.util.VentureStatItem;
-import net.laserdiamond.ventureplugin.util.ItemRegistry;
 import net.laserdiamond.ventureplugin.util.ItemRegistryKey;
 import net.laserdiamond.ventureplugin.util.VentureItemStatKeys;
 import org.bukkit.Color;
@@ -15,6 +14,9 @@ import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -48,14 +50,14 @@ public abstract class VentureArmorSet extends VentureStatItem {
      * @param armorPieceTypes The armor piece type
      * @return The material for the armor piece type
      */
-    public abstract Material getArmorPieceMaterial(ArmorPieceTypes armorPieceTypes);
+    public abstract Material armorPieceMaterials(ArmorPieceTypes armorPieceTypes);
 
     /**
      * Sets the armor color for leather armor
      * @param armorPieceTypes The armor piece type
      * @return the color for the armor piece
      */
-    public Color setArmorColor(ArmorPieceTypes armorPieceTypes)
+    public Color armorColors(ArmorPieceTypes armorPieceTypes)
     {
         String armorPieceString = armorPieceTypes.getName();
         int red = config().getInt(armorPieceString + "Red");
@@ -110,24 +112,6 @@ public abstract class VentureArmorSet extends VentureStatItem {
     }
 
     /**
-     * Creates vanilla attributes for the item
-     * @param armorPieceTypes The armor piece type
-     * @param stars The amount of stars the item has
-     * @return The attributes for the item
-     */
-    @Deprecated
-    public abstract Multimap<Attribute, AttributeModifier> createAttributes(@NotNull ArmorPieceTypes armorPieceTypes, int stars);
-
-    /**
-     * Creates Venture Plugin Item Stats for the item
-     * @param armorPieceTypes The armor piece type
-     * @param stars The amount of stars the item has
-     * @return The Venture Item Stats
-     */
-    @Deprecated
-    public abstract HashMap<VentureItemStatKeys, Double> createItemStats(@NotNull ArmorPieceTypes armorPieceTypes, int stars);
-
-    /**
      * Creates Venture Plugin Item Stats for the item
      * @param armorPieceTypes The armor piece type
      * @param stars The amount of stars the item has
@@ -161,14 +145,39 @@ public abstract class VentureArmorSet extends VentureStatItem {
         return itemStatKeysDoubleHashMap;
     }
 
-    /**
-     * Creates the Armor Piece for the item as an ItemForger instance
-     * @param armorPieceTypes The armor piece type
-     * @param stars The amount of stars the item has
-     * @return The Venture armor piece as an ItemForger instance
-     */
-    @Deprecated
-    public abstract ItemForger createArmorPiece(@NotNull ArmorPieceTypes armorPieceTypes, int stars);
+    public Multimap<Attribute, AttributeModifier> createArmorAttributes(@NotNull ArmorPieceTypes armorPieceTypes, int stars)
+    {
+        List<Attribute> armorAttributes = new ArrayList<>();
+        armorAttributes.add(Attribute.GENERIC_ATTACK_DAMAGE);
+        armorAttributes.add(Attribute.GENERIC_ARMOR);
+        armorAttributes.add(Attribute.GENERIC_ARMOR_TOUGHNESS);
+
+        String armorPiece = armorPieceTypes.getName();
+        double damage = config().getDouble(armorPiece + "AttackDamage") * (1 + stars * this.starBonus);
+        double armor = config().getDouble(armorPiece + "Armor") * (1 + stars * this.starBonus);
+        double toughness = config().getDouble("toughness");
+        ItemForger itemForger = new ItemForger(Material.STONE_SWORD);
+        for (ArmorPieceTypes armorPieceTypes1 : ArmorPieceTypes.values())
+        {
+            EquipmentSlot slot = armorPieceTypes1.getEquipmentSlot();
+            for (Attribute attribute : armorAttributes)
+            {
+                double amount = 0;
+                switch (attribute)
+                {
+                    case GENERIC_ATTACK_DAMAGE -> amount = damage;
+                    case GENERIC_ARMOR -> amount = armor;
+                    case GENERIC_ARMOR_TOUGHNESS -> amount = toughness;
+                }
+                if (amount != 0)
+                {
+                    itemForger.addAttributeModifer(attribute.getKey().toString(), amount, attribute, AttributeModifier.Operation.ADD_NUMBER, slot);
+                }
+            }
+
+        }
+        return itemForger.getAttributes();
+    }
 
     // TODO: Advanced Armor set piece generator
 
@@ -182,20 +191,20 @@ public abstract class VentureArmorSet extends VentureStatItem {
     {
         String armorPieceString = armorPieceTypes.getName();
         String armorName = armorPieceString.substring(0,1).toUpperCase() + armorPieceString.substring(1);
-        ItemForger itemForger = new ItemForger(getArmorPieceMaterial(armorPieceTypes))
+        ItemForger itemForger = new ItemForger(armorPieceMaterials(armorPieceTypes))
                 .setName(ItemNameBuilder.name(armorSetName() + " " + armorName, stars))
                 .setStars(stars)
                 .setLore(createLore(armorPieceTypes, stars))
                 .setRarity(rarity())
                 .setUnbreakable(isUnbreakable())
                 .setFireResistant(isFireResistant())
-                .setItemStats(createVentureStats(armorPieceTypes, stars))
-                .setAttributeModifiers(createAttributes(armorPieceTypes, stars), true);
+                .setAttributeModifiers(createArmorAttributes(armorPieceTypes, stars), true)
+                .setItemStats(createVentureStats(armorPieceTypes, stars));
 
-        switch (getArmorPieceMaterial(armorPieceTypes))
+        switch (armorPieceMaterials(armorPieceTypes))
         {
             case PLAYER_HEAD -> itemForger.setPlayerHeadSkin(playerHeadSkin(), sigBits()[0], sigBits()[1]);
-            case LEATHER_HELMET, LEATHER_CHESTPLATE, LEATHER_LEGGINGS, LEATHER_BOOTS -> itemForger.LeatherArmorColor(setArmorColor(armorPieceTypes));
+            case LEATHER_HELMET, LEATHER_CHESTPLATE, LEATHER_LEGGINGS, LEATHER_BOOTS -> itemForger.LeatherArmorColor(armorColors(armorPieceTypes));
         }
 
         switch (armorPieceTypes)
@@ -219,20 +228,20 @@ public abstract class VentureArmorSet extends VentureStatItem {
     {
         String armorPieceString = armorPieceTypes.getName();
         String armorName = armorPieceString.substring(0,1).toUpperCase() + armorPieceString.substring(1);
-        ItemForger itemForger = new ItemForger(getArmorPieceMaterial(armorPieceTypes))
+        ItemForger itemForger = new ItemForger(armorPieceMaterials(armorPieceTypes))
                 .setName(ItemNameBuilder.name(armorSetName() + " " + armorName, stars))
                 .setStars(stars)
                 .setLore(createPlayerLore(player, armorPieceTypes, stars))
                 .setRarity(rarity())
                 .setUnbreakable(isUnbreakable())
                 .setFireResistant(isFireResistant())
-                .setItemStats(createVentureStats(armorPieceTypes, stars))
-                .setAttributeModifiers(createAttributes(armorPieceTypes, stars), true);
+                .setAttributeModifiers(createArmorAttributes(armorPieceTypes, stars), true)
+                .setItemStats(createVentureStats(armorPieceTypes, stars));
 
-        switch (getArmorPieceMaterial(armorPieceTypes))
+        switch (armorPieceMaterials(armorPieceTypes))
         {
             case PLAYER_HEAD -> itemForger.setPlayerHeadSkin(playerHeadSkin(), sigBits()[0], sigBits()[1]);
-            case LEATHER_HELMET, LEATHER_CHESTPLATE, LEATHER_LEGGINGS, LEATHER_BOOTS -> itemForger.LeatherArmorColor(setArmorColor(armorPieceTypes));
+            case LEATHER_HELMET, LEATHER_CHESTPLATE, LEATHER_LEGGINGS, LEATHER_BOOTS -> itemForger.LeatherArmorColor(armorColors(armorPieceTypes));
         }
 
         switch (armorPieceTypes)

@@ -11,15 +11,15 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.io.IOException;
 
-public class VanillaArmorConfig implements GetVarFile {
+public class NetheriteArmorConfig implements GetVarFile {
 
-    private VenturePlugin plugin;
-    private String fileName;
-    private File folders;
-    private File file;
-    private FileConfiguration config = new YamlConfiguration();
+    private final VenturePlugin plugin;
+    private final String fileName;
+    private final File folders;
+    private final File file;
+    private final FileConfiguration config = new YamlConfiguration();
 
-    public VanillaArmorConfig(VenturePlugin plugin, String fileName) {
+    public NetheriteArmorConfig(VenturePlugin plugin, String fileName) {
         this.plugin = plugin;
         this.fileName = fileName;
         folders = new File(plugin.getDataFolder() + File.separator + "items" + File.separator + "armor" + File.separator + "vanilla");
@@ -34,7 +34,7 @@ public class VanillaArmorConfig implements GetVarFile {
         try {
             config.load(file);
         } catch (IOException | InvalidConfigurationException exception) {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "ERROR LOADING VANILLA ARMOR CONFIG FROM FILE");
+            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "ERROR LOADING NETHERITE ARMOR CONFIG FROM FILE");
             exception.printStackTrace();
         }
     }

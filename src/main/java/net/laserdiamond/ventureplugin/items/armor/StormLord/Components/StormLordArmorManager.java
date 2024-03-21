@@ -20,6 +20,7 @@ import net.laserdiamond.ventureplugin.util.messages.Messages;
 import net.laserdiamond.ventureplugin.stats.Components.Stats;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -38,9 +39,20 @@ public class StormLordArmorManager extends VentureArmorSet implements AbilityCas
     private final VenturePlugin plugin = VenturePlugin.getInstance();
     private final StormLordArmorConfig armorConfig = plugin.getStormLordArmorConfig();
 
+    public StormLordArmorManager()
+    {
+        // TODO: Register ability listener in here
+        registerArmorSet();
+    }
+
     @Override
     public @NotNull String armorSetName() {
         return "Storm Lord";
+    }
+
+    @Override
+    public GetVarFile config() {
+        return plugin.getStormLordArmorConfig();
     }
 
     @Override
@@ -49,7 +61,22 @@ public class StormLordArmorManager extends VentureArmorSet implements AbilityCas
     }
 
     @Override
-    public Material getArmorPieceMaterial(ArmorPieceTypes armorPieceTypes) {
+    public boolean isFireResistant() {
+        return true;
+    }
+
+    @Override
+    public boolean isUnbreakable() {
+        return true;
+    }
+
+    @Override
+    public VentureItemRarity.Rarity rarity() {
+        return VentureItemRarity.Rarity.FABLED;
+    }
+
+    @Override
+    public Material armorPieceMaterials(ArmorPieceTypes armorPieceTypes) {
         Material material = null;
         switch (armorPieceTypes)
         {
@@ -62,26 +89,24 @@ public class StormLordArmorManager extends VentureArmorSet implements AbilityCas
     }
 
     @Override
-    public GetVarFile config() {
-        return plugin.getStormLordArmorConfig();
+    public Color armorColors(ArmorPieceTypes armorPieceTypes) {
+        return super.armorColors(armorPieceTypes);
     }
 
     @Override
-    public List<String> createLore(@NotNull ArmorPieceTypes armorPieceTypes, int stars)
-    {
-        HashMap<VentureItemStatKeys, Double> itemStatKeysMap = createItemStats(armorPieceTypes, stars);
+    public HashMap<VentureItemStatKeys, Double> createVentureStats(@NotNull ArmorPieceTypes armorPieceTypes, int stars) {
+        return super.createVentureStats(armorPieceTypes, stars);
+    }
 
-        List<String> lore = new ArrayList<>();
-
+    @Override
+    public List<String> createLore(@NotNull ArmorPieceTypes armorPieceTypes, int stars) {
         int blastRadius = config().getInt("blastRadius");
         int weaknessLvl = config().getInt("weaknessLvl");
         double weaknessDuration = config().getDouble("weaknessDuration");
         int cooldown = config().getInt("cooldown");
         double manaCost = config().getDouble("manaCost");
 
-
-        this.createStatLore(itemStatKeysMap);
-        lore.add(" ");
+        List<String> lore = super.createLore(armorPieceTypes, stars);
         lore.add(ChatColor.GOLD + "Full Set Bonus: Eye of the Storm" + ChatColor.YELLOW + " " + ChatColor.BOLD + "Press Q");
         lore.add(" ");
         lore.add(ChatColor.GRAY + "Grants all items with the " + ChatColor.AQUA + "Thunder Strike" + ChatColor.GRAY + " enchantment");
@@ -113,141 +138,22 @@ public class StormLordArmorManager extends VentureArmorSet implements AbilityCas
         // X should be determined by...
         // -Thunder Strike enchantment level
         // -Magic Damage
-
         return lore;
     }
 
     @Override
-    public List<String> createPlayerLore(@NotNull Player player, @NotNull ArmorPieceTypes armorPieceTypes, int stars) {
-
-        HashMap<VentureItemStatKeys, Double> itemStatKeysMap = createItemStats(armorPieceTypes, stars);
-
-        List<String> lore = this.createStatLore(itemStatKeysMap);
-
-        int blastRadius = config().getInt("blastRadius");
-        int weaknessLvl = config().getInt("weaknessLvl");
-        double weaknessDuration = config().getDouble("weaknessDuration");
-        int cooldown = config().getInt("cooldown");
-        double manaCost = config().getDouble("manaCost");
-
-        double baseDamage = config().getDouble("baseDamage");
-        if (player.getInventory().getItemInMainHand().getItemMeta() != null)
-        {
-            ItemMeta itemMeta = player.getInventory().getItemInMainHand().getItemMeta();
-            if (itemMeta.hasEnchant(EnchantsClass.THUNDER_STRIKE)) {
-                int thunderStrikeLevel = player.getInventory().getItemInMainHand().getItemMeta().getEnchantLevel(EnchantsClass.THUNDER_STRIKE);
-                int thunderStrikeBaseDamage = thunderStrikeLevel*thunderStrikeLevel;
-                double finalBaseDamage = baseDamage + thunderStrikeBaseDamage;
-
-                lore.add(" ");
-                lore.add(ChatColor.GOLD + "Full Set Bonus: Eye of the Storm" + ChatColor.YELLOW + " " + ChatColor.BOLD + "Press Q");
-                lore.add(" ");
-                lore.add(ChatColor.GRAY + "Grants all items with the " + ChatColor.AQUA + "Thunder Strike" + ChatColor.GRAY + " enchantment");
-                lore.add(ChatColor.GRAY + "the ability to unleash a devastating lightning blast");
-                lore.add(ChatColor.GRAY + "that deals " + ChatColor.AQUA + finalBaseDamage + ChatColor.RESET + ChatColor.GRAY + " base damage to nearby mobs in a " + ChatColor.GOLD + blastRadius + ChatColor.GRAY + " block");
-                lore.add(ChatColor.GRAY + "radius and inflicts " + ChatColor.YELLOW + "Weakness " + weaknessLvl + ChatColor.GRAY + " for " + ChatColor.GREEN + weaknessDuration + ChatColor.GRAY + " seconds");
-                lore.add(ChatColor.DARK_GRAY + "Mana Cost: " + ChatColor.DARK_AQUA + manaCost);
-                lore.add(ChatColor.DARK_GRAY + "Cooldown: " + ChatColor.GREEN + cooldown + ChatColor.DARK_GRAY + " seconds");
-                lore.add(" ");
-                lore.add(ChatColor.GRAY + "Gain " + ChatColor.DARK_AQUA + "Conduit Power" + ChatColor.GRAY + " when fully worn");
-                lore.add(" ");
-            } else
-            {
-                lore.addAll(createLore(armorPieceTypes, stars));
-            }
-        } else
-        {
-            lore.addAll(createLore(armorPieceTypes, stars));
-        }
-
-        return lore;
+    public ItemForger createArmorSet(@NotNull ArmorPieceTypes armorPieceTypes, int stars) {
+        return super.createArmorSet(armorPieceTypes, stars);
     }
 
     @Override
-    public Multimap<Attribute, AttributeModifier> createAttributes(@NotNull ArmorPieceTypes armorPieceTypes, int stars) {
-
-        ItemStack item = new ItemStack(Material.STONE_SWORD);
-        ItemMeta itemMeta = item.getItemMeta();
-
-        double knockbackRes = armorConfig.getDouble("knockBackRes") * 0.1;
-
-        AttributeModifier knockbackResModifier = new AttributeModifier(UUID.randomUUID(), "generic.knockbackRes", knockbackRes, AttributeModifier.Operation.ADD_NUMBER, armorPieceTypes.getEquipmentSlot());
-        itemMeta.addAttributeModifier(Attribute.GENERIC_KNOCKBACK_RESISTANCE, knockbackResModifier);
-
-        item.setItemMeta(itemMeta);
-        return item.getItemMeta().getAttributeModifiers();
+    public boolean isWearingFullSet(Player player) {
+        return super.isWearingFullSet(player);
     }
 
     @Override
-    public HashMap<VentureItemStatKeys, Double> createItemStats(@NotNull ArmorPieceTypes armorPieceTypes, int stars) {
-
-        String armorPiece = armorPieceTypes.getName();
-
-        double mana = config().getDouble(armorPiece + "Mana") * (1 + stars * this.starBonus);
-        double magicDamage = config().getDouble(armorPiece + "MagicDamage") * (1 + stars * this.starBonus);
-        double health = config().getDouble(armorPiece + "Health") * (1 + stars * this.starBonus);
-        double armor = config().getDouble(armorPiece + "Armor") * (1 + stars * this.starBonus);
-        double toughness = config().getDouble("toughness");
-        double fortitude = config().getDouble("fortitude");
-
-        HashMap<VentureItemStatKeys, Double> itemStatKeysDoubleHashMap = new HashMap<>();
-        itemStatKeysDoubleHashMap.put(VentureItemStatKeys.ARMOR_MAX_MANA_KEY, mana);
-        itemStatKeysDoubleHashMap.put(VentureItemStatKeys.ARMOR_MAGIC_DAMAGE_KEY, magicDamage);
-        itemStatKeysDoubleHashMap.put(VentureItemStatKeys.ARMOR_HEALTH_KEY, health);
-        itemStatKeysDoubleHashMap.put(VentureItemStatKeys.ARMOR_DEFENSE_KEY, armor);
-        itemStatKeysDoubleHashMap.put(VentureItemStatKeys.ARMOR_TOUGHNESS_KEY, toughness);
-        itemStatKeysDoubleHashMap.put(VentureItemStatKeys.ARMOR_FORTITUDE_KEY, fortitude);
-        return itemStatKeysDoubleHashMap;
-    }
-
-    @Override
-    public ItemForger createArmorPiece(@NotNull ArmorPieceTypes armorPieceTypes, int stars) {
-
-        String armorPieceString = armorPieceTypes.getName();
-
-        ItemForger itemForger = new ItemForger(Material.AIR);
-
-        try {
-            String armorName = armorPieceString.substring(0,1).toUpperCase() + armorPieceString.substring(1);
-
-            String HelmetURL = config().getString("HelmetURL");
-
-            if (armorPieceTypes.equals(ArmorPieceTypes.HELMET)) {
-                itemForger = new ItemForger(Material.PLAYER_HEAD)
-                        .setPlayerHeadSkin(HelmetURL, ArmorCMD.STORM_LORD_ARMOR.getHelmet(), ArmorCMD.STORM_LORD_ARMOR.getHelmet())
-                        .setCustomModelData(ArmorCMD.STORM_LORD_ARMOR.getHelmet());
-
-            } else if (armorPieceTypes.equals(ArmorPieceTypes.CHESTPLATE)) {
-                itemForger = new ItemForger(Material.LEATHER_CHESTPLATE)
-                        .LeatherArmorColor(0,213,255)
-                        .setCustomModelData(ArmorCMD.STORM_LORD_ARMOR.getChestplate());
-
-            } else if (armorPieceTypes.equals(ArmorPieceTypes.LEGGINGS)) {
-                itemForger = new ItemForger(Material.LEATHER_LEGGINGS)
-                        .LeatherArmorColor(0,160,191)
-                        .setCustomModelData(ArmorCMD.STORM_LORD_ARMOR.getLeggings());
-
-            } else if (armorPieceTypes.equals(ArmorPieceTypes.BOOTS)) {
-                itemForger = new ItemForger(Material.LEATHER_BOOTS)
-                        .LeatherArmorColor(0,124,148)
-                        .setCustomModelData(ArmorCMD.STORM_LORD_ARMOR.getBoots());
-
-            }
-
-            itemForger.setName(ItemNameBuilder.name(armorSetName() + armorName, stars))
-                    .setStars(stars)
-                    .setLore(createLore(armorPieceTypes, stars))
-                    .setRarity(VentureItemRarity.Rarity.FABLED)
-                    .setUnbreakable(true)
-                    .setFireResistant(true)
-                    .setItemStats(createItemStats(armorPieceTypes, stars));
-
-        } catch (NullPointerException exception) {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Something about this item is null: " + itemForger.getName());
-            exception.printStackTrace();
-        }
-
-        return itemForger;
+    public void registerArmorSet() {
+        super.registerArmorSet();
     }
 
     @AbilityHandler(abilityCastType = AbilityCastType.DROP_ITEM)
