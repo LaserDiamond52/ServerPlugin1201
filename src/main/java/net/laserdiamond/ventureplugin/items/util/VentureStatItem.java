@@ -4,6 +4,7 @@ import net.laserdiamond.ventureplugin.util.File.GetVarFile;
 import net.laserdiamond.ventureplugin.util.VentureItemStatKeys;
 import net.laserdiamond.ventureplugin.util.Stars;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -43,17 +44,18 @@ public abstract class VentureStatItem {
 
     /**
      * Adds Venture Plugin item stat lore to the item
-     * @param baseLore The base lore of which the stat lore will be applied to
      * @param statMap The Venture item Stat map
      */
-    public void createStatLore(List<String> baseLore, HashMap<VentureItemStatKeys, Double> statMap)
+    public List<String> createStatLore(HashMap<VentureItemStatKeys, Double> statMap)
     {
+        List<String> baseLore = new ArrayList<>();
         baseLore.add(" ");
         if (statMap != null)
         {
             List<String> statLore = ItemForger.createStatLore(statMap);
             baseLore.addAll(statLore);
         }
+        return baseLore;
     }
 
     /*

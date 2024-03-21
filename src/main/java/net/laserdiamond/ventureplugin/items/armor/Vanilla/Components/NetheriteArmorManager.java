@@ -46,7 +46,7 @@ public class NetheriteArmorManager extends VentureArmorSet {
     }
 
     @Override
-    public Material setArmorPieceMaterial(ArmorPieceTypes armorPieceTypes) {
+    public Material getArmorPieceMaterial(ArmorPieceTypes armorPieceTypes) {
         Material material = null;
         switch (armorPieceTypes)
         {

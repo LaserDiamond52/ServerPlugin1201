@@ -39,6 +39,7 @@ import net.laserdiamond.ventureplugin.items.crafting.SmithingTable.SmithingTable
 import net.laserdiamond.ventureplugin.items.util.ItemForgerRegistry;
 import net.laserdiamond.ventureplugin.entities.healthDisplay.mobHealthDisplay;
 import net.laserdiamond.ventureplugin.events.abilities.AbilityListener;
+import net.laserdiamond.ventureplugin.util.ItemRegistry;
 import net.laserdiamond.ventureplugin.util.RegisterAbilityCaster;
 import net.laserdiamond.ventureplugin.stats.Config.BaseStatsConfig;
 import net.laserdiamond.ventureplugin.stats.Manager.StatProfileManager;
@@ -108,6 +109,7 @@ public final class VenturePlugin extends JavaPlugin {
 
         // Refresh Items
         getServer().getPluginManager().registerEvents(new ItemForgerRegistry(this),this);
+        getServer().getPluginManager().registerEvents(new ItemRegistry(this),this);
 
         // Damage
         getServer().getPluginManager().registerEvents(new DamageEvent(this),this);

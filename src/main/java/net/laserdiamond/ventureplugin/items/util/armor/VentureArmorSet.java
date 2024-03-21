@@ -17,6 +17,7 @@ import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -43,18 +44,18 @@ public abstract class VentureArmorSet extends VentureStatItem {
     public abstract ArmorCMD setArmorCMD();
 
     /**
-     * Sets the material for all armor pieces
+     * Gets the material for all armor pieces
      * @param armorPieceTypes The armor piece type
      * @return The material for the armor piece type
      */
-    public abstract Material setArmorPieceMaterial(ArmorPieceTypes armorPieceTypes);
+    public abstract Material getArmorPieceMaterial(ArmorPieceTypes armorPieceTypes);
 
     /**
      * Sets the armor color for leather armor
      * @param armorPieceTypes The armor piece type
      * @return the color for the armor piece
      */
-    private Color setArmorColor(ArmorPieceTypes armorPieceTypes)
+    public Color setArmorColor(ArmorPieceTypes armorPieceTypes)
     {
         String armorPieceString = armorPieceTypes.getName();
         int red = config().getInt(armorPieceString + "Red");
@@ -82,12 +83,17 @@ public abstract class VentureArmorSet extends VentureStatItem {
     }
 
     /**
-     * Method for creating lore for the item
+     * Creates the lore for the item
      * @param armorPieceTypes The armor piece type
      * @param stars The amount of stars the item has
      * @return The lore of the item
      */
-    public abstract List<String> createLore(@NotNull ArmorPieceTypes armorPieceTypes, int stars);
+    public List<String> createLore(@NotNull ArmorPieceTypes armorPieceTypes, int stars)
+    {
+        List<String> lore = new ArrayList<>();
+        lore.addAll(createStatLore(createVentureStats(armorPieceTypes, stars)));
+        return lore;
+    }
 
     /**
      * Method for creating item lore based off the player that has the item in their inventory
@@ -96,7 +102,12 @@ public abstract class VentureArmorSet extends VentureStatItem {
      * @param stars The amount of stars the item has
      * @return The lore of the item
      */
-    public abstract List<String> createPlayerLore(@NotNull Player player, @NotNull ArmorPieceTypes armorPieceTypes, int stars);
+    public List<String> createPlayerLore(@NotNull Player player, @NotNull ArmorPieceTypes armorPieceTypes, int stars)
+    {
+        List<String> lore = new ArrayList<>();
+        lore.addAll(createStatLore(createVentureStats(armorPieceTypes, stars)));
+        return lore;
+    }
 
     /**
      * Creates vanilla attributes for the item
@@ -104,6 +115,7 @@ public abstract class VentureArmorSet extends VentureStatItem {
      * @param stars The amount of stars the item has
      * @return The attributes for the item
      */
+    @Deprecated
     public abstract Multimap<Attribute, AttributeModifier> createAttributes(@NotNull ArmorPieceTypes armorPieceTypes, int stars);
 
     /**
@@ -112,9 +124,16 @@ public abstract class VentureArmorSet extends VentureStatItem {
      * @param stars The amount of stars the item has
      * @return The Venture Item Stats
      */
+    @Deprecated
     public abstract HashMap<VentureItemStatKeys, Double> createItemStats(@NotNull ArmorPieceTypes armorPieceTypes, int stars);
 
-    public final HashMap<VentureItemStatKeys, Double> createVentureStats(@NotNull ArmorPieceTypes armorPieceTypes, int stars)
+    /**
+     * Creates Venture Plugin Item Stats for the item
+     * @param armorPieceTypes The armor piece type
+     * @param stars The amount of stars the item has
+     * @return The Venture Item Stats
+     */
+    public HashMap<VentureItemStatKeys, Double> createVentureStats(@NotNull ArmorPieceTypes armorPieceTypes, int stars)
     {
         String armorPiece = armorPieceTypes.getName();
 
@@ -163,7 +182,7 @@ public abstract class VentureArmorSet extends VentureStatItem {
     {
         String armorPieceString = armorPieceTypes.getName();
         String armorName = armorPieceString.substring(0,1).toUpperCase() + armorPieceString.substring(1);
-        ItemForger itemForger = new ItemForger(setArmorPieceMaterial(armorPieceTypes))
+        ItemForger itemForger = new ItemForger(getArmorPieceMaterial(armorPieceTypes))
                 .setName(ItemNameBuilder.name(armorSetName() + " " + armorName, stars))
                 .setStars(stars)
                 .setLore(createLore(armorPieceTypes, stars))
@@ -173,7 +192,7 @@ public abstract class VentureArmorSet extends VentureStatItem {
                 .setItemStats(createVentureStats(armorPieceTypes, stars))
                 .setAttributeModifiers(createAttributes(armorPieceTypes, stars), true);
 
-        switch (setArmorPieceMaterial(armorPieceTypes))
+        switch (getArmorPieceMaterial(armorPieceTypes))
         {
             case PLAYER_HEAD -> itemForger.setPlayerHeadSkin(playerHeadSkin(), sigBits()[0], sigBits()[1]);
             case LEATHER_HELMET, LEATHER_CHESTPLATE, LEATHER_LEGGINGS, LEATHER_BOOTS -> itemForger.LeatherArmorColor(setArmorColor(armorPieceTypes));
@@ -200,7 +219,7 @@ public abstract class VentureArmorSet extends VentureStatItem {
     {
         String armorPieceString = armorPieceTypes.getName();
         String armorName = armorPieceString.substring(0,1).toUpperCase() + armorPieceString.substring(1);
-        ItemForger itemForger = new ItemForger(setArmorPieceMaterial(armorPieceTypes))
+        ItemForger itemForger = new ItemForger(getArmorPieceMaterial(armorPieceTypes))
                 .setName(ItemNameBuilder.name(armorSetName() + " " + armorName, stars))
                 .setStars(stars)
                 .setLore(createPlayerLore(player, armorPieceTypes, stars))
@@ -210,7 +229,7 @@ public abstract class VentureArmorSet extends VentureStatItem {
                 .setItemStats(createVentureStats(armorPieceTypes, stars))
                 .setAttributeModifiers(createAttributes(armorPieceTypes, stars), true);
 
-        switch (setArmorPieceMaterial(armorPieceTypes))
+        switch (getArmorPieceMaterial(armorPieceTypes))
         {
             case PLAYER_HEAD -> itemForger.setPlayerHeadSkin(playerHeadSkin(), sigBits()[0], sigBits()[1]);
             case LEATHER_HELMET, LEATHER_CHESTPLATE, LEATHER_LEGGINGS, LEATHER_BOOTS -> itemForger.LeatherArmorColor(setArmorColor(armorPieceTypes));
@@ -231,7 +250,7 @@ public abstract class VentureArmorSet extends VentureStatItem {
      * @param player The player wearing the armor
      * @return If the player is wearing the full set
      */
-    public final boolean isWearingFullSet(Player player)
+    public boolean isWearingFullSet(Player player)
     {
         return ArmorEquipStats.isWearingFullSet(player, setArmorCMD().getHelmet(), setArmorCMD().getChestplate(), setArmorCMD().getLeggings(), setArmorCMD().getBoots());
     }
@@ -243,6 +262,7 @@ public abstract class VentureArmorSet extends VentureStatItem {
     {
         ItemRegistry registry = new ItemRegistry(instance());
         HashMap<ItemRegistryKey, ItemForger> registryMap = registry.getItemRegistryMap();
+        HashMap<String, ItemForger> nameMap = registry.getItemCommandNameMap();
 
         int maxStars = instance().getConfig().getInt("maxStars");
 
@@ -251,12 +271,16 @@ public abstract class VentureArmorSet extends VentureStatItem {
         {
             for (ArmorPieceTypes armorPieceTypes : ArmorPieceTypes.values())
             {
-                ItemRegistryKey key = new ItemRegistryKey(createArmorSet(armorPieceTypes, i).getCustomModelData(), i);
+                ItemForger armorItem = createArmorSet(armorPieceTypes, i);
+                String armorPieceTypeName = armorPieceTypes.getName();
+                String commandName = (armorSetName() + "_" + armorPieceTypeName + "_" + i).toLowerCase().replace(" ", "_");
+                nameMap.put(commandName, armorItem);
+                ItemRegistryKey key = new ItemRegistryKey(armorItem.getCustomModelData(), i);
                 registryMap.put(key, createArmorSet(armorPieceTypes, i));
             }
         }
 
-        HashMap<String, ItemForger> nameMap = registry.getItemCommandNameMap();
+        /*
         for (ArmorPieceTypes armorPieceTypes : ArmorPieceTypes.values())
         {
             ItemForger armorItem = createArmorSet(armorPieceTypes, 0);
@@ -265,6 +289,7 @@ public abstract class VentureArmorSet extends VentureStatItem {
 
             nameMap.put(commandName, armorItem);
         }
+         */
 
     }
 

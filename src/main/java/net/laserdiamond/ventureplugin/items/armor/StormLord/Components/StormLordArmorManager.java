@@ -32,7 +32,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-
+// TODO: Rewrite entire class to use new abstract class
 public class StormLordArmorManager extends VentureArmorSet implements AbilityCasting.DropItemSpell {
 
     private final VenturePlugin plugin = VenturePlugin.getInstance();
@@ -49,7 +49,7 @@ public class StormLordArmorManager extends VentureArmorSet implements AbilityCas
     }
 
     @Override
-    public Material setArmorPieceMaterial(ArmorPieceTypes armorPieceTypes) {
+    public Material getArmorPieceMaterial(ArmorPieceTypes armorPieceTypes) {
         Material material = null;
         switch (armorPieceTypes)
         {
@@ -80,7 +80,7 @@ public class StormLordArmorManager extends VentureArmorSet implements AbilityCas
         double manaCost = config().getDouble("manaCost");
 
 
-        this.createStatLore(lore, itemStatKeysMap);
+        this.createStatLore(itemStatKeysMap);
         lore.add(" ");
         lore.add(ChatColor.GOLD + "Full Set Bonus: Eye of the Storm" + ChatColor.YELLOW + " " + ChatColor.BOLD + "Press Q");
         lore.add(" ");
@@ -122,7 +122,7 @@ public class StormLordArmorManager extends VentureArmorSet implements AbilityCas
 
         HashMap<VentureItemStatKeys, Double> itemStatKeysMap = createItemStats(armorPieceTypes, stars);
 
-        List<String> lore = new ArrayList<>();
+        List<String> lore = this.createStatLore(itemStatKeysMap);
 
         int blastRadius = config().getInt("blastRadius");
         int weaknessLvl = config().getInt("weaknessLvl");
@@ -139,7 +139,6 @@ public class StormLordArmorManager extends VentureArmorSet implements AbilityCas
                 int thunderStrikeBaseDamage = thunderStrikeLevel*thunderStrikeLevel;
                 double finalBaseDamage = baseDamage + thunderStrikeBaseDamage;
 
-                this.createStatLore(lore, itemStatKeysMap);
                 lore.add(" ");
                 lore.add(ChatColor.GOLD + "Full Set Bonus: Eye of the Storm" + ChatColor.YELLOW + " " + ChatColor.BOLD + "Press Q");
                 lore.add(" ");
@@ -269,7 +268,7 @@ public class StormLordArmorManager extends VentureArmorSet implements AbilityCas
 
         ItemStack droppedItem = event.getItemDrop().getItemStack();
         ItemMeta droppedMeta = droppedItem.getItemMeta();
-
+        // TODO: Rewrite to be cleaner
         if (isWearingFullSet(player) && droppedMeta != null && droppedMeta.hasEnchant(EnchantsClass.THUNDER_STRIKE))
         {
             event.setCancelled(true);
