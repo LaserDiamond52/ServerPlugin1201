@@ -25,11 +25,10 @@ public class ArmorEquipStats implements Listener {
 
     private final VenturePlugin plugin;
     private final StatProfileManager statProfileManager;
-    private final HashMap<ItemRegistryKey, ItemForger> itemRegistryMap;
+
     public ArmorEquipStats(VenturePlugin plugin) {
         this.plugin = plugin;
         statProfileManager = plugin.getStatProfileManager();
-        itemRegistryMap = plugin.getItemRegistryMap();
     }
 
     @EventHandler
