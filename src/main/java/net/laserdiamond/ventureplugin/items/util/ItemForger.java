@@ -14,10 +14,7 @@ import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ArmorMeta;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
-import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.inventory.meta.*;
 import org.bukkit.inventory.meta.trim.ArmorTrim;
 import org.bukkit.inventory.meta.trim.TrimMaterial;
 import org.bukkit.inventory.meta.trim.TrimPattern;
@@ -79,12 +76,90 @@ public class ItemForger {
         return this;
     }
 
+    public Material getMaterial()
+    {
+        return itemStack.getType();
+    }
+
     public ItemForger clone() {
         return new ItemForger(itemStack);
     }
 
-    public ItemMeta getItemMeta() {
+    public ItemMeta getItemMeta()
+    {
         return itemStack.getItemMeta();
+    }
+
+    public boolean isArmorItem()
+    {
+        if (itemStack.getItemMeta() instanceof ArmorMeta)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public ArmorMeta getArmorMeta()
+    {
+        if (itemStack.getItemMeta() instanceof ArmorMeta armorMeta)
+        {
+            return armorMeta;
+        }
+        return null;
+    }
+
+    public boolean isLeatherArmorItem()
+    {
+        if (itemStack.getItemMeta() instanceof LeatherArmorMeta)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public LeatherArmorMeta getLeatherArmorMeta()
+    {
+        if (itemStack.getItemMeta() instanceof LeatherArmorMeta leatherArmorMeta)
+        {
+            return leatherArmorMeta;
+        }
+        return null;
+    }
+
+    public boolean isHead()
+    {
+        if (itemStack.getItemMeta() instanceof SkullMeta)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public SkullMeta getSkullMeta()
+    {
+        if (itemStack.getItemMeta() instanceof SkullMeta skullMeta)
+        {
+            return skullMeta;
+        }
+        return null;
+    }
+
+    public boolean isEnchantedBook()
+    {
+        if (itemStack.getItemMeta() instanceof EnchantmentStorageMeta)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public EnchantmentStorageMeta getEnchantmentStorageMeta()
+    {
+        if (itemStack.getItemMeta() instanceof EnchantmentStorageMeta enchantmentStorageMeta)
+        {
+            return enchantmentStorageMeta;
+        }
+        return null;
     }
 
     public String getName() {
@@ -118,8 +193,9 @@ public class ItemForger {
 
     public ItemForger setPlayerHeadSkin(@NotNull String url, int mostSigBits, int leastSigBits) {
 
-        try {
-            SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
+        if (itemStack.getItemMeta() instanceof SkullMeta skullMeta)
+        {
+            //SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
 
             UUID GameProfile = new UUID(mostSigBits,leastSigBits);
 
@@ -141,10 +217,16 @@ public class ItemForger {
             }
 
             itemStack.setItemMeta(skullMeta);
+        }
+        /*
+        try {
+
         } catch (ClassCastException exception) {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Could not cast item to 'SkullMeta'!");
             exception.printStackTrace();
         }
+
+         */
         return this;
     }
 
@@ -194,7 +276,14 @@ public class ItemForger {
     }
 
     public Map<Enchantment, Integer> getEnchantments() {
-        return itemStack.getItemMeta().getEnchants();
+
+        if (isEnchantedBook())
+        {
+            return getEnchantmentStorageMeta().getStoredEnchants();
+        } else {
+            return itemStack.getItemMeta().getEnchants();
+        }
+        //return itemStack.getItemMeta().getEnchants();
     }
 
     public boolean hasEnchants() {
@@ -298,113 +387,184 @@ public class ItemForger {
     }
 
     public ItemForger LeatherArmorColor(Color color) {
-        try {
-            LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) itemStack.getItemMeta();
+        if (itemStack.getItemMeta() instanceof LeatherArmorMeta leatherArmorMeta)
+        {
             leatherArmorMeta.setColor(color);
             itemStack.setItemMeta(leatherArmorMeta);
+        }
+        /*
+        try {
+            LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) itemStack.getItemMeta();
+
 
         } catch (ClassCastException exception) {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Could not cast item to 'LeatherArmorMeta'!");
             exception.printStackTrace();
         }
+
+         */
         return this;
     }
 
     public ItemForger LeatherArmorColor(int R, int G, int B) {
-        try {
-            LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) itemStack.getItemMeta();
+        if (itemStack.getItemMeta() instanceof LeatherArmorMeta leatherArmorMeta)
+        {
             leatherArmorMeta.setColor(Color.fromRGB(R, G, B));
             itemStack.setItemMeta(leatherArmorMeta);
+        }
+        /*
+        try {
+            LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) itemStack.getItemMeta();
+
 
         } catch (ClassCastException exception) {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Could not cast item to 'LeatherArmorMeta'!");
             exception.printStackTrace();
         }
+         */
         return this;
     }
 
     public Color getLeatherArmorColor() {
+        if (itemStack.getItemMeta() instanceof LeatherArmorMeta leatherArmorMeta)
+        {
+            return leatherArmorMeta.getColor();
+        }
+        /*
         try {
             LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) itemStack.getItemMeta();
-            return leatherArmorMeta.getColor();
+
         } catch (ClassCastException exception) {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Could not cast item to 'LeatherArmorMeta'!");
             exception.printStackTrace();
         }
+         */
         return null;
     }
 
     public ArmorTrim getArmorTrim() {
+        if (itemStack.getItemMeta() instanceof ArmorMeta armorMeta)
+        {
+            return armorMeta.getTrim();
+        }
+        /*
         try {
             ArmorMeta armorMeta = (ArmorMeta) itemStack.getItemMeta();
-            return armorMeta.getTrim();
+
         } catch (ClassCastException ignored) {
             //Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Could not case item to 'ArmorMeta'!");
             //exception.printStackTrace();
         }
+
+         */
         return null;
     }
 
     public TrimMaterial getArmorTrimMaterial() {
-        try {
-            ArmorMeta armorMeta = (ArmorMeta) itemStack.getItemMeta();
+        if (itemStack.getItemMeta() instanceof ArmorMeta armorMeta)
+        {
             if (armorMeta.getTrim() != null) {
                 return armorMeta.getTrim().getMaterial();
             }
+        }
+        /*
+        try {
+            ArmorMeta armorMeta = (ArmorMeta) itemStack.getItemMeta();
+
         } catch (ClassCastException ignored) {
             //Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Could not case item to 'ArmorMeta'!");
             //exception.printStackTrace();
         }
+         */
         return null;
     }
 
     public TrimPattern getArmorTrimPattern() {
-        try {
-            ArmorMeta armorMeta = (ArmorMeta) itemStack.getItemMeta();
+        if (itemStack.getItemMeta() instanceof ArmorMeta armorMeta)
+        {
             if (armorMeta.getTrim() != null) {
                 return armorMeta.getTrim().getPattern();
             }
+        }
+        /*
+        try {
+            ArmorMeta armorMeta = (ArmorMeta) itemStack.getItemMeta();
+
         } catch (ClassCastException ignored) {
             //Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Could not cast item to 'ArmorMeta'!");
             //exception.printStackTrace();
         }
+
+         */
         return null;
     }
 
     public ItemForger setArmorTrim(ArmorTrim armorTrim) {
-        try {
-            ArmorMeta armorMeta = (ArmorMeta) itemStack.getItemMeta();
+        if (itemStack.getItemMeta() instanceof ArmorMeta armorMeta)
+        {
             armorMeta.setTrim(armorTrim);
             itemStack.setItemMeta(armorMeta);
+        }
+        /*
+        try {
+            ArmorMeta armorMeta = (ArmorMeta) itemStack.getItemMeta();
+
         } catch (ClassCastException ignored) {
             //Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Could not cast item to 'ArmorMeta'!");
             //exception.printStackTrace();
+        }
+
+         */
+        return this;
+    }
+
+    public ItemForger setArmorTrim(TrimMaterial trimMaterial, TrimPattern trimPattern)
+    {
+        if (itemStack.getItemMeta() instanceof ArmorMeta armorMeta)
+        {
+            ArmorTrim trim = new ArmorTrim(trimMaterial, trimPattern);
+            armorMeta.setTrim(trim);
+            itemStack.setItemMeta(armorMeta);
         }
         return this;
     }
 
     public boolean hasArmorTrim() {
-        try {
-            ArmorMeta armorMeta = (ArmorMeta) itemStack.getItemMeta();
+        if (itemStack.getItemMeta() instanceof ArmorMeta armorMeta)
+        {
             if (armorMeta.hasTrim()) {
                 return true;
             }
+        }
+        /*
+        try {
+            ArmorMeta armorMeta = (ArmorMeta) itemStack.getItemMeta();
+
         } catch (ClassCastException ignored) {
             //Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Could not cast item to 'ArmorMeta'!");
             //exception.printStackTrace();
         }
+
+         */
         return false;
     }
 
     public ItemForger removeArmorTrim() {
-        try {
-            ArmorMeta armorMeta = (ArmorMeta) itemStack.getItemMeta();
+        if (itemStack.getItemMeta() instanceof ArmorMeta armorMeta)
+        {
             armorMeta.setTrim(null);
             itemStack.setItemMeta(armorMeta);
+        }
+        /*
+        try {
+            ArmorMeta armorMeta = (ArmorMeta) itemStack.getItemMeta();
+
         } catch (ClassCastException ignored) {
             //Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Could not cast item to 'ArmorMeta'!");
             //exception.printStackTrace();
         }
+
+         */
         return this;
     }
 

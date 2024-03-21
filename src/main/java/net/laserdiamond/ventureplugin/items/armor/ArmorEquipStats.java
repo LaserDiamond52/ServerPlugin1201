@@ -4,6 +4,8 @@ import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import net.laserdiamond.ventureplugin.VenturePlugin;
 import net.laserdiamond.ventureplugin.items.util.ItemForger;
 import net.laserdiamond.ventureplugin.items.util.ItemForgerRegistry;
+import net.laserdiamond.ventureplugin.util.ItemRegistry;
+import net.laserdiamond.ventureplugin.util.ItemRegistryKey;
 import net.laserdiamond.ventureplugin.util.VentureItemStatKeys;
 import net.laserdiamond.ventureplugin.stats.Components.DamageStats;
 import net.laserdiamond.ventureplugin.stats.Components.DefenseStats;
@@ -23,9 +25,11 @@ public class ArmorEquipStats implements Listener {
 
     private final VenturePlugin plugin;
     private final StatProfileManager statProfileManager;
+    private final HashMap<ItemRegistryKey, ItemForger> itemRegistryMap;
     public ArmorEquipStats(VenturePlugin plugin) {
         this.plugin = plugin;
         statProfileManager = plugin.getStatProfileManager();
+        itemRegistryMap = plugin.getItemRegistryMap();
     }
 
     @EventHandler
@@ -37,13 +41,13 @@ public class ArmorEquipStats implements Listener {
         ItemStack newItem = event.getNewItem(), oldItem = event.getOldItem();
         ItemMeta newMeta = newItem.getItemMeta(), oldMeta = oldItem.getItemMeta();
 
-        if (newMeta != null) {
-            if (newMeta.hasCustomModelData()) {
-                // Equipping custom item (Includes Netherite)
-                int newCMD = newMeta.getCustomModelData();
-                int itemStars = ItemForger.getItemStars(newItem);
-                HashMap<Integer, ItemForger> itemForgerHashMap = ItemForgerRegistry.itemForgerHashMap(itemStars);
-                ItemForger itemForger = itemForgerHashMap.get(newCMD);
+
+
+        if (newMeta != null)
+        {
+            if (newMeta.hasCustomModelData())
+            {
+                ItemForger itemForger = new ItemForger(newItem);
 
                 Double health = itemForger.getItemStat(VentureItemStatKeys.ARMOR_HEALTH_KEY);
                 Double armor = itemForger.getItemStat(VentureItemStatKeys.ARMOR_DEFENSE_KEY);
@@ -57,10 +61,11 @@ public class ArmorEquipStats implements Listener {
 
                 addStats(statProfile, health, armor, toughness, speed, mana, meleeDamage, magicDamage, rangeDamage);
                 addFortitude(player, fortitude);
-            } else {
-                // Equipping Vanilla Item (Excluding Netherite)
+            } else
+            {
                 Material newMaterial = newItem.getType();
-                for (VanillaArmorValues values : VanillaArmorValues.values()) {
+                for (VanillaArmorValues values : VanillaArmorValues.values())
+                {
                     if (values.getMaterial().equals(newMaterial)) {
                         Double armor = values.getProtectionValue();
                         Double toughness = values.getToughnessValue();
@@ -70,13 +75,11 @@ public class ArmorEquipStats implements Listener {
                 }
             }
         }
-        if (oldMeta != null) {
-            if (oldMeta.hasCustomModelData()) {
-                // TODO: Removing custom item (Includes Netherite)
-                int oldCMD = oldMeta.getCustomModelData();
-                int itemStars = ItemForger.getItemStars(oldItem);
-                HashMap<Integer, ItemForger> itemForgerHashMap = ItemForgerRegistry.itemForgerHashMap(itemStars);
-                ItemForger itemForger = itemForgerHashMap.get(oldCMD);
+        if (oldMeta != null)
+        {
+            if (oldMeta.hasCustomModelData())
+            {
+                ItemForger itemForger = new ItemForger(oldItem);
 
                 Double health = itemForger.getItemStat(VentureItemStatKeys.ARMOR_HEALTH_KEY);
                 Double armor = itemForger.getItemStat(VentureItemStatKeys.ARMOR_DEFENSE_KEY);
@@ -90,11 +93,13 @@ public class ArmorEquipStats implements Listener {
 
                 removeStats(statProfile, health, armor, toughness, speed, mana, meleeDamage, magicDamage, rangeDamage);
                 removeFortitude(player, fortitude);
-            } else {
-                // TODO: Removing Vanilla Item (Excluding Netherite)
+            } else
+            {
                 Material oldMaterial = oldItem.getType();
-                for (VanillaArmorValues values : VanillaArmorValues.values()) {
-                    if (values.getMaterial().equals(oldMaterial)) {
+                for (VanillaArmorValues values : VanillaArmorValues.values())
+                {
+                    if (values.getMaterial().equals(oldMaterial))
+                    {
                         Double armor = values.getProtectionValue();
                         Double toughness = values.getToughnessValue();
 

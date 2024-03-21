@@ -7,59 +7,59 @@ description: Venture Plugin for Minecraft Server (1.20.1)
 
 permissions:
 
-  ventureplugin.breakblock:
+  venture_plugin.breakblock:
     description: Allows players to break blocks
-  ventureplugin.placeblock:
+  venture_plugin.placeblock:
     description: Allows players to placee blocks
-  ventureplugin.harvestblock:
+  venture_plugin.harvestblock:
     description: Allows players to harvest blocks
-  ventureplugin.pickupitem:
+  venture_plugin.pickupitem:
     description: Allows players to pick up items
-  ventureplugin.dropitem:
+  venture_plugin.dropitem:
     description: Allows players to drop items
 
-  ventureplugin.armorstand:
+  venture_plugin.armorstand:
     description: Allows players to interact with armor stands
-  ventureplugin.interact:
+  venture_plugin.interact:
     description: Allows players to interact with entities
-  ventureplugin.shearentity:
+  venture_plugin.shearentity:
     description: Allows players to shear entities
 
-  ventureplugin.move:
+  venture_plugin.move:
     description: Allows players to move
-  ventureplugin.changemainhand:
+  venture_plugin.changemainhand:
     description: Allows players to change their mainhand
-  ventureplugin.swaphands:
+  venture_plugin.swaphands:
     description: Allows players to swap between their main and offhand
-  ventureplugin.portaltravel:
+  venture_plugin.portaltravel:
     description: Allows players to travel through portals to other dimensions
-  ventureplugin.changegamemode:
+  venture_plugin.changegamemode:
     description: Allows players to change their gamemode
 
-  ventureplugin.chat:
+  venture_plugin.chat:
     description: Allows players to chat
-  ventureplugin.executecommands:
+  venture_plugin.executecommands:
     description: Allows players to execute commands
 
-  ventureplugin.giveitems:
+  venture_plugin.giveitems:
     description: Allows players to give themselves items from this plugin
 
-  ventureplugin.skills:
+  venture_plugin.skills:
     description: Allows players to view their skills
-  ventureplugin.stats:
+  venture_plugin.stats:
     description: Allows players to see their stats
-  ventureplugin.tuningmenu:
+  venture_plugin.tuningmenu:
     description: Allows players to use the skill menu
-  ventureplugin.resetskills:
+  venture_plugin.resetskills:
     description: Allows player to reset skills
-  ventureplugin.mana:
+  venture_plugin.mana:
     description: Allows players to manipulate their mana
-  ventureplugin.effect:
+  venture_plugin.effect:
     description: Allows players to grant plugin effects to themselves/others
 
-  ventureplugin.experiencereset:
+  venture_plugin.experiencereset:
     description: Allows players to reset experience levels
-  ventureplugin.enchant:
+  venture_plugin.enchant:
     description: Gives access to the /pluginenchant command and its aliases
 
 commands:

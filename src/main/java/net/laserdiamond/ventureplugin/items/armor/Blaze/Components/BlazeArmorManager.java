@@ -8,6 +8,7 @@ import net.laserdiamond.ventureplugin.items.util.VentureItemRarity;
 import net.laserdiamond.ventureplugin.items.util.armor.*;
 import net.laserdiamond.ventureplugin.util.File.GetVarFile;
 import net.laserdiamond.ventureplugin.util.VentureItemStatKeys;
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
@@ -21,9 +22,13 @@ import java.util.List;
 public class BlazeArmorManager extends VentureArmorSet implements AbilityCasting.RunnableSpell {
 
     // TODO: Create rest of lore for armor + finish config file
-    private static final VenturePlugin PLUGIN = VenturePlugin.getInstance();
+    private final VenturePlugin plugin = VenturePlugin.getInstance();
     //private static final BlazeArmorConfig ARMOR_CONFIG = PLUGIN.getBlazeArmorConfig();
 
+    public BlazeArmorManager()
+    {
+        registerArmorSet();
+    }
     @Override
     public String armorSetName() {
         return "Blaze";
@@ -32,7 +37,7 @@ public class BlazeArmorManager extends VentureArmorSet implements AbilityCasting
     @Override
     public GetVarFile config()
     {
-        return PLUGIN.getBlazeArmorConfig();
+        return plugin.getBlazeArmorConfig();
     }
 
     @Override

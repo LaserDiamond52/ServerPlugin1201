@@ -20,7 +20,7 @@ public class ViewStats implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
         if (sender instanceof Player player) {
-            if (player.hasPermission("ventureplugin.stats")) {
+            if (player.hasPermission("venture_plugin.stats")) {
 
                 Inventory statInventory = Bukkit.createInventory(null, 54, ChatColor.GOLD + player.getName() + "'s Stats");
 

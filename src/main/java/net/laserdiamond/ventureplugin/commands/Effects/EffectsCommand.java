@@ -31,7 +31,7 @@ public class EffectsCommand implements CommandExecutor, TabExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
-        if (sender.hasPermission("ventureplugin.effects")) {
+        if (sender.hasPermission("venture_plugin.effects")) {
             if (args.length == 0) {
                 sender.sendMessage(ChatColor.RED + "Please specify a target");
             } else if (args.length == 1) {
@@ -219,7 +219,7 @@ public class EffectsCommand implements CommandExecutor, TabExecutor {
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
         List<String> argsList = new ArrayList<>();
-        if (sender.hasPermission("serverplugin1201.effect")) {
+        if (sender.hasPermission("venture_plugin.effect")) {
 
             //Bukkit.broadcastMessage("Command arg length: " + args.length);
 

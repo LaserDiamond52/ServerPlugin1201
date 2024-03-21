@@ -27,6 +27,7 @@ import net.laserdiamond.ventureplugin.events.effects.Components.EffectTimer;
 import net.laserdiamond.ventureplugin.events.effects.Config.EffectProfileConfig;
 import net.laserdiamond.ventureplugin.events.effects.Managers.EffectManager;
 import net.laserdiamond.ventureplugin.items.armor.ArmorEquipStats;
+import net.laserdiamond.ventureplugin.items.armor.Blaze.Components.BlazeArmorManager;
 import net.laserdiamond.ventureplugin.items.armor.Blaze.Config.BlazeArmorConfig;
 import net.laserdiamond.ventureplugin.items.armor.StormLord.Components.EyeOfStormCooldown;
 import net.laserdiamond.ventureplugin.items.armor.StormLord.Components.StormLordArmorManager;
@@ -36,10 +37,12 @@ import net.laserdiamond.ventureplugin.items.armor.Trims.Config.ArmorTrimConfig;
 import net.laserdiamond.ventureplugin.items.armor.Vanilla.Components.NetheriteArmorManager;
 import net.laserdiamond.ventureplugin.items.armor.Vanilla.Config.VanillaArmorConfig;
 import net.laserdiamond.ventureplugin.items.crafting.SmithingTable.SmithingTableCrafting;
+import net.laserdiamond.ventureplugin.items.util.ItemForger;
 import net.laserdiamond.ventureplugin.items.util.ItemForgerRegistry;
 import net.laserdiamond.ventureplugin.entities.healthDisplay.mobHealthDisplay;
 import net.laserdiamond.ventureplugin.events.abilities.AbilityListener;
 import net.laserdiamond.ventureplugin.util.ItemRegistry;
+import net.laserdiamond.ventureplugin.util.ItemRegistryKey;
 import net.laserdiamond.ventureplugin.util.RegisterAbilityCaster;
 import net.laserdiamond.ventureplugin.stats.Config.BaseStatsConfig;
 import net.laserdiamond.ventureplugin.stats.Manager.StatProfileManager;
@@ -52,6 +55,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public final class VenturePlugin extends JavaPlugin {
@@ -70,10 +74,15 @@ public final class VenturePlugin extends JavaPlugin {
     private BaseStatsConfig baseStatsConfig;
     private EnchantConfig enchantConfig;
     private ArmorTrimConfig armorTrimConfig;
+
+    private HashMap<String, ItemForger> itemCommandNameMap;
+    private HashMap<ItemRegistryKey, ItemForger> itemRegistryMap;
+    private HashMap<ItemRegistryKey, ItemForger> playerItemRegistry;
+
     private NetheriteArmorManager netheriteArmorManager;
     private VanillaArmorConfig vanillaArmorConfig;
     private BlazeArmorConfig blazeArmorConfig;
-
+    private BlazeArmorManager blazeArmorManager;
     private StormLordArmorConfig stormLordArmorConfig;
     private StormLordArmorManager stormLordArmorManager;
 
@@ -90,6 +99,10 @@ public final class VenturePlugin extends JavaPlugin {
 
         Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Enabling Plugin...");
         plugin = this;
+
+        itemCommandNameMap = new HashMap<>();
+        itemRegistryMap = new HashMap<>();
+        playerItemRegistry = new HashMap<>();
 
         // Create Stat Profiles for players
         createConfigs();
@@ -108,7 +121,7 @@ public final class VenturePlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ManaRegen(this),this);
 
         // Refresh Items
-        getServer().getPluginManager().registerEvents(new ItemForgerRegistry(this),this);
+        //getServer().getPluginManager().registerEvents(new ItemForgerRegistry(this),this);
         getServer().getPluginManager().registerEvents(new ItemRegistry(this),this);
 
         // Damage
@@ -172,6 +185,10 @@ public final class VenturePlugin extends JavaPlugin {
     }
     public NetheriteArmorManager getNetheriteArmorManager() {
         return netheriteArmorManager;
+    }
+    public BlazeArmorManager getBlazeArmorManager()
+    {
+        return blazeArmorManager;
     }
     public StormLordArmorManager getStormArmorManager() {
         return stormLordArmorManager;
@@ -283,6 +300,7 @@ public final class VenturePlugin extends JavaPlugin {
     }
     private void createItemManagers() {
         netheriteArmorManager = new NetheriteArmorManager(this);
+        blazeArmorManager = new BlazeArmorManager();
         stormLordArmorManager = new StormLordArmorManager();
     }
     private void createTimers() {
@@ -348,5 +366,17 @@ public final class VenturePlugin extends JavaPlugin {
         if (abilityTimer != null && !abilityTimer.isCancelled()) {
             abilityTimer.cancel();
         }
+    }
+
+    public HashMap<String, ItemForger> getItemCommandNameMap() {
+        return itemCommandNameMap;
+    }
+
+    public HashMap<ItemRegistryKey, ItemForger> getItemRegistryMap() {
+        return itemRegistryMap;
+    }
+
+    public HashMap<ItemRegistryKey, ItemForger> getPlayerItemRegistry() {
+        return playerItemRegistry;
     }
 }

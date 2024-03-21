@@ -1,6 +1,6 @@
 
 toughness: 4
-knockBackRes: 1
+fortitude: 1
 auraBaseDamage: 5
 abilityDuration: 5
 abilityCooldown: 5

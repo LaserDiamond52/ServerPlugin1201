@@ -260,9 +260,9 @@ public abstract class VentureArmorSet extends VentureStatItem {
      */
     public void registerArmorSet()
     {
-        ItemRegistry registry = new ItemRegistry(instance());
-        HashMap<ItemRegistryKey, ItemForger> registryMap = registry.getItemRegistryMap();
-        HashMap<String, ItemForger> nameMap = registry.getItemCommandNameMap();
+        //ItemRegistry registry = new ItemRegistry(instance());
+        HashMap<ItemRegistryKey, ItemForger> registryMap = instance().getItemRegistryMap();
+        HashMap<String, ItemForger> nameMap = instance().getItemCommandNameMap();
 
         int maxStars = instance().getConfig().getInt("maxStars");
 
@@ -279,17 +279,6 @@ public abstract class VentureArmorSet extends VentureStatItem {
                 registryMap.put(key, createArmorSet(armorPieceTypes, i));
             }
         }
-
-        /*
-        for (ArmorPieceTypes armorPieceTypes : ArmorPieceTypes.values())
-        {
-            ItemForger armorItem = createArmorSet(armorPieceTypes, 0);
-            String armorPieceTypeName = armorPieceTypes.getName();
-            String commandName = (armorSetName() + armorPieceTypeName).toLowerCase().replace(" ", "_");
-
-            nameMap.put(commandName, armorItem);
-        }
-         */
 
     }
 

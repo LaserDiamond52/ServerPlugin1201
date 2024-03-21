@@ -30,7 +30,7 @@ public class GiveItemsCommand implements CommandExecutor, TabExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
-        if (sender.hasPermission("ventureplugin.giveitems")) {
+        if (sender.hasPermission("venture_plugin.giveitems")) {
             if (args.length == 0) {
                 sender.sendMessage(ChatColor.RED + "Please specify a target");
             } else if (args.length == 1) {
@@ -39,7 +39,7 @@ public class GiveItemsCommand implements CommandExecutor, TabExecutor {
                 Player target = Bukkit.getPlayer(args[0]);
                 String inputItem = args[1];
                 if (target != null) {
-                    give(sender, target, inputItem);
+                    testGive(sender, target, inputItem);
                 }
             }
         }
@@ -65,8 +65,8 @@ public class GiveItemsCommand implements CommandExecutor, TabExecutor {
      */
     private void testGive(CommandSender sender, Player target, String input)
     {
-        ItemRegistry itemRegistry = new ItemRegistry(plugin);
-        HashMap<String, ItemForger> itemCommandNameMap = itemRegistry.getItemCommandNameMap();
+        //ItemRegistry itemRegistry = new ItemRegistry(plugin);
+        HashMap<String, ItemForger> itemCommandNameMap = plugin.getItemCommandNameMap();
         if (itemCommandNameMap.containsKey(input))
         {
             ItemForger itemToGive = itemCommandNameMap.get(input);
@@ -83,15 +83,16 @@ public class GiveItemsCommand implements CommandExecutor, TabExecutor {
 
         List<String> argsList = new ArrayList<>();
 
-        if (sender.hasPermission("serverplugin1201.giveitems")) {
+        if (sender.hasPermission("venture_plugin.giveitems")) {
             if (args.length == 1) {
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     argsList.add(player.getName());
                 }
             } else if (args.length == 2) {
-                for (ItemForgerRegistry.ItemMaps itemMaps : ItemForgerRegistry.ItemMaps.values()) {
-                    String itemMapsName = itemMaps.getName();
-                    argsList.add(itemMapsName);
+                HashMap<String, ItemForger> itemCommandNameMap = plugin.getItemCommandNameMap();
+                for (String string : itemCommandNameMap.keySet())
+                {
+                    argsList.add(string);
                 }
             }
         } else {
