@@ -1,9 +1,8 @@
 
 toughness: 4
 fortitude: 1
-auraBaseDamage: 5
-abilityDuration: 5
-abilityCooldown: 5
+auraBaseDamage: 8
+auraRadius: 5
 manaCost: 30
 abilityName: Blazing Aura
 

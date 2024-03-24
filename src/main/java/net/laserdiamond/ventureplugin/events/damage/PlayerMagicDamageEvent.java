@@ -31,7 +31,7 @@ public class PlayerMagicDamageEvent extends PlayerEvent implements Cancellable {
         this.inflictDamage = inflictDamage;
     }
 
-    public static void run(final Player player, LivingEntity target, double damage, boolean inflictDamage)
+    public void run()
     {
         StatPlayer statPlayer = new StatPlayer(player);
         DamageStats damageStats = statPlayer.getDamageStats();

@@ -41,8 +41,8 @@ public class StormLordArmorManager extends VentureArmorSet implements AbilityCas
 
     public StormLordArmorManager()
     {
-        // TODO: Register ability listener in here
         registerArmorSet();
+        plugin.getAbilityListeners().add(this);
     }
 
     @Override
@@ -89,16 +89,6 @@ public class StormLordArmorManager extends VentureArmorSet implements AbilityCas
     }
 
     @Override
-    public Color armorColors(ArmorPieceTypes armorPieceTypes) {
-        return super.armorColors(armorPieceTypes);
-    }
-
-    @Override
-    public HashMap<VentureItemStatKeys, Double> createVentureStats(@NotNull ArmorPieceTypes armorPieceTypes, int stars) {
-        return super.createVentureStats(armorPieceTypes, stars);
-    }
-
-    @Override
     public List<String> createLore(@NotNull ArmorPieceTypes armorPieceTypes, int stars) {
         int blastRadius = config().getInt("blastRadius");
         int weaknessLvl = config().getInt("weaknessLvl");
@@ -139,21 +129,6 @@ public class StormLordArmorManager extends VentureArmorSet implements AbilityCas
         // -Thunder Strike enchantment level
         // -Magic Damage
         return lore;
-    }
-
-    @Override
-    public ItemForger createArmorSet(@NotNull ArmorPieceTypes armorPieceTypes, int stars) {
-        return super.createArmorSet(armorPieceTypes, stars);
-    }
-
-    @Override
-    public boolean isWearingFullSet(Player player) {
-        return super.isWearingFullSet(player);
-    }
-
-    @Override
-    public void registerArmorSet() {
-        super.registerArmorSet();
     }
 
     @AbilityHandler(abilityCastType = AbilityCastType.DROP_ITEM)
@@ -199,7 +174,8 @@ public class StormLordArmorManager extends VentureArmorSet implements AbilityCas
                                 Bukkit.getPluginManager().callEvent(magicDamageEvent);
                                 if (!magicDamageEvent.isCancelled())
                                 {
-                                    PlayerMagicDamageEvent.run(player, livingEntity, finalDamage, true);
+                                    // FIXME:
+                                    magicDamageEvent.run();
                                 }
                             }
                         }

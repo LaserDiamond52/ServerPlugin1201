@@ -113,6 +113,9 @@ public final class VenturePlugin extends JavaPlugin {
         setUpCooldowns();
         getServer().getPluginManager().registerEvents(new PlayerJoinServer(this), this);
 
+        // Spell Casts
+        getServer().getPluginManager().registerEvents(new AbilityListeners(this),this);
+
         // Register timers
         createTasks();
 
@@ -151,8 +154,7 @@ public final class VenturePlugin extends JavaPlugin {
         // Mob names
         getServer().getPluginManager().registerEvents(new mobHealthDisplay(this),this);
 
-        // Spell Casts
-        getServer().getPluginManager().registerEvents(new AbilityListeners(this),this);
+
 
         // Register Commands
         getCommand("plugineffect").setExecutor(new EffectsCommand(this));
@@ -160,6 +162,7 @@ public final class VenturePlugin extends JavaPlugin {
         getCommand("pluginenchant").setExecutor(new EnchantCommand());
         getCommand("stats").setExecutor(new ViewStats());
         getCommand("refillmana").setExecutor(new fillMana());
+        // TODO: Summon cmd for mobs
 
         // TODO: Test Spell Casters
         addAbilities();
@@ -321,25 +324,6 @@ public final class VenturePlugin extends JavaPlugin {
     private void addAbilities()
     {
         RegisterAbilityCaster.addListener(new EnchantListeners(this),this);
-        RegisterAbilityCaster.addListener(stormLordArmorManager, this);
-
-        /*
-        for (AbilityListener abilityListener : abilityListeners)
-        {
-            for (Method method : abilityListener.getClass().getDeclaredMethods())
-            {
-                AbilityHandler annotation = method.getAnnotation(AbilityHandler.class);
-                switch (annotation.abilityCastType())
-                {
-                    case RIGHT_CLICK -> rightClickAbilities.add(method);
-                    case LEFT_CLICK -> leftClickAbilities.add(method);
-                    case DROP_ITEM -> dropItemAbilities.add(method);
-                    case RUNNABLE -> runnableAbilities.add(method);
-                    case ATTACK_ENTITY -> attackEntityAbilities.add(method);
-                }
-            }
-        }
-         */
     }
 
     private void saveProfilesToConfigs() {

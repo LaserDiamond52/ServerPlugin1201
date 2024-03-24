@@ -22,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * An abstract class that represents a Venture plugin armor set
@@ -57,7 +58,7 @@ public abstract class VentureArmorSet extends VentureStatItem {
      * @param armorPieceTypes The armor piece type
      * @return the color for the armor piece
      */
-    public Color armorColors(ArmorPieceTypes armorPieceTypes)
+    public final Color armorColors(ArmorPieceTypes armorPieceTypes)
     {
         String armorPieceString = armorPieceTypes.getName();
         int red = config().getInt(armorPieceString + "Red");
@@ -79,7 +80,7 @@ public abstract class VentureArmorSet extends VentureStatItem {
      * SigBits needed for player head skin
      * @return
      */
-    public final int[] sigBits()
+    private int[] sigBits()
     {
         return new int[]{setArmorCMD().getHelmet(), setArmorCMD().getHelmet()};
     }
@@ -145,37 +146,32 @@ public abstract class VentureArmorSet extends VentureStatItem {
         return itemStatKeysDoubleHashMap;
     }
 
-    public Multimap<Attribute, AttributeModifier> createArmorAttributes(@NotNull ArmorPieceTypes armorPieceTypes, int stars)
+    public final Multimap<Attribute, AttributeModifier> createArmorAttributes(@NotNull ArmorPieceTypes armorPieceTypes, int stars)
     {
-        List<Attribute> armorAttributes = new ArrayList<>();
-        armorAttributes.add(Attribute.GENERIC_ATTACK_DAMAGE);
-        armorAttributes.add(Attribute.GENERIC_ARMOR);
-        armorAttributes.add(Attribute.GENERIC_ARMOR_TOUGHNESS);
-
         String armorPiece = armorPieceTypes.getName();
         double damage = config().getDouble(armorPiece + "AttackDamage") * (1 + stars * this.starBonus);
         double armor = config().getDouble(armorPiece + "Armor") * (1 + stars * this.starBonus);
         double toughness = config().getDouble("toughness");
         ItemForger itemForger = new ItemForger(Material.STONE_SWORD);
-        for (ArmorPieceTypes armorPieceTypes1 : ArmorPieceTypes.values())
-        {
-            EquipmentSlot slot = armorPieceTypes1.getEquipmentSlot();
-            for (Attribute attribute : armorAttributes)
-            {
-                double amount = 0;
-                switch (attribute)
-                {
-                    case GENERIC_ATTACK_DAMAGE -> amount = damage;
-                    case GENERIC_ARMOR -> amount = armor;
-                    case GENERIC_ARMOR_TOUGHNESS -> amount = toughness;
-                }
-                if (amount != 0)
-                {
-                    itemForger.addAttributeModifer(attribute.getKey().toString(), amount, attribute, AttributeModifier.Operation.ADD_NUMBER, slot);
-                }
-            }
 
+        EquipmentSlot equipmentSlot = null;
+
+        switch (armorPieceTypes)
+        {
+            case HELMET -> equipmentSlot = EquipmentSlot.HEAD;
+            case CHESTPLATE -> equipmentSlot = EquipmentSlot.CHEST;
+            case LEGGINGS -> equipmentSlot = EquipmentSlot.LEGS;
+            case BOOTS -> equipmentSlot = EquipmentSlot.FEET;
         }
+
+        AttributeModifier damageModifier = new AttributeModifier(UUID.randomUUID(),"generic.attack_damage", damage, AttributeModifier.Operation.ADD_SCALAR, equipmentSlot);
+        AttributeModifier armorModifier = new AttributeModifier(UUID.randomUUID(),"generic.armor", armor, AttributeModifier.Operation.ADD_NUMBER, equipmentSlot);
+        AttributeModifier toughnessModifier = new AttributeModifier(UUID.randomUUID(),"generic.armor_toughness", toughness, AttributeModifier.Operation.ADD_NUMBER, equipmentSlot);
+
+        itemForger.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, damageModifier);
+        itemForger.addAttributeModifier(Attribute.GENERIC_ARMOR, armorModifier);
+        itemForger.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, toughnessModifier);
+
         return itemForger.getAttributes();
     }
 
@@ -187,7 +183,7 @@ public abstract class VentureArmorSet extends VentureStatItem {
      * @param stars The amount of stars the item has
      * @return The armor piece as an ItemForger instance
      */
-    public ItemForger createArmorSet(@NotNull ArmorPieceTypes armorPieceTypes, int stars)
+    public final ItemForger createArmorSet(@NotNull ArmorPieceTypes armorPieceTypes, int stars)
     {
         String armorPieceString = armorPieceTypes.getName();
         String armorName = armorPieceString.substring(0,1).toUpperCase() + armorPieceString.substring(1);
@@ -198,7 +194,7 @@ public abstract class VentureArmorSet extends VentureStatItem {
                 .setRarity(rarity())
                 .setUnbreakable(isUnbreakable())
                 .setFireResistant(isFireResistant())
-                .setAttributeModifiers(createArmorAttributes(armorPieceTypes, stars), true)
+                .setAttributeModifiers(createArmorAttributes(armorPieceTypes, stars), false)
                 .setItemStats(createVentureStats(armorPieceTypes, stars));
 
         switch (armorPieceMaterials(armorPieceTypes))
@@ -224,7 +220,7 @@ public abstract class VentureArmorSet extends VentureStatItem {
      * @param stars The stars the armor piece will have
      * @return The armor piece as an ItemForger instance
      */
-    public ItemForger createPlayerArmorSet(Player player, @NotNull ArmorPieceTypes armorPieceTypes, int stars)
+    public final ItemForger createPlayerArmorSet(Player player, @NotNull ArmorPieceTypes armorPieceTypes, int stars)
     {
         String armorPieceString = armorPieceTypes.getName();
         String armorName = armorPieceString.substring(0,1).toUpperCase() + armorPieceString.substring(1);
