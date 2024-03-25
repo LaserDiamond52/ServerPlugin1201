@@ -4,10 +4,10 @@ import org.bukkit.NamespacedKey;
 
 public enum ItemPropertiesKeys {
 
-    RARITY_KEY (new NamespacedKey("itemdata", "rarity")),
-    STARS_KEY (new NamespacedKey("itemdata", "stars")),
-    FIRE_RESISTANCE_KEY (new NamespacedKey("itemdata", "fire_resistant")),
-    ITEM_TYPE (new NamespacedKey("itemdata", "itemtype"));
+    RARITY_KEY (new NamespacedKey("item_data", "rarity")),
+    STARS_KEY (new NamespacedKey("item_data", "stars")),
+    FIRE_RESISTANCE_KEY (new NamespacedKey("item_data", "fire_resistant")),
+    ITEM_MAP_KEY(new NamespacedKey("item_data", "item_key"));
 
     private final NamespacedKey key;
     ItemPropertiesKeys(NamespacedKey key) {

@@ -4,10 +4,8 @@ import com.google.common.collect.Multimap;
 import net.laserdiamond.ventureplugin.VenturePlugin;
 import net.laserdiamond.ventureplugin.items.armor.ArmorEquipStats;
 import net.laserdiamond.ventureplugin.items.util.ItemForger;
-import net.laserdiamond.ventureplugin.items.util.ItemForgerRegistry;
 import net.laserdiamond.ventureplugin.items.util.ItemNameBuilder;
 import net.laserdiamond.ventureplugin.items.util.VentureStatItem;
-import net.laserdiamond.ventureplugin.util.ItemRegistryKey;
 import net.laserdiamond.ventureplugin.util.VentureItemStatKeys;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -15,8 +13,6 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -29,10 +25,7 @@ import java.util.UUID;
  */
 public abstract class VentureArmorSet extends VentureStatItem {
 
-    private VenturePlugin instance()
-    {
-        return VenturePlugin.getInstance();
-    }
+    public final VenturePlugin plugin = VenturePlugin.getInstance();
 
     /**
      * The name of the armor set
@@ -149,7 +142,7 @@ public abstract class VentureArmorSet extends VentureStatItem {
     public final Multimap<Attribute, AttributeModifier> createArmorAttributes(@NotNull ArmorPieceTypes armorPieceTypes, int stars)
     {
         String armorPiece = armorPieceTypes.getName();
-        double damage = config().getDouble(armorPiece + "AttackDamage") * (1 + stars * this.starBonus);
+        double damage = config().getDouble(armorPiece + "MeleeDamage") * 0.01 * (1 + stars * this.starBonus);
         double armor = config().getDouble(armorPiece + "Armor") * (1 + stars * this.starBonus);
         double toughness = config().getDouble("toughness");
         ItemForger itemForger = new ItemForger(Material.STONE_SWORD);
@@ -222,8 +215,9 @@ public abstract class VentureArmorSet extends VentureStatItem {
      */
     public final ItemForger createPlayerArmorSet(Player player, @NotNull ArmorPieceTypes armorPieceTypes, int stars)
     {
-        String armorPieceString = armorPieceTypes.getName();
-        String armorName = armorPieceString.substring(0,1).toUpperCase() + armorPieceString.substring(1);
+        String armorPieceTypesName = armorPieceTypes.getName();
+        String armorName = armorPieceTypesName.substring(0,1).toUpperCase() + armorPieceTypesName.substring(1);
+        String keyName = (armorSetName() + "_" + armorPieceTypesName + "_" + stars).toLowerCase().replace(" ", "_");
         ItemForger itemForger = new ItemForger(armorPieceMaterials(armorPieceTypes))
                 .setName(ItemNameBuilder.name(armorSetName() + " " + armorName, stars))
                 .setStars(stars)
@@ -232,7 +226,8 @@ public abstract class VentureArmorSet extends VentureStatItem {
                 .setUnbreakable(isUnbreakable())
                 .setFireResistant(isFireResistant())
                 .setAttributeModifiers(createArmorAttributes(armorPieceTypes, stars), true)
-                .setItemStats(createVentureStats(armorPieceTypes, stars));
+                .setItemStats(createVentureStats(armorPieceTypes, stars))
+                .setItemKey(keyName);
 
         switch (armorPieceMaterials(armorPieceTypes))
         {
@@ -265,45 +260,45 @@ public abstract class VentureArmorSet extends VentureStatItem {
      */
     public void registerArmorSet()
     {
-        //ItemRegistry registry = new ItemRegistry(instance());
-        HashMap<ItemRegistryKey, ItemForger> registryMap = instance().getItemRegistryMap();
-        HashMap<String, ItemForger> nameMap = instance().getItemCommandNameMap();
+        // FIXME: Item registry SHOULD NOT use custom model data for the map. Use the item's name and the amount of stars it has and store it as the key
+        // FIXME: Use command name as map
+        HashMap<String, ItemForger> itemRegistryMap = plugin.getItemRegistryMap();
+        HashMap<String, VentureArmorSet> playerItemRegistry = plugin.getPlayerArmorItemRegistryMap();
 
-        int maxStars = instance().getConfig().getInt("maxStars");
-
+        int maxStars = plugin.getConfig().getInt("maxStars");
 
         for (int i = 0; i < maxStars; i++)
         {
             for (ArmorPieceTypes armorPieceTypes : ArmorPieceTypes.values())
             {
-                ItemForger armorItem = createArmorSet(armorPieceTypes, i);
                 String armorPieceTypeName = armorPieceTypes.getName();
                 String commandName = (armorSetName() + "_" + armorPieceTypeName + "_" + i).toLowerCase().replace(" ", "_");
-                nameMap.put(commandName, armorItem);
-                ItemRegistryKey key = new ItemRegistryKey(armorItem.getCustomModelData(), i);
-                registryMap.put(key, createArmorSet(armorPieceTypes, i));
+                ItemForger armorItem = createArmorSet(armorPieceTypes, i).setItemKey(commandName);
+                itemRegistryMap.put(commandName, armorItem);
+                if (registerPlayerArmorSet())
+                {
+                    playerItemRegistry.put(commandName, this);
+                }
             }
         }
+
 
     }
 
     // TODO: Finish player armor registry (or figure out at least)
-    @Deprecated
-    public void registerArmorSetPlayer(Player player)
+
+    /**
+     * Determines if the armor set should be registered as a player-based armor set
+     * <p>
+     * Player-based armor sets have unique properties to them, in that their lore and/or stats and other properties may be determined by the player that is currently holding them
+     * <p>
+     * If createPlayerLore or other player-based methods are overridden in the child class, and this is false, they will not be in use
+     * @return True if this armor set should be player-based, false if not (false by default)
+     */
+    public boolean registerPlayerArmorSet()
     {
-        ItemForgerRegistry registry = new ItemForgerRegistry(instance());
-        HashMap<ItemRegistryKey, ItemForger> registryPlayerMap = registry.getPlayerItemForgerRegistryMap();
-
-        int maxStars = instance().getConfig().getInt("maxStars");
-
-
-        for (int i = 0; i < maxStars; i++)
-        {
-            for (ArmorPieceTypes armorPieceTypes : ArmorPieceTypes.values())
-            {
-                ItemRegistryKey key = new ItemRegistryKey(createArmorSet(armorPieceTypes, i).getCustomModelData(), i);
-                registryPlayerMap.put(key, createPlayerArmorSet(player, armorPieceTypes, i));
-            }
-        }
+        return false;
     }
+
+
 }

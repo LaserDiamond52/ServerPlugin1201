@@ -27,16 +27,19 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
-public class BlazeArmorManager extends VentureArmorSet implements AbilityCasting.RunnableSpell {
+public final class BlazeArmorManager extends VentureArmorSet implements AbilityCasting.RunnableSpell {
 
     // TODO: Create rest of lore for armor
-    private final VenturePlugin plugin = VenturePlugin.getInstance();
+    //private final VenturePlugin plugin = VenturePlugin.getInstance();
+    private final HashMap<UUID, Integer> blazeAuraTimer;
 
     public BlazeArmorManager()
     {
         registerArmorSet();
         plugin.getAbilityListeners().add(this);
+        blazeAuraTimer = new HashMap<>();
     }
     @Override
     public String armorSetName() {
@@ -110,51 +113,63 @@ public class BlazeArmorManager extends VentureArmorSet implements AbilityCasting
 
     @AbilityHandler(abilityCastType = AbilityCastType.RUNNABLE)
     @Override
-    public void onActivate(Player player, int timer)
+    public void onActivate(Player player)
     {
         StatPlayer statPlayer = new StatPlayer(player);
         Stats stats = statPlayer.getStats();
         //String abilityName = config().getString("abilityName");
         double manaCost = config().getDouble("manaCost");
         double auraRadius = config().getDouble("auraRadius");
-        double auraDamage = config().getDouble("auraDamage");
+        double auraDamage = config().getDouble("auraBaseDamage");
         double availableMana = stats.getAvailableMana();
 
         PlayerSpellCastEvent spellCastEvent = new PlayerSpellCastEvent(player, manaCost);
         double eventCost = spellCastEvent.getManaCost();
 
+        //player.sendMessage("running");
+
+        if (!blazeAuraTimer.containsKey(player.getUniqueId()) || blazeAuraTimer.get(player.getUniqueId()) == null)
+        {
+            blazeAuraTimer.put(player.getUniqueId(), 0);
+        }
+
+        Integer playerTimer = blazeAuraTimer.get(player.getUniqueId());
+
         if (!isWearingFullSet(player))
         {
             return;
         }
-        if (timer == 20 && player.isSneaking())
+        if (player.isSneaking())
         {
-            if (!(availableMana >= eventCost))
-            {
-                player.sendMessage(Messages.notEnoughMana());
-                return;
-            }
-            Bukkit.getPluginManager().callEvent(spellCastEvent);
-            if (!spellCastEvent.isCancelled())
-            {
-                stats.setAvailableMana(availableMana - eventCost);
+            blazeAuraTimer.put(player.getUniqueId(), playerTimer + 1);
 
-                for (LivingEntity livingEntity : player.getLocation().getNearbyLivingEntities(auraRadius))
+            if (playerTimer >= 20)
+            {
+                blazeAuraTimer.put(player.getUniqueId(), 0);
+                if (!(availableMana >= eventCost))
                 {
-                    if (livingEntity != player)
+                    player.sendMessage(Messages.notEnoughMana());
+                    return;
+                }
+                Bukkit.getPluginManager().callEvent(spellCastEvent);
+                if (!spellCastEvent.isCancelled())
+                {
+                    stats.setAvailableMana(availableMana - eventCost);
+
+                    for (LivingEntity livingEntity : player.getLocation().getNearbyLivingEntities(auraRadius))
                     {
-                        PlayerMagicDamageEvent magicDamageEvent = new PlayerMagicDamageEvent(player, livingEntity, auraDamage, true);
-                        Bukkit.getPluginManager().callEvent(magicDamageEvent);
-                        if (!magicDamageEvent.isCancelled())
+                        if (livingEntity != player)
                         {
-                            // FIXME:
-                            magicDamageEvent.run();
+                            livingEntity.setFireTicks(livingEntity.getFireTicks() + 100);
+                            PlayerMagicDamageEvent magicDamageEvent = new PlayerMagicDamageEvent(player, livingEntity, auraDamage, true);
+                            Bukkit.getPluginManager().callEvent(magicDamageEvent);
                         }
                     }
-                }
-            } else {
+                } else {
 
+                }
             }
+
         }
 
 

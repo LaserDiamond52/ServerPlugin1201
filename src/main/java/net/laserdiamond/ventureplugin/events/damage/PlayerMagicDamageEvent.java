@@ -9,13 +9,14 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 
+
+/**
+ * Event that increases Player damage by their magic damage modifiers. If the target is a player, their defense points will reduce damage accordingly
+ * <p>
+ * Can choose whether the damage should be inflicted or not, but does not cancel the event
+ */
 public class PlayerMagicDamageEvent extends PlayerEvent implements Cancellable {
 
-    /**
-     * Event that increases Player damage by their magic damage modifiers. If the target is a player, their defense points will reduce damage accordingly
-     * <p>
-     * Can choose whether the damage should be inflicted or not, but does not cancel the event
-     */
     private final LivingEntity target;
     private static final HandlerList HANDLER_LIST = new HandlerList();
     private double damage;
@@ -29,34 +30,6 @@ public class PlayerMagicDamageEvent extends PlayerEvent implements Cancellable {
         this.damage = damage;
         this.isCancelled = false;
         this.inflictDamage = inflictDamage;
-    }
-
-    public void run()
-    {
-        StatPlayer statPlayer = new StatPlayer(player);
-        DamageStats damageStats = statPlayer.getDamageStats();
-        double bMagic = damageStats.getbMagicDmg();
-        double pMagicIncrease = 1 + (damageStats.getpMagicDmg() * 0.01);
-
-        double magicDamage = (bMagic + damage) * pMagicIncrease;
-
-        if (target instanceof Player playerTarget) // Check if target is a player
-        {
-            StatPlayer statPlayerTarget = new StatPlayer(playerTarget);
-            DefenseStats defenseStats = statPlayerTarget.getDefenseStats();
-            double defense = defenseStats.getDefense();
-            double magicDefense = defenseStats.getMagicDefense();
-            magicDamage = ApplyDefense.finalDamage(defense + magicDefense, magicDamage); // Apply magic protection armor
-        }
-
-        // TODO: May want to remove these
-        //EntityHealthDisplayChangeEvent entityHealthDisplayChangeEvent = new EntityHealthDisplayChangeEvent(target, magicDamage, true);
-        //Bukkit.getPluginManager().callEvent(entityHealthDisplayChangeEvent);
-
-        if (inflictDamage)
-        {
-            target.damage(magicDamage, player);
-        }
     }
 
     @Override

@@ -44,7 +44,7 @@ public class ItemForger {
     private final NamespacedKey meleeDamageKey = VentureItemStatKeys.ARMOR_MELEE_DAMAGE_KEY.getKey();
     private final NamespacedKey magicDamageKey = VentureItemStatKeys.ARMOR_MAGIC_DAMAGE_KEY.getKey();
     private final NamespacedKey rangeDamageKey = VentureItemStatKeys.ARMOR_RANGE_DAMAGE_KEY.getKey();
-    private static final NamespacedKey itemTypeKey = ItemPropertiesKeys.ITEM_TYPE.getKey();
+    private static final NamespacedKey ITEM_MAP_KEY = ItemPropertiesKeys.ITEM_MAP_KEY.getKey();
 
     private final int maxStars = plugin.getConfig().getInt("maxStars");
 
@@ -981,23 +981,6 @@ public class ItemForger {
         return statLore;
     }
 
-    public String getItemTypeKey() {
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        return itemMeta.getPersistentDataContainer().get(itemTypeKey, PersistentDataType.STRING);
-    }
-
-    public static String getItemTypeKey(ItemStack itemStack) {
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        return itemMeta.getPersistentDataContainer().get(itemTypeKey, PersistentDataType.STRING);
-    }
-
-    public ItemForger setItemTypeKey(String input) {
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.getPersistentDataContainer().set(itemTypeKey, PersistentDataType.STRING, input);
-        itemStack.setItemMeta(itemMeta);
-        return this;
-    }
-
     public ItemForger setFireResistant(boolean fireResistant) {
         if (fireResistant)
         {
@@ -1023,6 +1006,20 @@ public class ItemForger {
         }
         itemStack.setItemMeta(itemMeta);
         return this;
+    }
+
+    public ItemForger setItemKey(String value)
+    {
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        itemMeta.getPersistentDataContainer().set(ITEM_MAP_KEY, PersistentDataType.STRING, value);
+        itemStack.setItemMeta(itemMeta);
+        return this;
+    }
+
+    public String getItemKey()
+    {
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        return itemMeta.getPersistentDataContainer().get(ITEM_MAP_KEY, PersistentDataType.STRING);
     }
 
     public ItemStack toItemStack() {

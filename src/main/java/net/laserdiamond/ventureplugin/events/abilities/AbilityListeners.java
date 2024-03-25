@@ -20,44 +20,38 @@ public class AbilityListeners extends BukkitRunnable implements Listener {
     private final VenturePlugin plugin;
     private final HashMap<AbilityListener, Method> rightClickAbility, leftClickAbility, dropItemAbility, runnableAbility, attackAbility;
 
+
+
     public AbilityListeners(VenturePlugin plugin)
     {
         this.plugin = plugin;
-        rightClickAbility = new HashMap<>();
-        leftClickAbility = new HashMap<>();
-        dropItemAbility = new HashMap<>();
-        runnableAbility = new HashMap<>();
-        attackAbility = new HashMap<>();
+        rightClickAbility = plugin.getAbilities().rightClickAbilities();
+        leftClickAbility = plugin.getAbilities().leftClickAbilities();
+        runnableAbility = plugin.getAbilities().runnableAbilities();
+        dropItemAbility = plugin.getAbilities().dropItemAbilities();
+        attackAbility = plugin.getAbilities().attackAbility();
     }
 
     /**
      * BukkitRunnable for Sneaking/Passive abilities
      */
-
-    private int timer = 0;
-
     @Override
     public void run()
     {
         for (Player player : Bukkit.getServer().getOnlinePlayers())
         {
-            timer++;
             try {
-                PlayerRunnableSpell(player, timer);
+                PlayerRunnableSpell(player);
             } catch (InvocationTargetException | IllegalAccessException e) {
                 Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "!ERROR WHILE TRYING TO ACTIVATE SPELL/ABILITY!");
                 throw new RuntimeException(e);
-            }
-            if (timer >= 20)
-            {
-                timer = 0;
             }
         }
     }
 
     /**
      * Event handler for registered click abilities
-     * @param event
+     * @param event PlayerInteractEvent
      * @throws InvocationTargetException
      * @throws IllegalAccessException
      */
@@ -120,6 +114,12 @@ public class AbilityListeners extends BukkitRunnable implements Listener {
 
     private void dropItemAbility(PlayerDropItemEvent event) throws InvocationTargetException, IllegalAccessException
     {
+        for (AbilityListener listener : dropItemAbility.keySet())
+        {
+            Method method = dropItemAbility.get(listener);
+            method.invoke(listener, event);
+        }
+        /*
         List<AbilityListener> listeners = plugin.getAbilityListeners();
         if (dropItemAbility.isEmpty())
         {
@@ -147,6 +147,8 @@ public class AbilityListeners extends BukkitRunnable implements Listener {
             }
         }
 
+         */
+
     }
 
     @Deprecated
@@ -169,7 +171,8 @@ public class AbilityListeners extends BukkitRunnable implements Listener {
     }
 
     @Deprecated
-    private void PlayerRunnableSpell(Player player, int timer) throws InvocationTargetException, IllegalAccessException {
+    private void PlayerRunnableSpell(Player player) throws InvocationTargetException, IllegalAccessException {
+        /*
         List<AbilityListener> listeners = plugin.getAbilityListeners();
         for (AbilityListener listener : listeners)
         {
@@ -187,9 +190,36 @@ public class AbilityListeners extends BukkitRunnable implements Listener {
                 }
             }
         }
+
+         */
+        for (AbilityListener listener : runnableAbility.keySet())
+        {
+            Method method = runnableAbility.get(listener);
+            method.invoke(listener, player);
+        }
     }
 
-    private void runClickAbility(HashMap<AbilityListener, Method> abilities, AbilityCastType abilityCastType, PlayerInteractEvent event) throws InvocationTargetException, IllegalAccessException {
+    private void runClickAbility(HashMap<AbilityListener, Method> abilities, AbilityCastType abilityCastType, PlayerInteractEvent event) throws InvocationTargetException, IllegalAccessException
+    {
+        switch (abilityCastType)
+        {
+            case RIGHT_CLICK -> {
+                for (AbilityListener listener : rightClickAbility.keySet())
+                {
+                    Method method = rightClickAbility.get(listener);
+                    method.invoke(listener, event);
+                }
+            }
+            case LEFT_CLICK -> {
+                for (AbilityListener listener : leftClickAbility.keySet())
+                {
+                    Method method = leftClickAbility.get(listener);
+                    method.invoke(listener, event);
+                }
+            }
+        }
+
+        /*
         List<AbilityListener> listeners = plugin.getAbilityListeners();
         if (abilities.isEmpty())
         {
@@ -216,5 +246,7 @@ public class AbilityListeners extends BukkitRunnable implements Listener {
                 method.invoke(listener, event);
             }
         }
+
+         */
     }
 }

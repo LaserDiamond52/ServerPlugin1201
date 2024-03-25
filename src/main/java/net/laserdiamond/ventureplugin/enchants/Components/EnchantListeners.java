@@ -119,20 +119,20 @@ public class EnchantListeners implements Listener, AbilityListener, AbilityCasti
                 if (event.getEntity() instanceof LivingEntity livingEntity) {
                     // TODO: Living Entity is hit
 
-                    if (mainHandMeta.hasEnchant(EnchantsClass.VENOMOUS_ASPECT)) {
-                        int enchantLvl = mainHandMeta.getEnchantLevel(EnchantsClass.VENOMOUS_ASPECT);
+                    if (mainHandMeta.hasEnchant(VentureEnchants.VENOMOUS_ASPECT)) {
+                        int enchantLvl = mainHandMeta.getEnchantLevel(VentureEnchants.VENOMOUS_ASPECT);
                         int finalVenomDuration = venomDuration * enchantLvl;
 
                         livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.POISON, finalVenomDuration * 20, venomLvl));
                     }
-                    if (mainHandMeta.hasEnchant(EnchantsClass.DECAY)) {
-                        int enchantLvl = mainHandMeta.getEnchantLevel(EnchantsClass.DECAY);
+                    if (mainHandMeta.hasEnchant(VentureEnchants.DECAY)) {
+                        int enchantLvl = mainHandMeta.getEnchantLevel(VentureEnchants.DECAY);
                         int finalDecayDuration = decayDuration * enchantLvl;
 
                         livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, finalDecayDuration, decayWitherLvl));
                     }
-                    if (mainHandMeta.hasEnchant(EnchantsClass.THUNDER_STRIKE)) {
-                        int enchantLvl = mainHandMeta.getEnchantLevel(EnchantsClass.THUNDER_STRIKE);
+                    if (mainHandMeta.hasEnchant(VentureEnchants.THUNDER_STRIKE)) {
+                        int enchantLvl = mainHandMeta.getEnchantLevel(VentureEnchants.THUNDER_STRIKE);
                         double finalDamageIncrease = 1 + thunderStrikeDamageIncrease * enchantLvl;
                         double finalDamage = eventDamage * finalDamageIncrease;
 
@@ -144,8 +144,8 @@ public class EnchantListeners implements Listener, AbilityListener, AbilityCasti
                             ThunderStrikeProfiles.put(playerUUID, 0);
                         }
                     }
-                    if (mainHandMeta.hasEnchant(EnchantsClass.GLOW)) {
-                        int enchantLvl = mainHandMeta.getEnchantLevel(EnchantsClass.GLOW);
+                    if (mainHandMeta.hasEnchant(VentureEnchants.GLOW)) {
+                        int enchantLvl = mainHandMeta.getEnchantLevel(VentureEnchants.GLOW);
                         int finalGlowDuration = glowDuration * enchantLvl;
 
                         livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, finalGlowDuration, 0));
@@ -224,16 +224,16 @@ public class EnchantListeners implements Listener, AbilityListener, AbilityCasti
             //defenseStats.setProjectileDefense(currentProjectileArmor + finalProt);
             //enchantStats.setProjectileDefense(currentEnchantProjectileArmor + finalProt);
         }
-        if (itemMeta.hasEnchant(EnchantsClass.MAGIC_PROTECTION)) {
-            int protectionLvl = itemMeta.getEnchantLevel(EnchantsClass.MAGIC_PROTECTION);
+        if (itemMeta.hasEnchant(VentureEnchants.MAGIC_PROTECTION)) {
+            int protectionLvl = itemMeta.getEnchantLevel(VentureEnchants.MAGIC_PROTECTION);
             double finalProt = magic_armor * protectionLvl;
             PlayerEnchantStatKeys.add(statProfile, PlayerEnchantStatKeys.MAGIC_DEFENSE, finalProt);
 
             //defenseStats.setMagicDefense(currentMagicArmor + finalProt);
             //enchantStats.setMagicDefense(currentEnchantMagicArmor + finalProt);
         }
-        if (itemMeta.hasEnchant(EnchantsClass.TOUGHNESS)) {
-            int toughnessLvl = itemMeta.getEnchantLevel(EnchantsClass.TOUGHNESS);
+        if (itemMeta.hasEnchant(VentureEnchants.TOUGHNESS)) {
+            int toughnessLvl = itemMeta.getEnchantLevel(VentureEnchants.TOUGHNESS);
             double finalToughness = toughness * toughnessLvl;
             PlayerEnchantStatKeys.add(statProfile, PlayerEnchantStatKeys.TOUGHNESS, finalToughness);
 
@@ -290,15 +290,15 @@ public class EnchantListeners implements Listener, AbilityListener, AbilityCasti
             //defenseStats.setProjectileDefense(currentProjectileArmor - finalProt);
             //enchantStats.setProjectileDefense(currentEnchantProjectileArmor - finalProt);
         }
-        if (itemMeta.hasEnchant(EnchantsClass.MAGIC_PROTECTION)) {
-            int protectionLvl = itemMeta.getEnchantLevel(EnchantsClass.MAGIC_PROTECTION);
+        if (itemMeta.hasEnchant(VentureEnchants.MAGIC_PROTECTION)) {
+            int protectionLvl = itemMeta.getEnchantLevel(VentureEnchants.MAGIC_PROTECTION);
             double finalProt = magic_armor * protectionLvl;
             PlayerEnchantStatKeys.remove(statProfile, PlayerEnchantStatKeys.MAGIC_DEFENSE, finalProt);
             //defenseStats.setMagicDefense(currentMagicArmor - finalProt);
             //enchantStats.setMagicDefense(currentEnchantMagicArmor - finalProt);
         }
-        if (itemMeta.hasEnchant(EnchantsClass.TOUGHNESS)) {
-            int toughnessLvl = itemMeta.getEnchantLevel(EnchantsClass.TOUGHNESS);
+        if (itemMeta.hasEnchant(VentureEnchants.TOUGHNESS)) {
+            int toughnessLvl = itemMeta.getEnchantLevel(VentureEnchants.TOUGHNESS);
             double finalToughness = toughness * toughnessLvl;
             PlayerEnchantStatKeys.remove(statProfile, PlayerEnchantStatKeys.TOUGHNESS, finalToughness);
             //defenseStats.setToughness(currentToughness - finalToughness);
@@ -315,8 +315,8 @@ public class EnchantListeners implements Listener, AbilityListener, AbilityCasti
         Double currentMaxMana = stats.getMaxMana();
         Double currentEnchantMana = enchantStats.getMana();
 
-        if (itemMeta.hasEnchant(EnchantsClass.MANA_POOL)) {
-            int manaLvl = itemMeta.getEnchantLevel(EnchantsClass.MANA_POOL);
+        if (itemMeta.hasEnchant(VentureEnchants.MANA_POOL)) {
+            int manaLvl = itemMeta.getEnchantLevel(VentureEnchants.MANA_POOL);
             Double finalMana = mana * manaLvl;
             stats.setMaxMana(currentMaxMana + finalMana);
             enchantStats.setMana(currentEnchantMana + finalMana);
@@ -331,8 +331,8 @@ public class EnchantListeners implements Listener, AbilityListener, AbilityCasti
         Double currentMaxMana = stats.getMaxMana();
         Double currentEnchantMana = enchantStats.getMana();
 
-        if (itemMeta.hasEnchant(EnchantsClass.MANA_POOL)) {
-            int manaLvl = itemMeta.getEnchantLevel(EnchantsClass.MANA_POOL);
+        if (itemMeta.hasEnchant(VentureEnchants.MANA_POOL)) {
+            int manaLvl = itemMeta.getEnchantLevel(VentureEnchants.MANA_POOL);
             Double finalMana = mana * manaLvl;
             stats.setMaxMana(currentMaxMana - finalMana);
             enchantStats.setMana(currentEnchantMana - finalMana);
@@ -352,20 +352,20 @@ public class EnchantListeners implements Listener, AbilityListener, AbilityCasti
         Double currentEnchantMagic = enchantStats.getBaseMagic();
         Double currentEnchantRange = enchantStats.getBaseRange();
 
-        if (itemMeta.hasEnchant(EnchantsClass.MELEE_DAMAGE)) {
-            int meleeLvl = itemMeta.getEnchantLevel(EnchantsClass.MELEE_DAMAGE);
+        if (itemMeta.hasEnchant(VentureEnchants.MELEE_DAMAGE)) {
+            int meleeLvl = itemMeta.getEnchantLevel(VentureEnchants.MELEE_DAMAGE);
             Double finalStrength = meleeLvl * strength;
             damageStats.setbMeleeDmg(currentBaseMelee + finalStrength);
             enchantStats.setBaseMelee(currentEnchantMelee + finalStrength);
         }
-        if (itemMeta.hasEnchant(EnchantsClass.MAGIC_DAMAGE)) {
-            int magicLvl = itemMeta.getEnchantLevel(EnchantsClass.MAGIC_DAMAGE);
+        if (itemMeta.hasEnchant(VentureEnchants.MAGIC_DAMAGE)) {
+            int magicLvl = itemMeta.getEnchantLevel(VentureEnchants.MAGIC_DAMAGE);
             Double finalMagic = magicLvl * arcane;
             damageStats.setbMagicDmg(currentBaseMagic + finalMagic);
             enchantStats.setBaseMagic(currentEnchantMagic + finalMagic);
         }
-        if (itemMeta.hasEnchant(EnchantsClass.RANGE_DAMAGE)) {
-            int rangeLvl = itemMeta.getEnchantLevel(EnchantsClass.RANGE_DAMAGE);
+        if (itemMeta.hasEnchant(VentureEnchants.RANGE_DAMAGE)) {
+            int rangeLvl = itemMeta.getEnchantLevel(VentureEnchants.RANGE_DAMAGE);
             Double finalRange = rangeLvl * archer;
             damageStats.setbRangeDmg(currentBaseRange + finalRange);
             enchantStats.setBaseRange(currentEnchantRange + finalRange);
@@ -385,20 +385,20 @@ public class EnchantListeners implements Listener, AbilityListener, AbilityCasti
         Double currentEnchantMagic = enchantStats.getBaseMagic();
         Double currentEnchantRange = enchantStats.getBaseRange();
 
-        if (itemMeta.hasEnchant(EnchantsClass.MELEE_DAMAGE)) {
-            int meleeLvl = itemMeta.getEnchantLevel(EnchantsClass.MELEE_DAMAGE);
+        if (itemMeta.hasEnchant(VentureEnchants.MELEE_DAMAGE)) {
+            int meleeLvl = itemMeta.getEnchantLevel(VentureEnchants.MELEE_DAMAGE);
             Double finalStrength = meleeLvl * strength;
             damageStats.setbMeleeDmg(currentBaseMelee - finalStrength);
             enchantStats.setBaseMelee(currentEnchantMelee - finalStrength);
         }
-        if (itemMeta.hasEnchant(EnchantsClass.MAGIC_DAMAGE)) {
-            int magicLvl = itemMeta.getEnchantLevel(EnchantsClass.MAGIC_DAMAGE);
+        if (itemMeta.hasEnchant(VentureEnchants.MAGIC_DAMAGE)) {
+            int magicLvl = itemMeta.getEnchantLevel(VentureEnchants.MAGIC_DAMAGE);
             Double finalMagic = magicLvl * arcane;
             damageStats.setbMagicDmg(currentBaseMagic - finalMagic);
             enchantStats.setBaseMagic(currentEnchantMagic - finalMagic);
         }
-        if (itemMeta.hasEnchant(EnchantsClass.RANGE_DAMAGE)) {
-            int rangeLvl = itemMeta.getEnchantLevel(EnchantsClass.RANGE_DAMAGE);
+        if (itemMeta.hasEnchant(VentureEnchants.RANGE_DAMAGE)) {
+            int rangeLvl = itemMeta.getEnchantLevel(VentureEnchants.RANGE_DAMAGE);
             Double finalRange = rangeLvl * archer;
             damageStats.setbRangeDmg(currentBaseRange - finalRange);
             enchantStats.setBaseRange(currentEnchantRange - finalRange);
@@ -409,7 +409,7 @@ public class EnchantListeners implements Listener, AbilityListener, AbilityCasti
     {
         Stats stats = statProfile.stats();
 
-        if (itemMeta.hasEnchant(EnchantsClass.SPEED))
+        if (itemMeta.hasEnchant(VentureEnchants.SPEED))
         {
             stats.setSpeed(stats.getSpeed() + speed);
         }
@@ -419,7 +419,7 @@ public class EnchantListeners implements Listener, AbilityListener, AbilityCasti
     {
         Stats stats = statProfile.stats();
 
-        if (itemMeta.hasEnchant(EnchantsClass.SPEED))
+        if (itemMeta.hasEnchant(VentureEnchants.SPEED))
         {
             stats.setSpeed(stats.getSpeed() - speed);
         }
@@ -429,15 +429,15 @@ public class EnchantListeners implements Listener, AbilityListener, AbilityCasti
     {
         LootStats lootStats = statProfile.lootStats();
 
-        if (itemMeta.hasEnchant(EnchantsClass.ARMOR_MINING_FORTUNE))
+        if (itemMeta.hasEnchant(VentureEnchants.ARMOR_MINING_FORTUNE))
         {
             lootStats.setBonusOreLoot(lootStats.getBonusOreLoot() + minerFortune);
         }
-        if (itemMeta.hasEnchant(EnchantsClass.ARMOR_FORAGING_FORTUNE))
+        if (itemMeta.hasEnchant(VentureEnchants.ARMOR_FORAGING_FORTUNE))
         {
             lootStats.setBonusWoodLoot(lootStats.getBonusWoodLoot() + foragerFortune);
         }
-        if (itemMeta.hasEnchant(EnchantsClass.ARMOR_FISHING_FORTUNE))
+        if (itemMeta.hasEnchant(VentureEnchants.ARMOR_FISHING_FORTUNE))
         {
             lootStats.setFishingLoot(lootStats.getFishingLoot() + fishermanFortune);
         }
@@ -446,15 +446,15 @@ public class EnchantListeners implements Listener, AbilityListener, AbilityCasti
     {
         LootStats lootStats = statProfile.lootStats();
 
-        if (itemMeta.hasEnchant(EnchantsClass.ARMOR_MINING_FORTUNE))
+        if (itemMeta.hasEnchant(VentureEnchants.ARMOR_MINING_FORTUNE))
         {
             lootStats.setBonusOreLoot(lootStats.getBonusOreLoot() - minerFortune);
         }
-        if (itemMeta.hasEnchant(EnchantsClass.ARMOR_FORAGING_FORTUNE))
+        if (itemMeta.hasEnchant(VentureEnchants.ARMOR_FORAGING_FORTUNE))
         {
             lootStats.setBonusWoodLoot(lootStats.getBonusWoodLoot() - foragerFortune);
         }
-        if (itemMeta.hasEnchant(EnchantsClass.ARMOR_FISHING_FORTUNE))
+        if (itemMeta.hasEnchant(VentureEnchants.ARMOR_FISHING_FORTUNE))
         {
             lootStats.setFishingLoot(lootStats.getFishingLoot() - fishermanFortune);
         }
@@ -462,12 +462,11 @@ public class EnchantListeners implements Listener, AbilityListener, AbilityCasti
 
     /**
      * SpellCastHandler that grants enchantments with passive abilities their ability
-     * @param player The player that is casting the ability/spell
-     * @param timer The time interval at which something should happen (max: 20 ticks)
+     * @param player The player that is casting the ability
      */
     @AbilityHandler(abilityCastType = AbilityCastType.RUNNABLE)
     @Override
-    public void onActivate(Player player, int timer)
+    public void onActivate(Player player)
     {
         PlayerInventory playerInventory = player.getInventory();
 
@@ -477,7 +476,7 @@ public class EnchantListeners implements Listener, AbilityListener, AbilityCasti
             ItemMeta helmetMeta = helmet.getItemMeta();
             if (helmetMeta != null && helmetMeta.hasEnchants())
             {
-                if (helmetMeta.hasEnchant(EnchantsClass.NIGHT_VISION))
+                if (helmetMeta.hasEnchant(VentureEnchants.NIGHT_VISION))
                 {
                     player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 100, 0));
                 }

@@ -9,9 +9,9 @@ import org.bukkit.enchantments.EnchantmentTarget;
 import java.lang.reflect.Field;
 import java.util.*;
 
-public class EnchantsClass {
+public class VentureEnchants {
 
-    public static ArrayList<Enchantment> custom_enchants = new ArrayList<>();
+    public static ArrayList<Enchantment> ventureEnchants = new ArrayList<>();
     public static HashMap<Enchantment, String> EnchantmentNames = new HashMap<>();
     public static final Enchantment GLINT = new EnchantmentWrapper("glint", "", 1,1, EnchantmentTarget.ALL, false);
     public static final Enchantment GLOW = new EnchantmentWrapper("glow", "Glow", 1,2, EnchantmentTarget.WEAPON, false, aspectConflicting());
@@ -37,13 +37,13 @@ public class EnchantsClass {
 
         List<Enchantment> enchantsClasses = Arrays.stream(Enchantment.values()).toList();
 
-        boolean registeredGlint = enchantsClasses.contains(EnchantsClass.GLINT);
-        boolean registeredGlow = enchantsClasses.contains(EnchantsClass.GLOW);
-        boolean registeredVenomousAspect = enchantsClasses.contains(EnchantsClass.VENOMOUS_ASPECT);
-        boolean registeredDecay = enchantsClasses.contains(EnchantsClass.DECAY);
-        boolean registeredThunderStrike = enchantsClasses.contains(EnchantsClass.THUNDER_STRIKE);
-        boolean registeredMagicProtection = enchantsClasses.contains(EnchantsClass.MAGIC_PROTECTION);
-        boolean registeredToughness = enchantsClasses.contains(EnchantsClass.TOUGHNESS);
+        boolean registeredGlint = enchantsClasses.contains(VentureEnchants.GLINT);
+        boolean registeredGlow = enchantsClasses.contains(VentureEnchants.GLOW);
+        boolean registeredVenomousAspect = enchantsClasses.contains(VentureEnchants.VENOMOUS_ASPECT);
+        boolean registeredDecay = enchantsClasses.contains(VentureEnchants.DECAY);
+        boolean registeredThunderStrike = enchantsClasses.contains(VentureEnchants.THUNDER_STRIKE);
+        boolean registeredMagicProtection = enchantsClasses.contains(VentureEnchants.MAGIC_PROTECTION);
+        boolean registeredToughness = enchantsClasses.contains(VentureEnchants.TOUGHNESS);
         boolean registeredManaPool = enchantsClasses.contains(MANA_POOL);
         boolean registeredMeleeDamage = enchantsClasses.contains(MELEE_DAMAGE);
         boolean registeredMagicDamage = enchantsClasses.contains(MAGIC_DAMAGE);
@@ -158,7 +158,7 @@ public class EnchantsClass {
         EnchantmentNames.put(Enchantment.SOUL_SPEED, "Soul Speed");
         EnchantmentNames.put(Enchantment.SWIFT_SNEAK, "Swift Sneak");
 
-        for (Enchantment enchantment : custom_enchants)
+        for (Enchantment enchantment : ventureEnchants)
         {
             EnchantmentNames.put(enchantment, enchantment.getName());
         }
@@ -171,7 +171,7 @@ public class EnchantsClass {
             field.setAccessible(true);
             field.set(null, true);
             Enchantment.registerEnchantment(enchantment);
-            custom_enchants.add(enchantment);
+            ventureEnchants.add(enchantment);
         } catch (Exception e) {
             registered = false;
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "ERROR WHILE REGISTERING " + enchantment.getName() + "!");
@@ -192,7 +192,7 @@ public class EnchantsClass {
             @SuppressWarnings("unchecked")
             HashMap<NamespacedKey, Enchantment> byKey = (HashMap<NamespacedKey, Enchantment>) keyField.get(null);
 
-            for (Enchantment enchantment : custom_enchants) {
+            for (Enchantment enchantment : ventureEnchants) {
                 if (byKey.containsKey(enchantment.getKey())) {
                     byKey.remove(enchantment.getKey());
                 }
@@ -203,7 +203,7 @@ public class EnchantsClass {
             @SuppressWarnings("unchecked")
             HashMap<String, Enchantment> byName = (HashMap<String, Enchantment>) nameField.get(null);
 
-            for (Enchantment enchantment : custom_enchants) {
+            for (Enchantment enchantment : ventureEnchants) {
                 if (byName.containsKey(enchantment.getName())) {
                     byName.remove(enchantment.getName());
                 }
@@ -296,7 +296,7 @@ public class EnchantsClass {
         List<String> enchantLore = new ArrayList<>();
         String enchantString;
         for (Enchantment enchantment : enchants.keySet()) {
-            String enchantmentName = EnchantsClass.EnchantmentNames.get(enchantment);
+            String enchantmentName = VentureEnchants.EnchantmentNames.get(enchantment);
             int enchantLvl = enchants.get(enchantment);
 
             if (enchantLvl == enchantment.getMaxLevel()) {
@@ -384,23 +384,23 @@ public class EnchantsClass {
         CURSE_OF_VANISHING (Enchantment.VANISHING_CURSE, "curse_of_vanishing"),
         SOUL_SPEED (Enchantment.SOUL_SPEED, "soul_speed"),
         SWIFT_SNEAK (Enchantment.SWIFT_SNEAK, "swift_sneak"),
-        GLOW (EnchantsClass.GLOW, "glow"),
-        VENOMOUS_ASPECT (EnchantsClass.VENOMOUS_ASPECT, "venomous_aspect"),
-        DECAY (EnchantsClass.DECAY, "decay"),
-        THUNDER_STRIKE (EnchantsClass.THUNDER_STRIKE, "thunder_strike"),
-        MAGIC_PROTECTION (EnchantsClass.MAGIC_PROTECTION, "magic_protection"),
-        TOUGHNESS (EnchantsClass.TOUGHNESS, "toughness"),
-        MANA_POOL (EnchantsClass.MANA_POOL, "mana_pool"),
-        STRENGTH (EnchantsClass.MELEE_DAMAGE, "strength"),
-        ARCANE (EnchantsClass.MAGIC_DAMAGE, "arcane"),
-        ARCHER (EnchantsClass.RANGE_DAMAGE, "archer"),
-        HEALTH (EnchantsClass.HEALTH, "health"),
-        NIGHT_VISION (EnchantsClass.NIGHT_VISION, "night_vision"),
-        SPEED (EnchantsClass.SPEED, "speed"),
-        REACH (EnchantsClass.REACH, "reach"),
-        ARMOR_MINING_FORTUNE (EnchantsClass.ARMOR_MINING_FORTUNE, "miner"),
-        ARMOR_FORAGING_FORTUNE (EnchantsClass.ARMOR_FORAGING_FORTUNE, "forager"),
-        ARMOR_FISHING_FORTUNE (EnchantsClass.ARMOR_FISHING_FORTUNE, "fishing");
+        GLOW (VentureEnchants.GLOW, "glow"),
+        VENOMOUS_ASPECT (VentureEnchants.VENOMOUS_ASPECT, "venomous_aspect"),
+        DECAY (VentureEnchants.DECAY, "decay"),
+        THUNDER_STRIKE (VentureEnchants.THUNDER_STRIKE, "thunder_strike"),
+        MAGIC_PROTECTION (VentureEnchants.MAGIC_PROTECTION, "magic_protection"),
+        TOUGHNESS (VentureEnchants.TOUGHNESS, "toughness"),
+        MANA_POOL (VentureEnchants.MANA_POOL, "mana_pool"),
+        STRENGTH (VentureEnchants.MELEE_DAMAGE, "strength"),
+        ARCANE (VentureEnchants.MAGIC_DAMAGE, "arcane"),
+        ARCHER (VentureEnchants.RANGE_DAMAGE, "archer"),
+        HEALTH (VentureEnchants.HEALTH, "health"),
+        NIGHT_VISION (VentureEnchants.NIGHT_VISION, "night_vision"),
+        SPEED (VentureEnchants.SPEED, "speed"),
+        REACH (VentureEnchants.REACH, "reach"),
+        ARMOR_MINING_FORTUNE (VentureEnchants.ARMOR_MINING_FORTUNE, "miner"),
+        ARMOR_FORAGING_FORTUNE (VentureEnchants.ARMOR_FORAGING_FORTUNE, "forager"),
+        ARMOR_FISHING_FORTUNE (VentureEnchants.ARMOR_FISHING_FORTUNE, "fishing");
 
 
         private final Enchantment enchantment;

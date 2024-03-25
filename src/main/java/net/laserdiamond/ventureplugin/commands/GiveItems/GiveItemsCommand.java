@@ -2,8 +2,6 @@ package net.laserdiamond.ventureplugin.commands.GiveItems;
 
 import net.laserdiamond.ventureplugin.VenturePlugin;
 import net.laserdiamond.ventureplugin.items.util.ItemForger;
-import net.laserdiamond.ventureplugin.items.util.ItemForgerRegistry;
-import net.laserdiamond.ventureplugin.util.ItemRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -39,22 +37,11 @@ public class GiveItemsCommand implements CommandExecutor, TabExecutor {
                 Player target = Bukkit.getPlayer(args[0]);
                 String inputItem = args[1];
                 if (target != null) {
-                    testGive(sender, target, inputItem);
+                    give(sender, target, inputItem);
                 }
             }
         }
         return true;
-    }
-
-    private void give(CommandSender sender, Player target, String input) {
-
-        try {
-            ItemForger itemForger = ItemForgerRegistry.ItemMaps.of(input);
-            target.getInventory().addItem(itemForger.toItemStack());
-            sender.sendMessage(ChatColor.GREEN + "Gave " + itemForger.getName() + ChatColor.GREEN + "to " + target.getName());
-        } catch (IllegalArgumentException exception) {
-            sender.sendMessage(ChatColor.RED + "Not an item: " + input);
-        }
     }
 
     /**
@@ -63,13 +50,12 @@ public class GiveItemsCommand implements CommandExecutor, TabExecutor {
      * @param target The player target of the command
      * @param input The sender's input
      */
-    private void testGive(CommandSender sender, Player target, String input)
+    private void give(CommandSender sender, Player target, String input)
     {
-        //ItemRegistry itemRegistry = new ItemRegistry(plugin);
-        HashMap<String, ItemForger> itemCommandNameMap = plugin.getItemCommandNameMap();
-        if (itemCommandNameMap.containsKey(input))
+        HashMap<String, ItemForger> itemRegistryMap = plugin.getItemRegistryMap();
+        if (itemRegistryMap.containsKey(input))
         {
-            ItemForger itemToGive = itemCommandNameMap.get(input);
+            ItemForger itemToGive = itemRegistryMap.get(input);
             target.getInventory().addItem(itemToGive.toItemStack());
             sender.sendMessage(ChatColor.GREEN + "Gave " + itemToGive.getName() + ChatColor.GREEN + " to " + ChatColor.GOLD + target.getName());
             target.sendMessage(ChatColor.GREEN + "You received a " + itemToGive.getName() + ChatColor.GREEN + " from " + ChatColor.GOLD + sender.getName());
@@ -89,8 +75,8 @@ public class GiveItemsCommand implements CommandExecutor, TabExecutor {
                     argsList.add(player.getName());
                 }
             } else if (args.length == 2) {
-                HashMap<String, ItemForger> itemCommandNameMap = plugin.getItemCommandNameMap();
-                for (String string : itemCommandNameMap.keySet())
+                HashMap<String, ItemForger> itemRegistryMap = plugin.getItemRegistryMap();
+                for (String string : itemRegistryMap.keySet())
                 {
                     argsList.add(string);
                 }

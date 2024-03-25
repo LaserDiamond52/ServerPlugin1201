@@ -1,7 +1,7 @@
 package net.laserdiamond.ventureplugin.items.util;
 
 import net.laserdiamond.ventureplugin.VenturePlugin;
-import net.laserdiamond.ventureplugin.enchants.Components.EnchantsClass;
+import net.laserdiamond.ventureplugin.enchants.Components.VentureEnchants;
 import net.laserdiamond.ventureplugin.items.armor.StormLord.Components.StormLordArmorManager;
 import net.laserdiamond.ventureplugin.items.armor.Vanilla.Components.NetheriteArmorManager;
 import net.laserdiamond.ventureplugin.items.util.armor.ArmorPieceTypes;
@@ -104,7 +104,7 @@ public class ItemForgerRegistry implements Listener {
 
 
         String enchantString;
-        String enchantmentName = EnchantsClass.EnchantmentNames.get(enchantment);
+        String enchantmentName = VentureEnchants.EnchantmentNames.get(enchantment);
         int enchantLvl = itemMeta.getEnchantLevel(enchantment);
 
         if (enchantLvl == enchantment.getMaxLevel()) {
@@ -154,7 +154,7 @@ public class ItemForgerRegistry implements Listener {
         List<String> enchantLore = new ArrayList<>();
         String enchantString;
         for (Enchantment enchantment : enchants.keySet()) {
-            String enchantmentName = EnchantsClass.EnchantmentNames.get(enchantment);
+            String enchantmentName = VentureEnchants.EnchantmentNames.get(enchantment);
             int enchantLvl = enchants.get(enchantment);
 
             if (enchantLvl == enchantment.getMaxLevel()) {

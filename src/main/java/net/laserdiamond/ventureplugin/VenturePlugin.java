@@ -7,14 +7,14 @@ import net.laserdiamond.ventureplugin.commands.ViewProfiles.ViewStats;
 import net.laserdiamond.ventureplugin.commands.fillMana;
 import net.laserdiamond.ventureplugin.enchants.Components.EnchantListeners;
 import net.laserdiamond.ventureplugin.enchants.Components.EnchantPlayerHeadHelmets;
-import net.laserdiamond.ventureplugin.enchants.Components.EnchantsClass;
+import net.laserdiamond.ventureplugin.enchants.Components.VentureEnchants;
 import net.laserdiamond.ventureplugin.enchants.Config.EnchantConfig;
 import net.laserdiamond.ventureplugin.enchants.anvil.AnvilInvetoryGUI;
 import net.laserdiamond.ventureplugin.events.CancelInventoryMovementMenus;
-import net.laserdiamond.ventureplugin.events.abilities.AbilityCastType;
-import net.laserdiamond.ventureplugin.events.abilities.AbilityListeners;
+import net.laserdiamond.ventureplugin.events.abilities.*;
 import net.laserdiamond.ventureplugin.events.damage.DamageEvent;
 import net.laserdiamond.ventureplugin.events.damage.ApplyDefense;
+import net.laserdiamond.ventureplugin.events.damage.inflict.PlayerDmg;
 import net.laserdiamond.ventureplugin.events.effects.Components.Timers.ManaFreezeTimer;
 import net.laserdiamond.ventureplugin.events.effects.Components.Timers.NecrosisTimer;
 import net.laserdiamond.ventureplugin.events.effects.Components.Timers.ParalyzeTimer;
@@ -39,9 +39,8 @@ import net.laserdiamond.ventureplugin.items.armor.Vanilla.Config.NetheriteArmorC
 import net.laserdiamond.ventureplugin.items.crafting.SmithingTable.SmithingTableCrafting;
 import net.laserdiamond.ventureplugin.items.util.ItemForger;
 import net.laserdiamond.ventureplugin.entities.healthDisplay.mobHealthDisplay;
-import net.laserdiamond.ventureplugin.events.abilities.AbilityListener;
+import net.laserdiamond.ventureplugin.items.util.armor.VentureArmorSet;
 import net.laserdiamond.ventureplugin.util.ItemRegistry;
-import net.laserdiamond.ventureplugin.util.ItemRegistryKey;
 import net.laserdiamond.ventureplugin.util.RegisterAbilityCaster;
 import net.laserdiamond.ventureplugin.stats.Config.BaseStatsConfig;
 import net.laserdiamond.ventureplugin.stats.Manager.StatProfileManager;
@@ -74,9 +73,9 @@ public final class VenturePlugin extends JavaPlugin {
     private EnchantConfig enchantConfig;
     private ArmorTrimConfig armorTrimConfig;
 
-    private HashMap<String, ItemForger> itemCommandNameMap;
-    private HashMap<ItemRegistryKey, ItemForger> itemRegistryMap;
-    private HashMap<ItemRegistryKey, ItemForger> playerItemRegistry;
+    private final HashMap<String, ItemForger> itemRegistryMap = new HashMap<>();
+    private final HashMap<String, ItemForger> playerItemRegistryMap = new HashMap<>();
+    private final HashMap<String, VentureArmorSet> playerArmorItemRegistryMap = new HashMap<>();
 
     private NetheriteArmorManager netheriteArmorManager;
     private NetheriteArmorConfig netheriteArmorConfig;
@@ -86,11 +85,12 @@ public final class VenturePlugin extends JavaPlugin {
     private StormLordArmorManager stormLordArmorManager;
 
     private final List<AbilityListener> abilityListeners = new ArrayList<>();
-    private final List<Method> rightClickAbilities = new ArrayList<>();
-    private final List<Method> leftClickAbilities = new ArrayList<>();
-    private final List<Method> dropItemAbilities = new ArrayList<>();
-    private final List<Method> attackEntityAbilities = new ArrayList<>();
-    private final List<Method> runnableAbilities = new ArrayList<>();
+    private final HashMap<AbilityListener, Method> rightClickAbilities = new HashMap<>();
+    private final HashMap<AbilityListener, Method> leftClickAbilities = new HashMap<>();
+    private final HashMap<AbilityListener, Method> dropItemAbilities = new HashMap<>();
+    private final HashMap<AbilityListener, Method> attackEntityAbilities = new HashMap<>();
+    private final HashMap<AbilityListener, Method> runnableAbilities = new HashMap<>();
+    private final Abilities abilities = new Abilities(rightClickAbilities, leftClickAbilities, dropItemAbilities,runnableAbilities, attackEntityAbilities);
 
     @Override
     public void onEnable() {
@@ -99,16 +99,12 @@ public final class VenturePlugin extends JavaPlugin {
         Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Enabling Plugin...");
         plugin = this;
 
-        itemCommandNameMap = new HashMap<>();
-        itemRegistryMap = new HashMap<>();
-        playerItemRegistry = new HashMap<>();
-
         // Create Stat Profiles for players
         createConfigs();
         createItemConfigs();
         createManagers();
         createItemManagers();
-        EnchantsClass.register();
+        VentureEnchants.register();
         createTimers();
         setUpCooldowns();
         getServer().getPluginManager().registerEvents(new PlayerJoinServer(this), this);
@@ -128,6 +124,7 @@ public final class VenturePlugin extends JavaPlugin {
 
         // Damage
         getServer().getPluginManager().registerEvents(new DamageEvent(this),this);
+        getServer().getPluginManager().registerEvents(new PlayerDmg(),this);
 
         // Effect events
         getServer().getPluginManager().registerEvents(new EffectEvents(this),this);
@@ -200,29 +197,14 @@ public final class VenturePlugin extends JavaPlugin {
     {
         return abilityListeners;
     }
-    // TODO: Make ability listeners register from the class they originate from
-    public List<Method> getAbilityMethods(AbilityCastType abilityCastType)
+
+    public Abilities getAbilities()
     {
-        switch (abilityCastType)
-        {
-            case RIGHT_CLICK -> {
-                return rightClickAbilities;
-            }
-            case LEFT_CLICK -> {
-                return leftClickAbilities;
-            }
-            case DROP_ITEM -> {
-                return dropItemAbilities;
-            }
-            case RUNNABLE -> {
-                return runnableAbilities;
-            }
-            case ATTACK_ENTITY -> {
-                return attackEntityAbilities;
-            }
-        }
-        return new ArrayList<>();
+        return abilities;
     }
+
+    // TODO: Make ability listeners register from the class they originate from
+
     @Override
     public void onDisable() {
         // Plugin shutdown logic
@@ -237,7 +219,7 @@ public final class VenturePlugin extends JavaPlugin {
         cancelTasks();
 
         // Unregister enchantments
-        EnchantsClass.unregisterEnchantments();
+        VentureEnchants.unregisterEnchantments();
     }
 
     public BaseStatsConfig getBaseStatsConfig() {
@@ -324,6 +306,25 @@ public final class VenturePlugin extends JavaPlugin {
     private void addAbilities()
     {
         RegisterAbilityCaster.addListener(new EnchantListeners(this),this);
+
+        for (AbilityListener listener : getAbilityListeners())
+        {
+            for (Method method : listener.getClass().getDeclaredMethods())
+            {
+                if (method.isAnnotationPresent(AbilityHandler.class))
+                {
+                    AbilityHandler annotation = method.getAnnotation(AbilityHandler.class);
+                    switch (annotation.abilityCastType())
+                    {
+                        case RIGHT_CLICK -> abilities.rightClickAbilities().put(listener, method);
+                        case LEFT_CLICK -> abilities.leftClickAbilities().put(listener, method);
+                        case DROP_ITEM -> abilities.dropItemAbilities().put(listener, method);
+                        case RUNNABLE -> abilities.runnableAbilities().put(listener, method);
+                        case ATTACK_ENTITY -> abilities.attackAbility().put(listener, method);
+                    }
+                }
+            }
+        }
     }
 
     private void saveProfilesToConfigs() {
@@ -352,15 +353,15 @@ public final class VenturePlugin extends JavaPlugin {
         }
     }
 
-    public HashMap<String, ItemForger> getItemCommandNameMap() {
-        return itemCommandNameMap;
-    }
-
-    public HashMap<ItemRegistryKey, ItemForger> getItemRegistryMap() {
+    public HashMap<String, ItemForger> getItemRegistryMap() {
         return itemRegistryMap;
     }
 
-    public HashMap<ItemRegistryKey, ItemForger> getPlayerItemRegistry() {
-        return playerItemRegistry;
+    public HashMap<String, ItemForger> getPlayerItemRegistryMap() {
+        return playerItemRegistryMap;
+    }
+
+    public HashMap<String, VentureArmorSet> getPlayerArmorItemRegistryMap() {
+        return playerArmorItemRegistryMap;
     }
 }

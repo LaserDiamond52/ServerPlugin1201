@@ -10,15 +10,16 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Event that increases Player damage by their melee damage modifiers. If the target is a player, their defense points will reduce damage accordingly
+ * <p>
+ * Can choose whether the damage should be inflicted or not, but does not cancel the event
+ * <p>
+ * This event is mainly for melee attacks that involve ranged moves that scale with melee damage
+ */
 public class PlayerMeleeDamageEvent extends PlayerEvent implements Cancellable {
 
-    /**
-     * Event that increases Player damage by their melee damage modifiers. If the target is a player, their defense points will reduce damage accordingly
-     * <p>
-     * Can choose whether the damage should be inflicted or not, but does not cancel the event
-     * <p>
-     * This event is mainly for melee attacks that involve ranged moves that scale with melee damage
-     */
+
     private final LivingEntity target;
     private double damage;
     private boolean inflictDamage;

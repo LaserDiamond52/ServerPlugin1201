@@ -1,29 +1,20 @@
 package net.laserdiamond.ventureplugin.items.armor.StormLord.Components;
 
-import com.google.common.collect.Multimap;
-import net.laserdiamond.ventureplugin.VenturePlugin;
-import net.laserdiamond.ventureplugin.enchants.Components.EnchantsClass;
+import net.laserdiamond.ventureplugin.enchants.Components.VentureEnchants;
 import net.laserdiamond.ventureplugin.entities.player.StatPlayer;
 import net.laserdiamond.ventureplugin.events.damage.PlayerMagicDamageEvent;
 import net.laserdiamond.ventureplugin.events.mana.PlayerSpellCastEvent;
-import net.laserdiamond.ventureplugin.items.armor.StormLord.Config.StormLordArmorConfig;
-import net.laserdiamond.ventureplugin.items.util.ItemForger;
-import net.laserdiamond.ventureplugin.items.util.ItemNameBuilder;
 import net.laserdiamond.ventureplugin.items.util.VentureItemRarity;
 import net.laserdiamond.ventureplugin.items.util.armor.ArmorCMD;
 import net.laserdiamond.ventureplugin.items.util.armor.ArmorPieceTypes;
 import net.laserdiamond.ventureplugin.events.abilities.*;
 import net.laserdiamond.ventureplugin.items.util.armor.VentureArmorSet;
 import net.laserdiamond.ventureplugin.util.File.GetVarFile;
-import net.laserdiamond.ventureplugin.util.VentureItemStatKeys;
 import net.laserdiamond.ventureplugin.util.messages.Messages;
 import net.laserdiamond.ventureplugin.stats.Components.Stats;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Color;
 import org.bukkit.Material;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -33,11 +24,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-// TODO: Rewrite entire class to use new abstract class
-public class StormLordArmorManager extends VentureArmorSet implements AbilityCasting.DropItemSpell {
-
-    private final VenturePlugin plugin = VenturePlugin.getInstance();
-    private final StormLordArmorConfig armorConfig = plugin.getStormLordArmorConfig();
+public final class StormLordArmorManager extends VentureArmorSet implements AbilityCasting.DropItemSpell {
 
     public StormLordArmorManager()
     {
@@ -131,18 +118,63 @@ public class StormLordArmorManager extends VentureArmorSet implements AbilityCas
         return lore;
     }
 
+    @Override
+    public List<String> createPlayerLore(@NotNull Player player, @NotNull ArmorPieceTypes armorPieceTypes, int stars) {
+
+        int blastRadius = config().getInt("blastRadius");
+        int weaknessLvl = config().getInt("weaknessLvl");
+        double weaknessDuration = config().getDouble("weaknessDuration");
+        int cooldown = config().getInt("cooldown");
+        double manaCost = config().getDouble("manaCost");
+
+        ItemStack mainHand = player.getInventory().getItemInMainHand();
+        ItemMeta mainHandMeta = mainHand.getItemMeta();
+
+        List<String> lore = super.createPlayerLore(player, armorPieceTypes, stars);
+        lore.add(ChatColor.GOLD + "Full Set Bonus: Eye of the Storm" + ChatColor.YELLOW + " " + ChatColor.BOLD + "Press Q");
+        lore.add(" ");
+        lore.add(ChatColor.GRAY + "Grants all items with the " + ChatColor.AQUA + "Thunder Strike" + ChatColor.GRAY + " enchantment");
+        lore.add(ChatColor.GRAY + "the ability to unleash a devastating lightning blast");
+
+        if (mainHandMeta != null && mainHandMeta.hasEnchant(VentureEnchants.THUNDER_STRIKE))
+        {
+            int enchantLvl = mainHandMeta.getEnchantLevel(VentureEnchants.THUNDER_STRIKE);
+            double baseDamage = config().getDouble("baseDamage");
+            double finalDamage = baseDamage + Math.pow(enchantLvl, 2);
+
+            lore.add(ChatColor.GRAY + "that deals " + ChatColor.AQUA + finalDamage + ChatColor.RESET + ChatColor.GRAY + " base damage to nearby mobs in a " + ChatColor.GOLD + blastRadius + ChatColor.GRAY + " block");
+
+        } else {
+            lore.add(ChatColor.GRAY + "that deals " + ChatColor.AQUA + ChatColor.MAGIC + "X" + ChatColor.RESET + ChatColor.GRAY + " base damage to nearby mobs in a " + ChatColor.GOLD + blastRadius + ChatColor.GRAY + " block");
+        }
+
+        lore.add(ChatColor.GRAY + "radius and inflicts " + ChatColor.YELLOW + "Weakness " + weaknessLvl + ChatColor.GRAY + " for " + ChatColor.GREEN + weaknessDuration + ChatColor.GRAY + " seconds");
+        lore.add(ChatColor.DARK_GRAY + "Mana Cost: " + ChatColor.DARK_AQUA + manaCost);
+        lore.add(ChatColor.DARK_GRAY + "Cooldown: " + ChatColor.GREEN + cooldown + ChatColor.DARK_GRAY + " seconds");
+        lore.add(" ");
+        lore.add(ChatColor.GRAY + "Gain " + ChatColor.DARK_AQUA + "Conduit Power" + ChatColor.GRAY + " when fully worn");
+        lore.add(" ");
+
+        return lore;
+    }
+
+    @Override
+    public boolean registerPlayerArmorSet() {
+        return true;
+    }
+
     @AbilityHandler(abilityCastType = AbilityCastType.DROP_ITEM)
     @Override
     public void onDropItemCast(PlayerDropItemEvent event) {
         Player player = event.getPlayer();
         StatPlayer statPlayer = new StatPlayer(player);
         Stats stats = statPlayer.getStats();
-        String abilityName = armorConfig.getString("abilityName");
+        String abilityName = config().getString("abilityName");
         double availableMana = stats.getAvailableMana();
-        double manaCost = armorConfig.getDouble("manaCost");
-        int cooldown = armorConfig.getInt("cooldown");
-        double baseDamage = armorConfig.getDouble("baseDamage");
-        double blastRadius = armorConfig.getDouble("blastRadius");
+        double manaCost = config().getDouble("manaCost");
+        int cooldown = config().getInt("cooldown");
+        double baseDamage = config().getDouble("baseDamage");
+        double blastRadius = config().getDouble("blastRadius");
 
         PlayerSpellCastEvent spellCastEvent = new PlayerSpellCastEvent(player, manaCost);
         double eventCost = spellCastEvent.getManaCost();
@@ -150,7 +182,7 @@ public class StormLordArmorManager extends VentureArmorSet implements AbilityCas
         ItemStack droppedItem = event.getItemDrop().getItemStack();
         ItemMeta droppedMeta = droppedItem.getItemMeta();
         // TODO: Rewrite to be cleaner
-        if (isWearingFullSet(player) && droppedMeta != null && droppedMeta.hasEnchant(EnchantsClass.THUNDER_STRIKE))
+        if (isWearingFullSet(player) && droppedMeta != null && droppedMeta.hasEnchant(VentureEnchants.THUNDER_STRIKE))
         {
             event.setCancelled(true);
             if (EyeOfStormCooldown.checkCooldown(player))
@@ -162,7 +194,7 @@ public class StormLordArmorManager extends VentureArmorSet implements AbilityCas
                     {
                         stats.setAvailableMana(availableMana - eventCost);
 
-                        int enchantLvl = droppedMeta.getEnchantLevel(EnchantsClass.THUNDER_STRIKE);
+                        int enchantLvl = droppedMeta.getEnchantLevel(VentureEnchants.THUNDER_STRIKE);
                         double finalDamage = baseDamage + Math.pow(enchantLvl, 2);
 
                         for (LivingEntity livingEntity : player.getLocation().getNearbyLivingEntities(blastRadius))
@@ -172,11 +204,6 @@ public class StormLordArmorManager extends VentureArmorSet implements AbilityCas
                             {
                                 PlayerMagicDamageEvent magicDamageEvent = new PlayerMagicDamageEvent(player, livingEntity, finalDamage, true);
                                 Bukkit.getPluginManager().callEvent(magicDamageEvent);
-                                if (!magicDamageEvent.isCancelled())
-                                {
-                                    // FIXME:
-                                    magicDamageEvent.run();
-                                }
                             }
                         }
 

@@ -9,15 +9,17 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 
+/**
+ * Event that increases Player damage by their range damage modifiers. If the target is a player, their defense points will reduce damage accordingly
+ * <p>
+ * Can choose whether the damage should be inflicted or not, but does not cancel the event
+ */
 public class PlayerRangeDamageEvent extends PlayerEvent implements Cancellable {
 
-    /**
-     * Event that increases Player damage by their range damage modifiers. If the target is a player, their defense points will reduce damage accordingly
-     * <p>
-     * Can choose whether the damage should be inflicted or not, but does not cancel the event
-     */
+
     private LivingEntity target;
     private static final HandlerList HANDLER_LIST = new HandlerList();
+    private double damage;
     private boolean isCancelled;
     private boolean inflictDamage;
 
@@ -25,6 +27,7 @@ public class PlayerRangeDamageEvent extends PlayerEvent implements Cancellable {
     {
         super(player);
         this.target = target;
+        this.damage = damage;
         this.isCancelled = false;
         this.inflictDamage = inflictDamage;
     }
@@ -86,5 +89,13 @@ public class PlayerRangeDamageEvent extends PlayerEvent implements Cancellable {
 
     public void setInflictDamage(boolean inflictDamage) {
         this.inflictDamage = inflictDamage;
+    }
+
+    public double getDamage() {
+        return damage;
+    }
+
+    public void setDamage(double damage) {
+        this.damage = damage;
     }
 }

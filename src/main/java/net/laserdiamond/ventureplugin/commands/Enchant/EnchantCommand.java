@@ -1,6 +1,6 @@
 package net.laserdiamond.ventureplugin.commands.Enchant;
 
-import net.laserdiamond.ventureplugin.enchants.Components.EnchantsClass;
+import net.laserdiamond.ventureplugin.enchants.Components.VentureEnchants;
 import net.laserdiamond.ventureplugin.items.util.ItemForger;
 import net.laserdiamond.ventureplugin.items.util.UpdateItem;
 import net.laserdiamond.ventureplugin.util.messages.Messages;
@@ -78,7 +78,7 @@ public class EnchantCommand implements CommandExecutor, TabExecutor {
 
         try
         {
-            Enchantment enchantToAdd = EnchantsClass.EnchantEnum.of(input);
+            Enchantment enchantToAdd = VentureEnchants.EnchantEnum.of(input);
             ItemStack mainHand = target.getInventory().getItemInMainHand();
             if (enchantToAdd.getItemTarget().includes(mainHand))
             {
@@ -113,7 +113,7 @@ public class EnchantCommand implements CommandExecutor, TabExecutor {
                 }
             } else if (args.length == 2) {
                 // TODO: Offer enchant
-                for (EnchantsClass.EnchantEnum enchantEnum : EnchantsClass.EnchantEnum.values())
+                for (VentureEnchants.EnchantEnum enchantEnum : VentureEnchants.EnchantEnum.values())
                 {
                     String enchantArgName = enchantEnum.getCommandName();
                     argsList.add(enchantArgName);
@@ -122,7 +122,7 @@ public class EnchantCommand implements CommandExecutor, TabExecutor {
 
             } else if (args.length == 3) {
                 // TODO: Offer enchant level
-                for (EnchantsClass.EnchantEnum enchantEnum : EnchantsClass.EnchantEnum.values())
+                for (VentureEnchants.EnchantEnum enchantEnum : VentureEnchants.EnchantEnum.values())
                 {
                     String argName = enchantEnum.getCommandName();
 

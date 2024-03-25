@@ -23,6 +23,6 @@ public abstract class AbilityCasting {
 
     public interface RunnableSpell extends AbilityListener
     {
-        void onActivate(Player player, int timer);
+        void onActivate(Player player);
     }
 }
