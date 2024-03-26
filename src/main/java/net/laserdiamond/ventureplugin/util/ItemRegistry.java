@@ -38,21 +38,22 @@ public class ItemRegistry implements Listener {
     private final VenturePlugin plugin;
 
     private final HashMap<String, ItemForger> itemCommandNameMap;
-
-    private final HashMap<String, List<String>> playerItemLoreMap;
-    private final HashMap<String, VentureArmorSet> playerItemMap;
+    private final List<VentureArmorSet> playerItemMap;
 
     public ItemRegistry(VenturePlugin plugin)
     {
         this.plugin = plugin;
         itemCommandNameMap = plugin.getItemRegistryMap();
-        playerItemMap = plugin.getPlayerArmorItemRegistryMap();
-        playerItemLoreMap = new HashMap<>();
+        playerItemMap = plugin.getPlayerItemMap();
     }
 
-    public VentureArmorSet playerVentureArmorSet (String keyValue, Player player) {
+    public HashMap<String, List<String>> playerVentureArmorSetLore (String keyValue, Player player) {
 
-        return playerItemMap.get(keyValue);
+        for (VentureArmorSet ventureArmorSet : playerItemMap)
+        {
+            
+        }
+        return null;
     }
 
     @EventHandler

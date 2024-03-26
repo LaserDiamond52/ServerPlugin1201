@@ -74,8 +74,11 @@ public final class VenturePlugin extends JavaPlugin {
     private ArmorTrimConfig armorTrimConfig;
 
     private final HashMap<String, ItemForger> itemRegistryMap = new HashMap<>();
+    private final List<VentureArmorSet> playerItemMap = new ArrayList<>();
+
     private final HashMap<String, ItemForger> playerItemRegistryMap = new HashMap<>();
     private final HashMap<String, VentureArmorSet> playerArmorItemRegistryMap = new HashMap<>();
+    private final HashMap<String, List<String>> playerArmorLoreMap = new HashMap<>();
 
     private NetheriteArmorManager netheriteArmorManager;
     private NetheriteArmorConfig netheriteArmorConfig;
@@ -363,5 +366,13 @@ public final class VenturePlugin extends JavaPlugin {
 
     public HashMap<String, VentureArmorSet> getPlayerArmorItemRegistryMap() {
         return playerArmorItemRegistryMap;
+    }
+
+    public HashMap<String, List<String>> getPlayerArmorLoreMap() {
+        return playerArmorLoreMap;
+    }
+
+    public List<VentureArmorSet> getPlayerItemMap() {
+        return playerItemMap;
     }
 }

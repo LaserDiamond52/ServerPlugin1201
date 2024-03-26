@@ -263,7 +263,7 @@ public abstract class VentureArmorSet extends VentureStatItem {
         // FIXME: Item registry SHOULD NOT use custom model data for the map. Use the item's name and the amount of stars it has and store it as the key
         // FIXME: Use command name as map
         HashMap<String, ItemForger> itemRegistryMap = plugin.getItemRegistryMap();
-        HashMap<String, VentureArmorSet> playerItemRegistry = plugin.getPlayerArmorItemRegistryMap();
+        List<VentureArmorSet> playerItemMap = plugin.getPlayerItemMap();
 
         int maxStars = plugin.getConfig().getInt("maxStars");
 
@@ -277,7 +277,7 @@ public abstract class VentureArmorSet extends VentureStatItem {
                 itemRegistryMap.put(commandName, armorItem);
                 if (registerPlayerArmorSet())
                 {
-                    playerItemRegistry.put(commandName, this);
+                    playerItemMap.add(this);
                 }
             }
         }
@@ -300,5 +300,21 @@ public abstract class VentureArmorSet extends VentureStatItem {
         return false;
     }
 
+    @Deprecated
+    public void registerPlayerArmorLore(Player player)
+    {
+        HashMap<String, List<String>> playerArmorLoreMap = plugin.getPlayerArmorLoreMap();
+        int maxStars = plugin.getConfig().getInt("maxStars");
 
+        for (int i = 0; i < maxStars; i++)
+        {
+            for (ArmorPieceTypes armorPieceTypes : ArmorPieceTypes.values())
+            {
+                String armorPieceTypeName = armorPieceTypes.getName();
+                String keyName = (armorSetName() + "_" + armorPieceTypeName + "_" + i).toLowerCase();
+                playerArmorLoreMap.put(keyName, createPlayerLore(player, armorPieceTypes, i));
+            }
+        }
+
+    }
 }
