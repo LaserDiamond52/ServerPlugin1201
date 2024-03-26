@@ -28,7 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class EnchantListeners implements Listener, AbilityListener, AbilityCasting.RunnableSpell, AbilityCasting.LeftClickSpell {
+public class EnchantListeners implements Listener, AbilityListener, AbilityCasting.RunnableAbility, AbilityCasting.LeftClickAbility {
 
     private final VenturePlugin plugin;
     private final StatProfileManager statProfileManager;

@@ -40,8 +40,6 @@ public class ArmorEquipStats implements Listener {
         ItemStack newItem = event.getNewItem(), oldItem = event.getOldItem();
         ItemMeta newMeta = newItem.getItemMeta(), oldMeta = oldItem.getItemMeta();
 
-
-
         if (newMeta != null)
         {
             if (newMeta.hasCustomModelData())

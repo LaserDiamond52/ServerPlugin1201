@@ -1,7 +1,7 @@
 package net.laserdiamond.ventureplugin.items.crafting.Recipes;
 
 import net.laserdiamond.ventureplugin.VenturePlugin;
-import net.laserdiamond.ventureplugin.items.armor.Vanilla.Components.NetheriteArmorManager;
+import net.laserdiamond.ventureplugin.items.armor.Vanilla.Components.NetheriteArmor;
 import net.laserdiamond.ventureplugin.items.crafting.SmithingTable.SmithingRecipe;
 import net.laserdiamond.ventureplugin.items.util.armor.ArmorPieceTypes;
 import org.bukkit.Material;
@@ -14,7 +14,7 @@ import org.bukkit.inventory.meta.trim.ArmorTrim;
 public class SmithingTableRecipes {
 
     private static final VenturePlugin plugin = VenturePlugin.getInstance();
-    private static final NetheriteArmorManager netheriteArmorManager = plugin.getNetheriteArmorManager();
+    private static final NetheriteArmor NETHERITE_ARMOR = plugin.getNetheriteArmorManager();
 
 
     public enum Recipes {
@@ -24,10 +24,10 @@ public class SmithingTableRecipes {
         NETHERITE_PICKAXE (new SmithingRecipe(new ItemStack(Material.DIAMOND_PICKAXE), new ItemStack(Material.NETHERITE_INGOT,1), new ItemStack(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE,1)), new ItemStack(Material.NETHERITE_PICKAXE)),
         NETHERITE_SHOVEL (new SmithingRecipe(new ItemStack(Material.DIAMOND_SHOVEL), new ItemStack(Material.NETHERITE_INGOT,1), new ItemStack(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE,1)), new ItemStack(Material.NETHERITE_SHOVEL)),
         NETHERITE_HOE (new SmithingRecipe(new ItemStack(Material.DIAMOND_HOE), new ItemStack(Material.NETHERITE_INGOT,1), new ItemStack(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE,1)), new ItemStack(Material.NETHERITE_HOE)),
-        NETHERITE_BOOTS (new SmithingRecipe(new ItemStack(Material.DIAMOND_BOOTS), new ItemStack(Material.NETHERITE_INGOT,1), new ItemStack(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE,1)), netheriteArmorManager.createArmorSet(ArmorPieceTypes.BOOTS, 0).toItemStack()),
-        NETHERITE_LEGGINGS (new SmithingRecipe(new ItemStack(Material.DIAMOND_LEGGINGS), new ItemStack(Material.NETHERITE_INGOT,1), new ItemStack(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE,1)), netheriteArmorManager.createArmorSet(ArmorPieceTypes.LEGGINGS,0).toItemStack()),
-        NETHERITE_CHESTPLATE (new SmithingRecipe(new ItemStack(Material.DIAMOND_CHESTPLATE), new ItemStack(Material.NETHERITE_INGOT,1), new ItemStack(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE,1)), netheriteArmorManager.createArmorSet(ArmorPieceTypes.CHESTPLATE,0).toItemStack()),
-        NETHERITE_HELMET (new SmithingRecipe(new ItemStack(Material.DIAMOND_HELMET), new ItemStack(Material.NETHERITE_INGOT,1), new ItemStack(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE,1)), netheriteArmorManager.createArmorSet(ArmorPieceTypes.HELMET,0).toItemStack());
+        NETHERITE_BOOTS (new SmithingRecipe(new ItemStack(Material.DIAMOND_BOOTS), new ItemStack(Material.NETHERITE_INGOT,1), new ItemStack(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE,1)), NETHERITE_ARMOR.createArmorSet(ArmorPieceTypes.BOOTS, 0).toItemStack()),
+        NETHERITE_LEGGINGS (new SmithingRecipe(new ItemStack(Material.DIAMOND_LEGGINGS), new ItemStack(Material.NETHERITE_INGOT,1), new ItemStack(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE,1)), NETHERITE_ARMOR.createArmorSet(ArmorPieceTypes.LEGGINGS,0).toItemStack()),
+        NETHERITE_CHESTPLATE (new SmithingRecipe(new ItemStack(Material.DIAMOND_CHESTPLATE), new ItemStack(Material.NETHERITE_INGOT,1), new ItemStack(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE,1)), NETHERITE_ARMOR.createArmorSet(ArmorPieceTypes.CHESTPLATE,0).toItemStack()),
+        NETHERITE_HELMET (new SmithingRecipe(new ItemStack(Material.DIAMOND_HELMET), new ItemStack(Material.NETHERITE_INGOT,1), new ItemStack(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE,1)), NETHERITE_ARMOR.createArmorSet(ArmorPieceTypes.HELMET,0).toItemStack());
 
         private final SmithingRecipe smithingRecipe;
         private final ItemStack result;

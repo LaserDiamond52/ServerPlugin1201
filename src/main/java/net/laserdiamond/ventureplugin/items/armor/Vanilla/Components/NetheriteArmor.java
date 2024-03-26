@@ -13,12 +13,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class NetheriteArmorManager extends VentureArmorSet {
+public class NetheriteArmor extends VentureArmorSet {
 
-    private final VenturePlugin plugin = VenturePlugin.getInstance();
-
-    public NetheriteArmorManager() {
-        registerArmorSet();
+    public NetheriteArmor(VenturePlugin plugin) {
+        super(plugin);
     }
 
 
@@ -28,7 +26,7 @@ public class NetheriteArmorManager extends VentureArmorSet {
     }
 
     @Override
-    public ArmorCMD setArmorCMD() {
+    public ArmorCMD getArmorCMD() {
         return ArmorCMD.NETHERITE_ARMOR;
     }
 

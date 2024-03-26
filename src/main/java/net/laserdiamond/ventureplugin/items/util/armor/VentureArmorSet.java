@@ -25,7 +25,13 @@ import java.util.UUID;
  */
 public abstract class VentureArmorSet extends VentureStatItem {
 
-    public final VenturePlugin plugin = VenturePlugin.getInstance();
+    public final VenturePlugin plugin;
+
+    public VentureArmorSet(VenturePlugin plugin)
+    {
+        this.plugin = plugin;
+        registerArmorSet();
+    }
 
     /**
      * The name of the armor set
@@ -37,7 +43,7 @@ public abstract class VentureArmorSet extends VentureStatItem {
      * Sets the custom model data for the armor set
      * @return ArmorCMD enum object containing the custom model data for each armor piece
      */
-    public abstract ArmorCMD setArmorCMD();
+    public abstract ArmorCMD getArmorCMD();
 
     /**
      * Gets the material for all armor pieces
@@ -75,7 +81,7 @@ public abstract class VentureArmorSet extends VentureStatItem {
      */
     private int[] sigBits()
     {
-        return new int[]{setArmorCMD().getHelmet(), setArmorCMD().getHelmet()};
+        return new int[]{getArmorCMD().getHelmet(), getArmorCMD().getHelmet()};
     }
 
     /**
@@ -198,10 +204,10 @@ public abstract class VentureArmorSet extends VentureStatItem {
 
         switch (armorPieceTypes)
         {
-            case HELMET -> itemForger.setCustomModelData(setArmorCMD().getHelmet());
-            case CHESTPLATE -> itemForger.setCustomModelData(setArmorCMD().getChestplate());
-            case LEGGINGS -> itemForger.setCustomModelData(setArmorCMD().getLeggings());
-            case BOOTS -> itemForger.setCustomModelData(setArmorCMD().getBoots());
+            case HELMET -> itemForger.setCustomModelData(getArmorCMD().getHelmet());
+            case CHESTPLATE -> itemForger.setCustomModelData(getArmorCMD().getChestplate());
+            case LEGGINGS -> itemForger.setCustomModelData(getArmorCMD().getLeggings());
+            case BOOTS -> itemForger.setCustomModelData(getArmorCMD().getBoots());
         }
         return itemForger;
     }
@@ -237,10 +243,10 @@ public abstract class VentureArmorSet extends VentureStatItem {
 
         switch (armorPieceTypes)
         {
-            case HELMET -> itemForger.setCustomModelData(setArmorCMD().getHelmet());
-            case CHESTPLATE -> itemForger.setCustomModelData(setArmorCMD().getChestplate());
-            case LEGGINGS -> itemForger.setCustomModelData(setArmorCMD().getLeggings());
-            case BOOTS -> itemForger.setCustomModelData(setArmorCMD().getBoots());
+            case HELMET -> itemForger.setCustomModelData(getArmorCMD().getHelmet());
+            case CHESTPLATE -> itemForger.setCustomModelData(getArmorCMD().getChestplate());
+            case LEGGINGS -> itemForger.setCustomModelData(getArmorCMD().getLeggings());
+            case BOOTS -> itemForger.setCustomModelData(getArmorCMD().getBoots());
         }
         return itemForger;
     }
@@ -252,7 +258,7 @@ public abstract class VentureArmorSet extends VentureStatItem {
      */
     public boolean isWearingFullSet(Player player)
     {
-        return ArmorEquipStats.isWearingFullSet(player, setArmorCMD().getHelmet(), setArmorCMD().getChestplate(), setArmorCMD().getLeggings(), setArmorCMD().getBoots());
+        return ArmorEquipStats.isWearingFullSet(player, getArmorCMD().getHelmet(), getArmorCMD().getChestplate(), getArmorCMD().getLeggings(), getArmorCMD().getBoots());
     }
 
     /**
@@ -263,11 +269,11 @@ public abstract class VentureArmorSet extends VentureStatItem {
         // FIXME: Item registry SHOULD NOT use custom model data for the map. Use the item's name and the amount of stars it has and store it as the key
         // FIXME: Use command name as map
         HashMap<String, ItemForger> itemRegistryMap = plugin.getItemRegistryMap();
-        List<VentureArmorSet> playerItemMap = plugin.getPlayerItemMap();
+        List<VentureArmorSet> playerItemMap = plugin.getPlayerArmorItemMap();
 
         int maxStars = plugin.getConfig().getInt("maxStars");
 
-        for (int i = 0; i < maxStars; i++)
+        for (int i = 0; i < maxStars + 1; i++)
         {
             for (ArmorPieceTypes armorPieceTypes : ArmorPieceTypes.values())
             {
@@ -275,14 +281,13 @@ public abstract class VentureArmorSet extends VentureStatItem {
                 String commandName = (armorSetName() + "_" + armorPieceTypeName + "_" + i).toLowerCase().replace(" ", "_");
                 ItemForger armorItem = createArmorSet(armorPieceTypes, i).setItemKey(commandName);
                 itemRegistryMap.put(commandName, armorItem);
-                if (registerPlayerArmorSet())
-                {
-                    playerItemMap.add(this);
-                }
+
             }
         }
-
-
+        if (registerPlayerArmorSet())
+        {
+            playerItemMap.add(this);
+        }
     }
 
     // TODO: Finish player armor registry (or figure out at least)
@@ -298,23 +303,5 @@ public abstract class VentureArmorSet extends VentureStatItem {
     public boolean registerPlayerArmorSet()
     {
         return false;
-    }
-
-    @Deprecated
-    public void registerPlayerArmorLore(Player player)
-    {
-        HashMap<String, List<String>> playerArmorLoreMap = plugin.getPlayerArmorLoreMap();
-        int maxStars = plugin.getConfig().getInt("maxStars");
-
-        for (int i = 0; i < maxStars; i++)
-        {
-            for (ArmorPieceTypes armorPieceTypes : ArmorPieceTypes.values())
-            {
-                String armorPieceTypeName = armorPieceTypes.getName();
-                String keyName = (armorSetName() + "_" + armorPieceTypeName + "_" + i).toLowerCase();
-                playerArmorLoreMap.put(keyName, createPlayerLore(player, armorPieceTypes, i));
-            }
-        }
-
     }
 }

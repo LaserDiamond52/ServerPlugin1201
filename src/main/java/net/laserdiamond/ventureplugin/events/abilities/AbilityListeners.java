@@ -3,9 +3,12 @@ package net.laserdiamond.ventureplugin.events.abilities;
 import net.laserdiamond.ventureplugin.VenturePlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -18,9 +21,7 @@ import java.util.*;
 public class AbilityListeners extends BukkitRunnable implements Listener {
 
     private final VenturePlugin plugin;
-    private final HashMap<AbilityListener, Method> rightClickAbility, leftClickAbility, dropItemAbility, runnableAbility, attackAbility;
-
-
+    private final HashMap<AbilityListener, Method> rightClickAbility, leftClickAbility, dropItemAbility, runnableAbility, attackAbility, onKillAbility;
 
     public AbilityListeners(VenturePlugin plugin)
     {
@@ -30,6 +31,7 @@ public class AbilityListeners extends BukkitRunnable implements Listener {
         runnableAbility = plugin.getAbilities().runnableAbilities();
         dropItemAbility = plugin.getAbilities().dropItemAbilities();
         attackAbility = plugin.getAbilities().attackAbility();
+        onKillAbility = plugin.getAbilities().onKillAbility();
     }
 
     /**
@@ -60,13 +62,13 @@ public class AbilityListeners extends BukkitRunnable implements Listener {
 
         if (event.getAction().isRightClick())
         {
-            runClickAbility(rightClickAbility, AbilityCastType.RIGHT_CLICK, event);
+            runClickAbility(AbilityCastType.RIGHT_CLICK, event);
             //PlayerClickItemSpell(AbilityCastType.RIGHT_CLICK, event);
         }
 
         if (event.getAction().isLeftClick())
         {
-            runClickAbility(leftClickAbility, AbilityCastType.LEFT_CLICK, event);
+            runClickAbility(AbilityCastType.LEFT_CLICK, event);
             //PlayerClickItemSpell(AbilityCastType.LEFT_CLICK, event);
         }
     }
@@ -92,23 +94,23 @@ public class AbilityListeners extends BukkitRunnable implements Listener {
         }
     }
 
-    @Deprecated
-    private void PlayerDropItemSpell(PlayerDropItemEvent event) throws InvocationTargetException, IllegalAccessException {
-
-        List<AbilityListener> listeners = plugin.getAbilityListeners();
-        for (AbilityListener listener : listeners)
+    @EventHandler
+    public void onAttackAbility(EntityDamageByEntityEvent event) throws InvocationTargetException, IllegalAccessException {
+        if (event.getDamager() instanceof Player player)
         {
-            for (Method method : listener.getClass().getDeclaredMethods())
+            if (event.getEntity() instanceof LivingEntity livingEntity)
             {
-                if (method.isAnnotationPresent(AbilityHandler.class))
-                {
-                    AbilityHandler annotation = method.getAnnotation(AbilityHandler.class);
-                    if (annotation.abilityCastType() == AbilityCastType.DROP_ITEM)
-                    {
-                        method.invoke(listener, event);
-                    }
-                }
+                attackAbility(player, event.getFinalDamage(), livingEntity);
             }
+        }
+    }
+
+    @EventHandler
+    public void castAbilityKill(EntityDeathEvent event) throws InvocationTargetException, IllegalAccessException {
+        if (event.getEntity().getKiller() != null)
+        {
+            Player player = event.getEntity().getKiller();
+            killAbility(player, event.getEntity());
         }
     }
 
@@ -119,79 +121,12 @@ public class AbilityListeners extends BukkitRunnable implements Listener {
             Method method = dropItemAbility.get(listener);
             method.invoke(listener, event);
         }
-        /*
-        List<AbilityListener> listeners = plugin.getAbilityListeners();
-        if (dropItemAbility.isEmpty())
-        {
-            for (AbilityListener listener : listeners)
-            {
-                for (Method method : listener.getClass().getDeclaredMethods())
-                {
-                    if (method.isAnnotationPresent(AbilityHandler.class))
-                    {
-                        AbilityHandler annotation = method.getAnnotation(AbilityHandler.class);
-                        if (annotation.abilityCastType() == AbilityCastType.DROP_ITEM)
-                        {
-                            dropItemAbility.put(listener, method);
-                            method.invoke(listener, event);
-                        }
-                    }
-                }
-            }
-        } else
-        {
-            for (AbilityListener listener : dropItemAbility.keySet())
-            {
-                Method method = dropItemAbility.get(listener);
-                method.invoke(listener, event);
-            }
-        }
-
-         */
 
     }
 
-    @Deprecated
-    private void PlayerClickItemSpell(AbilityCastType abilityCastType, PlayerInteractEvent event) throws InvocationTargetException, IllegalAccessException {
-        List<AbilityListener> listeners = plugin.getAbilityListeners();
-        for (AbilityListener listener : listeners)
-        {
-            for (Method method : listener.getClass().getDeclaredMethods())
-            {
-                if (method.isAnnotationPresent(AbilityHandler.class))
-                {
-                    AbilityHandler annotation = method.getAnnotation(AbilityHandler.class);
-                    if (annotation.abilityCastType() == abilityCastType)
-                    {
-                        method.invoke(listener, event);
-                    }
-                }
-            }
-        }
-    }
+    private void PlayerRunnableSpell(Player player) throws InvocationTargetException, IllegalAccessException
+    {
 
-    @Deprecated
-    private void PlayerRunnableSpell(Player player) throws InvocationTargetException, IllegalAccessException {
-        /*
-        List<AbilityListener> listeners = plugin.getAbilityListeners();
-        for (AbilityListener listener : listeners)
-        {
-            for (Method method : listener.getClass().getDeclaredMethods())
-            {
-                if (method.isAnnotationPresent(AbilityHandler.class))
-                {
-                    AbilityHandler annotation = method.getAnnotation(AbilityHandler.class);
-                    {
-                        if (annotation.abilityCastType() == AbilityCastType.RUNNABLE)
-                        {
-                            method.invoke(listener, player, timer);
-                        }
-                    }
-                }
-            }
-        }
-
-         */
         for (AbilityListener listener : runnableAbility.keySet())
         {
             Method method = runnableAbility.get(listener);
@@ -199,7 +134,7 @@ public class AbilityListeners extends BukkitRunnable implements Listener {
         }
     }
 
-    private void runClickAbility(HashMap<AbilityListener, Method> abilities, AbilityCastType abilityCastType, PlayerInteractEvent event) throws InvocationTargetException, IllegalAccessException
+    private void runClickAbility(AbilityCastType abilityCastType, PlayerInteractEvent event) throws InvocationTargetException, IllegalAccessException
     {
         switch (abilityCastType)
         {
@@ -218,35 +153,21 @@ public class AbilityListeners extends BukkitRunnable implements Listener {
                 }
             }
         }
+    }
 
-        /*
-        List<AbilityListener> listeners = plugin.getAbilityListeners();
-        if (abilities.isEmpty())
+    private void attackAbility(Player player, double damage, LivingEntity hitEntity) throws InvocationTargetException, IllegalAccessException {
+        for (AbilityListener listener : attackAbility.keySet())
         {
-            for (AbilityListener listener : listeners)
-            {
-                for (Method method : listener.getClass().getDeclaredMethods())
-                {
-                    if (method.isAnnotationPresent(AbilityHandler.class))
-                    {
-                        AbilityHandler annotation = method.getAnnotation(AbilityHandler.class);
-                        if (annotation.abilityCastType() == abilityCastType)
-                        {
-                            abilities.put(listener, method);
-                            method.invoke(listener, event);
-                        }
-                    }
-                }
-            }
-        } else
-        {
-            for (AbilityListener listener : abilities.keySet())
-            {
-                Method method = abilities.get(listener);
-                method.invoke(listener, event);
-            }
+            Method method = attackAbility.get(listener);
+            method.invoke(listener, player, damage, hitEntity);
         }
+    }
 
-         */
+    private void killAbility(Player player, LivingEntity killedEntity) throws InvocationTargetException, IllegalAccessException {
+        for (AbilityListener listener : onKillAbility.keySet())
+        {
+            Method method = onKillAbility.get(listener);
+            method.invoke(listener, player, killedEntity);
+        }
     }
 }

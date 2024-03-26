@@ -1,6 +1,5 @@
 package net.laserdiamond.ventureplugin.items.armor.Blaze.Components;
 
-import com.google.common.collect.Multimap;
 import net.laserdiamond.ventureplugin.VenturePlugin;
 import net.laserdiamond.ventureplugin.entities.player.StatPlayer;
 import net.laserdiamond.ventureplugin.events.abilities.AbilityCastType;
@@ -8,36 +7,33 @@ import net.laserdiamond.ventureplugin.events.abilities.AbilityCasting;
 import net.laserdiamond.ventureplugin.events.abilities.AbilityHandler;
 import net.laserdiamond.ventureplugin.events.damage.PlayerMagicDamageEvent;
 import net.laserdiamond.ventureplugin.events.mana.PlayerSpellCastEvent;
-import net.laserdiamond.ventureplugin.items.util.ItemForger;
 import net.laserdiamond.ventureplugin.items.util.VentureItemRarity;
 import net.laserdiamond.ventureplugin.items.util.armor.*;
 import net.laserdiamond.ventureplugin.stats.Components.Stats;
 import net.laserdiamond.ventureplugin.util.File.GetVarFile;
-import net.laserdiamond.ventureplugin.util.VentureItemStatKeys;
 import net.laserdiamond.ventureplugin.util.messages.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Color;
 import org.bukkit.Material;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public final class BlazeArmorManager extends VentureArmorSet implements AbilityCasting.RunnableSpell {
+public final class BlazeArmor extends VentureArmorSet implements AbilityCasting.RunnableAbility {
 
     // TODO: Create rest of lore for armor
     //private final VenturePlugin plugin = VenturePlugin.getInstance();
     private final HashMap<UUID, Integer> blazeAuraTimer;
 
-    public BlazeArmorManager()
+    public BlazeArmor(VenturePlugin plugin)
     {
-        registerArmorSet();
+        super(plugin);
         plugin.getAbilityListeners().add(this);
         blazeAuraTimer = new HashMap<>();
     }
@@ -53,7 +49,7 @@ public final class BlazeArmorManager extends VentureArmorSet implements AbilityC
     }
 
     @Override
-    public ArmorCMD setArmorCMD() {
+    public ArmorCMD getArmorCMD() {
         return ArmorCMD.BLAZE_ARMOR;
     }
 
@@ -106,6 +102,11 @@ public final class BlazeArmorManager extends VentureArmorSet implements AbilityC
         //
         // While sneaking, set mobs within a 5 block
         // radius ablaze and deal 5 damage/second
+        //
+        // Bonus Ability : Soul Stealer
+        //
+        // Upon killing a mob/player, instantly
+        // regain 10% of your max health
 
         return lore;
     }
@@ -139,6 +140,7 @@ public final class BlazeArmorManager extends VentureArmorSet implements AbilityC
         {
             return;
         }
+        player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 100, 0));
         if (player.isSneaking())
         {
             blazeAuraTimer.put(player.getUniqueId(), playerTimer + 1);
@@ -165,13 +167,8 @@ public final class BlazeArmorManager extends VentureArmorSet implements AbilityC
                             Bukkit.getPluginManager().callEvent(magicDamageEvent);
                         }
                     }
-                } else {
-
                 }
             }
-
         }
-
-
     }
 }

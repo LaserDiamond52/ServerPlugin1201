@@ -1,5 +1,6 @@
 package net.laserdiamond.ventureplugin.items.armor.StormLord.Components;
 
+import net.laserdiamond.ventureplugin.VenturePlugin;
 import net.laserdiamond.ventureplugin.enchants.Components.VentureEnchants;
 import net.laserdiamond.ventureplugin.entities.player.StatPlayer;
 import net.laserdiamond.ventureplugin.events.damage.PlayerMagicDamageEvent;
@@ -24,11 +25,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-public final class StormLordArmorManager extends VentureArmorSet implements AbilityCasting.DropItemSpell {
+public final class StormLordArmor extends VentureArmorSet implements AbilityCasting.DropItemAbility {
 
-    public StormLordArmorManager()
+    public StormLordArmor(VenturePlugin plugin)
     {
-        registerArmorSet();
+        super(plugin);
         plugin.getAbilityListeners().add(this);
     }
 
@@ -43,7 +44,7 @@ public final class StormLordArmorManager extends VentureArmorSet implements Abil
     }
 
     @Override
-    public ArmorCMD setArmorCMD() {
+    public ArmorCMD getArmorCMD() {
         return ArmorCMD.STORM_LORD_ARMOR;
     }
 

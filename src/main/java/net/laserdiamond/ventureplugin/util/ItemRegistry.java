@@ -20,9 +20,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
-import org.bukkit.event.player.PlayerAttemptPickupItemEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ArmorMeta;
@@ -38,22 +36,51 @@ public class ItemRegistry implements Listener {
     private final VenturePlugin plugin;
 
     private final HashMap<String, ItemForger> itemCommandNameMap;
-    private final List<VentureArmorSet> playerItemMap;
+    private final List<VentureArmorSet> playerArmorItemMap;
 
     public ItemRegistry(VenturePlugin plugin)
     {
         this.plugin = plugin;
         itemCommandNameMap = plugin.getItemRegistryMap();
-        playerItemMap = plugin.getPlayerItemMap();
+        playerArmorItemMap = plugin.getPlayerArmorItemMap();
     }
 
-    public HashMap<String, List<String>> playerVentureArmorSetLore (String keyValue, Player player) {
-
-        for (VentureArmorSet ventureArmorSet : playerItemMap)
+    public HashMap<String, List<String>> playerLore(Player player)
+    {
+        HashMap<String, List<String>> playerLoreMap = new HashMap<>();
+        int maxStars = plugin.getConfig().getInt("maxStars");
+        for (VentureArmorSet ventureArmorSet : playerArmorItemMap)
         {
-            
+            String armorName = ventureArmorSet.armorSetName();
+            for (int i = 0; i < maxStars; i++)
+            {
+                for (ArmorPieceTypes armorPieceTypes : ArmorPieceTypes.values())
+                {
+                    String armorPieceTypeName = armorPieceTypes.getName();
+                    String keyName = (armorName + "_" + armorPieceTypeName + "_" + i).toLowerCase();
+                    playerLoreMap.put(keyName, ventureArmorSet.createPlayerLore(player, armorPieceTypes, i));
+                }
+            }
         }
-        return null;
+        return playerLoreMap;
+    }
+
+    public HashMap<Integer, List<String>> defaultPlayerLore(Player player, int stars)
+    {
+        HashMap<Integer, List<String>> defaultPlayerLore = new HashMap<>();
+
+        for (VentureArmorSet ventureArmorSet : playerArmorItemMap) // Armor pieces
+        {
+            defaultPlayerLore.put(ventureArmorSet.getArmorCMD().getHelmet(), ventureArmorSet.createPlayerLore(player, ArmorPieceTypes.HELMET, stars));
+            defaultPlayerLore.put(ventureArmorSet.getArmorCMD().getChestplate(), ventureArmorSet.createPlayerLore(player, ArmorPieceTypes.CHESTPLATE, stars));
+            defaultPlayerLore.put(ventureArmorSet.getArmorCMD().getLeggings(), ventureArmorSet.createPlayerLore(player, ArmorPieceTypes.LEGGINGS, stars));
+            defaultPlayerLore.put(ventureArmorSet.getArmorCMD().getBoots(), ventureArmorSet.createPlayerLore(player, ArmorPieceTypes.BOOTS, stars));
+        }
+
+        // Weapons
+
+        // Menu Items
+        return defaultPlayerLore;
     }
 
     @EventHandler
@@ -64,7 +91,7 @@ public class ItemRegistry implements Listener {
         for (ItemStack itemStack : player.getInventory().getContents())
         {
             // TODO: Update item to have player-defined lore
-
+            renewItemNew(itemStack, player);
         }
     }
 
@@ -82,14 +109,30 @@ public class ItemRegistry implements Listener {
                 if (eventInv.equals(player.getInventory()))
                 {
                     // TODO: Update item to have player-defined lore
+                    renewItemNew(event.getCursor(), player);
+
 
                 } else
                 {
                     // TODO: Update item
-                    //renewItem(event.getCursor());
                     renewItemNew(event.getCursor());
                 }
+                for (ItemStack itemStack : player.getInventory().getContents())
+                {
+                    renewItemNew(itemStack, player);
+                }
             }
+        }
+    }
+
+    @EventHandler
+    public void switchMainHand(PlayerItemHeldEvent event)
+    {
+        Player player = event.getPlayer();
+
+        for (ItemStack itemStack : player.getInventory().getContents())
+        {
+            renewItemNew(itemStack, player);
         }
     }
 
@@ -110,7 +153,7 @@ public class ItemRegistry implements Listener {
             for (ItemStack itemStack : player.getInventory().getContents())
             {
                 // TODO: Update item to have player-defined lore
-
+                renewItemNew(itemStack, player);
             }
         }
     }
@@ -133,7 +176,7 @@ public class ItemRegistry implements Listener {
             for (ItemStack itemStack : player.getInventory().getContents())
             {
                 // TODO: Update item to have player-defined lore
-
+                renewItemNew(itemStack, player);
             }
         }
     }
@@ -145,7 +188,7 @@ public class ItemRegistry implements Listener {
         ItemStack itemToPickUp = event.getItem().getItemStack();
 
         // TODO: Update item to have player-defined lore
-
+        renewItemNew(itemToPickUp, player);
 
     }
 
@@ -157,6 +200,8 @@ public class ItemRegistry implements Listener {
         ItemStack playerItem = event.getPlayerItem();
 
         // TODO: Update both items to have player-defined lore
+        renewItemNew(armorStandItem, player);
+        renewItemNew(playerItem, player);
 
     }
 
@@ -259,48 +304,56 @@ public class ItemRegistry implements Listener {
 
                 if (itemMeta.hasCustomModelData())
                 {
-
+                    int stars = itemForger.getStars();
                     String keyValue = itemForger.getItemKey();
                     try
                     {
-                        if (itemCommandNameMap.containsKey(keyValue))
-                        {
-                            ItemForger itemForgerMapItem = itemCommandNameMap.get(keyValue);
-                            List<String> lore = itemForgerMapItem.getLore();
-                            VentureItemRarity.Rarity rarity = itemForgerMapItem.getRarity();
-                            HashMap<VentureItemStatKeys, Double> itemStatMap = itemForgerMapItem.getItemStats();
-                            Multimap<Attribute, AttributeModifier> attributes = itemForgerMapItem.getAttributes();
+                        HashMap<Integer, List<String>> playerLoreMap = defaultPlayerLore(player, stars);
 
-                            if (lore != null)
+                        ItemForger itemForgerMapItem = itemCommandNameMap.get(keyValue);
+                        List<String> lore = itemForgerMapItem.getLore();
+                        List<String> playerLore = playerLoreMap.get(itemMeta.getCustomModelData());
+                        VentureItemRarity.Rarity rarity = itemForgerMapItem.getRarity();
+                        HashMap<VentureItemStatKeys, Double> itemStatMap = itemForgerMapItem.getItemStats();
+                        Multimap<Attribute, AttributeModifier> attributes = itemForgerMapItem.getAttributes();
+
+
+                        if (lore != null) // FIXME: Test
+                        {
+                            if (!playerLoreMap.containsKey(itemMeta.getCustomModelData()))
                             {
                                 newLore.addAll(lore);
                             }
-                            if (rarity != null)
-                            {
-                                itemMeta.setDisplayName(itemForgerMapItem.getName());
-                                itemMeta.getPersistentDataContainer().set(ItemPropertiesKeys.RARITY_KEY.getKey(), VentureItemRarity.STRING, rarity.getRarity());
-                            }
-                            if (itemStatMap != null)
-                            {
-                                for (VentureItemStatKeys ventureItemStatKeys : itemStatMap.keySet())
-                                {
-                                    NamespacedKey itemStatKey = ventureItemStatKeys.getKey();
-                                    Double statKeyValue = itemStatMap.get(ventureItemStatKeys);
-                                    if (itemMeta.getPersistentDataContainer().get(itemStatKey, PersistentDataType.DOUBLE) != null)
-                                    {
-                                        itemMeta.getPersistentDataContainer().set(itemStatKey, PersistentDataType.DOUBLE, statKeyValue);
-                                    }
-                                }
-                            }
-                            if (attributes != null)
-                            {
-                                itemMeta.setAttributeModifiers(attributes);
-                            }
-                        } else if (itemCommandNameMap.containsKey(keyValue))
+                        }
+                        if (playerLore != null) // FIXME: Test
                         {
-
+                            if (playerLoreMap.containsKey(itemMeta.getCustomModelData()))
+                            {
+                                newLore.addAll(playerLore);
+                            }
                         }
 
+                        if (rarity != null)
+                        {
+                            itemMeta.setDisplayName(itemForgerMapItem.getName());
+                            itemMeta.getPersistentDataContainer().set(ItemPropertiesKeys.RARITY_KEY.getKey(), VentureItemRarity.STRING, rarity.getRarity());
+                        }
+                        if (itemStatMap != null)
+                        {
+                            for (VentureItemStatKeys ventureItemStatKeys : itemStatMap.keySet())
+                            {
+                                NamespacedKey itemStatKey = ventureItemStatKeys.getKey();
+                                Double statKeyValue = itemStatMap.get(ventureItemStatKeys);
+                                if (itemMeta.getPersistentDataContainer().get(itemStatKey, PersistentDataType.DOUBLE) != null)
+                                {
+                                    itemMeta.getPersistentDataContainer().set(itemStatKey, PersistentDataType.DOUBLE, statKeyValue);
+                                }
+                            }
+                        }
+                        if (attributes != null)
+                        {
+                            itemMeta.setAttributeModifiers(attributes);
+                        }
 
                     } catch (NullPointerException exception)
                     {

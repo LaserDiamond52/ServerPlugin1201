@@ -2,8 +2,8 @@ package net.laserdiamond.ventureplugin.items.util;
 
 import net.laserdiamond.ventureplugin.VenturePlugin;
 import net.laserdiamond.ventureplugin.enchants.Components.VentureEnchants;
-import net.laserdiamond.ventureplugin.items.armor.StormLord.Components.StormLordArmorManager;
-import net.laserdiamond.ventureplugin.items.armor.Vanilla.Components.NetheriteArmorManager;
+import net.laserdiamond.ventureplugin.items.armor.StormLord.Components.StormLordArmor;
+import net.laserdiamond.ventureplugin.items.armor.Vanilla.Components.NetheriteArmor;
 import net.laserdiamond.ventureplugin.items.util.armor.ArmorPieceTypes;
 import net.laserdiamond.ventureplugin.items.util.misc.MenuItems;
 import net.laserdiamond.ventureplugin.stats.Components.StatsItemManager;
@@ -35,16 +35,16 @@ import java.util.Map;
 public class ItemForgerRegistry implements Listener {
 
     private VenturePlugin plugin;
-    private static NetheriteArmorManager netheriteArmorManager;
-    private static StormLordArmorManager stormLordArmorManager;
+    private static NetheriteArmor netheriteArmor;
+    private static StormLordArmor stormLordArmor;
     private final HashMap<String, ItemForger> giveItemCommandMap;
     private final HashMap<ItemRegistryKey, ItemForger> itemForgerRegistryMap;
     private final HashMap<ItemRegistryKey, ItemForger> playerItemForgerRegistryMap;
 
     public ItemForgerRegistry(VenturePlugin plugin) {
         this.plugin = plugin;
-        netheriteArmorManager = plugin.getNetheriteArmorManager();
-        stormLordArmorManager = plugin.getStormArmorManager();
+        netheriteArmor = plugin.getNetheriteArmorManager();
+        stormLordArmor = plugin.getStormArmorManager();
         giveItemCommandMap = new HashMap<>();
         itemForgerRegistryMap = new HashMap<>();
         playerItemForgerRegistryMap = new HashMap<>();
