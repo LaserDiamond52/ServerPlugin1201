@@ -9,6 +9,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 public abstract class ArmorConfig implements GetVarFile {
 
@@ -65,5 +66,11 @@ public abstract class ArmorConfig implements GetVarFile {
     @Override
     public Boolean getBoolean(String path) {
         return config.getBoolean(path);
+    }
+
+    @Override
+    public List<Integer> getIntList(String path)
+    {
+        return config.getIntegerList(path);
     }
 }
