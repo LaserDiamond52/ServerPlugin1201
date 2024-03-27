@@ -3,7 +3,7 @@ package net.laserdiamond.ventureplugin.util;
 import com.google.common.collect.Multimap;
 import net.laserdiamond.ventureplugin.VenturePlugin;
 import net.laserdiamond.ventureplugin.enchants.Components.VentureEnchants;
-import net.laserdiamond.ventureplugin.items.armor.Trims.Components.TrimLore;
+import net.laserdiamond.ventureplugin.items.armor.trims.Components.TrimLore;
 import net.laserdiamond.ventureplugin.items.util.ItemForger;
 import net.laserdiamond.ventureplugin.items.util.VentureItemRarity;
 import net.laserdiamond.ventureplugin.items.util.armor.ArmorPieceTypes;

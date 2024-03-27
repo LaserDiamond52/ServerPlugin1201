@@ -1,9 +1,14 @@
 package net.laserdiamond.ventureplugin.events.damage;
 
 import net.laserdiamond.ventureplugin.VenturePlugin;
+import net.laserdiamond.ventureplugin.entities.player.StatPlayer;
+import net.laserdiamond.ventureplugin.stats.Components.DamageStats;
 import net.laserdiamond.ventureplugin.stats.Manager.StatProfileManager;
 import org.bukkit.*;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -104,9 +109,27 @@ public class DamageEvent implements Listener {
     */
 
     @EventHandler
-    public void damageStat(EntityDamageByEntityEvent event)
+    public void arrowDamage(EntityDamageByEntityEvent event)
     {
+        if (event.getDamager() instanceof Arrow arrow)
+        {
+            if (arrow.getShooter() instanceof Player player)
+            {
+                double damage = event.getDamage();
 
+                StatPlayer statPlayer = new StatPlayer(player);
+                DamageStats damageStats = statPlayer.getDamageStats();
+                double baseRange = damageStats.getBaseRange();
+                double percentRange = 1 + (damageStats.getPercentRange() * 0.01);
+                double finalArrowDamage = (baseRange + damage) * percentRange;
+
+                if (event.getEntity() instanceof LivingEntity)
+                {
+                    player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP,100,1); // Arrow ping sound
+                    event.setDamage(finalArrowDamage);
+                }
+            }
+        }
     }
 
 

@@ -2,8 +2,8 @@ package net.laserdiamond.ventureplugin.items.util;
 
 import net.laserdiamond.ventureplugin.VenturePlugin;
 import net.laserdiamond.ventureplugin.enchants.Components.VentureEnchants;
-import net.laserdiamond.ventureplugin.items.armor.StormLord.Components.StormLordArmor;
-import net.laserdiamond.ventureplugin.items.armor.Vanilla.Components.NetheriteArmor;
+import net.laserdiamond.ventureplugin.items.armor.components.StormLordArmor;
+import net.laserdiamond.ventureplugin.items.armor.components.NetheriteArmor;
 import net.laserdiamond.ventureplugin.items.util.armor.ArmorPieceTypes;
 import net.laserdiamond.ventureplugin.items.util.misc.MenuItems;
 import net.laserdiamond.ventureplugin.stats.Components.StatsItemManager;

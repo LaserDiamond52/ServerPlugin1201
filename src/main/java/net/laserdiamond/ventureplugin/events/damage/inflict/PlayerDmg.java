@@ -7,13 +7,10 @@ import net.laserdiamond.ventureplugin.events.damage.PlayerMeleeDamageEvent;
 import net.laserdiamond.ventureplugin.events.damage.PlayerRangeDamageEvent;
 import net.laserdiamond.ventureplugin.stats.Components.DamageStats;
 import net.laserdiamond.ventureplugin.stats.Components.DefenseStats;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 
 public class PlayerDmg implements Listener {
 
@@ -25,8 +22,8 @@ public class PlayerDmg implements Listener {
         double damage = event.getDamage();
         StatPlayer statPlayer = new StatPlayer(player);
         DamageStats damageStats = statPlayer.getDamageStats();
-        double baseMelee = damageStats.getbMeleeDmg();
-        double percentMelee = 1 + (damageStats.getpMeleeDmg() * 0.01);
+        double baseMelee = damageStats.getBaseMelee();
+        double percentMelee = 1 + (damageStats.getPercentMelee() * 0.01);
 
         double meleeDmg = (baseMelee + damage) * percentMelee;
 
@@ -52,8 +49,8 @@ public class PlayerDmg implements Listener {
         double damage = event.getDamage();
         StatPlayer statPlayer = new StatPlayer(player);
         DamageStats damageStats = statPlayer.getDamageStats();
-        double baseMagic = damageStats.getbMagicDmg();
-        double percentMagic = 1 + (damageStats.getpMagicDmg() * 0.01);
+        double baseMagic = damageStats.getBaseMagic();
+        double percentMagic = 1 + (damageStats.getPercentMagic() * 0.01);
 
         double magicDmg = (baseMagic + damage) * percentMagic;
 
@@ -80,10 +77,12 @@ public class PlayerDmg implements Listener {
         double damage = event.getDamage();
         StatPlayer statPlayer = new StatPlayer(player);
         DamageStats damageStats = statPlayer.getDamageStats();
-        double baseRange = damageStats.getbRangeDmg();
-        double percentRange = 1 + (damageStats.getpRangeDmg() * 0.01);
+        double baseRange = damageStats.getBaseRange();
+        double percentRange = 1 + (damageStats.getPercentRange() * 0.01);
 
         double rangeDmg = (baseRange + damage) * percentRange;
+
+        //player.sendMessage("event damage: " + rangeDmg);
 
         if (target instanceof Player playerTarget)
         {

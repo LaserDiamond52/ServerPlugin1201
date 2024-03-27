@@ -1,6 +1,6 @@
 package net.laserdiamond.ventureplugin.stats.Components.PlayerStatKeys;
 
-import net.laserdiamond.ventureplugin.items.armor.Trims.Components.ArmorTrimMaterialStats;
+import net.laserdiamond.ventureplugin.items.armor.trims.Components.ArmorTrimMaterialStats;
 import net.laserdiamond.ventureplugin.stats.Components.DamageStats;
 import net.laserdiamond.ventureplugin.stats.Components.DefenseStats;
 import net.laserdiamond.ventureplugin.stats.Components.StatProfile;
@@ -47,9 +47,9 @@ public enum PlayerTrimMaterialStatKeys {
             }
             case AMETHYST -> {
                 trimMaterialStats.setAmethystBonusDamage(trimMaterialStats.getAmethystBonusDamage() + amount);
-                damageStats.setpMeleeDmg(damageStats.getpMeleeDmg() + amount);
-                damageStats.setpMagicDmg(damageStats.getpMagicDmg() + amount);
-                damageStats.setpRangeDmg(damageStats.getpRangeDmg() + amount);
+                damageStats.setpMeleeDmg(damageStats.getPercentMelee() + amount);
+                damageStats.setpMagicDmg(damageStats.getPercentMagic() + amount);
+                damageStats.setpRangeDmg(damageStats.getPercentRange() + amount);
             }
             case DIAMOND -> {
                 trimMaterialStats.setDiamondBonusMana(trimMaterialStats.getDiamondBonusMana() + amount);
@@ -93,9 +93,9 @@ public enum PlayerTrimMaterialStatKeys {
             }
             case AMETHYST -> {
                 trimMaterialStats.setAmethystBonusDamage(trimMaterialStats.getAmethystBonusDamage() - amount);
-                damageStats.setpMeleeDmg(damageStats.getpMeleeDmg() - amount);
-                damageStats.setpMagicDmg(damageStats.getpMagicDmg() - amount);
-                damageStats.setpRangeDmg(damageStats.getpRangeDmg() - amount);
+                damageStats.setpMeleeDmg(damageStats.getPercentMelee() - amount);
+                damageStats.setpMagicDmg(damageStats.getPercentMagic() - amount);
+                damageStats.setpRangeDmg(damageStats.getPercentRange() - amount);
             }
             case DIAMOND -> {
                 trimMaterialStats.setDiamondBonusMana(trimMaterialStats.getDiamondBonusMana() - amount);

@@ -36,8 +36,8 @@ public class PlayerRangeDamageEvent extends PlayerEvent implements Cancellable {
     {
         StatPlayer statPlayer = new StatPlayer(player);
         DamageStats damageStats = statPlayer.getDamageStats();
-        double bRange = damageStats.getbRangeDmg();
-        double pRangeIncrease = 1 + (damageStats.getpRangeDmg() * 0.02);
+        double bRange = damageStats.getBaseRange();
+        double pRangeIncrease = 1 + (damageStats.getPercentRange() * 0.02);
 
         double rangeDamage = (bRange + damage) * pRangeIncrease;
 

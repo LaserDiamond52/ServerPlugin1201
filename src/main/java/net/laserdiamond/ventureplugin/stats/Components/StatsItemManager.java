@@ -2,9 +2,9 @@ package net.laserdiamond.ventureplugin.stats.Components;
 
 import net.laserdiamond.ventureplugin.VenturePlugin;
 import net.laserdiamond.ventureplugin.enchants.Components.EnchantStats;
-import net.laserdiamond.ventureplugin.items.armor.Trims.Components.ArmorTrimMaterialStats;
-import net.laserdiamond.ventureplugin.items.armor.Trims.Components.ArmorTrimPatternStats;
-import net.laserdiamond.ventureplugin.items.armor.Trims.Manager.ArmorTrimStats;
+import net.laserdiamond.ventureplugin.items.armor.trims.Components.ArmorTrimMaterialStats;
+import net.laserdiamond.ventureplugin.items.armor.trims.Components.ArmorTrimPatternStats;
+import net.laserdiamond.ventureplugin.items.armor.trims.Manager.ArmorTrimStats;
 import net.laserdiamond.ventureplugin.items.util.ItemForger;
 import net.laserdiamond.ventureplugin.stats.Manager.StatProfileManager;
 import org.bukkit.ChatColor;
@@ -39,12 +39,12 @@ public class StatsItemManager {
         double speed = stats.getSpeed();
         double maxMana = stats.getMaxMana();
 
-        double baseMelee = damageStats.getbMeleeDmg();
-        double baseMagic = damageStats.getbMagicDmg();
-        double baseRange = damageStats.getbRangeDmg();
-        double meleeDamage = damageStats.getpMeleeDmg();
-        double magicDamage = damageStats.getpMagicDmg();
-        double rangeDamage = damageStats.getpRangeDmg();
+        double baseMelee = damageStats.getBaseMelee();
+        double baseMagic = damageStats.getBaseMagic();
+        double baseRange = damageStats.getBaseRange();
+        double meleeDamage = damageStats.getPercentMelee();
+        double magicDamage = damageStats.getPercentMagic();
+        double rangeDamage = damageStats.getPercentRange();
 
         double armor = defenseStats.getDefense();
         double fire_armor = defenseStats.getFireDefense();

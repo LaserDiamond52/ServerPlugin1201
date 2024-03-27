@@ -4,6 +4,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
 
 public abstract class AbilityCasting {
 
@@ -32,8 +33,13 @@ public abstract class AbilityCasting {
         void onAttack(Player player, double damage, LivingEntity hitEntity);
     }
 
-    public interface OnDeathAbility extends AbilityListener
+    public interface onKillAbility extends AbilityListener
     {
         void onKill(Player player, LivingEntity killedEntity);
+    }
+
+    public interface toggleSneakAbility extends AbilityListener
+    {
+        void onToggle(PlayerToggleSneakEvent event);
     }
 }

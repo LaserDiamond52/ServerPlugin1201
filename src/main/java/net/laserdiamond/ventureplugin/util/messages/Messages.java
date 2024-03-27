@@ -47,6 +47,11 @@ public class Messages {
         return ChatColor.RED + abilityName + " is on cooldown";
     }
 
+    public static String abilityAlreadyActive(String abilityName)
+    {
+        return ChatColor.DARK_GRAY + abilityName + " is already active!";
+    }
+
     public static String cancelledSpellMsg()
     {
         return ChatColor.RED + "You are unable to cast spells";

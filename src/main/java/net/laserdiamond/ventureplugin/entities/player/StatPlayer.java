@@ -2,7 +2,7 @@ package net.laserdiamond.ventureplugin.entities.player;
 
 import net.laserdiamond.ventureplugin.VenturePlugin;
 import net.laserdiamond.ventureplugin.enchants.Components.EnchantStats;
-import net.laserdiamond.ventureplugin.items.armor.Trims.Manager.ArmorTrimStats;
+import net.laserdiamond.ventureplugin.items.armor.trims.Manager.ArmorTrimStats;
 import net.laserdiamond.ventureplugin.stats.Components.*;
 import net.laserdiamond.ventureplugin.stats.Manager.StatProfileManager;
 import org.bukkit.entity.Player;

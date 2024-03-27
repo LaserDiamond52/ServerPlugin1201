@@ -344,9 +344,9 @@ public class EnchantListeners implements Listener, AbilityListener, AbilityCasti
         DamageStats damageStats = statProfile.damageStats();
         EnchantStats enchantStats = statProfile.enchantStats();
 
-        Double currentBaseMelee = damageStats.getbMeleeDmg();
-        Double currentBaseMagic = damageStats.getbMagicDmg();
-        Double currentBaseRange = damageStats.getbRangeDmg();
+        Double currentBaseMelee = damageStats.getBaseMelee();
+        Double currentBaseMagic = damageStats.getBaseMagic();
+        Double currentBaseRange = damageStats.getBaseRange();
 
         Double currentEnchantMelee = enchantStats.getBaseMelee();
         Double currentEnchantMagic = enchantStats.getBaseMagic();
@@ -377,9 +377,9 @@ public class EnchantListeners implements Listener, AbilityListener, AbilityCasti
         DamageStats damageStats = statProfile.damageStats();
         EnchantStats enchantStats = statProfile.enchantStats();
 
-        Double currentBaseMelee = damageStats.getbMeleeDmg();
-        Double currentBaseMagic = damageStats.getbMagicDmg();
-        Double currentBaseRange = damageStats.getbRangeDmg();
+        Double currentBaseMelee = damageStats.getBaseMelee();
+        Double currentBaseMagic = damageStats.getBaseMagic();
+        Double currentBaseRange = damageStats.getBaseRange();
 
         Double currentEnchantMelee = enchantStats.getBaseMelee();
         Double currentEnchantMagic = enchantStats.getBaseMagic();

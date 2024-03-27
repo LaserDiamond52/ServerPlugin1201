@@ -1,0 +1,36 @@
+
+abilityName: Guardian's Laser
+manaCost: 25
+laserDamage: 10
+toughness: 3
+
+helmetMagicDamage: 7
+helmetMana: 90
+helmetHealth: 4
+helmetArmor: 3
+
+chestplateRed: 40
+chestplateGreen: 171
+chestplateBlue: 138
+chestplateMagicDamage: 7
+chestplateMana: 70
+chestplateHealth: 7
+chestplateArmor: 8
+
+leggingsRed: 27
+leggingsGreen: 152
+leggingsBlue: 123
+leggingsMagicDamage: 7
+leggingsMana: 70
+leggingsHealth: 5
+leggingsArmor: 6
+
+bootsRed: 17
+bootsGreen: 135
+bootsBlue: 107
+bootsMagicDamage: 7
+bootsMana: 70
+bootsHealth: 4
+bootsArmor: 3
+
+HelmetURL: http://textures.minecraft.net/texture/ea07bb0a126ee816f1f3d21421446516648986d7fc22356d8eb4dd8eb2021c2

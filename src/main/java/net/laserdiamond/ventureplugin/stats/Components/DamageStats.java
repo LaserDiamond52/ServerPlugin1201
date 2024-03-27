@@ -21,7 +21,7 @@ public class DamageStats {
         this.reach = reach;
     }
 
-    public double getbMeleeDmg() {
+    public double getBaseMelee() {
         return bMeleeDmg;
     }
 
@@ -29,7 +29,7 @@ public class DamageStats {
         this.bMeleeDmg = bMeleeDmg;
     }
 
-    public double getbMagicDmg() {
+    public double getBaseMagic() {
         return bMagicDmg;
     }
 
@@ -37,7 +37,7 @@ public class DamageStats {
         this.bMagicDmg = bMagicDmg;
     }
 
-    public double getbRangeDmg() {
+    public double getBaseRange() {
         return bRangeDmg;
     }
 
@@ -45,7 +45,7 @@ public class DamageStats {
         this.bRangeDmg = bRangeDmg;
     }
 
-    public double getpMeleeDmg() {
+    public double getPercentMelee() {
         return pMeleeDmg;
     }
 
@@ -53,7 +53,7 @@ public class DamageStats {
         this.pMeleeDmg = pMeleeDmg;
     }
 
-    public double getpMagicDmg() {
+    public double getPercentMagic() {
         return pMagicDmg;
     }
 
@@ -61,7 +61,7 @@ public class DamageStats {
         this.pMagicDmg = pMagicDmg;
     }
 
-    public double getpRangeDmg() {
+    public double getPercentRange() {
         return pRangeDmg;
     }
 

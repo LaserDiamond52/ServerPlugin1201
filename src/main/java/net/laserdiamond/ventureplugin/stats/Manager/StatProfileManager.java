@@ -2,9 +2,9 @@ package net.laserdiamond.ventureplugin.stats.Manager;
 
 import net.laserdiamond.ventureplugin.VenturePlugin;
 import net.laserdiamond.ventureplugin.enchants.Components.EnchantStats;
-import net.laserdiamond.ventureplugin.items.armor.Trims.Components.ArmorTrimMaterialStats;
-import net.laserdiamond.ventureplugin.items.armor.Trims.Components.ArmorTrimPatternStats;
-import net.laserdiamond.ventureplugin.items.armor.Trims.Manager.ArmorTrimStats;
+import net.laserdiamond.ventureplugin.items.armor.trims.Components.ArmorTrimMaterialStats;
+import net.laserdiamond.ventureplugin.items.armor.trims.Components.ArmorTrimPatternStats;
+import net.laserdiamond.ventureplugin.items.armor.trims.Manager.ArmorTrimStats;
 import net.laserdiamond.ventureplugin.stats.Components.*;
 import net.laserdiamond.ventureplugin.stats.Config.BaseStatsConfig;
 import net.laserdiamond.ventureplugin.tunement.Components.TunementProfile;

@@ -2,7 +2,7 @@ package net.laserdiamond.ventureplugin.items.util;
 
 import com.google.common.collect.Multimap;
 import net.laserdiamond.ventureplugin.util.VentureItemStatKeys;
-import net.laserdiamond.ventureplugin.items.armor.Trims.Components.TrimLore;
+import net.laserdiamond.ventureplugin.items.armor.trims.Components.TrimLore;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

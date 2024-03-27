@@ -38,8 +38,8 @@ public class PlayerMeleeDamageEvent extends PlayerEvent implements Cancellable {
     {
         StatPlayer statPlayer = new StatPlayer(player);
         DamageStats damageStats = statPlayer.getDamageStats();
-        double pMelee = damageStats.getbMeleeDmg();
-        double pMeleeIncrease = 1 + (damageStats.getpMeleeDmg() * 0.01);
+        double pMelee = damageStats.getBaseMelee();
+        double pMeleeIncrease = 1 + (damageStats.getPercentMelee() * 0.01);
 
         double meleeDamage = (pMelee + damage) * pMeleeIncrease;
 

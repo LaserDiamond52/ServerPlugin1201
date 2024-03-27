@@ -1,0 +1,29 @@
+
+abilityName: Sniper
+arrowDamageMultiplier: 1.25
+manaCost: 80
+cooldown: 40
+
+toughness: 0.5
+
+helmetMeleeDamage: 1.5
+helmetRangeDamage: 3.5
+helmetHealth: 1.5
+helmetArmor: 2.5
+
+chestplateMeleeDamage: 1.5
+chestplateRangeDamage: 3.5
+chestplateHealth: 4.5
+chestplateArmor: 5
+
+leggingsMeleeDamage: 1.5
+leggingsRangeDamage: 3.5
+leggingsHealth: 3
+leggingsArmor: 3.5
+
+bootsMeleeDamage: 1.5
+bootsRangeDamage: 3.5
+bootsHealth: 1.5
+bootsArmor: 2.5
+
+HelmetURL: http://textures.minecraft.net/texture/89d074ad9b9971879eb325bddff3675f7224856bd6d569fc8d483c133d73005d

@@ -33,8 +33,8 @@ public class MagicDamageEvent extends EntityDamageByEntityEvent implements Cance
             if (damagee instanceof LivingEntity livingEntity)
             {
                 DamageStats damageStats = statProfileManager.getStatProfile(player.getUniqueId()).damageStats();
-                double bMagic = damageStats.getbMagicDmg();
-                double pMagicIncrease = 1 + (damageStats.getpMagicDmg() * 0.01);
+                double bMagic = damageStats.getBaseMagic();
+                double pMagicIncrease = 1 + (damageStats.getPercentMagic() * 0.01);
 
                 damage = (bMagic + damage) * pMagicIncrease;
 

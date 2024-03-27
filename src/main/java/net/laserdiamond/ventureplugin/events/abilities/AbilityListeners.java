@@ -12,6 +12,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.lang.reflect.InvocationTargetException;
@@ -21,7 +22,7 @@ import java.util.*;
 public class AbilityListeners extends BukkitRunnable implements Listener {
 
     private final VenturePlugin plugin;
-    private final HashMap<AbilityListener, Method> rightClickAbility, leftClickAbility, dropItemAbility, runnableAbility, attackAbility, onKillAbility;
+    private final HashMap<AbilityListener, Method> rightClickAbility, leftClickAbility, dropItemAbility, runnableAbility, attackAbility, onKillAbility, toggleSneakAbility;
 
     public AbilityListeners(VenturePlugin plugin)
     {
@@ -32,6 +33,7 @@ public class AbilityListeners extends BukkitRunnable implements Listener {
         dropItemAbility = plugin.getAbilities().dropItemAbilities();
         attackAbility = plugin.getAbilities().attackAbility();
         onKillAbility = plugin.getAbilities().onKillAbility();
+        toggleSneakAbility = plugin.getAbilities().toggleSneakAbility();
     }
 
     /**
@@ -114,6 +116,12 @@ public class AbilityListeners extends BukkitRunnable implements Listener {
         }
     }
 
+    @EventHandler
+    public void onToggleSneakAbility(PlayerToggleSneakEvent event) throws InvocationTargetException, IllegalAccessException
+    {
+        toggleSneakAbility(event);
+    }
+
     private void dropItemAbility(PlayerDropItemEvent event) throws InvocationTargetException, IllegalAccessException
     {
         for (AbilityListener listener : dropItemAbility.keySet())
@@ -155,7 +163,8 @@ public class AbilityListeners extends BukkitRunnable implements Listener {
         }
     }
 
-    private void attackAbility(Player player, double damage, LivingEntity hitEntity) throws InvocationTargetException, IllegalAccessException {
+    private void attackAbility(Player player, double damage, LivingEntity hitEntity) throws InvocationTargetException, IllegalAccessException
+    {
         for (AbilityListener listener : attackAbility.keySet())
         {
             Method method = attackAbility.get(listener);
@@ -163,11 +172,21 @@ public class AbilityListeners extends BukkitRunnable implements Listener {
         }
     }
 
-    private void killAbility(Player player, LivingEntity killedEntity) throws InvocationTargetException, IllegalAccessException {
+    private void killAbility(Player player, LivingEntity killedEntity) throws InvocationTargetException, IllegalAccessException
+    {
         for (AbilityListener listener : onKillAbility.keySet())
         {
             Method method = onKillAbility.get(listener);
             method.invoke(listener, player, killedEntity);
+        }
+    }
+
+    private void toggleSneakAbility(PlayerToggleSneakEvent event) throws InvocationTargetException, IllegalAccessException
+    {
+        for (AbilityListener listener : toggleSneakAbility.keySet())
+        {
+            Method method = toggleSneakAbility.get(listener);
+            method.invoke(listener, event);
         }
     }
 }

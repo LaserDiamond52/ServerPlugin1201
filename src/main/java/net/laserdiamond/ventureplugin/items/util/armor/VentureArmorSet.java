@@ -2,7 +2,7 @@ package net.laserdiamond.ventureplugin.items.util.armor;
 
 import com.google.common.collect.Multimap;
 import net.laserdiamond.ventureplugin.VenturePlugin;
-import net.laserdiamond.ventureplugin.items.armor.ArmorEquipStats;
+import net.laserdiamond.ventureplugin.items.armor.util.ArmorEquipStats;
 import net.laserdiamond.ventureplugin.items.util.ItemForger;
 import net.laserdiamond.ventureplugin.items.util.ItemNameBuilder;
 import net.laserdiamond.ventureplugin.items.util.VentureStatItem;
