@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+@Deprecated
 public class UpdateItem {
 
     // TODO: Item keys for custom stats don't update in item tags, but update for in-game stats

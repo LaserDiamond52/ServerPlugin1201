@@ -1,6 +1,7 @@
 package net.laserdiamond.ventureplugin.items.armor.components;
 
 import net.laserdiamond.ventureplugin.items.util.armor.VentureArmorSet;
+import net.laserdiamond.ventureplugin.util.File.ArmorConfig;
 import net.laserdiamond.ventureplugin.util.File.GetVarFile;
 import net.laserdiamond.ventureplugin.util.VentureItemStatKeys;
 import net.laserdiamond.ventureplugin.VenturePlugin;
@@ -31,7 +32,7 @@ public final class NetheriteArmor extends VentureArmorSet {
     }
 
     @Override
-    public GetVarFile config() {
+    public ArmorConfig config() {
         return plugin.getNetheriteArmorConfig();
     }
 

@@ -11,6 +11,7 @@ import net.laserdiamond.ventureplugin.items.util.armor.ArmorCMD;
 import net.laserdiamond.ventureplugin.items.util.armor.ArmorPieceTypes;
 import net.laserdiamond.ventureplugin.events.abilities.*;
 import net.laserdiamond.ventureplugin.items.util.armor.VentureArmorSet;
+import net.laserdiamond.ventureplugin.util.File.ArmorConfig;
 import net.laserdiamond.ventureplugin.util.File.GetVarFile;
 import net.laserdiamond.ventureplugin.util.messages.Messages;
 import net.laserdiamond.ventureplugin.stats.Components.Stats;
@@ -40,7 +41,7 @@ public final class StormLordArmor extends VentureArmorSet implements AbilityCast
     }
 
     @Override
-    public GetVarFile config() {
+    public ArmorConfig config() {
         return plugin.getStormLordArmorConfig();
     }
 

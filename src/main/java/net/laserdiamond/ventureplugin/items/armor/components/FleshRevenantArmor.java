@@ -8,6 +8,7 @@ import net.laserdiamond.ventureplugin.items.util.VentureItemRarity;
 import net.laserdiamond.ventureplugin.items.util.armor.ArmorCMD;
 import net.laserdiamond.ventureplugin.items.util.armor.ArmorPieceTypes;
 import net.laserdiamond.ventureplugin.items.util.armor.VentureArmorSet;
+import net.laserdiamond.ventureplugin.util.File.ArmorConfig;
 import net.laserdiamond.ventureplugin.util.File.GetVarFile;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -24,7 +25,7 @@ public final class FleshRevenantArmor extends VentureArmorSet implements Ability
     }
 
     @Override
-    public GetVarFile config() {
+    public ArmorConfig config() {
         return plugin.getFleshRevenantArmorConfig();
     }
 

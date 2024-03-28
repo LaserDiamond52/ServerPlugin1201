@@ -3,9 +3,11 @@ package net.laserdiamond.ventureplugin.util;
 import com.google.common.collect.Multimap;
 import net.laserdiamond.ventureplugin.VenturePlugin;
 import net.laserdiamond.ventureplugin.enchants.Components.VentureEnchants;
+import net.laserdiamond.ventureplugin.items.armor.components.SoulFireBlazeArmor;
 import net.laserdiamond.ventureplugin.items.armor.trims.Components.TrimLore;
 import net.laserdiamond.ventureplugin.items.util.ItemForger;
 import net.laserdiamond.ventureplugin.items.util.VentureItemRarity;
+import net.laserdiamond.ventureplugin.items.util.armor.ArmorCMD;
 import net.laserdiamond.ventureplugin.items.util.armor.ArmorPieceTypes;
 import net.laserdiamond.ventureplugin.items.util.armor.VentureArmorSet;
 import org.bukkit.Bukkit;
@@ -33,23 +35,15 @@ import java.util.List;
 
 public class ItemRegistry implements Listener {
 
-    private final VenturePlugin plugin;
-
-    private final HashMap<String, ItemForger> itemCommandNameMap;
-    private final List<VentureArmorSet> playerArmorItemMap;
-
-    public ItemRegistry(VenturePlugin plugin)
-    {
-        this.plugin = plugin;
-        itemCommandNameMap = plugin.getItemRegistryMap();
-        playerArmorItemMap = plugin.getPlayerArmorItemMap();
-    }
+    private static final VenturePlugin PLUGIN = VenturePlugin.getInstance();
+    private static final HashMap<String, ItemForger> ITEM_COMMAND_NAME_MAP = PLUGIN.getItemRegistryMap();
+    private static final List<VentureArmorSet> PLAYER_ARMOR_ITEM_MAP = PLUGIN.getPlayerArmorItemMap();
 
     public HashMap<String, List<String>> playerLore(Player player)
     {
         HashMap<String, List<String>> playerLoreMap = new HashMap<>();
-        int maxStars = plugin.getConfig().getInt("maxStars");
-        for (VentureArmorSet ventureArmorSet : playerArmorItemMap)
+        int maxStars = PLUGIN.getConfig().getInt("maxStars");
+        for (VentureArmorSet ventureArmorSet : PLAYER_ARMOR_ITEM_MAP)
         {
             String armorName = ventureArmorSet.armorSetName();
             for (int i = 0; i < maxStars; i++)
@@ -65,11 +59,11 @@ public class ItemRegistry implements Listener {
         return playerLoreMap;
     }
 
-    public HashMap<Integer, List<String>> defaultPlayerLore(Player player, int stars)
+    public static HashMap<Integer, List<String>> defaultPlayerLore(Player player, int stars)
     {
         HashMap<Integer, List<String>> defaultPlayerLore = new HashMap<>();
 
-        for (VentureArmorSet ventureArmorSet : playerArmorItemMap) // Armor pieces
+        for (VentureArmorSet ventureArmorSet : PLAYER_ARMOR_ITEM_MAP) // Armor pieces
         {
             defaultPlayerLore.put(ventureArmorSet.getArmorCMD().getHelmet(), ventureArmorSet.createPlayerLore(player, ArmorPieceTypes.HELMET, stars));
             defaultPlayerLore.put(ventureArmorSet.getArmorCMD().getChestplate(), ventureArmorSet.createPlayerLore(player, ArmorPieceTypes.CHESTPLATE, stars));
@@ -205,7 +199,7 @@ public class ItemRegistry implements Listener {
 
     }
 
-    public void renewItemNew(ItemStack itemStack)
+    public static void renewItemNew(ItemStack itemStack)
     {
         List<String> newLore = new ArrayList<>();
 
@@ -232,7 +226,7 @@ public class ItemRegistry implements Listener {
                     String keyValue = itemForger.getItemKey();
                     try
                     {
-                        ItemForger itemForgerMapItem = itemCommandNameMap.get(keyValue);
+                        ItemForger itemForgerMapItem = ITEM_COMMAND_NAME_MAP.get(keyValue);
                         List<String> lore = itemForgerMapItem.getLore();
                         VentureItemRarity.Rarity rarity = itemForgerMapItem.getRarity();
                         HashMap<VentureItemStatKeys, Double> itemStatMap = itemForgerMapItem.getItemStats();
@@ -240,7 +234,13 @@ public class ItemRegistry implements Listener {
 
                         if (lore != null)
                         {
-                            newLore.addAll(lore);
+
+                            if (ArmorCMD.isAnyArmorPiece(itemStack, ArmorCMD.SOUL_FIRE_BLAZE))
+                            {
+                                newLore.addAll(SoulFireBlazeArmor.itemSpecificLore(itemForger, lore));
+                            } else {
+                                newLore.addAll(lore);
+                            }
                         }
                         if (rarity != null)
                         {
@@ -281,7 +281,7 @@ public class ItemRegistry implements Listener {
     }
 
     // FIXME: Finish renewItem for players
-    public void renewItemNew(ItemStack itemStack, Player player)
+    public static ItemStack renewItemNew(ItemStack itemStack, Player player)
     {
         List<String> newLore = new ArrayList<>();
 
@@ -310,7 +310,7 @@ public class ItemRegistry implements Listener {
                     {
                         HashMap<Integer, List<String>> playerLoreMap = defaultPlayerLore(player, stars);
 
-                        ItemForger itemForgerMapItem = itemCommandNameMap.get(keyValue);
+                        ItemForger itemForgerMapItem = ITEM_COMMAND_NAME_MAP.get(keyValue);
                         List<String> lore = itemForgerMapItem.getLore();
                         List<String> playerLore = playerLoreMap.get(itemMeta.getCustomModelData());
                         VentureItemRarity.Rarity rarity = itemForgerMapItem.getRarity();
@@ -318,14 +318,19 @@ public class ItemRegistry implements Listener {
                         Multimap<Attribute, AttributeModifier> attributes = itemForgerMapItem.getAttributes();
 
 
-                        if (lore != null) // FIXME: Test
+                        if (lore != null) // TODO: Test
                         {
                             if (!playerLoreMap.containsKey(itemMeta.getCustomModelData()))
                             {
-                                newLore.addAll(lore);
+                                if (ArmorCMD.isAnyArmorPiece(itemStack, ArmorCMD.SOUL_FIRE_BLAZE))
+                                {
+                                    newLore.addAll(SoulFireBlazeArmor.itemSpecificLore(itemForger, lore));
+                                } else {
+                                    newLore.addAll(lore);
+                                }
                             }
                         }
-                        if (playerLore != null) // FIXME: Test
+                        if (playerLore != null) // TODO: Test
                         {
                             if (playerLoreMap.containsKey(itemMeta.getCustomModelData()))
                             {
@@ -369,5 +374,6 @@ public class ItemRegistry implements Listener {
 
             }
         }
+        return itemStack;
     }
 }

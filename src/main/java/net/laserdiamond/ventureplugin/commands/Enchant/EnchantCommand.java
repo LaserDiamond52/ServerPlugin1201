@@ -3,6 +3,7 @@ package net.laserdiamond.ventureplugin.commands.Enchant;
 import net.laserdiamond.ventureplugin.enchants.Components.VentureEnchants;
 import net.laserdiamond.ventureplugin.items.util.ItemForger;
 import net.laserdiamond.ventureplugin.items.util.UpdateItem;
+import net.laserdiamond.ventureplugin.util.ItemRegistry;
 import net.laserdiamond.ventureplugin.util.messages.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -85,8 +86,8 @@ public class EnchantCommand implements CommandExecutor, TabExecutor {
                 ItemForger mainHandForger = new ItemForger(mainHand);
                 int finalLevel = Math.min(enchantToAdd.getMaxLevel(), levelInput);
                 mainHandForger.addEnchant(enchantToAdd, finalLevel);
-                mainHandForger.setLore(UpdateItem.renewLore(mainHandForger.toItemStack()));
-                target.getInventory().setItemInMainHand(mainHandForger.toItemStack());
+                //mainHandForger.setLore(UpdateItem.renewLore(mainHandForger.toItemStack()));
+                target.getInventory().setItemInMainHand(ItemRegistry.renewItemNew(mainHandForger.toItemStack(), target));
             } else {
                 sender.sendMessage(ChatColor.RED + "Cannot apply " + input + " to " + mainHand.getType());
             }

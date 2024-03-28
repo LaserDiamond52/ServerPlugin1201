@@ -6,6 +6,7 @@ import net.laserdiamond.ventureplugin.items.armor.util.ArmorEquipStats;
 import net.laserdiamond.ventureplugin.items.util.ItemForger;
 import net.laserdiamond.ventureplugin.items.util.ItemNameBuilder;
 import net.laserdiamond.ventureplugin.items.util.VentureStatItem;
+import net.laserdiamond.ventureplugin.util.File.ArmorConfig;
 import net.laserdiamond.ventureplugin.util.VentureItemStatKeys;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -13,6 +14,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -38,6 +40,8 @@ public abstract class VentureArmorSet extends VentureStatItem {
      * @return The name of the armor set
      */
     public abstract String armorSetName();
+
+    public abstract ArmorConfig config();
 
     /**
      * Sets the custom model data for the armor set
@@ -72,7 +76,13 @@ public abstract class VentureArmorSet extends VentureStatItem {
      */
     public final String playerHeadSkin()
     {
-        return config().getString("HelmetURL");
+        String url = config().getString("HelmetURL");
+        if (url != null)
+        {
+            return url;
+        } else {
+            return " ";
+        }
     }
 
     /**
@@ -121,6 +131,7 @@ public abstract class VentureArmorSet extends VentureStatItem {
     {
         String armorPiece = armorPieceTypes.getName();
 
+        /*
         double meleeDamage = config().getDouble(armorPiece + "MeleeDamage") * (1 + stars * this.starBonus);
         double rangeDamage = config().getDouble(armorPiece + "RangeDamage") * (1 + stars * this.starBonus);
         double magicDamage = config().getDouble(armorPiece + "MagicDamage") * (1 + stars * this.starBonus);
@@ -130,6 +141,17 @@ public abstract class VentureArmorSet extends VentureStatItem {
         double toughness = config().getDouble("toughness");
         double fortitude = config().getDouble("fortitude");
         double speed = config().getDouble(armorPiece + "Speed") * (1 + stars * this.starBonus);
+
+         */
+        double meleeDamage = config().getStat(armorPieceTypes, ArmorConfig.StatType.MELEE_DAMAGE, stars);
+        double rangeDamage = config().getStat(armorPieceTypes, ArmorConfig.StatType.RANGE_DAMAGE, stars);
+        double magicDamage = config().getStat(armorPieceTypes, ArmorConfig.StatType.MAGIC_DAMAGE, stars);
+        double mana = config().getStat(armorPieceTypes, ArmorConfig.StatType.MANA, stars);
+        double health = config().getStat(armorPieceTypes, ArmorConfig.StatType.HEALTH, stars);
+        double armor = config().getStat(armorPieceTypes, ArmorConfig.StatType.ARMOR, stars);
+        double toughness = config().getStat(armorPieceTypes, ArmorConfig.StatType.TOUGHNESS, stars);
+        double fortitude = config().getStat(armorPieceTypes, ArmorConfig.StatType.FORTITUDE, stars);
+        double speed = config().getStat(armorPieceTypes, ArmorConfig.StatType.SPEED, stars);
 
         HashMap<VentureItemStatKeys, Double> itemStatKeysDoubleHashMap = new HashMap<>();
         itemStatKeysDoubleHashMap.put(VentureItemStatKeys.ARMOR_MELEE_DAMAGE_KEY, meleeDamage);
@@ -182,7 +204,7 @@ public abstract class VentureArmorSet extends VentureStatItem {
      * @param stars The amount of stars the item has
      * @return The armor piece as an ItemForger instance
      */
-    public final ItemForger createArmorSet(@NotNull ArmorPieceTypes armorPieceTypes, int stars)
+    public ItemForger createArmorSet(@NotNull ArmorPieceTypes armorPieceTypes, int stars)
     {
         String armorPieceString = armorPieceTypes.getName();
         String armorName = armorPieceString.substring(0,1).toUpperCase() + armorPieceString.substring(1);
@@ -259,6 +281,24 @@ public abstract class VentureArmorSet extends VentureStatItem {
     public boolean isWearingFullSet(Player player)
     {
         return ArmorEquipStats.isWearingFullSet(player, getArmorCMD().getHelmet(), getArmorCMD().getChestplate(), getArmorCMD().getLeggings(), getArmorCMD().getBoots());
+    }
+
+
+    public boolean isArmorPiece(ItemStack itemStack)
+    {
+        if (itemStack != null && itemStack.getItemMeta() != null && itemStack.getItemMeta().hasCustomModelData())
+        {
+            int customModelData = itemStack.getItemMeta().getCustomModelData();
+            if (customModelData == getArmorCMD().getHelmet() ||
+                customModelData == getArmorCMD().getChestplate() ||
+                customModelData == getArmorCMD().getLeggings() ||
+                customModelData == getArmorCMD().getBoots())
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

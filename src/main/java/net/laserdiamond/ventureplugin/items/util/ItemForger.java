@@ -3,6 +3,7 @@ package net.laserdiamond.ventureplugin.items.util;
 import com.google.common.collect.Multimap;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import net.laserdiamond.ventureplugin.util.UniqueVentureItemDataKey;
 import net.laserdiamond.ventureplugin.util.VentureItemStatKeys;
 import net.laserdiamond.ventureplugin.items.attributes.AttributeLoreNameMap;
 import org.apache.commons.codec.binary.Base64;
@@ -880,8 +881,6 @@ public class ItemForger {
             itemMeta.getPersistentDataContainer().set(itemStatKey, PersistentDataType.DOUBLE, keyValue);
         }
 
-
-
         itemStack.setItemMeta(itemMeta);
     }
 
@@ -896,6 +895,76 @@ public class ItemForger {
         return itemStatsMap;
     }
 
+    public ItemForger setUniqueItemDataKeyInt(UniqueVentureItemDataKey dataKey, int amount)
+    {
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        itemMeta.getPersistentDataContainer().set(dataKey.getKey(), PersistentDataType.INTEGER, amount);
+        itemStack.setItemMeta(itemMeta);
+        return this;
+    }
+
+    public static void setUniqueItemDataKeyInt(ItemStack itemStack, UniqueVentureItemDataKey dataKey, int amount)
+    {
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        itemMeta.getPersistentDataContainer().set(dataKey.getKey(), PersistentDataType.INTEGER, amount);
+        itemStack.setItemMeta(itemMeta);
+    }
+
+    public ItemForger setUniqueItemDataKeyDouble(UniqueVentureItemDataKey dataKey, double amount)
+    {
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        itemMeta.getPersistentDataContainer().set(dataKey.getKey(), PersistentDataType.DOUBLE, amount);
+        itemStack.setItemMeta(itemMeta);
+        return this;
+    }
+
+    public static void setUniqueItemDataKeyDouble(ItemStack itemStack, UniqueVentureItemDataKey dataKey, double amount)
+    {
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        itemMeta.getPersistentDataContainer().set(dataKey.getKey(), PersistentDataType.DOUBLE, amount);
+        itemStack.setItemMeta(itemMeta);
+    }
+
+    public Integer getUniqueItemDataKeyInt(UniqueVentureItemDataKey dataKey)
+    {
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        if (itemMeta.getPersistentDataContainer().get(dataKey.getKey(), PersistentDataType.INTEGER) != null)
+        {
+            return itemMeta.getPersistentDataContainer().get(dataKey.getKey(), PersistentDataType.INTEGER);
+        }
+        return 0;
+    }
+
+    public static Integer getUniqueItemDataKeyInt(ItemStack itemStack, UniqueVentureItemDataKey dataKey)
+    {
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        if (itemMeta.getPersistentDataContainer().get(dataKey.getKey(), PersistentDataType.INTEGER) != null)
+        {
+            return itemMeta.getPersistentDataContainer().get(dataKey.getKey(), PersistentDataType.INTEGER);
+        }
+        return 0;
+    }
+
+    public Double getUniqueItemDataKeyDouble(UniqueVentureItemDataKey dataKey)
+    {
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        if (itemMeta.getPersistentDataContainer().get(dataKey.getKey(), PersistentDataType.DOUBLE) != null)
+        {
+            return itemMeta.getPersistentDataContainer().get(dataKey.getKey(), PersistentDataType.DOUBLE);
+        }
+        return 0.0;
+    }
+
+    public static Double getUniqueItemDataKeyDouble(ItemStack itemStack, UniqueVentureItemDataKey dataKey)
+    {
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        if (itemMeta.getPersistentDataContainer().get(dataKey.getKey(), PersistentDataType.DOUBLE) != null)
+        {
+            return itemMeta.getPersistentDataContainer().get(dataKey.getKey(), PersistentDataType.DOUBLE);
+        }
+        return 0.0;
+    }
+
     public static List<String> createStatLore(HashMap<VentureItemStatKeys, Double> itemStatsKeyMap) {
 
         List<String> statLore = new ArrayList<>();
@@ -903,21 +972,25 @@ public class ItemForger {
         DecimalFormat doubleDecimalFormat = new DecimalFormat("0.00");
 
         // Create Lore for item
-        for (VentureItemStatKeys ventureItemStatKeys : VentureItemStatKeys.values()) {
+        for (VentureItemStatKeys ventureItemStatKeys : VentureItemStatKeys.values())
+        {
             String displayName = ventureItemStatKeys.getDisplayName();
             double statValue = 0;
-            if (itemStatsKeyMap.get(ventureItemStatKeys) != null) {
+            if (itemStatsKeyMap.get(ventureItemStatKeys) != null)
+            {
                 statValue = itemStatsKeyMap.get(ventureItemStatKeys);
             }
 
             String displayString = displayName + ventureItemStatKeys.getDisplayColor() + doubleDecimalFormat.format(statValue);
             StringBuilder displayStringBuilder = new StringBuilder(displayString);
 
-            if (VentureItemStatKeys.isPercentageStat(ventureItemStatKeys)) {
+            if (VentureItemStatKeys.isPercentageStat(ventureItemStatKeys))
+            {
                 displayStringBuilder.append("%");
 
             }
-            if (statValue > 0) {
+            if (statValue != 0)
+            {
                 statLore.add(displayStringBuilder.toString());
             }
         }

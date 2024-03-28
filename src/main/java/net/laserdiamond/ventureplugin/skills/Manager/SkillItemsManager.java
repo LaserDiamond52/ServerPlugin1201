@@ -1,4 +1,4 @@
-package net.laserdiamond.ventureplugin.skills.Components;
+package net.laserdiamond.ventureplugin.skills.Manager;
 
 public class SkillItemsManager {
 

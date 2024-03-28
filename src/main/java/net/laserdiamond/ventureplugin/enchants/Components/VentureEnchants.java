@@ -358,6 +358,7 @@ public class VentureEnchants {
         FROST_WALKER (Enchantment.FROST_WALKER, "frost_walker"),
         CURSE_OF_BINDING (Enchantment.BINDING_CURSE, "curse_of_binding"),
         SHARPNESS (Enchantment.DAMAGE_ALL, "sharpness"),
+        SMITE (Enchantment.DAMAGE_UNDEAD, "smite"),
         BANE_OF_ARTHROPODS (Enchantment.DAMAGE_ARTHROPODS, "bane_of_arthropods"),
         KNOCKBACK (Enchantment.KNOCKBACK, "knockback"),
         FIRE_ASPECT (Enchantment.FIRE_ASPECT, "fire_aspect"),

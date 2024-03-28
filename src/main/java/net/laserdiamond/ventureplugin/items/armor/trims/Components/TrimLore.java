@@ -12,8 +12,8 @@ import java.util.List;
 
 public class TrimLore {
 
-    private static final VenturePlugin plugin = VenturePlugin.getInstance();
-    private static final ArmorTrimConfig armorTrimConfig = plugin.getArmorTrimConfig();
+    private static final VenturePlugin PLUGIN = VenturePlugin.getInstance();
+    private static final ArmorTrimConfig ARMOR_TRIM_CONFIG = PLUGIN.getArmorTrimConfig();
 
     public static List<String> createLore(ArmorMeta armorMeta) {
 
@@ -27,24 +27,24 @@ public class TrimLore {
             //trimLore.add(ChatColor.GRAY + "" + ChatColor.BOLD + "Armor Trim:");
 
             //TODO: Patterns
-            double sentryEmeraldChance = armorTrimConfig.getDouble("sentryEmerald");
-            double vexManaRegen = armorTrimConfig.getDouble("vexManaRegen");
-            double wildForagingExp = armorTrimConfig.getDouble("wildForagingExp");
-            double coastFishingExp = armorTrimConfig.getDouble("coastFishingExp");
-            double duneMiningExp = armorTrimConfig.getDouble("duneMiningExp");
-            double wayFinderGlow = armorTrimConfig.getDouble("wayfinderGlow");
-            double raiserSusSandDrop = armorTrimConfig.getDouble("raiserSusSandDrop");
-            double shaperSusGravelDrop = armorTrimConfig.getDouble("shaperSusGravelDrop");
-            double hostBonusExp = armorTrimConfig.getDouble("hostBonusExp");
-            double wardCombatExp = armorTrimConfig.getDouble("wardCombatExp");
-            double silenceAttackChance = armorTrimConfig.getDouble("silenceAttackChance");
-            double tideAquaticDamage = armorTrimConfig.getDouble("tideAquaticDamage");
-            double snoutCounterChance = armorTrimConfig.getDouble("snoutCounterChance");
-            double ribWitherDuration = armorTrimConfig.getDouble("ribWitherDuration");
-            int ribWitherLevel = armorTrimConfig.getInt("ribWitherLevel");
-            double eyeMagicDamagePerLevel = armorTrimConfig.getDouble("eyeMagicDamagePerLevel");
+            double sentryEmeraldChance = ARMOR_TRIM_CONFIG.getDouble("sentryEmerald");
+            double vexManaRegen = ARMOR_TRIM_CONFIG.getDouble("vexManaRegen");
+            double wildForagingExp = ARMOR_TRIM_CONFIG.getDouble("wildForagingExp");
+            double coastFishingExp = ARMOR_TRIM_CONFIG.getDouble("coastFishingExp");
+            double duneMiningExp = ARMOR_TRIM_CONFIG.getDouble("duneMiningExp");
+            double wayFinderGlow = ARMOR_TRIM_CONFIG.getDouble("wayfinderGlow");
+            double raiserSusSandDrop = ARMOR_TRIM_CONFIG.getDouble("raiserSusSandDrop");
+            double shaperSusGravelDrop = ARMOR_TRIM_CONFIG.getDouble("shaperSusGravelDrop");
+            double hostBonusExp = ARMOR_TRIM_CONFIG.getDouble("hostBonusExp");
+            double wardCombatExp = ARMOR_TRIM_CONFIG.getDouble("wardCombatExp");
+            double silenceAttackChance = ARMOR_TRIM_CONFIG.getDouble("silenceAttackChance");
+            double tideAquaticDamage = ARMOR_TRIM_CONFIG.getDouble("tideAquaticDamage");
+            double snoutCounterChance = ARMOR_TRIM_CONFIG.getDouble("snoutCounterChance");
+            double ribWitherDuration = ARMOR_TRIM_CONFIG.getDouble("ribWitherDuration");
+            int ribWitherLevel = ARMOR_TRIM_CONFIG.getInt("ribWitherLevel");
+            double eyeMagicDamagePerLevel = ARMOR_TRIM_CONFIG.getDouble("eyeMagicDamagePerLevel");
 
-            double spireSaveFuelChance = armorTrimConfig.getDouble("spireSaveFuelChance");
+            double spireSaveFuelChance = ARMOR_TRIM_CONFIG.getDouble("spireSaveFuelChance");
 
             if (trimPattern.equals(TrimPattern.SENTRY)) {
                 // Pillagers have a higher chance to drop an emerald
@@ -225,17 +225,17 @@ public class TrimLore {
             }
 
             // TODO: Materials
-            double copperSpeed = armorTrimConfig.getDouble("copperSpeed");
-            double goldSaturation = armorTrimConfig.getDouble("goldSaturation");
-            double ironHealthBoost = armorTrimConfig.getDouble("ironHealthBoost");
-            double lapisExpBonus = armorTrimConfig.getDouble("lapisExpBonus");
-            double quartzMiningExp = armorTrimConfig.getDouble("quartzMiningExp");
-            double redstonePotionBonus = armorTrimConfig.getDouble("redstonePotionBonus");
-            double emeraldLuck = armorTrimConfig.getDouble("emeraldLuck");
-            double amethystDamage = armorTrimConfig.getDouble("amethystDamage");
-            double diamondMana = armorTrimConfig.getDouble("diamondMana");
-            double netheriteDefense = armorTrimConfig.getDouble("netheriteDefense");
-            double netheriteFireDefense = armorTrimConfig.getDouble("netheriteFireDefense");
+            double copperSpeed = ARMOR_TRIM_CONFIG.getDouble("copperSpeed");
+            double goldSaturation = ARMOR_TRIM_CONFIG.getDouble("goldSaturation");
+            double ironHealthBoost = ARMOR_TRIM_CONFIG.getDouble("ironHealthBoost");
+            double lapisExpBonus = ARMOR_TRIM_CONFIG.getDouble("lapisExpBonus");
+            double quartzMiningExp = ARMOR_TRIM_CONFIG.getDouble("quartzMiningExp");
+            double redstonePotionBonus = ARMOR_TRIM_CONFIG.getDouble("redstonePotionBonus");
+            double emeraldLuck = ARMOR_TRIM_CONFIG.getDouble("emeraldLuck");
+            double amethystDamage = ARMOR_TRIM_CONFIG.getDouble("amethystDamage");
+            double diamondMana = ARMOR_TRIM_CONFIG.getDouble("diamondMana");
+            double netheriteDefense = ARMOR_TRIM_CONFIG.getDouble("netheriteDefense");
+            double netheriteFireDefense = ARMOR_TRIM_CONFIG.getDouble("netheriteFireDefense");
 
             if (trimMaterial.equals(TrimMaterial.COPPER)) {
                 // Grants Speed

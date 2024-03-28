@@ -58,14 +58,4 @@ public abstract class VentureStatItem {
         baseLore.add(" ");
         return baseLore;
     }
-
-    /*
-     * Sets the config class for the item
-     * @param configClass The config class of the item(s)
-     * @return The config class of the item(s)
-     * @param <T>
-     */
-    /*public abstract <T extends YamlConfigFile<T>> T config();*/
-
-    public abstract GetVarFile config();
 }

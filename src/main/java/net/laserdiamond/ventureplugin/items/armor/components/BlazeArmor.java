@@ -10,6 +10,7 @@ import net.laserdiamond.ventureplugin.events.mana.PlayerSpellCastEvent;
 import net.laserdiamond.ventureplugin.items.util.VentureItemRarity;
 import net.laserdiamond.ventureplugin.items.util.armor.*;
 import net.laserdiamond.ventureplugin.stats.Components.Stats;
+import net.laserdiamond.ventureplugin.util.File.ArmorConfig;
 import net.laserdiamond.ventureplugin.util.File.GetVarFile;
 import net.laserdiamond.ventureplugin.util.messages.Messages;
 import org.bukkit.Bukkit;
@@ -43,7 +44,7 @@ public final class BlazeArmor extends VentureArmorSet implements AbilityCasting.
     }
 
     @Override
-    public GetVarFile config()
+    public ArmorConfig config()
     {
         return plugin.getBlazeArmorConfig();
     }

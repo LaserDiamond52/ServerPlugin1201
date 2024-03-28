@@ -1,21 +1,25 @@
 package net.laserdiamond.ventureplugin.util.File;
 
 import net.laserdiamond.ventureplugin.VenturePlugin;
+import net.laserdiamond.ventureplugin.items.util.armor.ArmorPieceTypes;
+import net.laserdiamond.ventureplugin.util.Config.ConfigLoader;
+import net.laserdiamond.ventureplugin.util.Stars;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
-public abstract class ArmorConfig implements GetVarFile {
+public abstract class ArmorConfig extends ConfigLoader {
 
     private final VenturePlugin plugin;
     private final String fileName;
     private final File file;
-    private final FileConfiguration config = new YamlConfiguration();
 
     public ArmorConfig(VenturePlugin plugin, String fileName)
     {
@@ -42,28 +46,53 @@ public abstract class ArmorConfig implements GetVarFile {
         }
     }
 
-    @Override
-    public FileConfiguration getConfig() {
-        return config;
+    private final double starBonus = Stars.STARS.getBoostPerStar();
+
+    /**
+     * Gets the stat type of the armor set from the config file
+     * @param armorPieceTypes The armor piece type
+     * @param statType The stat to get
+     * @param stars The amount of stars the item should have
+     * @return The value of that stat as a double
+     */
+    public double getStat(@NotNull ArmorPieceTypes armorPieceTypes, StatType statType, int stars)
+    {
+        if (statType.isPerPiece())
+        {
+            return config.getDouble(armorPieceTypes.getName() + statType.key) * (1 + stars * this.starBonus);
+        } else
+        {
+            return config.getDouble(statType.key);
+        }
     }
 
-    @Override
-    public Double getDouble(String path) {
-        return config.getDouble(path);
+    public enum StatType
+    {
+        MELEE_DAMAGE ("MeleeDamage", true),
+        RANGE_DAMAGE ("RangeDamage", true),
+        MAGIC_DAMAGE ("MagicDamage", true),
+        MANA ("Mana", true),
+        HEALTH ("Health", true),
+        ARMOR ("Armor", true),
+        TOUGHNESS ("toughness", false),
+        FORTITUDE ("fortitude", false),
+        SPEED ("Speed", true);
+        private final String key;
+        private final boolean isPerPiece;
+
+        StatType(String key, boolean isPerPiece)
+        {
+            this.key = key;
+            this.isPerPiece = isPerPiece;
+        }
+
+        public String getKey() {
+            return key;
+        }
+
+        public boolean isPerPiece() {
+            return isPerPiece;
+        }
     }
 
-    @Override
-    public Integer getInt(String path) {
-        return config.getInt(path);
-    }
-
-    @Override
-    public String getString(String path) {
-        return config.getString(path);
-    }
-
-    @Override
-    public Boolean getBoolean(String path) {
-        return config.getBoolean(path);
-    }
 }

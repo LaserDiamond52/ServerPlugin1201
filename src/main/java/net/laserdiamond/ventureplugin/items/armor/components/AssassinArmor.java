@@ -12,6 +12,7 @@ import net.laserdiamond.ventureplugin.items.util.armor.ArmorCMD;
 import net.laserdiamond.ventureplugin.items.util.armor.ArmorPieceTypes;
 import net.laserdiamond.ventureplugin.items.util.armor.VentureArmorSet;
 import net.laserdiamond.ventureplugin.stats.Components.Stats;
+import net.laserdiamond.ventureplugin.util.File.ArmorConfig;
 import net.laserdiamond.ventureplugin.util.File.GetVarFile;
 import net.laserdiamond.ventureplugin.util.messages.Messages;
 import org.bukkit.Bukkit;
@@ -33,7 +34,7 @@ public final class AssassinArmor extends VentureArmorSet implements AbilityCasti
     }
 
     @Override
-    public GetVarFile config() {
+    public ArmorConfig config() {
         return plugin.getAssassinArmorConfig();
     }
 

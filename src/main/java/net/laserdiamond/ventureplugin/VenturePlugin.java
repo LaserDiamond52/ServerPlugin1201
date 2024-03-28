@@ -133,7 +133,7 @@ public final class VenturePlugin extends JavaPlugin {
 
         // Refresh Items
         //getServer().getPluginManager().registerEvents(new ItemForgerRegistry(this),this);
-        getServer().getPluginManager().registerEvents(new ItemRegistry(this),this);
+        getServer().getPluginManager().registerEvents(new ItemRegistry(),this);
 
         // Damage
         getServer().getPluginManager().registerEvents(new DamageEvent(this),this);
@@ -319,7 +319,7 @@ public final class VenturePlugin extends JavaPlugin {
         armorTrimConfig = new ArmorTrimConfig(this, "trims");
         armorTrimConfig.loadConfig();
 
-        enchantConfig = new EnchantConfig(this, "enchants");
+        enchantConfig = new EnchantConfig(this, "enchants", "enchants");
         enchantConfig.loadConfig();
     }
 
