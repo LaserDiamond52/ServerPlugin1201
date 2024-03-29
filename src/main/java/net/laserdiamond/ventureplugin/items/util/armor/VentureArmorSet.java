@@ -210,7 +210,7 @@ public abstract class VentureArmorSet extends VentureStatItem {
         String armorName = armorPieceString.substring(0,1).toUpperCase() + armorPieceString.substring(1);
         ItemForger itemForger = new ItemForger(armorPieceMaterials(armorPieceTypes))
                 .setName(ItemNameBuilder.name(armorSetName() + " " + armorName, stars))
-                .setStars(stars)
+                //.setStars(stars)
                 .setLore(createLore(armorPieceTypes, stars))
                 .setRarity(rarity())
                 .setUnbreakable(isUnbreakable())
@@ -248,7 +248,6 @@ public abstract class VentureArmorSet extends VentureStatItem {
         String keyName = (armorSetName() + "_" + armorPieceTypesName + "_" + stars).toLowerCase().replace(" ", "_");
         ItemForger itemForger = new ItemForger(armorPieceMaterials(armorPieceTypes))
                 .setName(ItemNameBuilder.name(armorSetName() + " " + armorName, stars))
-                .setStars(stars)
                 .setLore(createPlayerLore(player, armorPieceTypes, stars))
                 .setRarity(rarity())
                 .setUnbreakable(isUnbreakable())
@@ -283,7 +282,11 @@ public abstract class VentureArmorSet extends VentureStatItem {
         return ArmorEquipStats.isWearingFullSet(player, getArmorCMD().getHelmet(), getArmorCMD().getChestplate(), getArmorCMD().getLeggings(), getArmorCMD().getBoots());
     }
 
-
+    /**
+     * Checks if the Item Stack is an armor piece of this class
+     * @param itemStack The item
+     * @return True if an armor piece of this class, false if not
+     */
     public boolean isArmorPiece(ItemStack itemStack)
     {
         if (itemStack != null && itemStack.getItemMeta() != null && itemStack.getItemMeta().hasCustomModelData())
@@ -306,8 +309,6 @@ public abstract class VentureArmorSet extends VentureStatItem {
      */
     public void registerArmorSet()
     {
-        // FIXME: Item registry SHOULD NOT use custom model data for the map. Use the item's name and the amount of stars it has and store it as the key
-        // FIXME: Use command name as map
         HashMap<String, ItemForger> itemRegistryMap = plugin.getItemRegistryMap();
         List<VentureArmorSet> playerItemMap = plugin.getPlayerArmorItemMap();
 
@@ -329,8 +330,6 @@ public abstract class VentureArmorSet extends VentureStatItem {
             playerItemMap.add(this);
         }
     }
-
-    // TODO: Finish player armor registry (or figure out at least)
 
     /**
      * Determines if the armor set should be registered as a player-based armor set

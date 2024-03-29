@@ -7,59 +7,61 @@ description: Venture Plugin for Minecraft Server (1.20.1)
 
 permissions:
 
-  venture_plugin.breakblock:
+  venture.break_block:
     description: Allows players to break blocks
-  venture_plugin.placeblock:
+  venture.place_block:
     description: Allows players to placee blocks
-  venture_plugin.harvestblock:
+  venture.harvest_block:
     description: Allows players to harvest blocks
-  venture_plugin.pickupitem:
+  venture.pick_up_item:
     description: Allows players to pick up items
-  venture_plugin.dropitem:
+  venture.drop_item:
     description: Allows players to drop items
 
-  venture_plugin.armorstand:
+  venture.armor_stand:
     description: Allows players to interact with armor stands
-  venture_plugin.interact:
+  venture.interact:
     description: Allows players to interact with entities
-  venture_plugin.shearentity:
+  venture.shear_entity:
     description: Allows players to shear entities
 
-  venture_plugin.move:
+  venture.move:
     description: Allows players to move
-  venture_plugin.changemainhand:
+  venture.change_main_hand:
     description: Allows players to change their mainhand
-  venture_plugin.swaphands:
+  venture.swap_hands:
     description: Allows players to swap between their main and offhand
-  venture_plugin.portaltravel:
+  venture.portal_travel:
     description: Allows players to travel through portals to other dimensions
-  venture_plugin.changegamemode:
+  venture.change_gamemode:
     description: Allows players to change their gamemode
 
-  venture_plugin.chat:
+  venture.chat:
     description: Allows players to chat
-  venture_plugin.executecommands:
+  venture.execute_commands:
     description: Allows players to execute commands
 
-  venture_plugin.giveitems:
+  venture.give_items:
     description: Allows players to give themselves items from this plugin
 
-  venture_plugin.skills:
+  venture.skills:
     description: Allows players to view their skills
-  venture_plugin.stats:
+  venture.edit_skills:
+    description: Allows players to edit their skills
+  venture.stats:
     description: Allows players to see their stats
-  venture_plugin.tuningmenu:
-    description: Allows players to use the skill menu
-  venture_plugin.resetskills:
-    description: Allows player to reset skills
-  venture_plugin.mana:
+  venture.tuning_menu:
+    description: Allows players to use the tuning menu
+  venture.edit_tuning:
+    description: Allows player to edit their tuning functionality (administrative level)
+  venture.edit_mana:
     description: Allows players to manipulate their mana
-  venture_plugin.effect:
-    description: Allows players to grant plugin effects to themselves/others
+  venture.effect:
+    description: Allows players to grant venture effects to themselves/others
 
-  venture_plugin.experiencereset:
-    description: Allows players to reset experience levels
-  venture_plugin.enchant:
+  venture.edit_experience:
+    description: Allows players to edit their experience levels
+  venture.enchant:
     description: Gives access to the /pluginenchant command and its aliases
 
 commands:
@@ -67,28 +69,36 @@ commands:
   plugineffect:
     description: gives a plugin effect to the specified player for a specified duration
     usage: /<command> <arg> <arg> <arg> <arg> <arg>
-    permission: serverplugin1201.effect
+    permission: venture.effect
 
   plugingive:
     description: gives a plugin item to the specified player
     usage: /<command> <arg> <arg>
-    permission: serverplugin1201.giveitems
+    permission: venture.give_items
     aliases:
       - giveitem
+
+  staritem:
+    description: sets the stars on the item in the player target's main hand, if applicable
+    usage: /<command> <arg> <arg>
+    permission: venture.give_items
+    aliases:
+      - star
+      - setstars
 
   pluginenchant:
     description: enchants the player's mainhand with the specified enchantment at the specified level
     usage: /<command> <arg> <arg> <arg>
-    permission: serverplugin1201.enchant
+    permission: venture.enchant
 
   stats:
     description: allows players to view their stats in a menu
     usage: /<command>
-    permission: serverplugin1201.stats
+    permission: venture.stats
     aliases:
       - viewstats
 
   refillmana:
     description: allows players to refill their mana instantly
     usage: /<command> <arg>
-    permission: serverplugin1201.mana
+    permission: venture.edit_mana

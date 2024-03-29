@@ -2,6 +2,7 @@ package net.laserdiamond.ventureplugin.events.abilities;
 
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
@@ -30,7 +31,7 @@ public abstract class AbilityCasting {
 
     public interface attackAbility extends AbilityListener
     {
-        void onAttack(Player player, double damage, LivingEntity hitEntity);
+        void onAttack(EntityDamageByEntityEvent event);
     }
 
     public interface onKillAbility extends AbilityListener

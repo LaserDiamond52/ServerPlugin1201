@@ -4,6 +4,7 @@ import net.laserdiamond.ventureplugin.enchants.Components.VentureEnchants;
 import net.laserdiamond.ventureplugin.items.util.ItemForger;
 import net.laserdiamond.ventureplugin.items.util.UpdateItem;
 import net.laserdiamond.ventureplugin.util.ItemRegistry;
+import net.laserdiamond.ventureplugin.util.Permissions;
 import net.laserdiamond.ventureplugin.util.messages.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -34,7 +35,7 @@ public class EnchantCommand implements CommandExecutor, TabExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args)
     {
-        if (sender.hasPermission("venture_plugin.enchant"))
+        if (sender.hasPermission(Permissions.ENCHANT.getPermissionString()))
         {
             if (args.length == 0)
             {
@@ -101,7 +102,7 @@ public class EnchantCommand implements CommandExecutor, TabExecutor {
     {
 
         List<String> argsList = new ArrayList<>();
-        if (sender.hasPermission("venture_plugin.enchant"))
+        if (sender.hasPermission(Permissions.ENCHANT.getPermissionString()))
         {
 
             if (args.length == 1)

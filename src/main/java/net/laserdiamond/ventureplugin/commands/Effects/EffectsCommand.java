@@ -3,6 +3,7 @@ package net.laserdiamond.ventureplugin.commands.Effects;
 import net.laserdiamond.ventureplugin.VenturePlugin;
 import net.laserdiamond.ventureplugin.events.effects.Managers.EffectManager;
 import net.laserdiamond.ventureplugin.util.EffectKeys;
+import net.laserdiamond.ventureplugin.util.Permissions;
 import net.laserdiamond.ventureplugin.util.messages.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -31,7 +32,7 @@ public class EffectsCommand implements CommandExecutor, TabExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
-        if (sender.hasPermission("venture_plugin.effects")) {
+        if (sender.hasPermission(Permissions.EFFECT.getPermissionString())) {
             if (args.length == 0) {
                 sender.sendMessage(ChatColor.RED + "Please specify a target");
             } else if (args.length == 1) {
@@ -219,7 +220,7 @@ public class EffectsCommand implements CommandExecutor, TabExecutor {
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
         List<String> argsList = new ArrayList<>();
-        if (sender.hasPermission("venture_plugin.effect")) {
+        if (sender.hasPermission(Permissions.EFFECT.getPermissionString())) {
 
             //Bukkit.broadcastMessage("Command arg length: " + args.length);
 

@@ -74,6 +74,7 @@ public class ItemRegistry implements Listener {
         // Weapons
 
         // Menu Items
+
         return defaultPlayerLore;
     }
 
@@ -304,7 +305,7 @@ public class ItemRegistry implements Listener {
 
                 if (itemMeta.hasCustomModelData())
                 {
-                    int stars = itemForger.getStars();
+                    int stars = itemForger.getStarsNew();
                     String keyValue = itemForger.getItemKey();
                     try
                     {

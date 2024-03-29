@@ -2,7 +2,8 @@ package net.laserdiamond.ventureplugin;
 
 import net.laserdiamond.ventureplugin.commands.Effects.EffectsCommand;
 import net.laserdiamond.ventureplugin.commands.Enchant.EnchantCommand;
-import net.laserdiamond.ventureplugin.commands.GiveItems.GiveItemsCommand;
+import net.laserdiamond.ventureplugin.commands.Items.GiveItemsCommand;
+import net.laserdiamond.ventureplugin.commands.Items.StarItemCommand;
 import net.laserdiamond.ventureplugin.commands.ViewProfiles.ViewStats;
 import net.laserdiamond.ventureplugin.commands.fillMana;
 import net.laserdiamond.ventureplugin.enchants.Components.EnchantListeners;
@@ -46,6 +47,7 @@ import net.laserdiamond.ventureplugin.tunement.Config.TunementConfig;
 import net.laserdiamond.ventureplugin.tunement.Manager.TunementProfileManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -172,6 +174,7 @@ public final class VenturePlugin extends JavaPlugin {
         getCommand("pluginenchant").setExecutor(new EnchantCommand());
         getCommand("stats").setExecutor(new ViewStats());
         getCommand("refillmana").setExecutor(new fillMana());
+        getCommand("staritem").setExecutor(new StarItemCommand());
         // TODO: Summon cmd for mobs
 
         // TODO: Test Spell Casters
@@ -180,6 +183,16 @@ public final class VenturePlugin extends JavaPlugin {
         getConfig().options().copyDefaults();
         saveDefaultConfig();
         reloadConfig();
+
+        // Kick all players upon loading the server
+
+        // If any players somehow stay on the server after the plugin is disabled, they will be caught here
+
+        // Prevent errors from occurring if a player was to stay on the server while the server re-enables itself
+        for (Player player : Bukkit.getOnlinePlayers())
+        {
+            player.kickPlayer(ChatColor.RED + "Server reloading. Please rejoin in a moment!");
+        }
     }
 
     public static VenturePlugin getInstance() {
@@ -245,6 +258,14 @@ public final class VenturePlugin extends JavaPlugin {
         // Plugin shutdown logic
 
         Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Disabling Plugin...");
+
+        // Automatically kick all players on the server when disabling the plugin
+
+        // Prevent errors from occurring if a player was to stay on the server while the server re-enables itself
+        for (Player player : Bukkit.getOnlinePlayers())
+        {
+            player.kickPlayer(ChatColor.RED + "Server reloading. Please rejoin in a moment!");
+        }
 
         // REMEMBER TO SAVE PROFILES TO CONFIGS FIRST!!!!
         saveProfilesToConfigs();

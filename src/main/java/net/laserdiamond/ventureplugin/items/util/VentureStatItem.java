@@ -58,4 +58,9 @@ public abstract class VentureStatItem {
         baseLore.add(" ");
         return baseLore;
     }
+
+    public boolean isStarrable()
+    {
+        return true;
+    }
 }

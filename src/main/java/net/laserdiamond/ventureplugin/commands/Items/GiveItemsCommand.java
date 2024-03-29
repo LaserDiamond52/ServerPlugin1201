@@ -1,7 +1,9 @@
-package net.laserdiamond.ventureplugin.commands.GiveItems;
+package net.laserdiamond.ventureplugin.commands.Items;
 
 import net.laserdiamond.ventureplugin.VenturePlugin;
 import net.laserdiamond.ventureplugin.items.util.ItemForger;
+import net.laserdiamond.ventureplugin.util.ItemRegistry;
+import net.laserdiamond.ventureplugin.util.Permissions;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -9,6 +11,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,7 +31,7 @@ public class GiveItemsCommand implements CommandExecutor, TabExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
-        if (sender.hasPermission("venture_plugin.giveitems")) {
+        if (sender.hasPermission(Permissions.GIVE_ITEMS.getPermissionString())) {
             if (args.length == 0) {
                 sender.sendMessage(ChatColor.RED + "Please specify a target");
             } else if (args.length == 1) {
@@ -56,7 +59,10 @@ public class GiveItemsCommand implements CommandExecutor, TabExecutor {
         if (itemRegistryMap.containsKey(input))
         {
             ItemForger itemToGive = itemRegistryMap.get(input);
-            target.getInventory().addItem(itemToGive.toItemStack());
+            int stars = itemToGive.getStarsNew();
+            sender.sendMessage("stars on item: " + stars);
+            ItemStack itemStackToGive = ItemRegistry.renewItemNew(itemToGive.toItemStack(), target);
+            target.getInventory().addItem(itemStackToGive);
             sender.sendMessage(ChatColor.GREEN + "Gave " + itemToGive.getName() + ChatColor.GREEN + " to " + ChatColor.GOLD + target.getName());
             target.sendMessage(ChatColor.GREEN + "You received a " + itemToGive.getName() + ChatColor.GREEN + " from " + ChatColor.GOLD + sender.getName());
         } else {
@@ -69,7 +75,7 @@ public class GiveItemsCommand implements CommandExecutor, TabExecutor {
 
         List<String> argsList = new ArrayList<>();
 
-        if (sender.hasPermission("venture_plugin.giveitems")) {
+        if (sender.hasPermission(Permissions.GIVE_ITEMS.getPermissionString())) {
             if (args.length == 1) {
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     argsList.add(player.getName());

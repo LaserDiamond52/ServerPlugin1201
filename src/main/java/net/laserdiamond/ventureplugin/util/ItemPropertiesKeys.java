@@ -5,7 +5,7 @@ import org.bukkit.NamespacedKey;
 public enum ItemPropertiesKeys {
 
     RARITY_KEY (new NamespacedKey("item_data", "rarity")),
-    STARS_KEY (new NamespacedKey("item_data", "stars")),
+    STARS_KEY (new NamespacedKey("item_data", "star")),
     FIRE_RESISTANCE_KEY (new NamespacedKey("item_data", "fire_resistant")),
     ITEM_MAP_KEY(new NamespacedKey("item_data", "item_key"));
 

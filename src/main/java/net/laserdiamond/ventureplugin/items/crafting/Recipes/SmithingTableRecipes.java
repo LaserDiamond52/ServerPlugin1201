@@ -153,8 +153,6 @@ public class SmithingTableRecipes {
                 }
             }
 
-
-
             return outputResult;
         }
 

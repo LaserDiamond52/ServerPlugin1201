@@ -6,26 +6,8 @@ auraRadius: 5
 manaCost: 45
 abilityName1: Blazing Aura
 abilityName2: Soul Stealer
-lifeStealAmount: 10
-
-killsToPrestige:
-  - 100
-  - 250
-  - 500
-  - 750
-  - 1000
-  - 1250
-  - 1500
-  - 2000
-  - 2500
-  - 5000
-  - 7500
-  - 10000
-  - 15000
-  - 20000
-  - 25000
-
-damageBoostPerPrestige: 1.5
+damageBoost: 1.25
+digitMax: 6
 
 helmetMeleeDamage: 8
 helmetRangeDamage: 6

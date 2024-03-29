@@ -98,13 +98,9 @@ public class AbilityListeners extends BukkitRunnable implements Listener {
 
     @EventHandler
     public void onAttackAbility(EntityDamageByEntityEvent event) throws InvocationTargetException, IllegalAccessException {
-        if (event.getDamager() instanceof Player player)
-        {
-            if (event.getEntity() instanceof LivingEntity livingEntity)
-            {
-                attackAbility(player, event.getFinalDamage(), livingEntity);
-            }
-        }
+
+
+        attackAbility(event);
     }
 
     @EventHandler
@@ -163,12 +159,12 @@ public class AbilityListeners extends BukkitRunnable implements Listener {
         }
     }
 
-    private void attackAbility(Player player, double damage, LivingEntity hitEntity) throws InvocationTargetException, IllegalAccessException
+    private void attackAbility(EntityDamageByEntityEvent event) throws InvocationTargetException, IllegalAccessException
     {
         for (AbilityListener listener : attackAbility.keySet())
         {
             Method method = attackAbility.get(listener);
-            method.invoke(listener, player, damage, hitEntity);
+            method.invoke(listener, event);
         }
     }
 

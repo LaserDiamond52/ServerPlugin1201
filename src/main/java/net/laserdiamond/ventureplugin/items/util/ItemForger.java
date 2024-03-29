@@ -697,6 +697,7 @@ public class ItemForger {
         itemMeta.getPersistentDataContainer().set(rarityKey, VentureItemRarity.STRING, itemRarity.getRarity());
     }
 
+    @Deprecated
     public Integer getStars() {
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta.getPersistentDataContainer().get(starsKey, PersistentDataType.INTEGER) != null) {
@@ -705,6 +706,77 @@ public class ItemForger {
         return 0;
     }
 
+    /**
+     * Gets the stars on the item. This is checked through the item key, where the stars are stored at the end of the string key
+     * <p>
+     * Item key names SHOULD NOT include numbers in their name. This can mess up this system and make it unreliable
+     * @return The stars if applicable, otherwise 0
+     */
+    public Integer getStarsNew()
+    {
+        String itemKey = this.getItemKey();
+        int stars = 0;
+        StringBuilder starStringBuilder = new StringBuilder();
+        if (itemKey != null)
+        {
+            for (int i = 0; i < itemKey.length(); i++)
+            {
+                char letter = itemKey.charAt(i);
+                if (Character.isDigit(letter)) // Check if the character at the current index is an int
+                {
+                    starStringBuilder.append(letter); // Add the int to the string builder
+                }
+                if (!starStringBuilder.isEmpty() && !Character.isDigit(i)) // If the string builder already has an int in it, and the next character is not an int, break out of the loop
+                {
+                    break;
+                }
+            }
+            String starString = starStringBuilder.toString();
+            if (!starString.isEmpty()) // Check if final string is not empty
+            {
+                try
+                {
+                    stars = Integer.parseInt(starString);
+                } catch (NumberFormatException exception)
+                {
+                    Bukkit.getConsoleSender().sendMessage("Could not find stars on item!");
+                    return 0;
+                }
+            } else
+            {
+                return stars;
+            }
+        }
+        return stars;
+    }
+
+    /**
+     * Sets the amount of stars on the item
+     * @param stars The amount of stars the item should have. Stars cannot be less than 0 or greater than the max stars set in the config.yml
+     * @return ItemForger instance of item (builder class)
+     */
+    public ItemForger setStarsNew(int stars)
+    {
+        String itemKey = this.getItemKey();
+        stars = Math.min(stars, plugin.getConfig().getInt("maxStars"));
+        String newStar = Integer.toString(Math.max(0, stars));
+        if (itemKey != null)
+        {
+            for (int i = 0; i < itemKey.length(); i++)
+            {
+                // TODO: Change way this works to get all the digits of the star count (only gets first) so that double digits+ stars can be possible to manage and maintain
+                char letter = itemKey.charAt(i);
+                if (Character.isDigit(letter))
+                {
+                    this.setItemKey(itemKey.replace(String.valueOf(letter), newStar));
+                    break;
+                }
+            }
+        }
+        return this;
+    }
+
+    @Deprecated
     public static Integer getItemStars(ItemStack itemStack) {
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta.getPersistentDataContainer().get(starsKey, PersistentDataType.INTEGER) != null) {
@@ -713,6 +785,7 @@ public class ItemForger {
         return 0;
     }
 
+    @Deprecated
     public ItemForger setStars(int starCount) {
         ItemMeta itemMeta = itemStack.getItemMeta();
         starCount = Math.min(Math.max(0, starCount), maxStars);

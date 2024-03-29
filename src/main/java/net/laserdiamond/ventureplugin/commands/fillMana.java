@@ -1,6 +1,7 @@
 package net.laserdiamond.ventureplugin.commands;
 
 import net.laserdiamond.ventureplugin.VenturePlugin;
+import net.laserdiamond.ventureplugin.util.Permissions;
 import net.laserdiamond.ventureplugin.util.messages.Messages;
 import net.laserdiamond.ventureplugin.stats.Components.Stats;
 import net.laserdiamond.ventureplugin.stats.Manager.StatProfileManager;
@@ -19,13 +20,13 @@ import java.util.List;
 
 public class fillMana implements CommandExecutor, TabExecutor {
 
-    private VenturePlugin plugin = VenturePlugin.getInstance();
-    private StatProfileManager statProfileManager = plugin.getStatProfileManager();
+    private final VenturePlugin plugin = VenturePlugin.getInstance();
+    private final StatProfileManager statProfileManager = plugin.getStatProfileManager();
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
-        if (sender.hasPermission("venture_plugin.mana"))
+        if (sender.hasPermission(Permissions.EDIT_MANA.getPermissionString()))
         {
             if (args.length == 0)
             {
@@ -63,7 +64,7 @@ public class fillMana implements CommandExecutor, TabExecutor {
 
         List<String> playerNames = new ArrayList<>();
 
-        if (sender.hasPermission("venture_plugin.mana")) {
+        if (sender.hasPermission(Permissions.EDIT_MANA.getPermissionString())) {
 
             if (args.length == 1)
             {
