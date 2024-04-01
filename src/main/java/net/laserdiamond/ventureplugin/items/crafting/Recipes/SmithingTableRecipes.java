@@ -1,9 +1,9 @@
 package net.laserdiamond.ventureplugin.items.crafting.Recipes;
 
 import net.laserdiamond.ventureplugin.VenturePlugin;
-import net.laserdiamond.ventureplugin.items.armor.components.NetheriteArmor;
+import net.laserdiamond.ventureplugin.items.armor.armor_sets.NetheriteArmor;
 import net.laserdiamond.ventureplugin.items.crafting.SmithingTable.SmithingRecipe;
-import net.laserdiamond.ventureplugin.items.util.armor.ArmorPieceTypes;
+import net.laserdiamond.ventureplugin.items.armor.util.ArmorPieceTypes;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ArmorMeta;

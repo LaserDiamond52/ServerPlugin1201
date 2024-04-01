@@ -2,10 +2,10 @@
 toughness: 6
 fortitude: 1
 
-helmetArmor: 6
+helmetDefense: 6
 
-chestplateArmor: 16
+chestplateDefense: 16
 
-leggingsArmor: 12
+leggingsDefense: 12
 
-bootsArmor: 6
+bootsDefense: 6

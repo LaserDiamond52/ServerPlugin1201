@@ -3,12 +3,12 @@ package net.laserdiamond.ventureplugin.items.armor.trims.Components;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import com.destroystokyo.paper.event.player.PlayerPickupExperienceEvent;
 import net.laserdiamond.ventureplugin.VenturePlugin;
-import net.laserdiamond.ventureplugin.items.armor.trims.Config.ArmorTrimConfig;
 import net.laserdiamond.ventureplugin.stats.Components.DamageStats;
 import net.laserdiamond.ventureplugin.stats.Components.DefenseStats;
 import net.laserdiamond.ventureplugin.stats.Components.Stats;
 import net.laserdiamond.ventureplugin.stats.Config.BaseStatsConfig;
 import net.laserdiamond.ventureplugin.stats.Manager.StatProfileManager;
+import net.laserdiamond.ventureplugin.util.File.ArmorConfig;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.ExperienceOrb;
@@ -29,7 +29,7 @@ public class TrimMaterialListeners implements Listener {
     private final VenturePlugin plugin;
     private final BaseStatsConfig baseStatsConfig;
     private final StatProfileManager statProfileManager;
-    private final ArmorTrimConfig armorTrimConfig;
+    private final ArmorConfig armorTrimConfig;
     private final double defaultPlayerSpeed;
     private final int defaultPlayerStarvationRate;
 

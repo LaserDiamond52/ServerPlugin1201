@@ -3,7 +3,7 @@ package net.laserdiamond.ventureplugin.items.crafting.SmithingTable;
 import net.laserdiamond.ventureplugin.VenturePlugin;
 import net.laserdiamond.ventureplugin.items.crafting.Recipes.SmithingTableRecipes;
 import net.laserdiamond.ventureplugin.items.util.ItemForger;
-import net.laserdiamond.ventureplugin.items.util.UpdateItem;
+import net.laserdiamond.ventureplugin.util.ItemRegistry;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -120,8 +120,7 @@ public class SmithingTableCrafting implements Listener
                             ItemForger resultForger = new ItemForger(resultItem);
 
                             resultForger.setArmorTrim(trimToAdd);
-                            resultForger.setLore(UpdateItem.renewLore(resultForger.toItemStack()));
-                            event.setResult(resultForger.toItemStack());
+                            event.setResult(ItemRegistry.renewItemNew(resultForger.toItemStack()));
                         }
 
                     }

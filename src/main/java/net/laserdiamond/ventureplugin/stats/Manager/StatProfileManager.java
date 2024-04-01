@@ -22,18 +22,18 @@ public class StatProfileManager {
 
     private final TunementProfileManager tunementProfileManager;
     private final Map<UUID, StatProfile> statProfiles = new HashMap<>();
-    private final double bHealth;
+    private final double baseHealth;
     private final double bSpeed;
     private final double bStarvation;
     private final double bLuck;
-    private final double pMelee;
-    private final double pMagic;
-    private final double pRange;
+    private final double percentMelee;
+    private final double percentMagic;
+    private final double percentRange;
     private final double availableMana;
     private final double maxMana;
-    private final double bMelee;
-    private final double bMagic;
-    private final double bRange;
+    private final double baseMelee;
+    private final double baseMagic;
+    private final double baseRange;
     private final double baseDefense;
     private final double baseFireDefense;
     private final double baseExplosionDefense;
@@ -45,20 +45,20 @@ public class StatProfileManager {
         BaseStatsConfig baseStatsConfig = plugin.getBaseStatsConfig();
         tunementProfileManager = plugin.getTunementProfileManager();
 
-        bHealth = baseStatsConfig.getDouble("baseHealth");
+        baseHealth = baseStatsConfig.getDouble("baseHealth");
         bSpeed = baseStatsConfig.getDouble("baseSpeedPoints");
         bStarvation = baseStatsConfig.getDouble("starvationRate");
         bLuck = baseStatsConfig.getDouble("baseLuck");
 
 
-        pMelee = baseStatsConfig.getDouble("meleeDamage");
-        pMagic = baseStatsConfig.getDouble("magicDamage");
-        pRange = baseStatsConfig.getDouble("rangeDamage");
+        percentMelee = baseStatsConfig.getDouble("meleeDamage");
+        percentMagic = baseStatsConfig.getDouble("magicDamage");
+        percentRange = baseStatsConfig.getDouble("rangeDamage");
         availableMana = baseStatsConfig.getDouble("availableMana");
         maxMana = baseStatsConfig.getDouble("maxMana");
-        bMelee = baseStatsConfig.getDouble("baseMelee");
-        bMagic = baseStatsConfig.getDouble("baseMagic");
-        bRange = baseStatsConfig.getDouble("baseRange");
+        baseMelee = baseStatsConfig.getDouble("baseMelee");
+        baseMagic = baseStatsConfig.getDouble("baseMagic");
+        baseRange = baseStatsConfig.getDouble("baseRange");
         baseDefense = baseStatsConfig.getDouble("baseDefense");
         baseFireDefense = baseStatsConfig.getDouble("baseFireDefense");
         baseExplosionDefense = baseStatsConfig.getDouble("baseExplosionDefense");
@@ -85,19 +85,20 @@ public class StatProfileManager {
 
 
         TunementStats tunementStats = tunementProfile.tunementStats();
-        double health = bHealth + tunementStats.getHealth();
-        double defense = baseDefense + tunementStats.getDefense();
-        double speed = bSpeed + tunementStats.getSpeed();
-        double mana = maxMana + tunementStats.getMana();
-        double bMelee = this.bMelee + tunementStats.getMelee();
-        double bMagic = this.bMagic + tunementStats.getMagic();
-        double bRange = this.bRange + tunementStats.getRange();
+        double finalBaseHealth = baseHealth + tunementStats.getHealth();
+        double finalBaseDefense = baseDefense + tunementStats.getDefense();
+        double finalBaseSpeed = bSpeed + tunementStats.getSpeed();
+        double finalBaseMana = maxMana + tunementStats.getMana();
+        double finalBaseMelee = this.baseMelee + tunementStats.getMelee();
+        double finalBaseMagic = this.baseMagic + tunementStats.getMagic();
+        double finalBaseRange = this.baseRange + tunementStats.getRange();
 
 
 
-        Stats stats = new Stats(player, health, speed, bStarvation, bLuck, availableMana, mana);
-        DamageStats damageStats = new DamageStats(bMelee, bMagic, bRange, pMelee, pMagic, pRange,0);
-        DefenseStats defenseStats = new DefenseStats(player, defense, baseFireDefense, baseExplosionDefense, baseProjectileDefense, baseMagicDefense, baseToughness, 0);
+        Stats stats = new Stats(player, finalBaseHealth, finalBaseSpeed, bStarvation, bLuck, availableMana, finalBaseMana);
+        ArmorStats armorStats = new ArmorStats(0,0,0,0,0,0,0,0,0,0,0,0,0);
+        DamageStats damageStats = new DamageStats(finalBaseMelee, finalBaseMagic, finalBaseRange, percentMelee, percentMagic, percentRange,0);
+        DefenseStats defenseStats = new DefenseStats(player, finalBaseDefense, baseFireDefense, baseExplosionDefense, baseProjectileDefense, baseMagicDefense, baseToughness, 0);
         LootStats lootStats = new LootStats(0,0,0,0,0);
         EnchantStats enchantStats = new EnchantStats(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
 
@@ -105,7 +106,7 @@ public class StatProfileManager {
         ArmorTrimPatternStats armorTrimPatternStats = new ArmorTrimPatternStats(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
         ArmorTrimStats armorTrimStats = new ArmorTrimStats(armorTrimMaterialStats, armorTrimPatternStats);
 
-        StatProfile statProfile = new StatProfile(stats, damageStats, defenseStats, lootStats, enchantStats, armorTrimStats, tunementProfile);
+        StatProfile statProfile = new StatProfile(stats, armorStats, damageStats, defenseStats, lootStats, enchantStats, armorTrimStats, tunementProfile);
         statProfiles.put(player.getUniqueId(), statProfile);
 
         return statProfile;

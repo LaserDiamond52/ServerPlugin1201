@@ -1,12 +1,12 @@
 toughness: 3
 fortitude: 1
 
-helmetArmor: 3
+helmetDefense: 3
 
-chestplateArmor: 8
+chestplateDefense: 8
 
-leggingsArmor: 6
+leggingsDefense: 6
 
-bootsArmor: 3
+bootsDefense: 3
 
-fireArmorMultiplier: 1.5
+fireDefenseMultiplier: 1.5

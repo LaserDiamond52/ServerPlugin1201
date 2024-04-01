@@ -1,6 +1,6 @@
 package net.laserdiamond.ventureplugin.events;
 
-import net.laserdiamond.ventureplugin.items.util.misc.MenuItems;
+import net.laserdiamond.ventureplugin.items.menuItems.misc.MiscMenuItems;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -29,7 +29,7 @@ public class CancelInventoryMovementMenus implements Listener {
             ItemStack clickedItem = event.getCurrentItem();
 
             // Cancel Clicking on Blank Menu item for ALL inventory GUIs
-            if (clickedItem.equals(MenuItems.createMenuItem(MenuItems.MenuItemEnum.BLANK_ITEM).toItemStack())) {
+            if (clickedItem.equals(MiscMenuItems.BLANK.createItem(player).toItemStack())) {
                 event.setCancelled(true);
             }
         }

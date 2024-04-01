@@ -762,15 +762,24 @@ public class ItemForger {
         String newStar = Integer.toString(Math.max(0, stars));
         if (itemKey != null)
         {
+            //StringBuilder starBuilder = new StringBuilder();
             for (int i = 0; i < itemKey.length(); i++)
             {
-                // TODO: Change way this works to get all the digits of the star count (only gets first) so that double digits+ stars can be possible to manage and maintain
+                // TODO: Change way this works to set all the digits of the star count (only gets first) so that double digits+ stars can be possible to manage and maintain
                 char letter = itemKey.charAt(i);
                 if (Character.isDigit(letter))
                 {
+                    //starBuilder.append(letter);
                     this.setItemKey(itemKey.replace(String.valueOf(letter), newStar));
                     break;
                 }
+                /*
+                if (!starBuilder.isEmpty() && !Character.isDigit(letter))
+                {
+                    break;
+                }
+
+                 */
             }
         }
         return this;

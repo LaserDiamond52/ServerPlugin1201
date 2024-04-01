@@ -2,7 +2,6 @@ package net.laserdiamond.ventureplugin.commands.Enchant;
 
 import net.laserdiamond.ventureplugin.enchants.Components.VentureEnchants;
 import net.laserdiamond.ventureplugin.items.util.ItemForger;
-import net.laserdiamond.ventureplugin.items.util.UpdateItem;
 import net.laserdiamond.ventureplugin.util.ItemRegistry;
 import net.laserdiamond.ventureplugin.util.Permissions;
 import net.laserdiamond.ventureplugin.util.messages.Messages;

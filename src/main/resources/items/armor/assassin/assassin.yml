@@ -14,7 +14,7 @@ helmetMeleeDamage: 3
 helmetRangeDamage: 6
 helmetSpeed: 10
 helmetHealth: 3
-helmetArmor: 3
+helmetDefense: 3
 
 chestplateRed: 77
 chestplateGreen: 77
@@ -23,7 +23,7 @@ chestplateMeleeDamage: 3
 chestplateRangeDamage: 6
 chestplateSpeed: 10
 chestplateHealth: 7
-chestplateArmor: 8.5
+chestplateDefense: 8.5
 
 leggingsRed: 77
 leggingsGreen: 77
@@ -32,7 +32,7 @@ leggingsMeleeDamage: 3
 leggingsRangeDamage: 6
 leggingsSpeed: 10
 leggingsHealth: 5
-leggingsArmor: 6.5
+leggingsDefense: 6.5
 
 bootsRed: 77
 bootsGreen: 77
@@ -41,6 +41,6 @@ bootsMeleeDamage: 3
 bootsRangeDamage: 6
 bootsSpeed: 13
 bootsHealth: 3
-bootsArmor: 3
+bootsDefense: 3
 
 HelmetURL: http://textures.minecraft.net/texture/3399e00f404411e465d74388df132d51fe868ecf86f1c073faffa1d9172ec0f3

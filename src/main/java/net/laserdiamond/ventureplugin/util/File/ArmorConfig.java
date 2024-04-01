@@ -1,21 +1,18 @@
 package net.laserdiamond.ventureplugin.util.File;
 
 import net.laserdiamond.ventureplugin.VenturePlugin;
-import net.laserdiamond.ventureplugin.items.util.armor.ArmorPieceTypes;
+import net.laserdiamond.ventureplugin.items.armor.util.ArmorPieceTypes;
 import net.laserdiamond.ventureplugin.util.Config.ConfigLoader;
 import net.laserdiamond.ventureplugin.util.Stars;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
-public abstract class ArmorConfig extends ConfigLoader {
+public class ArmorConfig extends ConfigLoader {
 
     private final VenturePlugin plugin;
     private final String fileName;
@@ -27,6 +24,7 @@ public abstract class ArmorConfig extends ConfigLoader {
         this.fileName = fileName;
         File folders = new File(plugin.getDataFolder() + File.separator + "items" + File.separator + "armor" + File.separator + fileName);
         file = new File(folders, fileName + ".yml");
+        plugin.getArmorConfigs().add(this);
     }
 
     @Override
@@ -73,7 +71,11 @@ public abstract class ArmorConfig extends ConfigLoader {
         MAGIC_DAMAGE ("MagicDamage", true),
         MANA ("Mana", true),
         HEALTH ("Health", true),
-        ARMOR ("Armor", true),
+        DEFENSE("Defense", true),
+        FIRE_DEFENSE("FireDefense", true),
+        PROJECTILE_DEFENSE("ProjectileDefense", true),
+        EXPLOSION_DEFENSE("BlastDefense", true),
+        MAGIC_DEFENSE("MagicDefense", true),
         TOUGHNESS ("toughness", false),
         FORTITUDE ("fortitude", false),
         SPEED ("Speed", true);

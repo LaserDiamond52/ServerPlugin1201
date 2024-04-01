@@ -18,6 +18,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 public class StatsItemManager {
 
     private static final VenturePlugin plugin = VenturePlugin.getInstance();

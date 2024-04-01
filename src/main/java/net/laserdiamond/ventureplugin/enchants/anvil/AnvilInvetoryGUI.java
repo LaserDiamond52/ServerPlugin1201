@@ -1,7 +1,6 @@
 package net.laserdiamond.ventureplugin.enchants.anvil;
 
 import net.laserdiamond.ventureplugin.VenturePlugin;
-import net.laserdiamond.ventureplugin.items.util.misc.MenuItems;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -34,7 +33,7 @@ public class AnvilInvetoryGUI implements Listener {
         for (ItemStack itemStack : contents) {
             if (itemStack == null) {
                 if (!Slots.isInventorySlot(i)) {
-                    anvilGUI.setItem(i, MenuItems.createMenuItem(MenuItems.MenuItemEnum.BLANK_ITEM).toItemStack());
+                    //anvilGUI.setItem(i, MenuItems.createMenuItem(MenuItems.MenuItemEnum.BLANK_ITEM).toItemStack());
                 }
             }
             i++;

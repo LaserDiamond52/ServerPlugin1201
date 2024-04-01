@@ -74,7 +74,7 @@ public class HUD extends BukkitRunnable implements Listener {
             String healthDisplay = singleDecimalPlace.format(currentHealth) + "/" + singleDecimalPlace.format(maxHealth) + ChatColor.RED + "❤";
             String finalHealthDisplay;
 
-            String defenseDisplay = "Armor: " + doubleDecimalPlace.format(armor) + ChatColor.GREEN + "⛉";
+            String defenseDisplay = "Defense: " + doubleDecimalPlace.format(armor) + ChatColor.GREEN + "⛉";
             String finalDefenseDisplay = ChatColor.GREEN + defenseDisplay;
 
             if (!ManaFreezeTimer.hasNoEffect(player)) {

@@ -10,7 +10,11 @@ public enum VentureItemStatKeys {
     ARMOR_MAGIC_DAMAGE_KEY(new NamespacedKey("armor_data", "magic_damage"), ChatColor.GRAY + "Magic Damage: +", ChatColor.AQUA),
     ARMOR_MAX_MANA_KEY(new NamespacedKey("armor_data", "max_mana"), ChatColor.GRAY + "Mana: +", ChatColor.BLUE),
     ARMOR_HEALTH_KEY(new NamespacedKey("armor_data", "health"), ChatColor.GRAY + "Health: +", ChatColor.RED),
-    ARMOR_DEFENSE_KEY(new NamespacedKey("armor_data", "armor"), ChatColor.GRAY + "Armor: +", ChatColor.GREEN),
+    ARMOR_DEFENSE_KEY(new NamespacedKey("armor_data", "defense"), ChatColor.GRAY + "Defense: +", ChatColor.GREEN),
+    ARMOR_FIRE_DEFENSE_KEY(new NamespacedKey("armor_data", "fire_defense"), ChatColor.GRAY + "Fire Defense: +", ChatColor.GREEN),
+    ARMOR_PROJECTILE_DEFENSE_KEY(new NamespacedKey("armor_data", "projectile_defense"), ChatColor.GRAY + "Projectile Defense: +", ChatColor.GREEN),
+    ARMOR_EXPLOSION_DEFENSE_KEY(new NamespacedKey("armor_data", "explosion_defense"), ChatColor.GRAY + "Blast Defense: +", ChatColor.GREEN),
+    ARMOR_MAGIC_DEFENSE_KEY(new NamespacedKey("armor_data", "magic_defense"), ChatColor.GRAY + "Magic Defense: +", ChatColor.GREEN),
     ARMOR_TOUGHNESS_KEY(new NamespacedKey("armor_data", "toughness"), ChatColor.GRAY + "Toughness: +", ChatColor.GREEN),
     ARMOR_FORTITUDE_KEY(new NamespacedKey("armor_data", "fortitude"), ChatColor.GRAY + "Fortitude: +", ChatColor.DARK_GREEN),
     ARMOR_SPEED_KEY(new NamespacedKey("armor_data", "speed"), ChatColor.GRAY + "Speed: +", ChatColor.WHITE);

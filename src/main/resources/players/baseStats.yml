@@ -53,6 +53,20 @@ baseMagicDefense: 0
 # Player's base toughness
 baseToughness: 0
 
+# Defense Factor
+#
+# The formula for defense calculation is x / (x + a)
+#
+# This applies for the following forms of protection:
+# - Defense
+# - Fire Defense
+# - Explosion Defense
+# - Projectile Defense
+# - Magic Defense
+# - Toughness
+
+a: 20
+
 # Default Speed
 
 # Determines how much speed each point of speed should give

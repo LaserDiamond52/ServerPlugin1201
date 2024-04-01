@@ -9,27 +9,27 @@ abilityName: Blazing Aura
 
 helmetMeleeDamage: 5
 helmetHealth: 3
-helmetArmor: 3.5
+helmetDefense: 3.5
 
 chestplateRed: 255
 chestplateGreen: 205
 chestplateBlue: 3
 chestplateMeleeDamage: 5
 chestplateHealth: 7
-chestplateArmor: 8.5
+chestplateDefense: 8.5
 
 leggingsRed: 255
 leggingsGreen: 205
 leggingsBlue: 3
 leggingsMeleeDamage: 5
 leggingsHealth: 5
-leggingsArmor: 6.5
+leggingsDefense: 6.5
 
 bootsRed: 255
 bootsGreen: 205
 bootsBlue: 3
 bootsMeleeDamage: 5
 bootsHealth: 3
-bootsArmor: 3.5
+bootsDefense: 3.5
 
 HelmetURL: http://textures.minecraft.net/texture/b20657e24b56e1b2f8fc219da1de788c0c24f36388b1a409d0cd2d8dba44aa3b

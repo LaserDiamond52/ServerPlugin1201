@@ -14,7 +14,7 @@ helmetRangeDamage: 6
 helmetMagicDamage: 3
 helmetMana: 30
 helmetHealth: 5
-helmetArmor: 4
+helmetDefense: 4
 
 chestplateRed: 0
 chestplateGreen: 128
@@ -24,7 +24,7 @@ chestplateRangeDamage: 6
 chestplateMagicDamage: 3
 chestplateMana: 25
 chestplateHealth: 10
-chestplateArmor: 11
+chestplateDefense: 11
 
 leggingsRed: 0
 leggingsGreen: 128
@@ -34,7 +34,7 @@ leggingsRangeDamage: 6
 leggingsMagicDamage: 3
 leggingsMana: 25
 leggingsHealth: 7
-leggingsArmor: 9
+leggingsDefense: 9
 
 bootsRed: 0
 bootsGreen: 128
@@ -44,6 +44,6 @@ bootsRangeDamage: 6
 bootsMagicDamage: 3
 bootsMana: 25
 bootsHealth: 5
-bootsArmor: 4
+bootsDefense: 4
 
 HelmetURL: http://textures.minecraft.net/texture/445b140208ea0b23655f01e9ae7ea0fc7d83a3c0a44c03be2a2a29d292d4ec20

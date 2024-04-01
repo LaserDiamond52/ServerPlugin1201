@@ -23,10 +23,9 @@ import java.util.List;
 
 public class ApplyDefense implements Listener {
 
-    private final VenturePlugin PLUGIN;
+    private static final VenturePlugin PLUGIN = VenturePlugin.getInstance();
     private final StatProfileManager STAT_PROFILE_MANAGER;
     public ApplyDefense(VenturePlugin plugin) {
-        this.PLUGIN = plugin;
         this.STAT_PROFILE_MANAGER = plugin.getStatProfileManager();
     }
 
@@ -186,8 +185,10 @@ public class ApplyDefense implements Listener {
 
     }
 
-    public static Double finalDamage(double armor, double damage) {
-        double damageReduction = 1 - (armor / (armor + 20));
+    public static Double finalDamage(double armor, double damage)
+    {
+        double defenseFactor = PLUGIN.getBaseStatsConfig().getInt("a");
+        double damageReduction = 1 - (armor / (armor + defenseFactor));
 
         return damageReduction * damage;
     }

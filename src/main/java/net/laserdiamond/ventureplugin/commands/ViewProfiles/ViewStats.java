@@ -1,8 +1,7 @@
 package net.laserdiamond.ventureplugin.commands.ViewProfiles;
 
-import net.laserdiamond.ventureplugin.VenturePlugin;
-import net.laserdiamond.ventureplugin.items.util.misc.MenuItems;
-import net.laserdiamond.ventureplugin.stats.Components.StatsItemManager;
+import net.laserdiamond.ventureplugin.items.menuItems.misc.MiscMenuItems;
+import net.laserdiamond.ventureplugin.items.menuItems.stats.StatMenuItems;
 import net.laserdiamond.ventureplugin.util.Permissions;
 import net.laserdiamond.ventureplugin.util.messages.Messages;
 import org.bukkit.Bukkit;
@@ -25,22 +24,15 @@ public class ViewStats implements CommandExecutor {
 
                 Inventory statInventory = Bukkit.createInventory(null, 54, ChatColor.GOLD + player.getName() + "'s Stats");
 
-                for (StatsItemManager.StatsItem statsItem : StatsItemManager.StatsItem.values()) {
-                    ItemStack statMenuItem = StatsItemManager.createStatItem(player, statsItem).toItemStack();
-                    int inventorySlot = statsItem.getInventorySlot();
+
+                for (StatMenuItems.StatItemSlots statItemSlots : StatMenuItems.StatItemSlots.values())
+                {
+                    ItemStack statMenuItem = statItemSlots.getVentureMenuItem().createItem(player).toItemStack();
+                    int inventorySlot = statItemSlots.getInventorySlot();
                     statInventory.setItem(inventorySlot, statMenuItem);
                 }
 
-                ItemStack[] contents = statInventory.getContents();
-                ItemStack itemStack;
-                int i = 0;
-                while (i < contents.length) {
-                    itemStack = contents[i];
-                    if (itemStack == null) {
-                        statInventory.setItem(i, MenuItems.createMenuItem(MenuItems.MenuItemEnum.BLANK_ITEM).toItemStack());
-                    }
-                    i++;
-                }
+                MiscMenuItems.fillBlankSlotsPlayerInv(player, statInventory);
 
                 player.openInventory(statInventory);
             } else {
@@ -51,5 +43,10 @@ public class ViewStats implements CommandExecutor {
         }
 
         return true;
+    }
+
+    public static String statInvTitle(Player player)
+    {
+        return player.getName() + "'s Stats";
     }
 }

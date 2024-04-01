@@ -29,16 +29,18 @@ import net.laserdiamond.ventureplugin.events.PlayerJoinServer;
 import net.laserdiamond.ventureplugin.events.effects.Components.EffectTimer;
 import net.laserdiamond.ventureplugin.events.effects.Config.EffectProfileConfig;
 import net.laserdiamond.ventureplugin.events.effects.Managers.EffectManager;
-import net.laserdiamond.ventureplugin.items.armor.components.*;
-import net.laserdiamond.ventureplugin.items.armor.config.*;
+import net.laserdiamond.ventureplugin.items.armor.armor_sets.*;
 import net.laserdiamond.ventureplugin.items.armor.util.ArmorEquipStats;
 import net.laserdiamond.ventureplugin.events.abilities.cooldown.EyeOfStormCooldown;
 import net.laserdiamond.ventureplugin.items.armor.trims.Components.TrimMaterialListeners;
-import net.laserdiamond.ventureplugin.items.armor.trims.Config.ArmorTrimConfig;
 import net.laserdiamond.ventureplugin.items.crafting.SmithingTable.SmithingTableCrafting;
+import net.laserdiamond.ventureplugin.items.menuItems.misc.MiscMenuItems;
+import net.laserdiamond.ventureplugin.items.menuItems.stats.StatMenuItems;
 import net.laserdiamond.ventureplugin.items.util.ItemForger;
 import net.laserdiamond.ventureplugin.entities.healthDisplay.mobHealthDisplay;
-import net.laserdiamond.ventureplugin.items.util.armor.VentureArmorSet;
+import net.laserdiamond.ventureplugin.items.armor.util.VentureArmorSet;
+import net.laserdiamond.ventureplugin.items.menuItems.util.VentureMenuItem;
+import net.laserdiamond.ventureplugin.util.File.ArmorConfig;
 import net.laserdiamond.ventureplugin.util.ItemRegistry;
 import net.laserdiamond.ventureplugin.util.RegisterAbilityCaster;
 import net.laserdiamond.ventureplugin.stats.Config.BaseStatsConfig;
@@ -71,29 +73,37 @@ public final class VenturePlugin extends JavaPlugin {
 
     private BaseStatsConfig baseStatsConfig;
     private EnchantConfig enchantConfig;
-    private ArmorTrimConfig armorTrimConfig;
 
     private final HashMap<String, ItemForger> itemRegistryMap = new HashMap<>();
+    private final HashMap<String, ItemForger> unobtainableItemRegistryMap = new HashMap<>();
     private final List<VentureArmorSet> playerArmorItemMap = new ArrayList<>();
+    private final List<VentureMenuItem> ventureMenuItems = new ArrayList<>();
 
     private NetheriteArmor netheriteArmor;
-    private NetheriteArmorConfig netheriteArmorConfig;
-    private BlazeArmorConfig blazeArmorConfig;
     private BlazeArmor blazeArmor;
-    private SoulFireBlazeArmorConfig soulFireBlazeArmorConfig;
     private SoulFireBlazeArmor soulFireBlazeArmor;
-    private StormLordArmorConfig stormLordArmorConfig;
     private StormLordArmor stormLordArmor;
     private AssassinArmor assassinArmor;
-    private AssassinArmorConfig assassinArmorConfig;
     private ReinforcedDiamondArmor reinforcedDiamondArmor;
-    private ReinforcedDiamondArmorConfig reinforcedDiamondArmorConfig;
     private PrismariteArmor prismariteArmor;
-    private PrismariteArmorConfig prismariteArmorConfig;
     private FleshRevenantArmor fleshRevenantArmor;
-    private FleshRevenantArmorConfig fleshRevenantArmorConfig;
     private BoneTerrorArmor boneTerrorArmor;
-    private BoneTerrorArmorConfig boneTerrorArmorConfig;
+
+
+    private final List<ArmorConfig> armorConfigs = new ArrayList<>();
+
+    private final ArmorConfig
+
+            armorTrimConfig = new ArmorConfig(this, "trims"),
+            netheriteArmorConfig = new ArmorConfig(this, "netherite"),
+            blazeArmorConfig = new ArmorConfig(this,"blaze"),
+            soulFireBlazeArmorConfig = new ArmorConfig(this, "soul_fire_blaze"),
+            stormLordArmorConfig = new ArmorConfig(this,"storm_lord"),
+            assassinArmorConfig = new ArmorConfig(this, "assassin"),
+            reinforcedDiamondArmorConfig = new ArmorConfig(this, "reinforced_diamond"),
+            prismariteArmorConfig = new ArmorConfig(this, "prismarite"),
+            fleshRevenantArmorConfig = new ArmorConfig(this, "flesh_revenant"),
+            boneTerrorArmorConfig = new ArmorConfig(this, "bone_terror");
 
     private final List<AbilityListener> abilityListeners = new ArrayList<>();
     private final HashMap<AbilityListener, Method> rightClickAbilities = new HashMap<>();
@@ -161,7 +171,7 @@ public final class VenturePlugin extends JavaPlugin {
         //SmithingTableCrafting.init();
 
         // Anvil Inventory GUI
-        getServer().getPluginManager().registerEvents(new AnvilInvetoryGUI(this),this);
+        //getServer().getPluginManager().registerEvents(new AnvilInvetoryGUI(this),this);
 
         // Mob names
         getServer().getPluginManager().registerEvents(new mobHealthDisplay(this),this);
@@ -290,42 +300,13 @@ public final class VenturePlugin extends JavaPlugin {
     public EnchantConfig getEnchantConfig() {
         return enchantConfig;
     }
+
+    /*
     public ArmorTrimConfig getArmorTrimConfig() {
         return armorTrimConfig;
     }
-    public NetheriteArmorConfig getNetheriteArmorConfig() {
-        return netheriteArmorConfig;
-    }
-    public BlazeArmorConfig getBlazeArmorConfig() {
-        return blazeArmorConfig;
-    }
-    public SoulFireBlazeArmorConfig getSoulFireBlazeArmorConfig()
-    {
-        return soulFireBlazeArmorConfig;
-    }
-    public StormLordArmorConfig getStormLordArmorConfig() {
-        return stormLordArmorConfig;
-    }
-    public AssassinArmorConfig getAssassinArmorConfig()
-    {
-        return assassinArmorConfig;
-    }
-    public ReinforcedDiamondArmorConfig getReinforcedDiamondArmorConfig()
-    {
-        return reinforcedDiamondArmorConfig;
-    }
-    public PrismariteArmorConfig getPrismariteArmorConfig()
-    {
-        return prismariteArmorConfig;
-    }
-    public FleshRevenantArmorConfig getFleshRevenantArmorConfig()
-    {
-        return fleshRevenantArmorConfig;
-    }
-    public BoneTerrorArmorConfig getBoneTerrorArmorConfig()
-    {
-        return boneTerrorArmorConfig;
-    }
+
+     */
 
     private void createConfigs() {
         baseStatsConfig = new BaseStatsConfig(this, "baseStats");
@@ -337,40 +318,16 @@ public final class VenturePlugin extends JavaPlugin {
         effectProfileConfig = new EffectProfileConfig(this, "effectDurations");
         effectProfileConfig.loadConfig();
 
-        armorTrimConfig = new ArmorTrimConfig(this, "trims");
-        armorTrimConfig.loadConfig();
-
         enchantConfig = new EnchantConfig(this, "enchants", "enchants");
         enchantConfig.loadConfig();
     }
 
     private void createItemConfigs() {
-        netheriteArmorConfig = new NetheriteArmorConfig(this, "netherite");
-        netheriteArmorConfig.loadConfig();
 
-        blazeArmorConfig = new BlazeArmorConfig(this, "blaze");
-        blazeArmorConfig.loadConfig();
-
-        soulFireBlazeArmorConfig = new SoulFireBlazeArmorConfig(this, "soul_fire_blaze");
-        soulFireBlazeArmorConfig.loadConfig();
-
-        stormLordArmorConfig = new StormLordArmorConfig(this, "storm_lord");
-        stormLordArmorConfig.loadConfig();
-
-        assassinArmorConfig = new AssassinArmorConfig(this, "assassin");
-        assassinArmorConfig.loadConfig();
-
-        reinforcedDiamondArmorConfig = new ReinforcedDiamondArmorConfig(this, "reinforced_diamond");
-        reinforcedDiamondArmorConfig.loadConfig();
-
-        prismariteArmorConfig = new PrismariteArmorConfig(this,"prismarite");
-        prismariteArmorConfig.loadConfig();
-
-        fleshRevenantArmorConfig = new FleshRevenantArmorConfig(this, "flesh_revenant");
-        fleshRevenantArmorConfig.loadConfig();
-
-        boneTerrorArmorConfig = new BoneTerrorArmorConfig(this, "bone_terror");
-        boneTerrorArmorConfig.loadConfig();
+        for (ArmorConfig armorConfig : armorConfigs)
+        {
+            armorConfig.loadConfig();
+        }
 
     }
     private void createManagers() {
@@ -382,7 +339,11 @@ public final class VenturePlugin extends JavaPlugin {
         effectManager = new EffectManager(this);
         effectManager.loadProfilesFromConfig();
     }
+
     private void createItemManagers() {
+
+        //new StatMenuItems(this);
+
         netheriteArmor = new NetheriteArmor(this);
         blazeArmor = new BlazeArmor(this);
         soulFireBlazeArmor = new SoulFireBlazeArmor(this);
@@ -412,7 +373,7 @@ public final class VenturePlugin extends JavaPlugin {
     }
     private void addAbilities()
     {
-        RegisterAbilityCaster.addListener(new EnchantListeners(this),this);
+        RegisterAbilityCaster.addListener(new EnchantListeners(this),this); // TODO: Convert this to new method
 
         for (AbilityListener listener : getAbilityListeners())
         {
@@ -468,5 +429,57 @@ public final class VenturePlugin extends JavaPlugin {
 
     public List<VentureArmorSet> getPlayerArmorItemMap() {
         return playerArmorItemMap;
+    }
+
+    public List<ArmorConfig> getArmorConfigs() {
+        return armorConfigs;
+    }
+
+    public ArmorConfig getArmorTrimConfig() {
+        return armorTrimConfig;
+    }
+
+    public ArmorConfig getNetheriteArmorConfig() {
+        return netheriteArmorConfig;
+    }
+
+    public ArmorConfig getBlazeArmorConfig() {
+        return blazeArmorConfig;
+    }
+
+    public ArmorConfig getSoulFireBlazeArmorConfig() {
+        return soulFireBlazeArmorConfig;
+    }
+
+    public ArmorConfig getStormLordArmorConfig() {
+        return stormLordArmorConfig;
+    }
+
+    public ArmorConfig getAssassinArmorConfig() {
+        return assassinArmorConfig;
+    }
+
+    public ArmorConfig getReinforcedDiamondArmorConfig() {
+        return reinforcedDiamondArmorConfig;
+    }
+
+    public ArmorConfig getPrismariteArmorConfig() {
+        return prismariteArmorConfig;
+    }
+
+    public ArmorConfig getFleshRevenantArmorConfig() {
+        return fleshRevenantArmorConfig;
+    }
+
+    public ArmorConfig getBoneTerrorArmorConfig() {
+        return boneTerrorArmorConfig;
+    }
+
+    public HashMap<String, ItemForger> getUnobtainableItemRegistryMap() {
+        return unobtainableItemRegistryMap;
+    }
+
+    public List<VentureMenuItem> getVentureMenuItems() {
+        return ventureMenuItems;
     }
 }

@@ -1,7 +1,7 @@
 package net.laserdiamond.ventureplugin.items.armor.trims.Components;
 
 import net.laserdiamond.ventureplugin.VenturePlugin;
-import net.laserdiamond.ventureplugin.items.armor.trims.Config.ArmorTrimConfig;
+import net.laserdiamond.ventureplugin.util.File.ArmorConfig;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.meta.ArmorMeta;
 import org.bukkit.inventory.meta.trim.TrimMaterial;
@@ -13,7 +13,7 @@ import java.util.List;
 public class TrimLore {
 
     private static final VenturePlugin PLUGIN = VenturePlugin.getInstance();
-    private static final ArmorTrimConfig ARMOR_TRIM_CONFIG = PLUGIN.getArmorTrimConfig();
+    private static final ArmorConfig ARMOR_TRIM_CONFIG = PLUGIN.getArmorTrimConfig();
 
     public static List<String> createLore(ArmorMeta armorMeta) {
 

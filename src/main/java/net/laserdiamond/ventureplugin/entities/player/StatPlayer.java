@@ -25,6 +25,11 @@ public class StatPlayer {
         return getStatProfile().stats();
     }
 
+    public ArmorStats getArmorStats()
+    {
+        return getStatProfile().armorStats();
+    }
+
     public DamageStats getDamageStats() {
         return getStatProfile().damageStats();
     }

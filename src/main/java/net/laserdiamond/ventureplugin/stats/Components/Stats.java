@@ -154,36 +154,6 @@ public class Stats {
     }
 
     @Deprecated
-    public double getBaseMeleeDamage() {
-        return baseMeleeDamage;
-    }
-
-    @Deprecated
-    public void setBaseMeleeDamage(double baseMeleeDamage) {
-        this.baseMeleeDamage = baseMeleeDamage;
-    }
-
-    @Deprecated
-    public double getBaseMagicDamage() {
-        return baseMagicDamage;
-    }
-
-    @Deprecated
-    public void setBaseMagicDamage(double baseMagicDamage) {
-        this.baseMagicDamage = baseMagicDamage;
-    }
-
-    @Deprecated
-    public double getBaseRangeDamage() {
-        return baseRangeDamage;
-    }
-
-    @Deprecated
-    public void setBaseRangeDamage(double baseRangeDamage) {
-        this.baseRangeDamage = baseRangeDamage;
-    }
-
-    @Deprecated
     public double getDefense() {
         return defense;
     }
@@ -191,16 +161,6 @@ public class Stats {
     @Deprecated
     public void setDefense(double defense) {
         this.defense = defense;
-    }
-
-    @Deprecated
-    public double getToughness() {
-        return toughness;
-    }
-
-    @Deprecated
-    public void setToughness(double toughness) {
-        this.toughness = toughness;
     }
 
     @Deprecated
