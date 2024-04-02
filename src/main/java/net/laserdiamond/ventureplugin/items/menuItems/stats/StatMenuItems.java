@@ -37,9 +37,25 @@ public class StatMenuItems {
         fortitudeStatItem = new FortitudeStatItem(plugin);
     }
 
-    public StatMenuItems()
+    public static void registerMenuItems(Player player)
     {
+        HEALTH_STAT_ITEM.register(player);
+        DEFENSE_STAT_ITEM.register(player);
+        TOUGHNESS_STAT_ITEM.register(player);
+        MANA_STAT_ITEM.register(player);
+        DAMAGE_STAT_ITEM.register(player);
+        SPEED_STAT_ITEM.register(player);
+        FORTITUDE_STAT_ITEM.register(player);
 
+        DEFENSE_STAT_ITEM_MORE.register(player);
+        FIRE_DEFENSE_STAT_ITEM_MORE.register(player);
+        EXPLOSION_DEFENSE_STAT_ITEM_MORE.register(player);
+        PROJECTILE_DEFENSE_STAT_ITEM_MORE.register(player);
+        MAGIC_DEFENSE_STAT_ITEM_MORE.register(player);
+
+        MELEE_DAMAGE_STAT_ITEM.register(player);
+        MAGIC_DAMAGE_STAT_ITEM.register(player);
+        RANGE_DAMAGE_STAT_ITEM.register(player);
     }
 
     public VentureMenuItem getHealthStatItem() {

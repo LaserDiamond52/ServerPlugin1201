@@ -57,6 +57,22 @@ public class ItemRegistry implements Listener {
 
         // Weapons
 
+        // Menu Items
+        defaultPlayerLore.put(StatMenuItems.HEALTH_STAT_ITEM.menuItem().getCustomModelData(), StatMenuItems.HEALTH_STAT_ITEM.createLore(player));
+        defaultPlayerLore.put(StatMenuItems.DEFENSE_STAT_ITEM.menuItem().getCustomModelData(), StatMenuItems.DEFENSE_STAT_ITEM.createLore(player));
+        defaultPlayerLore.put(StatMenuItems.TOUGHNESS_STAT_ITEM.menuItem().getCustomModelData(), StatMenuItems.TOUGHNESS_STAT_ITEM.createLore(player));
+        defaultPlayerLore.put(StatMenuItems.MANA_STAT_ITEM.menuItem().getCustomModelData(), StatMenuItems.MANA_STAT_ITEM.createLore(player));
+        defaultPlayerLore.put(StatMenuItems.DAMAGE_STAT_ITEM.menuItem().getCustomModelData(), StatMenuItems.DAMAGE_STAT_ITEM.createLore(player));
+        defaultPlayerLore.put(StatMenuItems.SPEED_STAT_ITEM.menuItem().getCustomModelData(), StatMenuItems.SPEED_STAT_ITEM.createLore(player));
+        defaultPlayerLore.put(StatMenuItems.FORTITUDE_STAT_ITEM.menuItem().getCustomModelData(), StatMenuItems.FORTITUDE_STAT_ITEM.createLore(player));
+        defaultPlayerLore.put(StatMenuItems.DEFENSE_STAT_ITEM_MORE.menuItem().getCustomModelData(), StatMenuItems.DEFENSE_STAT_ITEM_MORE.createLore(player));
+        defaultPlayerLore.put(StatMenuItems.FIRE_DEFENSE_STAT_ITEM_MORE.menuItem().getCustomModelData(), StatMenuItems.FIRE_DEFENSE_STAT_ITEM_MORE.createLore(player));
+        defaultPlayerLore.put(StatMenuItems.EXPLOSION_DEFENSE_STAT_ITEM_MORE.menuItem().getCustomModelData(), StatMenuItems.EXPLOSION_DEFENSE_STAT_ITEM_MORE.createLore(player));
+        defaultPlayerLore.put(StatMenuItems.PROJECTILE_DEFENSE_STAT_ITEM_MORE.menuItem().getCustomModelData(), StatMenuItems.PROJECTILE_DEFENSE_STAT_ITEM_MORE.createLore(player));
+        defaultPlayerLore.put(StatMenuItems.MAGIC_DEFENSE_STAT_ITEM_MORE.menuItem().getCustomModelData(), StatMenuItems.MAGIC_DEFENSE_STAT_ITEM_MORE.createLore(player));
+        defaultPlayerLore.put(StatMenuItems.MELEE_DAMAGE_STAT_ITEM.menuItem().getCustomModelData(), StatMenuItems.MELEE_DAMAGE_STAT_ITEM.createLore(player));
+        defaultPlayerLore.put(StatMenuItems.MAGIC_DAMAGE_STAT_ITEM.menuItem().getCustomModelData(), StatMenuItems.MAGIC_DAMAGE_STAT_ITEM.createLore(player));
+        defaultPlayerLore.put(StatMenuItems.RANGE_DAMAGE_STAT_ITEM.menuItem().getCustomModelData(), StatMenuItems.RANGE_DAMAGE_STAT_ITEM.createLore(player));
 
         return defaultPlayerLore;
     }
@@ -99,7 +115,7 @@ public class ItemRegistry implements Listener {
                 } else
                 {
                     // TODO: Update item
-                    if (event.getView().getTitle().equals(ViewStats.statInvTitle(player)))
+                    if (event.getView().getTitle().contains(ViewStats.statInvTitle(player)))
                     {
                         renewItemNew(event.getCursor(), player);
                     } else {
@@ -108,7 +124,7 @@ public class ItemRegistry implements Listener {
                 }
                 for (ItemStack itemStack : player.getInventory().getContents())
                 {
-                    if (event.getView().getTitle().equals(ViewStats.statInvTitle(player)))
+                    if (event.getView().getTitle().contains(ViewStats.statInvTitle(player)))
                     {
                         renewItemNew(itemStack, player);
                     } else {
@@ -142,11 +158,13 @@ public class ItemRegistry implements Listener {
             for (ItemStack itemStack : inventory.getContents())
             {
                 // TODO: Update item
-                if (event.getView().getTitle().equals(ViewStats.statInvTitle(player)))
+                if (event.getView().getTitle().contains(ViewStats.statInvTitle(player)))
                 {
                     renewItemNew(itemStack, player);
+                    player.sendMessage("player gui");
                 } else {
                     renewItemNew(itemStack);
+                    player.sendMessage("not player gui");
                 }
             }
             for (ItemStack itemStack : player.getInventory().getContents())
@@ -169,7 +187,7 @@ public class ItemRegistry implements Listener {
             {
                 // TODO: Update item
                 //renewItem(itemStack);
-                if (event.getView().getTitle().equals(ViewStats.statInvTitle(player)))
+                if (event.getView().getTitle().contains(ViewStats.statInvTitle(player)))
                 {
                     renewItemNew(itemStack, player);
                 } else {
