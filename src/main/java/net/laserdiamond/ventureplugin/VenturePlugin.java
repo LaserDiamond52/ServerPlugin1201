@@ -10,7 +10,6 @@ import net.laserdiamond.ventureplugin.enchants.Components.EnchantListeners;
 import net.laserdiamond.ventureplugin.enchants.Components.EnchantPlayerHeadHelmets;
 import net.laserdiamond.ventureplugin.enchants.Components.VentureEnchants;
 import net.laserdiamond.ventureplugin.enchants.Config.EnchantConfig;
-import net.laserdiamond.ventureplugin.enchants.anvil.AnvilInvetoryGUI;
 import net.laserdiamond.ventureplugin.events.CancelInventoryMovementMenus;
 import net.laserdiamond.ventureplugin.events.abilities.*;
 import net.laserdiamond.ventureplugin.events.abilities.cooldown.AssassinCloakCooldown;
@@ -35,13 +34,12 @@ import net.laserdiamond.ventureplugin.events.abilities.cooldown.EyeOfStormCooldo
 import net.laserdiamond.ventureplugin.items.armor.trims.Components.TrimMaterialListeners;
 import net.laserdiamond.ventureplugin.items.crafting.SmithingTable.SmithingTableCrafting;
 import net.laserdiamond.ventureplugin.items.menuItems.misc.MiscMenuItems;
-import net.laserdiamond.ventureplugin.items.menuItems.stats.StatMenuItems;
 import net.laserdiamond.ventureplugin.items.util.ItemForger;
 import net.laserdiamond.ventureplugin.entities.healthDisplay.mobHealthDisplay;
 import net.laserdiamond.ventureplugin.items.armor.util.VentureArmorSet;
 import net.laserdiamond.ventureplugin.items.menuItems.util.VentureMenuItem;
 import net.laserdiamond.ventureplugin.util.File.ArmorConfig;
-import net.laserdiamond.ventureplugin.util.ItemRegistry;
+import net.laserdiamond.ventureplugin.items.util.ItemRegistry;
 import net.laserdiamond.ventureplugin.util.RegisterAbilityCaster;
 import net.laserdiamond.ventureplugin.stats.Config.BaseStatsConfig;
 import net.laserdiamond.ventureplugin.stats.Manager.StatProfileManager;
@@ -163,8 +161,9 @@ public final class VenturePlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new EnchantListeners(this),this);
         getServer().getPluginManager().registerEvents(new EnchantPlayerHeadHelmets(this),this);
 
-        // Cancel Menu Inventory Manipulation
+        // Menu Inventory Manipulation
         getServer().getPluginManager().registerEvents(new CancelInventoryMovementMenus(),this);
+        MiscMenuItems menuItems = new MiscMenuItems(this);
 
         // Smithing Table Inventory
         getServer().getPluginManager().registerEvents(new SmithingTableCrafting(this),this);
@@ -182,7 +181,7 @@ public final class VenturePlugin extends JavaPlugin {
         getCommand("plugineffect").setExecutor(new EffectsCommand(this));
         getCommand("plugingive").setExecutor(new GiveItemsCommand(this));
         getCommand("pluginenchant").setExecutor(new EnchantCommand());
-        getCommand("stats").setExecutor(new ViewStats());
+        ViewStats viewStats = new ViewStats(this);
         getCommand("refillmana").setExecutor(new fillMana());
         getCommand("staritem").setExecutor(new StarItemCommand());
         // TODO: Summon cmd for mobs

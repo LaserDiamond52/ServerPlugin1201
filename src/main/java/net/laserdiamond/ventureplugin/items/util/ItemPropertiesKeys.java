@@ -1,4 +1,4 @@
-package net.laserdiamond.ventureplugin.util;
+package net.laserdiamond.ventureplugin.items.util;
 
 import org.bukkit.NamespacedKey;
 

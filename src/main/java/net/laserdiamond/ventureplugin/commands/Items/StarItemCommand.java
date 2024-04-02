@@ -2,7 +2,7 @@ package net.laserdiamond.ventureplugin.commands.Items;
 
 import net.laserdiamond.ventureplugin.VenturePlugin;
 import net.laserdiamond.ventureplugin.items.util.ItemForger;
-import net.laserdiamond.ventureplugin.util.ItemRegistry;
+import net.laserdiamond.ventureplugin.items.util.ItemRegistry;
 import net.laserdiamond.ventureplugin.util.Permissions;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -12,7 +12,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -3,7 +3,7 @@ package net.laserdiamond.ventureplugin.items.tools.util;
 import com.google.common.collect.Multimap;
 import net.laserdiamond.ventureplugin.items.util.ItemForger;
 import net.laserdiamond.ventureplugin.items.misc.util.VentureStatItem;
-import net.laserdiamond.ventureplugin.util.VentureItemStatKeys;
+import net.laserdiamond.ventureplugin.items.util.VentureItemStatKeys;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;

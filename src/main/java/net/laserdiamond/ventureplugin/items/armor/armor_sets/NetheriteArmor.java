@@ -2,7 +2,7 @@ package net.laserdiamond.ventureplugin.items.armor.armor_sets;
 
 import net.laserdiamond.ventureplugin.items.armor.util.VentureArmorSet;
 import net.laserdiamond.ventureplugin.util.File.ArmorConfig;
-import net.laserdiamond.ventureplugin.util.VentureItemStatKeys;
+import net.laserdiamond.ventureplugin.items.util.VentureItemStatKeys;
 import net.laserdiamond.ventureplugin.VenturePlugin;
 import net.laserdiamond.ventureplugin.items.util.VentureItemRarity;
 import net.laserdiamond.ventureplugin.items.armor.util.ArmorCMD;
@@ -60,14 +60,8 @@ public final class NetheriteArmor extends VentureArmorSet {
 
     @Override
     public List<String> createLore(@NotNull ArmorPieceTypes armorPieceTypes, int stars) {
-        double fireArmorMult = config().getDouble("fireDefenseMultiplier");
-        double armor = createVentureStats(armorPieceTypes, stars).get(VentureItemStatKeys.ARMOR_DEFENSE_KEY);
-        double fireArmor = armor * fireArmorMult;
         List<String> lore = super.createLore(armorPieceTypes, stars);
-        lore.add(ChatColor.GOLD + "Piece Bonus: Fire Protection");
-        lore.add(" ");
-        lore.add(ChatColor.GRAY + "Grants +" + ChatColor.GOLD + fireArmor + ChatColor.GRAY + " fire defense");
-        lore.add(" ");
+
         return lore;
     }
 }

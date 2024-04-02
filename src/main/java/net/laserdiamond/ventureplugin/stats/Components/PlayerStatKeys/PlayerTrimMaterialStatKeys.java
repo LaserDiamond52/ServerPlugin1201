@@ -47,9 +47,9 @@ public enum PlayerTrimMaterialStatKeys {
             }
             case AMETHYST -> {
                 trimMaterialStats.setAmethystBonusDamage(trimMaterialStats.getAmethystBonusDamage() + amount);
-                damageStats.setpMeleeDmg(damageStats.getPercentMelee() + amount);
-                damageStats.setpMagicDmg(damageStats.getPercentMagic() + amount);
-                damageStats.setpRangeDmg(damageStats.getPercentRange() + amount);
+                damageStats.setPercentMeleeDmg(damageStats.getPercentMelee() + amount);
+                damageStats.setPercentMagicDmg(damageStats.getPercentMagic() + amount);
+                damageStats.setPercentRangeDmg(damageStats.getPercentRange() + amount);
             }
             case DIAMOND -> {
                 trimMaterialStats.setDiamondBonusMana(trimMaterialStats.getDiamondBonusMana() + amount);
@@ -93,9 +93,9 @@ public enum PlayerTrimMaterialStatKeys {
             }
             case AMETHYST -> {
                 trimMaterialStats.setAmethystBonusDamage(trimMaterialStats.getAmethystBonusDamage() - amount);
-                damageStats.setpMeleeDmg(damageStats.getPercentMelee() - amount);
-                damageStats.setpMagicDmg(damageStats.getPercentMagic() - amount);
-                damageStats.setpRangeDmg(damageStats.getPercentRange() - amount);
+                damageStats.setPercentMeleeDmg(damageStats.getPercentMelee() - amount);
+                damageStats.setPercentMagicDmg(damageStats.getPercentMagic() - amount);
+                damageStats.setPercentRangeDmg(damageStats.getPercentRange() - amount);
             }
             case DIAMOND -> {
                 trimMaterialStats.setDiamondBonusMana(trimMaterialStats.getDiamondBonusMana() - amount);

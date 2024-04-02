@@ -46,9 +46,9 @@ public enum PlayerStatKeys {
             case BASE_MELEE -> damageStats.setbMeleeDmg(damageStats.getBaseMelee() + amount);
             case BASE_MAGIC -> damageStats.setbMagicDmg(damageStats.getBaseMagic() + amount);
             case BASE_RANGE -> damageStats.setbRangeDmg(damageStats.getBaseRange() + amount);
-            case PERCENT_MELEE -> damageStats.setpMeleeDmg(damageStats.getPercentMelee() + amount);
-            case PERCENT_MAGIC -> damageStats.setpMagicDmg(damageStats.getPercentMagic() + amount);
-            case PERCENT_RANGE -> damageStats.setpRangeDmg(damageStats.getPercentRange() + amount);
+            case PERCENT_MELEE -> damageStats.setPercentMeleeDmg(damageStats.getPercentMelee() + amount);
+            case PERCENT_MAGIC -> damageStats.setPercentMagicDmg(damageStats.getPercentMagic() + amount);
+            case PERCENT_RANGE -> damageStats.setPercentRangeDmg(damageStats.getPercentRange() + amount);
             case REACH -> damageStats.setReach(damageStats.getReach() + amount);
             case DEFENSE -> defenseStats.setDefense(defenseStats.getDefense() + amount);
             case FIRE_DEFENSE -> defenseStats.setFireDefense(defenseStats.getFireDefense() + amount);
@@ -81,9 +81,9 @@ public enum PlayerStatKeys {
             case BASE_MELEE -> damageStats.setbMeleeDmg(damageStats.getBaseMelee() - amount);
             case BASE_MAGIC -> damageStats.setbMagicDmg(damageStats.getBaseMagic() - amount);
             case BASE_RANGE -> damageStats.setbRangeDmg(damageStats.getBaseRange() - amount);
-            case PERCENT_MELEE -> damageStats.setpMeleeDmg(damageStats.getPercentMelee() - amount);
-            case PERCENT_MAGIC -> damageStats.setpMagicDmg(damageStats.getPercentMagic() - amount);
-            case PERCENT_RANGE -> damageStats.setpRangeDmg(damageStats.getPercentRange() - amount);
+            case PERCENT_MELEE -> damageStats.setPercentMeleeDmg(damageStats.getPercentMelee() - amount);
+            case PERCENT_MAGIC -> damageStats.setPercentMagicDmg(damageStats.getPercentMagic() - amount);
+            case PERCENT_RANGE -> damageStats.setPercentRangeDmg(damageStats.getPercentRange() - amount);
             case REACH -> damageStats.setReach(damageStats.getReach() - amount);
             case DEFENSE -> defenseStats.setDefense(defenseStats.getDefense() - amount);
             case FIRE_DEFENSE -> defenseStats.setFireDefense(defenseStats.getFireDefense() - amount);

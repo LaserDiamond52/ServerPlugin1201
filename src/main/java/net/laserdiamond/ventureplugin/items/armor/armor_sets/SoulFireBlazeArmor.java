@@ -14,12 +14,14 @@ import net.laserdiamond.ventureplugin.items.armor.util.ArmorPieceTypes;
 import net.laserdiamond.ventureplugin.items.armor.util.VentureArmorSet;
 import net.laserdiamond.ventureplugin.stats.Components.Stats;
 import net.laserdiamond.ventureplugin.util.File.ArmorConfig;
-import net.laserdiamond.ventureplugin.util.ItemRegistry;
-import net.laserdiamond.ventureplugin.util.UniqueVentureItemDataKey;
+import net.laserdiamond.ventureplugin.items.util.ItemRegistry;
+import net.laserdiamond.ventureplugin.items.util.UniqueVentureItemDataKey;
 import net.laserdiamond.ventureplugin.util.messages.Messages;
+import net.laserdiamond.ventureplugin.util.particles.Particles;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -46,6 +48,8 @@ public final class SoulFireBlazeArmor extends VentureArmorSet implements Ability
         soulFireBlazeAuraTimer = new HashMap<>();
     }
 
+    int radius = 1;
+    double[] y = {0};
     @AbilityHandler(abilityCastType = AbilityCastType.RUNNABLE)
     @Override
     public void onActivate(Player player) {
@@ -54,6 +58,7 @@ public final class SoulFireBlazeArmor extends VentureArmorSet implements Ability
         double manaCost = config().getDouble("manaCost");
         double auraRadius = config().getDouble("auraRadius");
         double auraDamage = config().getDouble("auraBaseDamage");
+        String abilityName = config().getString("abilityName1");
         double availableMana = stats.getAvailableMana();
 
         PlayerSpellCastEvent spellCastEvent = new PlayerSpellCastEvent(player, manaCost);
@@ -74,10 +79,17 @@ public final class SoulFireBlazeArmor extends VentureArmorSet implements Ability
         if (player.isSneaking())
         {
             soulFireBlazeAuraTimer.put(player.getUniqueId(), playerTimer + 1);
+            if (availableMana >= eventCost)
+            {
+                Particles.spiralAura(Particle.SOUL_FIRE_FLAME, player.getLocation(), radius, y);
+                y[0] = y[0] + 0.125;
+            }
 
             if (playerTimer >= 20)
             {
                 soulFireBlazeAuraTimer.put(player.getUniqueId(), 0);
+                radius = 1;
+                y = new double[]{0};
                 if (!(availableMana >= eventCost))
                 {
                     player.sendMessage(Messages.notEnoughMana());
@@ -87,6 +99,7 @@ public final class SoulFireBlazeArmor extends VentureArmorSet implements Ability
                 if (!spellCastEvent.isCancelled())
                 {
                     stats.setAvailableMana(availableMana - eventCost);
+                    player.sendMessage(Messages.abilityUse(abilityName));
 
                     for (LivingEntity livingEntity : player.getLocation().getNearbyLivingEntities(auraRadius))
                     {
@@ -99,6 +112,8 @@ public final class SoulFireBlazeArmor extends VentureArmorSet implements Ability
                     }
                 }
             }
+
+
         }
     }
 

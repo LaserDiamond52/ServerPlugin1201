@@ -49,7 +49,7 @@ public class DamageStats {
         return pMeleeDmg;
     }
 
-    public void setpMeleeDmg(double pMeleeDmg) {
+    public void setPercentMeleeDmg(double pMeleeDmg) {
         this.pMeleeDmg = pMeleeDmg;
     }
 
@@ -57,7 +57,7 @@ public class DamageStats {
         return pMagicDmg;
     }
 
-    public void setpMagicDmg(double pMagicDmg) {
+    public void setPercentMagicDmg(double pMagicDmg) {
         this.pMagicDmg = pMagicDmg;
     }
 
@@ -65,7 +65,7 @@ public class DamageStats {
         return pRangeDmg;
     }
 
-    public void setpRangeDmg(double pRangeDmg) {
+    public void setPercentRangeDmg(double pRangeDmg) {
         this.pRangeDmg = pRangeDmg;
     }
 

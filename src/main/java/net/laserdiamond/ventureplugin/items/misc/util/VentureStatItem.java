@@ -2,8 +2,7 @@ package net.laserdiamond.ventureplugin.items.misc.util;
 
 import net.laserdiamond.ventureplugin.items.util.ItemForger;
 import net.laserdiamond.ventureplugin.items.util.VentureItemRarity;
-import net.laserdiamond.ventureplugin.util.File.GetVarFile;
-import net.laserdiamond.ventureplugin.util.VentureItemStatKeys;
+import net.laserdiamond.ventureplugin.items.util.VentureItemStatKeys;
 import net.laserdiamond.ventureplugin.util.Stars;
 
 import java.util.ArrayList;

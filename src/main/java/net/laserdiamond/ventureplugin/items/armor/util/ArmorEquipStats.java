@@ -4,7 +4,7 @@ import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import net.laserdiamond.ventureplugin.VenturePlugin;
 import net.laserdiamond.ventureplugin.items.util.ItemForger;
 import net.laserdiamond.ventureplugin.stats.Components.*;
-import net.laserdiamond.ventureplugin.util.VentureItemStatKeys;
+import net.laserdiamond.ventureplugin.items.util.VentureItemStatKeys;
 import net.laserdiamond.ventureplugin.stats.Manager.StatProfileManager;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -167,15 +167,15 @@ public class ArmorEquipStats implements Listener {
             armorStats.setMana(armorStats.getMana() + mana);
         }
         if (meleeDamage != null) {
-            damageStats.setpMeleeDmg(currentMeleeDamage + meleeDamage);
+            damageStats.setPercentMeleeDmg(currentMeleeDamage + meleeDamage);
             armorStats.setPercentMeleeDamage(armorStats.getPercentMeleeDamage() + meleeDamage);
         }
         if (magicDamage != null) {
-            damageStats.setpMagicDmg(currentMagicDamage + magicDamage);
+            damageStats.setPercentMagicDmg(currentMagicDamage + magicDamage);
             armorStats.setPercentMagicDamage(armorStats.getPercentMagicDamage() + magicDamage);
         }
         if (rangeDamage != null) {
-            damageStats.setpRangeDmg(currentRangeDamage + rangeDamage);
+            damageStats.setPercentRangeDmg(currentRangeDamage + rangeDamage);
             armorStats.setPercentRangeDamage(armorStats.getPercentRangeDamage() + rangeDamage);
         }
 
@@ -198,7 +198,7 @@ public class ArmorEquipStats implements Listener {
         double currentMana = stats.getMaxMana();
         double currentMeleeDamage = damageStats.getPercentMelee();
         double currentMagicDamage = damageStats.getPercentMagic();
-        double currentRangeDamage = damageStats.getBaseRange();
+        double currentRangeDamage = damageStats.getPercentRange();
 
         if (health != null) {
             stats.setHealth(currentHealth - health);
@@ -241,15 +241,15 @@ public class ArmorEquipStats implements Listener {
             armorStats.setMana(armorStats.getMana() - mana);
         }
         if (meleeDamage != null) {
-            damageStats.setpMeleeDmg(currentMeleeDamage - meleeDamage);
+            damageStats.setPercentMeleeDmg(currentMeleeDamage - meleeDamage);
             armorStats.setPercentMeleeDamage(armorStats.getPercentMeleeDamage() - meleeDamage);
         }
         if (magicDamage != null) {
-            damageStats.setpMagicDmg(currentMagicDamage - magicDamage);
+            damageStats.setPercentMagicDmg(currentMagicDamage - magicDamage);
             armorStats.setPercentMagicDamage(armorStats.getPercentMagicDamage() - magicDamage);
         }
         if (rangeDamage != null) {
-            damageStats.setpRangeDmg(currentRangeDamage - rangeDamage);
+            damageStats.setPercentRangeDmg(currentRangeDamage - rangeDamage);
             armorStats.setPercentRangeDamage(armorStats.getPercentRangeDamage() - rangeDamage);
         }
     }

@@ -8,6 +8,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
+// TODO: Move this over to misc menu items
+@Deprecated
 public class CancelInventoryMovementMenus implements Listener {
 
     @EventHandler

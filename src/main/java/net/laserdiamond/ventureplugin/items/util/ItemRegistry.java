@@ -1,4 +1,4 @@
-package net.laserdiamond.ventureplugin.util;
+package net.laserdiamond.ventureplugin.items.util;
 
 import com.google.common.collect.Multimap;
 import net.laserdiamond.ventureplugin.VenturePlugin;
@@ -6,14 +6,10 @@ import net.laserdiamond.ventureplugin.commands.ViewProfiles.ViewStats;
 import net.laserdiamond.ventureplugin.enchants.Components.VentureEnchants;
 import net.laserdiamond.ventureplugin.items.armor.armor_sets.SoulFireBlazeArmor;
 import net.laserdiamond.ventureplugin.items.armor.trims.Components.TrimLore;
-import net.laserdiamond.ventureplugin.items.menuItems.misc.MiscMenuItems;
 import net.laserdiamond.ventureplugin.items.menuItems.stats.StatMenuItems;
-import net.laserdiamond.ventureplugin.items.util.ItemForger;
-import net.laserdiamond.ventureplugin.items.util.VentureItemRarity;
 import net.laserdiamond.ventureplugin.items.armor.util.ArmorCMD;
 import net.laserdiamond.ventureplugin.items.armor.util.ArmorPieceTypes;
 import net.laserdiamond.ventureplugin.items.armor.util.VentureArmorSet;
-import net.laserdiamond.ventureplugin.items.menuItems.util.VentureMenuItem;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
@@ -58,21 +54,6 @@ public class ItemRegistry implements Listener {
         // Weapons
 
         // Menu Items
-        defaultPlayerLore.put(StatMenuItems.HEALTH_STAT_ITEM.menuItem().getCustomModelData(), StatMenuItems.HEALTH_STAT_ITEM.createLore(player));
-        defaultPlayerLore.put(StatMenuItems.DEFENSE_STAT_ITEM.menuItem().getCustomModelData(), StatMenuItems.DEFENSE_STAT_ITEM.createLore(player));
-        defaultPlayerLore.put(StatMenuItems.TOUGHNESS_STAT_ITEM.menuItem().getCustomModelData(), StatMenuItems.TOUGHNESS_STAT_ITEM.createLore(player));
-        defaultPlayerLore.put(StatMenuItems.MANA_STAT_ITEM.menuItem().getCustomModelData(), StatMenuItems.MANA_STAT_ITEM.createLore(player));
-        defaultPlayerLore.put(StatMenuItems.DAMAGE_STAT_ITEM.menuItem().getCustomModelData(), StatMenuItems.DAMAGE_STAT_ITEM.createLore(player));
-        defaultPlayerLore.put(StatMenuItems.SPEED_STAT_ITEM.menuItem().getCustomModelData(), StatMenuItems.SPEED_STAT_ITEM.createLore(player));
-        defaultPlayerLore.put(StatMenuItems.FORTITUDE_STAT_ITEM.menuItem().getCustomModelData(), StatMenuItems.FORTITUDE_STAT_ITEM.createLore(player));
-        defaultPlayerLore.put(StatMenuItems.DEFENSE_STAT_ITEM_MORE.menuItem().getCustomModelData(), StatMenuItems.DEFENSE_STAT_ITEM_MORE.createLore(player));
-        defaultPlayerLore.put(StatMenuItems.FIRE_DEFENSE_STAT_ITEM_MORE.menuItem().getCustomModelData(), StatMenuItems.FIRE_DEFENSE_STAT_ITEM_MORE.createLore(player));
-        defaultPlayerLore.put(StatMenuItems.EXPLOSION_DEFENSE_STAT_ITEM_MORE.menuItem().getCustomModelData(), StatMenuItems.EXPLOSION_DEFENSE_STAT_ITEM_MORE.createLore(player));
-        defaultPlayerLore.put(StatMenuItems.PROJECTILE_DEFENSE_STAT_ITEM_MORE.menuItem().getCustomModelData(), StatMenuItems.PROJECTILE_DEFENSE_STAT_ITEM_MORE.createLore(player));
-        defaultPlayerLore.put(StatMenuItems.MAGIC_DEFENSE_STAT_ITEM_MORE.menuItem().getCustomModelData(), StatMenuItems.MAGIC_DEFENSE_STAT_ITEM_MORE.createLore(player));
-        defaultPlayerLore.put(StatMenuItems.MELEE_DAMAGE_STAT_ITEM.menuItem().getCustomModelData(), StatMenuItems.MELEE_DAMAGE_STAT_ITEM.createLore(player));
-        defaultPlayerLore.put(StatMenuItems.MAGIC_DAMAGE_STAT_ITEM.menuItem().getCustomModelData(), StatMenuItems.MAGIC_DAMAGE_STAT_ITEM.createLore(player));
-        defaultPlayerLore.put(StatMenuItems.RANGE_DAMAGE_STAT_ITEM.menuItem().getCustomModelData(), StatMenuItems.RANGE_DAMAGE_STAT_ITEM.createLore(player));
 
         return defaultPlayerLore;
     }
@@ -80,6 +61,22 @@ public class ItemRegistry implements Listener {
     public static HashMap<Integer, List<String>> playerMenuItemMap(Player player)
     {
         HashMap<Integer, List<String>> map = new HashMap<>();
+
+        map.put(StatMenuItems.HEALTH_STAT_ITEM.menuItem().getCustomModelData(), StatMenuItems.HEALTH_STAT_ITEM.createLore(player));
+        map.put(StatMenuItems.DEFENSE_STAT_ITEM.menuItem().getCustomModelData(), StatMenuItems.DEFENSE_STAT_ITEM.createLore(player));
+        map.put(StatMenuItems.TOUGHNESS_STAT_ITEM.menuItem().getCustomModelData(), StatMenuItems.TOUGHNESS_STAT_ITEM.createLore(player));
+        map.put(StatMenuItems.MANA_STAT_ITEM.menuItem().getCustomModelData(), StatMenuItems.MANA_STAT_ITEM.createLore(player));
+        map.put(StatMenuItems.DAMAGE_STAT_ITEM.menuItem().getCustomModelData(), StatMenuItems.DAMAGE_STAT_ITEM.createLore(player));
+        map.put(StatMenuItems.SPEED_STAT_ITEM.menuItem().getCustomModelData(), StatMenuItems.SPEED_STAT_ITEM.createLore(player));
+        map.put(StatMenuItems.FORTITUDE_STAT_ITEM.menuItem().getCustomModelData(), StatMenuItems.FORTITUDE_STAT_ITEM.createLore(player));
+        map.put(StatMenuItems.DEFENSE_STAT_ITEM_MORE.menuItem().getCustomModelData(), StatMenuItems.DEFENSE_STAT_ITEM_MORE.createLore(player));
+        map.put(StatMenuItems.FIRE_DEFENSE_STAT_ITEM_MORE.menuItem().getCustomModelData(), StatMenuItems.FIRE_DEFENSE_STAT_ITEM_MORE.createLore(player));
+        map.put(StatMenuItems.EXPLOSION_DEFENSE_STAT_ITEM_MORE.menuItem().getCustomModelData(), StatMenuItems.EXPLOSION_DEFENSE_STAT_ITEM_MORE.createLore(player));
+        map.put(StatMenuItems.PROJECTILE_DEFENSE_STAT_ITEM_MORE.menuItem().getCustomModelData(), StatMenuItems.PROJECTILE_DEFENSE_STAT_ITEM_MORE.createLore(player));
+        map.put(StatMenuItems.MAGIC_DEFENSE_STAT_ITEM_MORE.menuItem().getCustomModelData(), StatMenuItems.MAGIC_DEFENSE_STAT_ITEM_MORE.createLore(player));
+        map.put(StatMenuItems.MELEE_DAMAGE_STAT_ITEM.menuItem().getCustomModelData(), StatMenuItems.MELEE_DAMAGE_STAT_ITEM.createLore(player));
+        map.put(StatMenuItems.MAGIC_DAMAGE_STAT_ITEM.menuItem().getCustomModelData(), StatMenuItems.MAGIC_DAMAGE_STAT_ITEM.createLore(player));
+        map.put(StatMenuItems.RANGE_DAMAGE_STAT_ITEM.menuItem().getCustomModelData(), StatMenuItems.RANGE_DAMAGE_STAT_ITEM.createLore(player));
 
         return map;
     }
@@ -96,6 +93,38 @@ public class ItemRegistry implements Listener {
         }
     }
 
+
+    @EventHandler
+    public void refreshSwitchMainHand(PlayerItemHeldEvent event)
+    {
+        Player player = event.getPlayer();
+
+        for (ItemStack itemStack : player.getInventory().getContents())
+        {
+            renewItemNew(itemStack, player);
+        }
+    }
+
+    private static final List<String> PLAYER_INV_TITLES = new ArrayList<>();
+    static
+    {
+        PLAYER_INV_TITLES.add(ViewStats.STAT_INV_TITLE);
+        PLAYER_INV_TITLES.add(ViewStats.DEFENSE_STAT_INV_TITLE);
+        PLAYER_INV_TITLES.add(ViewStats.DAMAGE_STAT_INV_TITLE);
+    }
+
+    private static boolean isAnyPlayerInvTitle(String invTitle)
+    {
+        for (String playerInvTitle : PLAYER_INV_TITLES)
+        {
+            if (invTitle.contains(playerInvTitle))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @EventHandler
     public void refreshOnClick(InventoryClickEvent event)
     {
@@ -109,13 +138,11 @@ public class ItemRegistry implements Listener {
             {
                 if (eventInv.equals(player.getInventory()))
                 {
-                    // TODO: Update item to have player-defined lore
                     renewItemNew(event.getCursor(), player);
 
                 } else
                 {
-                    // TODO: Update item
-                    if (event.getView().getTitle().contains(ViewStats.statInvTitle(player)))
+                    if (isAnyPlayerInvTitle(event.getView().getTitle()))
                     {
                         renewItemNew(event.getCursor(), player);
                     } else {
@@ -124,7 +151,7 @@ public class ItemRegistry implements Listener {
                 }
                 for (ItemStack itemStack : player.getInventory().getContents())
                 {
-                    if (event.getView().getTitle().contains(ViewStats.statInvTitle(player)))
+                    if (event.getView().getTitle().contains(ViewStats.STAT_INV_TITLE))
                     {
                         renewItemNew(itemStack, player);
                     } else {
@@ -133,17 +160,6 @@ public class ItemRegistry implements Listener {
 
                 }
             }
-        }
-    }
-
-    @EventHandler
-    public void switchMainHand(PlayerItemHeldEvent event)
-    {
-        Player player = event.getPlayer();
-
-        for (ItemStack itemStack : player.getInventory().getContents())
-        {
-            renewItemNew(itemStack, player);
         }
     }
 
@@ -157,19 +173,18 @@ public class ItemRegistry implements Listener {
         {
             for (ItemStack itemStack : inventory.getContents())
             {
-                // TODO: Update item
-                if (event.getView().getTitle().contains(ViewStats.statInvTitle(player)))
+                String title = event.getView().getTitle();
+                if (isAnyPlayerInvTitle(title))
                 {
                     renewItemNew(itemStack, player);
-                    player.sendMessage("player gui");
+                    //player.sendMessage("player gui");
                 } else {
                     renewItemNew(itemStack);
-                    player.sendMessage("not player gui");
+                    //player.sendMessage("not player gui");
                 }
             }
             for (ItemStack itemStack : player.getInventory().getContents())
             {
-                // TODO: Update item to have player-defined lore
                 renewItemNew(itemStack, player);
             }
         }
@@ -185,9 +200,7 @@ public class ItemRegistry implements Listener {
         {
             for (ItemStack itemStack : inventory.getContents())
             {
-                // TODO: Update item
-                //renewItem(itemStack);
-                if (event.getView().getTitle().contains(ViewStats.statInvTitle(player)))
+                if (isAnyPlayerInvTitle(event.getView().getTitle()))
                 {
                     renewItemNew(itemStack, player);
                 } else {
@@ -198,7 +211,6 @@ public class ItemRegistry implements Listener {
 
             for (ItemStack itemStack : player.getInventory().getContents())
             {
-                // TODO: Update item to have player-defined lore
                 renewItemNew(itemStack, player);
             }
         }
@@ -313,7 +325,6 @@ public class ItemRegistry implements Listener {
         return itemStack;
     }
 
-    // FIXME: Finish renewItem for players
     public static ItemStack renewItemNew(ItemStack itemStack, Player player)
     {
         List<String> newLore = new ArrayList<>();
@@ -352,7 +363,7 @@ public class ItemRegistry implements Listener {
                             Multimap<Attribute, AttributeModifier> attributes = itemForgerMapItem.getAttributes();
 
 
-                            if (lore != null) // TODO: Test
+                            if (lore != null)
                             {
                                 if (!playerLoreMap.containsKey(itemMeta.getCustomModelData()))
                                 {
@@ -364,7 +375,7 @@ public class ItemRegistry implements Listener {
                                     }
                                 }
                             }
-                            if (playerLore != null) // TODO: Test
+                            if (playerLore != null)
                             {
                                 if (playerLoreMap.containsKey(itemMeta.getCustomModelData()))
                                 {
@@ -393,6 +404,14 @@ public class ItemRegistry implements Listener {
                             {
                                 itemMeta.setAttributeModifiers(attributes);
                             }
+                        }
+                        HashMap<Integer, List<String>> menuItemLoreMap = playerMenuItemMap(player);
+                        if (menuItemLoreMap.containsKey(itemMeta.getCustomModelData()))
+                        {
+                            List<String> lore = menuItemLoreMap.get(itemMeta.getCustomModelData());
+                            itemMeta.setLore(lore);
+                            itemStack.setItemMeta(itemMeta);
+                            return itemStack;
                         }
 
 

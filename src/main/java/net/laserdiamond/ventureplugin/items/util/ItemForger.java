@@ -3,12 +3,9 @@ package net.laserdiamond.ventureplugin.items.util;
 import com.google.common.collect.Multimap;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
-import net.laserdiamond.ventureplugin.util.UniqueVentureItemDataKey;
-import net.laserdiamond.ventureplugin.util.VentureItemStatKeys;
 import net.laserdiamond.ventureplugin.items.attributes.AttributeLoreNameMap;
 import org.apache.commons.codec.binary.Base64;
 import net.laserdiamond.ventureplugin.VenturePlugin;
-import net.laserdiamond.ventureplugin.util.ItemPropertiesKeys;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -1071,6 +1068,7 @@ public class ItemForger {
                 displayStringBuilder.append("%");
 
             }
+            displayStringBuilder.append(ventureItemStatKeys.getStatSymbol().getSymbol());
             if (statValue != 0)
             {
                 statLore.add(displayStringBuilder.toString());

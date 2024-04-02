@@ -6,7 +6,7 @@ import net.laserdiamond.ventureplugin.items.util.ItemForger;
 import net.laserdiamond.ventureplugin.items.util.ItemNameBuilder;
 import net.laserdiamond.ventureplugin.items.misc.util.VentureStatItem;
 import net.laserdiamond.ventureplugin.util.File.ArmorConfig;
-import net.laserdiamond.ventureplugin.util.VentureItemStatKeys;
+import net.laserdiamond.ventureplugin.items.util.VentureItemStatKeys;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
@@ -203,7 +203,6 @@ public abstract class VentureArmorSet extends VentureStatItem {
         String armorName = armorPieceString.substring(0,1).toUpperCase() + armorPieceString.substring(1);
         ItemForger itemForger = new ItemForger(armorPieceMaterials(armorPieceTypes))
                 .setName(ItemNameBuilder.name(armorSetName() + " " + armorName, stars))
-                //.setStars(stars)
                 .setLore(createLore(armorPieceTypes, stars))
                 .setRarity(rarity())
                 .setUnbreakable(isUnbreakable())

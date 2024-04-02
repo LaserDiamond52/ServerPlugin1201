@@ -2,7 +2,6 @@ package net.laserdiamond.ventureplugin.items.menuItems.stats;
 
 import net.laserdiamond.ventureplugin.VenturePlugin;
 import net.laserdiamond.ventureplugin.entities.player.StatPlayer;
-import net.laserdiamond.ventureplugin.items.menuItems.stats.main.*;
 import net.laserdiamond.ventureplugin.items.menuItems.util.MenuItem;
 import net.laserdiamond.ventureplugin.items.menuItems.util.VentureMenuItem;
 import net.laserdiamond.ventureplugin.stats.Components.DefenseStats;
@@ -16,86 +15,14 @@ import java.util.List;
 
 public class StatMenuItems {
 
-    private VentureMenuItem
-            healthStatItem,
-            defenseStatItem,
-            toughnessStatItem,
-            manaStatItem,
-            damageStatItem,
-            speedStatItem,
-            fortitudeStatItem;
-
-
-    public StatMenuItems(VenturePlugin plugin)
-    {
-        healthStatItem = new HealthStatItem(plugin);
-        defenseStatItem = new DefenseStatItem(plugin);
-        toughnessStatItem = new ToughnessStatItem(plugin);
-        manaStatItem = new ManaStatItem(plugin);
-        damageStatItem = new DamageStatItem(plugin);
-        speedStatItem = new SpeedStatItem(plugin);
-        fortitudeStatItem = new FortitudeStatItem(plugin);
-    }
-
-    public static void registerMenuItems(Player player)
-    {
-        HEALTH_STAT_ITEM.register(player);
-        DEFENSE_STAT_ITEM.register(player);
-        TOUGHNESS_STAT_ITEM.register(player);
-        MANA_STAT_ITEM.register(player);
-        DAMAGE_STAT_ITEM.register(player);
-        SPEED_STAT_ITEM.register(player);
-        FORTITUDE_STAT_ITEM.register(player);
-
-        DEFENSE_STAT_ITEM_MORE.register(player);
-        FIRE_DEFENSE_STAT_ITEM_MORE.register(player);
-        EXPLOSION_DEFENSE_STAT_ITEM_MORE.register(player);
-        PROJECTILE_DEFENSE_STAT_ITEM_MORE.register(player);
-        MAGIC_DEFENSE_STAT_ITEM_MORE.register(player);
-
-        MELEE_DAMAGE_STAT_ITEM.register(player);
-        MAGIC_DAMAGE_STAT_ITEM.register(player);
-        RANGE_DAMAGE_STAT_ITEM.register(player);
-    }
-
-    public VentureMenuItem getHealthStatItem() {
-        return healthStatItem;
-    }
-
-    public VentureMenuItem getDefenseStatItem() {
-        return defenseStatItem;
-    }
-
-    public VentureMenuItem getToughnessStatItem() {
-        return toughnessStatItem;
-    }
-
-    public VentureMenuItem getManaStatItem() {
-        return manaStatItem;
-    }
-
-    public VentureMenuItem getDamageStatItem() {
-        return damageStatItem;
-    }
-
-    public VentureMenuItem getSpeedStatItem() {
-        return speedStatItem;
-    }
-
-    public VentureMenuItem getFortitudeStatItem() {
-        return fortitudeStatItem;
-    }
-
-
     private static final VenturePlugin PLUGIN = VenturePlugin.getInstance();
     private static final double DEFENSE_FACTOR = PLUGIN.getBaseStatsConfig().getInt("a");
 
     public static double damageReduction(double defense)
     {
-        return defense / (defense + DEFENSE_FACTOR);
+        return 100 * (defense / (defense + DEFENSE_FACTOR));
     }
 
-    @Deprecated
     public static VentureMenuItem HEALTH_STAT_ITEM = new VentureMenuItem(PLUGIN)
     {
         @Override
@@ -117,7 +44,8 @@ public class StatMenuItems {
             List<String> lore = new ArrayList<>();
 
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Health determines how much damage you can take before you die");
+            lore.add(ChatColor.GRAY + "Health determines how much damage");
+            lore.add(ChatColor.GRAY + "you can take before you die");
             lore.add(" ");
             lore.add(ChatColor.GRAY + "Base Health: " + ChatColor.RED + baseHealth + StatSymbols.HEALTH.getSymbol());
             lore.add(" ");
@@ -134,7 +62,6 @@ public class StatMenuItems {
         }
     };
 
-    @Deprecated
     public static VentureMenuItem DEFENSE_STAT_ITEM = new VentureMenuItem(PLUGIN)
     {
         @Override
@@ -186,7 +113,6 @@ public class StatMenuItems {
         }
     };
 
-    @Deprecated
     public static VentureMenuItem TOUGHNESS_STAT_ITEM = new VentureMenuItem(PLUGIN) {
         @Override
         public MenuItem menuItem() {
@@ -207,6 +133,9 @@ public class StatMenuItems {
             lore.add(ChatColor.GRAY + "true damage attacks. Toughness does not");
             lore.add(ChatColor.GRAY + "affect damage from normal attacks");
             lore.add(" ");
+            lore.add(ChatColor.GRAY + "Toughness is calculated at the same rate as defense:");
+            lore.add(ChatColor.GOLD + "x / (x + " + DEFENSE_FACTOR + ")");
+            lore.add(" ");
             lore.add(ChatColor.GRAY + "Base toughness: " + ChatColor.GREEN + baseToughness + StatSymbols.TOUGHNESS.getSymbol());
             lore.add(" ");
             lore.add(ChatColor.GRAY + "Toughness from armor: " + ChatColor.GREEN + armorToughness + StatSymbols.TOUGHNESS.getSymbol());
@@ -219,7 +148,6 @@ public class StatMenuItems {
         }
     };
 
-    @Deprecated
     public static VentureMenuItem MANA_STAT_ITEM = new VentureMenuItem(PLUGIN) {
         @Override
         public MenuItem menuItem() {
@@ -243,7 +171,7 @@ public class StatMenuItems {
 
             lore.add(" ");
             lore.add(ChatColor.GRAY + "Mana is used to cast abilities and regenerates");
-            lore.add(ChatColor.GRAY + "at a base rate of 2% per second");
+            lore.add(ChatColor.GRAY + "at a base rate of " + ChatColor.YELLOW + "2" + ChatColor.GRAY + "% per second");
             lore.add(" ");
             lore.add(ChatColor.GRAY + "Mana regeneration rate: " + ChatColor.BLUE + manaRegen + StatSymbols.MANA.getSymbol() + ChatColor.GRAY + " per second");
             lore.add(" ");
@@ -266,7 +194,6 @@ public class StatMenuItems {
         }
     };
 
-    @Deprecated
     public static VentureMenuItem DAMAGE_STAT_ITEM = new VentureMenuItem(PLUGIN) {
         @Override
         public MenuItem menuItem() {
@@ -281,9 +208,9 @@ public class StatMenuItems {
             lore.add(" ");
             lore.add(ChatColor.GRAY + "Every attack you inflict has its damage modified");
             lore.add(ChatColor.GRAY + "by one of the following damage types:");
-            lore.add(ChatColor.GRAY + "-" + ChatColor.RED + " Melee");
-            lore.add(ChatColor.GRAY + "-" + ChatColor.AQUA + " Magic");
-            lore.add(ChatColor.GRAY + "-" + ChatColor.DARK_PURPLE + " Range");
+            lore.add(ChatColor.GRAY + "-" + ChatColor.RED + " Melee" + StatSymbols.MELEE_DAMAGE.getSymbol());
+            lore.add(ChatColor.GRAY + "-" + ChatColor.AQUA + " Magic" + StatSymbols.MAGIC_DAMAGE.getSymbol());
+            lore.add(ChatColor.GRAY + "-" + ChatColor.DARK_PURPLE + " Range" + StatSymbols.RANGE_DAMAGE.getSymbol());
             lore.add(" ");
             lore.add(ChatColor.YELLOW + "" + ChatColor.ITALIC + "Click for more info");
             lore.add(" ");
@@ -297,7 +224,6 @@ public class StatMenuItems {
         }
     };
 
-    // TODO: Move to own class
     public static VentureMenuItem DEFENSE_STAT_ITEM_MORE = new VentureMenuItem(PLUGIN)
     {
         @Override
@@ -337,7 +263,6 @@ public class StatMenuItems {
         }
     };
 
-    // TODO: Move to own class
     public static VentureMenuItem FIRE_DEFENSE_STAT_ITEM_MORE = new VentureMenuItem(PLUGIN)
     {
         @Override
@@ -375,7 +300,6 @@ public class StatMenuItems {
         }
     };
 
-    // TODO: Move to own class
     public static VentureMenuItem EXPLOSION_DEFENSE_STAT_ITEM_MORE = new VentureMenuItem(PLUGIN)
     {
         @Override
@@ -411,7 +335,6 @@ public class StatMenuItems {
         }
     };
 
-    // TODO: Move to own class
     public static VentureMenuItem PROJECTILE_DEFENSE_STAT_ITEM_MORE = new VentureMenuItem(PLUGIN)
     {
         @Override
@@ -447,7 +370,6 @@ public class StatMenuItems {
         }
     };
 
-    // TODO: Move to own class
     public static VentureMenuItem MAGIC_DEFENSE_STAT_ITEM_MORE = new VentureMenuItem(PLUGIN)
     {
         @Override
@@ -483,8 +405,6 @@ public class StatMenuItems {
         }
     };
 
-
-    // TODO: Move to own class
     public static VentureMenuItem MELEE_DAMAGE_STAT_ITEM = new VentureMenuItem(PLUGIN)
     {
         @Override
@@ -527,7 +447,6 @@ public class StatMenuItems {
         }
     };
 
-    // TODO: Move to own class
     public static VentureMenuItem MAGIC_DAMAGE_STAT_ITEM = new VentureMenuItem(PLUGIN)
     {
         @Override
@@ -570,7 +489,6 @@ public class StatMenuItems {
         }
     };
 
-    // TODO: Move to own class
     public static VentureMenuItem RANGE_DAMAGE_STAT_ITEM = new VentureMenuItem(PLUGIN)
     {
         @Override
@@ -613,8 +531,6 @@ public class StatMenuItems {
         }
     };
 
-
-    @Deprecated
     public static VentureMenuItem SPEED_STAT_ITEM = new VentureMenuItem(PLUGIN)
     {
         @Override
@@ -640,14 +556,15 @@ public class StatMenuItems {
             lore.add(" ");
             lore.add(ChatColor.GRAY + "Speed determines how fast you can walk/run");
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "The speed attribute value is a universal constant amongst all");
-            lore.add(ChatColor.GRAY + "players, and thus cannot be changed. This determines how much");
-            lore.add(ChatColor.GRAY + "each speed point is worth");
+            lore.add(ChatColor.GRAY + "The speed attribute value is a " + ChatColor.LIGHT_PURPLE + "universal constant");
+            lore.add(ChatColor.GRAY + "amongst all players, and thus cannot be changed.");
+            lore.add(ChatColor.GRAY + "This determines how much each speed point is worth");
             lore.add(" ");
             lore.add(ChatColor.GRAY + "Speed attribute value: " + ChatColor.WHITE + baseSpeedAttribute + StatSymbols.SPEED.getSymbol());
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Speed points are used as a more readable way to measure your movement");
-            lore.add(ChatColor.GRAY + "speed. Each speed point represents 1% of the speed attribute value");
+            lore.add(ChatColor.WHITE + "Speed points " + StatSymbols.SPEED.getSymbol() + ChatColor.GRAY + " are used as a more readable way ");
+            lore.add(ChatColor.GRAY + "to measure your movement speed. Each speed point");
+            lore.add(ChatColor.GRAY + "represents " + ChatColor.YELLOW + "1" + ChatColor.GRAY + "% of the speed attribute value");
             lore.add(" ");
             lore.add(ChatColor.GRAY + "Base speed points: " + ChatColor.WHITE + baseSpeedPoints + StatSymbols.SPEED.getSymbol());
             lore.add(" ");
@@ -664,7 +581,6 @@ public class StatMenuItems {
         }
     };
 
-    @Deprecated
     public static VentureMenuItem FORTITUDE_STAT_ITEM = new VentureMenuItem(PLUGIN)
     {
         @Override

@@ -3,7 +3,7 @@ package net.laserdiamond.ventureplugin.items.crafting.SmithingTable;
 import net.laserdiamond.ventureplugin.VenturePlugin;
 import net.laserdiamond.ventureplugin.items.crafting.Recipes.SmithingTableRecipes;
 import net.laserdiamond.ventureplugin.items.util.ItemForger;
-import net.laserdiamond.ventureplugin.util.ItemRegistry;
+import net.laserdiamond.ventureplugin.items.util.ItemRegistry;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

@@ -2,7 +2,7 @@ package net.laserdiamond.ventureplugin.commands.Items;
 
 import net.laserdiamond.ventureplugin.VenturePlugin;
 import net.laserdiamond.ventureplugin.items.util.ItemForger;
-import net.laserdiamond.ventureplugin.util.ItemRegistry;
+import net.laserdiamond.ventureplugin.items.util.ItemRegistry;
 import net.laserdiamond.ventureplugin.util.Permissions;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -59,8 +59,6 @@ public class GiveItemsCommand implements CommandExecutor, TabExecutor {
         if (itemRegistryMap.containsKey(input))
         {
             ItemForger itemToGive = itemRegistryMap.get(input);
-            int stars = itemToGive.getStarsNew();
-            sender.sendMessage("stars on item: " + stars);
             ItemStack itemStackToGive = ItemRegistry.renewItemNew(itemToGive.toItemStack(), target);
             target.getInventory().addItem(itemStackToGive);
             sender.sendMessage(ChatColor.GREEN + "Gave " + itemToGive.getName() + ChatColor.GREEN + " to " + ChatColor.GOLD + target.getName());

@@ -2,17 +2,16 @@ package net.laserdiamond.ventureplugin.items.menuItems.util;
 
 import net.laserdiamond.ventureplugin.VenturePlugin;
 import net.laserdiamond.ventureplugin.items.util.ItemForger;
-import net.laserdiamond.ventureplugin.util.ItemRegistry;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
  * An abstract class representing all menu items. All lore on menu items is uniquely determined for each player
  * <p>
  * If lore is not set for the item, the lore will be blank
+ * <p>
+ * All menu items must be manually registered in the ItemRegistry class under playerMenuItemMap, otherwise lore will not appear
  */
 public abstract class VentureMenuItem {
 
@@ -60,23 +59,5 @@ public abstract class VentureMenuItem {
                 .setCustomModelData(menuItem().getCustomModelData())
                 .hideAllItemFlags()
                 .setLore(createLore(player));
-    }
-
-    /**
-     * Registers the item to the plugin, allowing item properties to be properly updated
-     */
-    public void register(Player player)
-    {
-        //HashMap<String, ItemForger> unobtainableItemRegistryMap = plugin.getUnobtainableItemRegistryMap();
-
-        //String keyName = menuItem().getDisplayName().replace(" ", "_").toLowerCase();
-        //unobtainableItemRegistryMap.put(keyName, createItem());
-        //plugin.getVentureMenuItems().add(this);
-
-        //HashMap<Integer, List<String>> playerMenuItemMap = ItemRegistry.playerMenuItemMap(player);
-        //playerMenuItemMap.put(menuItem().getCustomModelData(), createLore(player));
-
-        HashMap<Integer, List<String>> playerLore = ItemRegistry.defaultPlayerLore(player, 0);
-        playerLore.put(menuItem().getCustomModelData(), createLore(player));
     }
 }

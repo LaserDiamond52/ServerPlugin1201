@@ -17,9 +17,13 @@ import net.laserdiamond.ventureplugin.stats.Components.Stats;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
@@ -183,44 +187,45 @@ public final class StormLordArmor extends VentureArmorSet implements AbilityCast
 
         ItemStack droppedItem = event.getItemDrop().getItemStack();
         ItemMeta droppedMeta = droppedItem.getItemMeta();
-        // TODO: Rewrite to be cleaner
-        if (isWearingFullSet(player) && droppedMeta != null && droppedMeta.hasEnchant(VentureEnchants.THUNDER_STRIKE))
+
+        if (!isWearingFullSet(player) && droppedMeta == null)
+        {
+            return;
+        }
+        if (droppedMeta.hasEnchant(VentureEnchants.THUNDER_STRIKE))
         {
             event.setCancelled(true);
-            if (EyeOfStormCooldown.checkCooldown(player))
-            {
-                Bukkit.getPluginManager().callEvent(spellCastEvent);
-                if (availableMana > eventCost)
-                {
-                    if (!spellCastEvent.isCancelled())
-                    {
-                        stats.setAvailableMana(availableMana - eventCost);
-
-                        int enchantLvl = droppedMeta.getEnchantLevel(VentureEnchants.THUNDER_STRIKE);
-                        double finalDamage = baseDamage + Math.pow(enchantLvl, 2);
-
-                        for (LivingEntity livingEntity : player.getLocation().getNearbyLivingEntities(blastRadius))
-                        {
-                            livingEntity.getWorld().strikeLightningEffect(livingEntity.getLocation());
-                            if (livingEntity != player)
-                            {
-                                PlayerMagicDamageEvent magicDamageEvent = new PlayerMagicDamageEvent(player, livingEntity, finalDamage, true);
-                                Bukkit.getPluginManager().callEvent(magicDamageEvent);
-                            }
-                        }
-
-                        EyeOfStormCooldown.setCooldown(player, cooldown);
-                        player.sendMessage(Messages.abilityUse(abilityName));
-                    }
-                } else
-                {
-                    player.sendMessage(Messages.notEnoughMana());
-                }
-            } else
+            if (!EyeOfStormCooldown.checkCooldown(player))
             {
                 player.sendMessage(Messages.abilityCooldown(abilityName));
+                return;
             }
+            if (!(availableMana >= eventCost))
+            {
+                player.sendMessage(Messages.notEnoughMana());
+                return;
+            }
+            Bukkit.getPluginManager().callEvent(spellCastEvent);
+            if (!spellCastEvent.isCancelled())
+            {
+                stats.setAvailableMana(availableMana - eventCost);
 
+                int enchantLvl = droppedMeta.getEnchantLevel(VentureEnchants.THUNDER_STRIKE);
+                double finalDamage = baseDamage + Math.pow(enchantLvl, 2);
+
+                for (LivingEntity livingEntity : player.getLocation().getNearbyLivingEntities(blastRadius))
+                {
+                    livingEntity.getWorld().strikeLightningEffect(livingEntity.getLocation());
+                    if (livingEntity != player)
+                    {
+                        PlayerMagicDamageEvent magicDamageEvent = new PlayerMagicDamageEvent(player, livingEntity, finalDamage, true);
+                        Bukkit.getPluginManager().callEvent(magicDamageEvent);
+                    }
+                }
+
+                EyeOfStormCooldown.setCooldown(player, cooldown);
+                player.sendMessage(Messages.abilityUse(abilityName));
+            }
         }
     }
 

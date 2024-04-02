@@ -90,6 +90,9 @@ commands:
     description: enchants the player's mainhand with the specified enchantment at the specified level
     usage: /<command> <arg> <arg> <arg>
     permission: venture.enchant
+    aliases:
+      - ventureenchant
+      - ench
 
   stats:
     description: allows players to view their stats in a menu
