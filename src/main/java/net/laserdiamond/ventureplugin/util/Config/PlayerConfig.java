@@ -8,11 +8,14 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import java.io.File;
 import java.io.IOException;
 
-public abstract class PlayerConfig extends ConfigLoader {
+/**
+ * Class that represents a player config file
+ */
+public class PlayerConfig extends ConfigLoader {
 
-    private final VenturePlugin plugin;
-    private final String fileName;
-    private final File file;
+    public final VenturePlugin plugin;
+    public final String fileName;
+    public final File file;
 
     public PlayerConfig(VenturePlugin plugin, String fileName)
     {

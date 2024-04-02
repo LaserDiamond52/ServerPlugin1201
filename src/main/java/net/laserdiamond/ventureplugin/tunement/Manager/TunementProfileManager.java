@@ -1,12 +1,12 @@
 package net.laserdiamond.ventureplugin.tunement.Manager;
 
 import net.laserdiamond.ventureplugin.VenturePlugin;
+import net.laserdiamond.ventureplugin.util.Config.PlayerSaveConfig;
 import net.laserdiamond.ventureplugin.util.Config.ProfileConfigs;
 import net.laserdiamond.ventureplugin.stats.Config.BaseStatsConfig;
 import net.laserdiamond.ventureplugin.tunement.Components.TunementPoints;
 import net.laserdiamond.ventureplugin.tunement.Components.TunementProfile;
 import net.laserdiamond.ventureplugin.tunement.Components.TunementStats;
-import net.laserdiamond.ventureplugin.tunement.Config.TunementConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -25,7 +25,7 @@ public class TunementProfileManager implements ProfileConfigs {
     public TunementProfileManager(VenturePlugin plugin)
     {
         baseStatsConfig = plugin.getBaseStatsConfig();
-        TunementConfig tunementConfig = plugin.getTunementConfig();
+        PlayerSaveConfig tunementConfig = plugin.getTunementConfig();
         config = tunementConfig.getConfig();
     }
     @Override

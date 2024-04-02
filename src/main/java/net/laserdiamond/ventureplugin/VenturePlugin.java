@@ -38,12 +38,12 @@ import net.laserdiamond.ventureplugin.items.util.ItemForger;
 import net.laserdiamond.ventureplugin.entities.healthDisplay.mobHealthDisplay;
 import net.laserdiamond.ventureplugin.items.armor.util.VentureArmorSet;
 import net.laserdiamond.ventureplugin.items.menuItems.util.VentureMenuItem;
+import net.laserdiamond.ventureplugin.util.Config.PlayerSaveConfig;
 import net.laserdiamond.ventureplugin.util.File.ArmorConfig;
 import net.laserdiamond.ventureplugin.items.util.ItemRegistry;
 import net.laserdiamond.ventureplugin.util.RegisterAbilityCaster;
 import net.laserdiamond.ventureplugin.stats.Config.BaseStatsConfig;
 import net.laserdiamond.ventureplugin.stats.Manager.StatProfileManager;
-import net.laserdiamond.ventureplugin.tunement.Config.TunementConfig;
 import net.laserdiamond.ventureplugin.tunement.Manager.TunementProfileManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -60,7 +60,7 @@ public final class VenturePlugin extends JavaPlugin {
 
     private static VenturePlugin plugin;
     private StatProfileManager statProfileManager;
-    private TunementConfig tunementConfig;
+    private PlayerSaveConfig tunementConfig;
     private TunementProfileManager tunementProfileManager;
     private EffectManager effectManager;
     private EffectProfileConfig effectProfileConfig;
@@ -290,7 +290,7 @@ public final class VenturePlugin extends JavaPlugin {
     public BaseStatsConfig getBaseStatsConfig() {
         return baseStatsConfig;
     }
-    public TunementConfig getTunementConfig() {
+    public PlayerSaveConfig getTunementConfig() {
         return tunementConfig;
     }
     public EffectProfileConfig getEffectProfileConfig() {
@@ -311,8 +311,13 @@ public final class VenturePlugin extends JavaPlugin {
         baseStatsConfig = new BaseStatsConfig(this, "baseStats");
         baseStatsConfig.loadConfig();
 
+        tunementConfig = new PlayerSaveConfig(this, "tunement");
+        tunementConfig.loadConfig();
+        /*
         tunementConfig = new TunementConfig(this, "tunement");
         tunementConfig.loadConfig();
+
+         */
 
         effectProfileConfig = new EffectProfileConfig(this, "effectDurations");
         effectProfileConfig.loadConfig();
