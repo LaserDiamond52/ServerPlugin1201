@@ -1,6 +1,7 @@
-package net.laserdiamond.ventureplugin.tunement.Components;
+package net.laserdiamond.ventureplugin.tuning.Components;
 
-public class TunementStats {
+// TODO: May want to not save these to player config, and have values determined by the amount of points a player has
+public class TuningStats {
 
     private double health;
     private double defense;
@@ -10,7 +11,7 @@ public class TunementStats {
     private double magic;
     private double range;
 
-    public TunementStats(double health, double defense, double speed, double mana, double melee, double magic, double range)
+    public TuningStats(double health, double defense, double speed, double mana, double melee, double magic, double range)
     {
         this.health = health;
         this.defense = defense;

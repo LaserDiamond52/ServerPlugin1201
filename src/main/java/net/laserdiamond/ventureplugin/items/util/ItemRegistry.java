@@ -2,6 +2,7 @@ package net.laserdiamond.ventureplugin.items.util;
 
 import com.google.common.collect.Multimap;
 import net.laserdiamond.ventureplugin.VenturePlugin;
+import net.laserdiamond.ventureplugin.commands.ViewProfiles.TuningMenu;
 import net.laserdiamond.ventureplugin.commands.ViewProfiles.ViewStats;
 import net.laserdiamond.ventureplugin.enchants.Components.VentureEnchants;
 import net.laserdiamond.ventureplugin.items.armor.armor_sets.SoulFireBlazeArmor;
@@ -10,6 +11,7 @@ import net.laserdiamond.ventureplugin.items.menuItems.stats.StatMenuItems;
 import net.laserdiamond.ventureplugin.items.armor.util.ArmorCMD;
 import net.laserdiamond.ventureplugin.items.armor.util.ArmorPieceTypes;
 import net.laserdiamond.ventureplugin.items.armor.util.VentureArmorSet;
+import net.laserdiamond.ventureplugin.items.menuItems.tuning.TuningMenuItems;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
@@ -78,6 +80,14 @@ public class ItemRegistry implements Listener {
         map.put(StatMenuItems.MAGIC_DAMAGE_STAT_ITEM.menuItem().getCustomModelData(), StatMenuItems.MAGIC_DAMAGE_STAT_ITEM.createLore(player));
         map.put(StatMenuItems.RANGE_DAMAGE_STAT_ITEM.menuItem().getCustomModelData(), StatMenuItems.RANGE_DAMAGE_STAT_ITEM.createLore(player));
 
+        map.put(TuningMenuItems.POINTS.menuItem().getCustomModelData(), TuningMenuItems.POINTS.createLore(player));
+        map.put(TuningMenuItems.HEALTH.menuItem().getCustomModelData(), TuningMenuItems.HEALTH.createLore(player));
+        map.put(TuningMenuItems.DEFENSE.menuItem().getCustomModelData(), TuningMenuItems.DEFENSE.createLore(player));
+        map.put(TuningMenuItems.SPEED.menuItem().getCustomModelData(), TuningMenuItems.SPEED.createLore(player));
+        map.put(TuningMenuItems.MANA.menuItem().getCustomModelData(), TuningMenuItems.MANA.createLore(player));
+        map.put(TuningMenuItems.MELEE.menuItem().getCustomModelData(), TuningMenuItems.MELEE.createLore(player));
+        map.put(TuningMenuItems.MAGIC.menuItem().getCustomModelData(), TuningMenuItems.MAGIC.createLore(player));
+        map.put(TuningMenuItems.RANGE.menuItem().getCustomModelData(), TuningMenuItems.RANGE.createLore(player));
         return map;
     }
 
@@ -111,6 +121,7 @@ public class ItemRegistry implements Listener {
         PLAYER_INV_TITLES.add(ViewStats.STAT_INV_TITLE);
         PLAYER_INV_TITLES.add(ViewStats.DEFENSE_STAT_INV_TITLE);
         PLAYER_INV_TITLES.add(ViewStats.DAMAGE_STAT_INV_TITLE);
+        PLAYER_INV_TITLES.add(TuningMenu.TUNING_INV_TITLE);
     }
 
     private static boolean isAnyPlayerInvTitle(String invTitle)

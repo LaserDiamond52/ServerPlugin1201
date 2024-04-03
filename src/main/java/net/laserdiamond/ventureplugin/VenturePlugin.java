@@ -4,6 +4,7 @@ import net.laserdiamond.ventureplugin.commands.Effects.EffectsCommand;
 import net.laserdiamond.ventureplugin.commands.Enchant.EnchantCommand;
 import net.laserdiamond.ventureplugin.commands.Items.GiveItemsCommand;
 import net.laserdiamond.ventureplugin.commands.Items.StarItemCommand;
+import net.laserdiamond.ventureplugin.commands.ViewProfiles.TuningMenu;
 import net.laserdiamond.ventureplugin.commands.ViewProfiles.ViewStats;
 import net.laserdiamond.ventureplugin.commands.fillMana;
 import net.laserdiamond.ventureplugin.enchants.Components.EnchantListeners;
@@ -38,13 +39,15 @@ import net.laserdiamond.ventureplugin.items.util.ItemForger;
 import net.laserdiamond.ventureplugin.entities.healthDisplay.mobHealthDisplay;
 import net.laserdiamond.ventureplugin.items.armor.util.VentureArmorSet;
 import net.laserdiamond.ventureplugin.items.menuItems.util.VentureMenuItem;
+import net.laserdiamond.ventureplugin.util.Config.MiscConfig;
+import net.laserdiamond.ventureplugin.util.Config.PlayerConfig;
 import net.laserdiamond.ventureplugin.util.Config.PlayerSaveConfig;
 import net.laserdiamond.ventureplugin.util.File.ArmorConfig;
 import net.laserdiamond.ventureplugin.items.util.ItemRegistry;
 import net.laserdiamond.ventureplugin.util.RegisterAbilityCaster;
 import net.laserdiamond.ventureplugin.stats.Config.BaseStatsConfig;
 import net.laserdiamond.ventureplugin.stats.Manager.StatProfileManager;
-import net.laserdiamond.ventureplugin.tunement.Manager.TunementProfileManager;
+import net.laserdiamond.ventureplugin.tuning.Manager.TuningProfileManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -60,8 +63,8 @@ public final class VenturePlugin extends JavaPlugin {
 
     private static VenturePlugin plugin;
     private StatProfileManager statProfileManager;
-    private PlayerSaveConfig tunementConfig;
-    private TunementProfileManager tunementProfileManager;
+    private PlayerSaveConfig tuningConfig;
+    private TuningProfileManager tuningProfileManager;
     private EffectManager effectManager;
     private EffectProfileConfig effectProfileConfig;
     private BukkitTask displayHUDTimer;
@@ -69,8 +72,8 @@ public final class VenturePlugin extends JavaPlugin {
     private BukkitTask effectTimer;
     private BukkitTask abilityTimer;
 
-    private BaseStatsConfig baseStatsConfig;
-    private EnchantConfig enchantConfig;
+    private PlayerConfig baseStatsConfig;
+    private MiscConfig enchantConfig;
 
     private final HashMap<String, ItemForger> itemRegistryMap = new HashMap<>();
     private final HashMap<String, ItemForger> unobtainableItemRegistryMap = new HashMap<>();
@@ -182,6 +185,7 @@ public final class VenturePlugin extends JavaPlugin {
         getCommand("plugingive").setExecutor(new GiveItemsCommand(this));
         getCommand("pluginenchant").setExecutor(new EnchantCommand());
         ViewStats viewStats = new ViewStats(this);
+        TuningMenu tuningMenu = new TuningMenu(this);
         getCommand("refillmana").setExecutor(new fillMana());
         getCommand("staritem").setExecutor(new StarItemCommand());
         // TODO: Summon cmd for mobs
@@ -211,8 +215,8 @@ public final class VenturePlugin extends JavaPlugin {
     public StatProfileManager getStatProfileManager() {
         return statProfileManager;
     }
-    public TunementProfileManager getTunementProfileManager() {
-        return tunementProfileManager;
+    public TuningProfileManager getTunementProfileManager() {
+        return tuningProfileManager;
     }
     public EffectManager getEffectManager() {
         return effectManager;
@@ -287,16 +291,16 @@ public final class VenturePlugin extends JavaPlugin {
         VentureEnchants.unregisterEnchantments();
     }
 
-    public BaseStatsConfig getBaseStatsConfig() {
+    public PlayerConfig getBaseStatsConfig() {
         return baseStatsConfig;
     }
-    public PlayerSaveConfig getTunementConfig() {
-        return tunementConfig;
+    public PlayerSaveConfig getTuningConfig() {
+        return tuningConfig;
     }
     public EffectProfileConfig getEffectProfileConfig() {
         return effectProfileConfig;
     }
-    public EnchantConfig getEnchantConfig() {
+    public MiscConfig getEnchantConfig() {
         return enchantConfig;
     }
 
@@ -308,11 +312,11 @@ public final class VenturePlugin extends JavaPlugin {
      */
 
     private void createConfigs() {
-        baseStatsConfig = new BaseStatsConfig(this, "baseStats");
+        baseStatsConfig = new PlayerConfig(this, "baseStats");
         baseStatsConfig.loadConfig();
 
-        tunementConfig = new PlayerSaveConfig(this, "tunement");
-        tunementConfig.loadConfig();
+        tuningConfig = new PlayerSaveConfig(this, "tuning");
+        tuningConfig.loadConfig();
         /*
         tunementConfig = new TunementConfig(this, "tunement");
         tunementConfig.loadConfig();
@@ -322,7 +326,7 @@ public final class VenturePlugin extends JavaPlugin {
         effectProfileConfig = new EffectProfileConfig(this, "effectDurations");
         effectProfileConfig.loadConfig();
 
-        enchantConfig = new EnchantConfig(this, "enchants", "enchants");
+        enchantConfig = new MiscConfig(this, "enchants", "enchants");
         enchantConfig.loadConfig();
     }
 
@@ -335,8 +339,8 @@ public final class VenturePlugin extends JavaPlugin {
 
     }
     private void createManagers() {
-        tunementProfileManager = new TunementProfileManager(this);
-        tunementProfileManager.loadFromConfig();
+        tuningProfileManager = new TuningProfileManager(this);
+        tuningProfileManager.loadFromConfig();
 
         statProfileManager = new StatProfileManager(this);
 
@@ -402,12 +406,12 @@ public final class VenturePlugin extends JavaPlugin {
     }
 
     private void saveProfilesToConfigs() {
-        tunementProfileManager.saveToConfig();
+        tuningProfileManager.saveToConfig();
 
         effectManager.saveProfilesToConfig();
     }
     private void saveConfigs() {
-        tunementConfig.saveConfig();
+        tuningConfig.saveConfig();
 
         effectProfileConfig.saveConfig();
     }

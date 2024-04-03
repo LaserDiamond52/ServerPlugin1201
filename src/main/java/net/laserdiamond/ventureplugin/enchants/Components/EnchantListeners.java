@@ -10,6 +10,7 @@ import net.laserdiamond.ventureplugin.events.abilities.AbilityCasting;
 import net.laserdiamond.ventureplugin.stats.Components.*;
 import net.laserdiamond.ventureplugin.stats.Components.PlayerStatKeys.PlayerEnchantStatKeys;
 import net.laserdiamond.ventureplugin.stats.Manager.StatProfileManager;
+import net.laserdiamond.ventureplugin.util.Config.MiscConfig;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -32,7 +33,7 @@ public class EnchantListeners implements Listener, AbilityListener, AbilityCasti
 
     private final VenturePlugin plugin;
     private final StatProfileManager statProfileManager;
-    private final EnchantConfig enchantConfig;
+    private final MiscConfig enchantConfig;
     private final Map<UUID, Integer> ThunderStrikeProfiles = new HashMap<>();
 
     public EnchantListeners(VenturePlugin plugin) {

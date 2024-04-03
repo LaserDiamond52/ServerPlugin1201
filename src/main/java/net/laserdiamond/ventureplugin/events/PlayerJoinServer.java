@@ -5,7 +5,7 @@ import net.laserdiamond.ventureplugin.events.effects.Components.EffectProfile;
 import net.laserdiamond.ventureplugin.events.effects.Managers.EffectManager;
 import net.laserdiamond.ventureplugin.stats.Components.StatProfile;
 import net.laserdiamond.ventureplugin.stats.Manager.StatProfileManager;
-import net.laserdiamond.ventureplugin.tunement.Manager.TunementProfileManager;
+import net.laserdiamond.ventureplugin.tuning.Manager.TuningProfileManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -20,12 +20,12 @@ import java.util.UUID;
 public class PlayerJoinServer implements Listener {
 
     private final StatProfileManager statProfileManager;
-    private final TunementProfileManager tunementProfileManager;
+    private final TuningProfileManager tuningProfileManager;
     private final EffectManager effectManager;
 
     public PlayerJoinServer(VenturePlugin plugin) {
         statProfileManager = plugin.getStatProfileManager();
-        tunementProfileManager = plugin.getTunementProfileManager();
+        tuningProfileManager = plugin.getTunementProfileManager();
         effectManager = plugin.getEffectManager();
     }
 

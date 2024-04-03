@@ -8,6 +8,7 @@ import net.laserdiamond.ventureplugin.stats.Components.DefenseStats;
 import net.laserdiamond.ventureplugin.stats.Components.Stats;
 import net.laserdiamond.ventureplugin.stats.Config.BaseStatsConfig;
 import net.laserdiamond.ventureplugin.stats.Manager.StatProfileManager;
+import net.laserdiamond.ventureplugin.util.Config.PlayerConfig;
 import net.laserdiamond.ventureplugin.util.File.ArmorConfig;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
@@ -27,7 +28,7 @@ import org.bukkit.potion.PotionEffectType;
 public class TrimMaterialListeners implements Listener {
 
     private final VenturePlugin plugin;
-    private final BaseStatsConfig baseStatsConfig;
+    private final PlayerConfig baseStatsConfig;
     private final StatProfileManager statProfileManager;
     private final ArmorConfig armorTrimConfig;
     private final double defaultPlayerSpeed;

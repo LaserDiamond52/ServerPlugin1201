@@ -8,7 +8,7 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import java.io.File;
 import java.io.IOException;
 
-public abstract class MiscConfig extends ConfigLoader {
+public class MiscConfig extends ConfigLoader {
 
     private final VenturePlugin plugin;
     private final String folderName;

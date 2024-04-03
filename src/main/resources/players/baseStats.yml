@@ -89,5 +89,31 @@ starvationRate: 80
 # Player's base skill points
 
 # Base tunement points when players first join
-baseTunementPoints: 5
+baseTuningPoints: 5
+
+
+# Tuning Point Values
+
+# Determines how much of a stat each tuning point gives
+
+# Health
+healthValue: 1
+
+# Defense
+defenseValue: 1
+
+# Speed
+speedValue: 2
+
+# Mana
+manaValue: 5
+
+# Melee
+meleeValue: 0.25
+
+# Magic
+magicValue: 0.25
+
+# Range
+rangeValue: 0.25
 

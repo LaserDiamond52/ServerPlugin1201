@@ -105,3 +105,11 @@ commands:
     description: allows players to refill their mana instantly
     usage: /<command> <arg>
     permission: venture.edit_mana
+
+  tuning:
+    description: opens the player's tuning menu
+    usage: /<command>
+    permission: venture.tuning_menu
+    aliases:
+      - venturetuning
+      - tune

@@ -23,7 +23,15 @@ public enum MenuItem {
     MAGIC_DAMAGE_STAT (Material.DIAMOND, ChatColor.AQUA + "Magic Damage", 16),
     RANGE_DAMAGE_STAT (Material.BOW, ChatColor.DARK_PURPLE + "Range Damage", 17),
     SPEED_STAT (Material.IRON_BOOTS, ChatColor.WHITE + "Speed", 18),
-    FORTITUDE (Material.NETHERITE_CHESTPLATE, ChatColor.DARK_GREEN + "Fortitude", 19);
+    FORTITUDE (Material.NETHERITE_CHESTPLATE, ChatColor.DARK_GREEN + "Fortitude", 19),
+    TUNING_POINTS (Material.EXPERIENCE_BOTTLE, ChatColor.GREEN + "Tuning Points", 20),
+    TUNING_HEALTH (Material.RED_DYE, ChatColor.RED + "Health", 21),
+    TUNING_DEFENSE (Material.IRON_CHESTPLATE, ChatColor.GREEN + "Defense", 22),
+    TUNING_SPEED (Material.IRON_BOOTS, ChatColor.WHITE + "Speed", 23),
+    TUNING_MANA (Material.HEART_OF_THE_SEA, ChatColor.BLUE + "Mana", 24),
+    TUNING_MELEE (Material.IRON_SWORD, ChatColor.RED + "Melee Damage", 25),
+    TUNING_MAGIC (Material.DIAMOND, ChatColor.AQUA + "Magic Damage", 26),
+    TUNING_RANGE (Material.BOW, ChatColor.DARK_PURPLE + "Range Damage", 27);
 
 
     private final Material material;

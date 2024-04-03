@@ -1,6 +1,9 @@
-package net.laserdiamond.ventureplugin.tunement.Components;
+package net.laserdiamond.ventureplugin.tuning.Components;
 
-public class TunementPoints {
+/**
+ * Class that represents the tuning points a player can have
+ */
+public class TuningPoints {
 
     private int tuningPoints;
     private int healthPoints;
@@ -11,7 +14,7 @@ public class TunementPoints {
     private int magicPoints;
     private int rangePoints;
 
-    public TunementPoints(int tuningPoints, int healthPoints, int defensePoints, int speedPoints, int manaPoints, int meleePoints, int magicPoints, int rangePoints)
+    public TuningPoints(int tuningPoints, int healthPoints, int defensePoints, int speedPoints, int manaPoints, int meleePoints, int magicPoints, int rangePoints)
     {
         this.tuningPoints = tuningPoints;
         this.healthPoints = healthPoints;

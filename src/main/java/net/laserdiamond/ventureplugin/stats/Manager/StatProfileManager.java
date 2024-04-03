@@ -7,9 +7,10 @@ import net.laserdiamond.ventureplugin.items.armor.trims.Components.ArmorTrimPatt
 import net.laserdiamond.ventureplugin.items.armor.trims.Manager.ArmorTrimStats;
 import net.laserdiamond.ventureplugin.stats.Components.*;
 import net.laserdiamond.ventureplugin.stats.Config.BaseStatsConfig;
-import net.laserdiamond.ventureplugin.tunement.Components.TunementProfile;
-import net.laserdiamond.ventureplugin.tunement.Components.TunementStats;
-import net.laserdiamond.ventureplugin.tunement.Manager.TunementProfileManager;
+import net.laserdiamond.ventureplugin.tuning.Components.TuningProfile;
+import net.laserdiamond.ventureplugin.tuning.Components.TuningStats;
+import net.laserdiamond.ventureplugin.tuning.Manager.TuningProfileManager;
+import net.laserdiamond.ventureplugin.util.Config.PlayerConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -20,7 +21,7 @@ import java.util.UUID;
 
 public class StatProfileManager {
 
-    private final TunementProfileManager tunementProfileManager;
+    private final TuningProfileManager tuningProfileManager;
     private final Map<UUID, StatProfile> statProfiles = new HashMap<>();
     private final double baseHealth;
     private final double bSpeed;
@@ -42,8 +43,8 @@ public class StatProfileManager {
     private final double baseToughness;
 
     public StatProfileManager(VenturePlugin plugin) {
-        BaseStatsConfig baseStatsConfig = plugin.getBaseStatsConfig();
-        tunementProfileManager = plugin.getTunementProfileManager();
+        PlayerConfig baseStatsConfig = plugin.getBaseStatsConfig();
+        tuningProfileManager = plugin.getTunementProfileManager();
 
         baseHealth = baseStatsConfig.getDouble("baseHealth");
         bSpeed = baseStatsConfig.getDouble("baseSpeedPoints");
@@ -70,11 +71,11 @@ public class StatProfileManager {
     public StatProfile createNewStatProfile(Player player)
     {
 
-        TunementProfile tunementProfile = tunementProfileManager.getPlayerProfile(player.getUniqueId());
-        if (tunementProfile == null) // Check if profile is null (doesn't have profile)
+        TuningProfile tuningProfile = tuningProfileManager.getPlayerProfile(player.getUniqueId());
+        if (tuningProfile == null) // Check if profile is null (doesn't have profile)
         {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Player " + player.getName() + " does not have a tunement profile");
-            tunementProfile = tunementProfileManager.createNewProfile(player);
+            tuningProfile = tuningProfileManager.createNewProfile(player);
             Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Creating new profile for " + player.getName());
             Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Player UUID: " + player.getUniqueId());
         } else // Player has profile
@@ -84,14 +85,14 @@ public class StatProfileManager {
         }
 
 
-        TunementStats tunementStats = tunementProfile.tunementStats();
-        double finalBaseHealth = baseHealth + tunementStats.getHealth();
-        double finalBaseDefense = baseDefense + tunementStats.getDefense();
-        double finalBaseSpeed = bSpeed + tunementStats.getSpeed();
-        double finalBaseMana = maxMana + tunementStats.getMana();
-        double finalBaseMelee = this.baseMelee + tunementStats.getMelee();
-        double finalBaseMagic = this.baseMagic + tunementStats.getMagic();
-        double finalBaseRange = this.baseRange + tunementStats.getRange();
+        TuningStats tuningStats = tuningProfile.tuningStats();
+        double finalBaseHealth = baseHealth + tuningStats.getHealth();
+        double finalBaseDefense = baseDefense + tuningStats.getDefense();
+        double finalBaseSpeed = bSpeed + tuningStats.getSpeed();
+        double finalBaseMana = maxMana + tuningStats.getMana();
+        double finalBaseMelee = this.baseMelee + tuningStats.getMelee();
+        double finalBaseMagic = this.baseMagic + tuningStats.getMagic();
+        double finalBaseRange = this.baseRange + tuningStats.getRange();
 
 
 
@@ -106,7 +107,7 @@ public class StatProfileManager {
         ArmorTrimPatternStats armorTrimPatternStats = new ArmorTrimPatternStats(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
         ArmorTrimStats armorTrimStats = new ArmorTrimStats(armorTrimMaterialStats, armorTrimPatternStats);
 
-        StatProfile statProfile = new StatProfile(stats, armorStats, damageStats, defenseStats, lootStats, enchantStats, armorTrimStats, tunementProfile);
+        StatProfile statProfile = new StatProfile(stats, armorStats, damageStats, defenseStats, lootStats, enchantStats, armorTrimStats, tuningProfile);
         statProfiles.put(player.getUniqueId(), statProfile);
 
         return statProfile;

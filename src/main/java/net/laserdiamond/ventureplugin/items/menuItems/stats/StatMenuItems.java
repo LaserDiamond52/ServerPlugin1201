@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class StatMenuItems {
+public final class StatMenuItems {
 
     private static final VenturePlugin PLUGIN = VenturePlugin.getInstance();
     private static final double DEFENSE_FACTOR = PLUGIN.getBaseStatsConfig().getInt("a");

@@ -5,6 +5,8 @@ import net.laserdiamond.ventureplugin.enchants.Components.EnchantStats;
 import net.laserdiamond.ventureplugin.items.armor.trims.Manager.ArmorTrimStats;
 import net.laserdiamond.ventureplugin.stats.Components.*;
 import net.laserdiamond.ventureplugin.stats.Manager.StatProfileManager;
+import net.laserdiamond.ventureplugin.tuning.Components.TuningPoints;
+import net.laserdiamond.ventureplugin.tuning.Components.TuningStats;
 import org.bukkit.entity.Player;
 
 public class StatPlayer {
@@ -48,6 +50,16 @@ public class StatPlayer {
 
     public ArmorTrimStats getArmorTrimStats() {
         return getStatProfile().armorTrimStats();
+    }
+
+    public TuningPoints getTuningPointStats()
+    {
+        return getStatProfile().tuningProfile().tuningPoints();
+    }
+
+    public TuningStats getTuningStats()
+    {
+        return getStatProfile().tuningProfile().tuningStats();
     }
 
 
