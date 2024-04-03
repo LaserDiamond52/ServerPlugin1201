@@ -84,25 +84,25 @@ public class TuningMenu implements CommandExecutor, Listener {
                     // TODO: Add functionality to buttons
                     if (clickedSlot == TuningMenuItems.TuningItemSlots.HEALTH.getInventorySlot())
                     {
-
+                        // TODO: Add health
                     } else if (clickedSlot == TuningMenuItems.TuningItemSlots.DEFENSE.getInventorySlot())
                     {
-
+                        // TODO: Add Defense
                     } else if (clickedSlot == TuningMenuItems.TuningItemSlots.SPEED.getInventorySlot())
                     {
-
+                        // TODO: Add Speed
                     } else if (clickedSlot == TuningMenuItems.TuningItemSlots.MANA.getInventorySlot())
                     {
-
+                        // TODO: Add Mana
                     } else if (clickedSlot == TuningMenuItems.TuningItemSlots.MELEE.getInventorySlot())
                     {
-
+                        // TODO: Add Melee
                     } else if (clickedSlot == TuningMenuItems.TuningItemSlots.MAGIC.getInventorySlot())
                     {
-
+                        // TODO: Add Magic
                     } else if (clickedSlot == TuningMenuItems.TuningItemSlots.RANGE.getInventorySlot())
                     {
-
+                        // TODO: Add Range
                     }
                 }
             }

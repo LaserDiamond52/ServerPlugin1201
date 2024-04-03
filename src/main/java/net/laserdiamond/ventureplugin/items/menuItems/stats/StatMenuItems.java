@@ -35,11 +35,12 @@ public final class StatMenuItems {
         {
             StatPlayer statPlayer = new StatPlayer(player);
 
-            double baseHealth = plugin.getBaseStatsConfig().getDouble("baseHealth");
-            double armorHealth = statPlayer.getArmorStats().getHealth();
-            double enchantHealth = statPlayer.getEnchantStats().getHealth();
-            double trimHealth = statPlayer.getArmorTrimStats().armorTrimMaterialStats().getIronHealthBoost();
-            double totalHealth = statPlayer.getStats().getHealth();
+            double baseHealth = plugin.getBaseStatsConfig().getDouble("baseHealth"),
+                    tuningHealth = statPlayer.getTuningStats().getHealth(),
+                    armorHealth = statPlayer.getArmorStats().getHealth(),
+                    enchantHealth = statPlayer.getEnchantStats().getHealth(),
+                    trimHealth = statPlayer.getArmorTrimStats().armorTrimMaterialStats().getIronHealthBoost(),
+                    totalHealth = statPlayer.getStats().getHealth();
 
             List<String> lore = new ArrayList<>();
 
@@ -48,6 +49,8 @@ public final class StatMenuItems {
             lore.add(ChatColor.GRAY + "you can take before you die");
             lore.add(" ");
             lore.add(ChatColor.GRAY + "Base Health: " + ChatColor.RED + baseHealth + StatSymbols.HEALTH.getSymbol());
+            lore.add(" ");
+            lore.add(ChatColor.GRAY + "Health from tuning: " + ChatColor.RED + tuningHealth + StatSymbols.HEALTH.getSymbol());
             lore.add(" ");
             lore.add(ChatColor.GRAY + "Health from armor: " + ChatColor.RED + armorHealth + StatSymbols.HEALTH.getSymbol());
             lore.add(" ");
@@ -160,6 +163,7 @@ public final class StatMenuItems {
 
             double
                     baseMana = plugin.getBaseStatsConfig().getDouble("maxMana"),
+                    tuningMana = statPlayer.getTuningStats().getMana(),
                     totalMana = statPlayer.getStats().getMaxMana(),
                     armorMana = statPlayer.getArmorStats().getMana(),
                     enchantMana = statPlayer.getEnchantStats().getMana(),
@@ -177,6 +181,8 @@ public final class StatMenuItems {
             lore.add(" ");
             // TODO: Set up mana regeneration stat
             lore.add(ChatColor.GRAY + "Base mana: " + ChatColor.BLUE + baseMana + StatSymbols.MANA.getSymbol());
+            lore.add(" ");
+            lore.add(ChatColor.GRAY + "Mana from tuning: " + ChatColor.BLUE + tuningMana + StatSymbols.MANA.getSymbol());
             lore.add(" ");
             lore.add(ChatColor.GRAY + "Mana from armor: " + ChatColor.BLUE + armorMana + StatSymbols.MANA.getSymbol());
             lore.add(" ");
@@ -237,6 +243,7 @@ public final class StatMenuItems {
 
             double
                     baseDefense = PLUGIN.getBaseStatsConfig().getDouble("baseDefense"),
+                    tuningDefense = statPlayer.getTuningStats().getDefense(),
                     totalDefense = statPlayer.getDefenseStats().getDefense(),
                     armorDefense = statPlayer.getArmorStats().getDefense(),
                     enchantDefense = statPlayer.getEnchantStats().getDefense(),
@@ -247,6 +254,8 @@ public final class StatMenuItems {
             List<String> lore = new ArrayList<>();
             lore.add(" ");
             lore.add(ChatColor.GRAY + "Base Defense: " + ChatColor.GREEN + baseDefense + StatSymbols.DEFENSE.getSymbol());
+            lore.add(" ");
+            lore.add(ChatColor.GRAY + "Defense from tuning: " + ChatColor.GREEN + tuningDefense + StatSymbols.DEFENSE.getSymbol());
             lore.add(" ");
             lore.add(ChatColor.GRAY + "Defense from armor: " + ChatColor.GREEN + armorDefense + StatSymbols.DEFENSE.getSymbol());
             lore.add(" ");
@@ -419,10 +428,10 @@ public final class StatMenuItems {
 
             double
                     totalBaseMelee = statPlayer.getDamageStats().getBaseMelee() + 1,
+                    tuningBaseMelee = statPlayer.getTuningStats().getMelee(),
                     enchantBaseMelee = statPlayer.getEnchantStats().getBaseMelee(),
                     totalPercentMelee = statPlayer.getDamageStats().getPercentMelee(),
-                    armorPercentMelee = statPlayer.getArmorStats().getPercentMeleeDamage(),
-                    enchantPercentMelee = statPlayer.getEnchantStats().getBaseMelee();
+                    armorPercentMelee = statPlayer.getArmorStats().getPercentMeleeDamage();
 
             List<String> lore = new ArrayList<>();
 
@@ -432,15 +441,17 @@ public final class StatMenuItems {
             lore.add(ChatColor.GRAY + "Base " + ChatColor.RED + "melee damage" + StatSymbols.MELEE_DAMAGE.getSymbol() + ChatColor.GRAY + " is added onto your base " + ChatColor.RED + "melee damage" + StatSymbols.MELEE_DAMAGE.getSymbol());
             lore.add(ChatColor.GRAY + "before modifiers/percent damages are applied");
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Total base melee damage: " + ChatColor.RED + totalBaseMelee + StatSymbols.MELEE_DAMAGE.getSymbol());
-            lore.add(" ");
             lore.add(ChatColor.GRAY + "Base melee damage from enchants: " + ChatColor.RED + enchantBaseMelee + StatSymbols.MELEE_DAMAGE.getSymbol());
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Total percent melee damage: " + ChatColor.RED + totalPercentMelee + StatSymbols.MELEE_DAMAGE.getSymbol());
+            lore.add(ChatColor.GRAY + "Base melee damage from tuning: " + ChatColor.RED + tuningBaseMelee + StatSymbols.MELEE_DAMAGE.getSymbol());
+            lore.add(" ");
+            lore.add(ChatColor.GRAY + "Total base melee damage: " + ChatColor.RED + totalBaseMelee + StatSymbols.MELEE_DAMAGE.getSymbol());
+            lore.add(" ");
+            lore.add(ChatColor.GRAY + "Percent melee damage increases your melee damage by " + ChatColor.YELLOW + "x" + ChatColor.GRAY + "%");
             lore.add(" ");
             lore.add(ChatColor.GRAY + "Percent melee damage from armor: " + ChatColor.RED + armorPercentMelee + StatSymbols.MELEE_DAMAGE.getSymbol());
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Enchant melee damage from armor: " + ChatColor.RED + enchantPercentMelee + StatSymbols.MELEE_DAMAGE.getSymbol());
+            lore.add(ChatColor.GRAY + "Total percent melee damage: " + ChatColor.RED + totalPercentMelee + StatSymbols.MELEE_DAMAGE.getSymbol());
             lore.add(" ");
 
             return lore;
@@ -461,10 +472,10 @@ public final class StatMenuItems {
 
             double
                     totalBaseMagic = statPlayer.getDamageStats().getBaseMagic() + 1,
+                    tuningBaseMagic = statPlayer.getTuningStats().getMagic(),
                     enchantBaseMagic = statPlayer.getEnchantStats().getBaseMagic(),
                     totalPercentMagic = statPlayer.getDamageStats().getPercentMagic(),
-                    armorPercentMagic = statPlayer.getArmorStats().getPercentMagicDamage(),
-                    enchantPercentMagic = statPlayer.getEnchantStats().getMagicDefense();
+                    armorPercentMagic = statPlayer.getArmorStats().getPercentMagicDamage();
 
             List<String> lore = new ArrayList<>();
 
@@ -476,13 +487,15 @@ public final class StatMenuItems {
             lore.add(" ");
             lore.add(ChatColor.GRAY + "Total base magic damage: " + ChatColor.AQUA + totalBaseMagic + StatSymbols.MAGIC_DAMAGE.getSymbol());
             lore.add(" ");
+            lore.add(ChatColor.GRAY + "Base magic damage from tuning: " + ChatColor.AQUA + tuningBaseMagic + StatSymbols.MAGIC_DAMAGE.getSymbol());
+            lore.add(" ");
             lore.add(ChatColor.GRAY + "Base magic damage from enchants: " + ChatColor.AQUA + enchantBaseMagic + StatSymbols.MAGIC_DAMAGE.getSymbol());
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Total percent magic damage: " + ChatColor.AQUA + totalPercentMagic + StatSymbols.MAGIC_DAMAGE.getSymbol());
+            lore.add(ChatColor.GRAY + "Percent magic damage increases your magic damage by " + ChatColor.YELLOW + "x" + ChatColor.GRAY + "%");
             lore.add(" ");
             lore.add(ChatColor.GRAY + "Percent magic damage from armor: " + ChatColor.AQUA + armorPercentMagic + StatSymbols.MAGIC_DAMAGE.getSymbol());
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Enchant magic damage from armor: " + ChatColor.AQUA + enchantPercentMagic + StatSymbols.MAGIC_DAMAGE.getSymbol());
+            lore.add(ChatColor.GRAY + "Total percent magic damage: " + ChatColor.AQUA + totalPercentMagic + StatSymbols.MAGIC_DAMAGE.getSymbol());
             lore.add(" ");
 
             return lore;
@@ -503,10 +516,10 @@ public final class StatMenuItems {
 
             double
                     totalBaseRange = statPlayer.getDamageStats().getBaseRange() + 1,
+                    tuningBaseRange = statPlayer.getTuningStats().getRange(),
                     enchantBaseRange = statPlayer.getEnchantStats().getBaseRange(),
                     totalPercentRange = statPlayer.getDamageStats().getPercentRange(),
-                    armorPercentRange = statPlayer.getArmorStats().getPercentRangeDamage(),
-                    enchantPercentRange = statPlayer.getEnchantStats().getBaseRange();
+                    armorPercentRange = statPlayer.getArmorStats().getPercentRangeDamage();
 
             List<String> lore = new ArrayList<>();
 
@@ -516,15 +529,15 @@ public final class StatMenuItems {
             lore.add(ChatColor.GRAY + "Base " + ChatColor.DARK_PURPLE + "range damage" + StatSymbols.RANGE_DAMAGE.getSymbol() + ChatColor.GRAY + " is added onto your base " + ChatColor.DARK_PURPLE + "range damage" + StatSymbols.RANGE_DAMAGE.getSymbol());
             lore.add(ChatColor.GRAY + "before modifiers/percent damages are applied");
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Total base range damage: " + ChatColor.DARK_PURPLE + totalBaseRange + StatSymbols.RANGE_DAMAGE.getSymbol());
-            lore.add(" ");
             lore.add(ChatColor.GRAY + "Base range damage from enchants: " + ChatColor.DARK_PURPLE + enchantBaseRange + StatSymbols.RANGE_DAMAGE.getSymbol());
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Total percent range damage: " + ChatColor.DARK_PURPLE + totalPercentRange + StatSymbols.RANGE_DAMAGE.getSymbol());
+            lore.add(ChatColor.GRAY + "Base range damage from tuning: " + ChatColor.DARK_PURPLE + tuningBaseRange + StatSymbols.RANGE_DAMAGE.getSymbol());
+            lore.add(" ");
+            lore.add(ChatColor.GRAY + "Total base range damage: " + ChatColor.DARK_PURPLE + totalBaseRange + StatSymbols.RANGE_DAMAGE.getSymbol());
             lore.add(" ");
             lore.add(ChatColor.GRAY + "Percent range damage from armor: " + ChatColor.DARK_PURPLE + armorPercentRange + StatSymbols.RANGE_DAMAGE.getSymbol());
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Enchant range damage from armor: " + ChatColor.DARK_PURPLE + enchantPercentRange + StatSymbols.RANGE_DAMAGE.getSymbol());
+            lore.add(ChatColor.GRAY + "Total percent range damage: " + ChatColor.DARK_PURPLE + totalPercentRange + StatSymbols.RANGE_DAMAGE.getSymbol());
             lore.add(" ");
 
             return lore;
@@ -547,6 +560,7 @@ public final class StatMenuItems {
                     baseSpeedAttribute = PLUGIN.getBaseStatsConfig().getDouble("baseSpeed"),
                     baseSpeedPoints = PLUGIN.getBaseStatsConfig().getDouble("baseSpeedPoints"),
                     totalSpeed = statPlayer.getStats().getSpeed(),
+                    tuningSpeed = statPlayer.getTuningStats().getSpeed(),
                     armorSpeed = statPlayer.getArmorStats().getSpeed(),
                     enchantSpeed = statPlayer.getEnchantStats().getSpeed(),
                     armorTrimMaterialSpeed = statPlayer.getArmorTrimStats().armorTrimMaterialStats().getCopperSpeed();
@@ -567,6 +581,8 @@ public final class StatMenuItems {
             lore.add(ChatColor.GRAY + "represents " + ChatColor.YELLOW + "1" + ChatColor.GRAY + "% of the speed attribute value");
             lore.add(" ");
             lore.add(ChatColor.GRAY + "Base speed points: " + ChatColor.WHITE + baseSpeedPoints + StatSymbols.SPEED.getSymbol());
+            lore.add(" ");
+            lore.add(ChatColor.GRAY + "Speed from tuning: " + ChatColor.WHITE + tuningSpeed + StatSymbols.SPEED.getSymbol());
             lore.add(" ");
             lore.add(ChatColor.GRAY + "Speed from armor: " + ChatColor.WHITE + armorSpeed + StatSymbols.SPEED.getSymbol());
             lore.add(" ");
