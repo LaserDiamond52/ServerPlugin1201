@@ -7,6 +7,7 @@ import net.laserdiamond.ventureplugin.items.menuItems.util.VentureMenuItem;
 import net.laserdiamond.ventureplugin.stats.Components.DefenseStats;
 import net.laserdiamond.ventureplugin.stats.Components.StatSymbols;
 import org.bukkit.ChatColor;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -485,11 +486,11 @@ public final class StatMenuItems {
             lore.add(ChatColor.GRAY + "Base " + ChatColor.AQUA + "magic damage" + StatSymbols.MAGIC_DAMAGE.getSymbol() + ChatColor.GRAY + " is added onto your base " + ChatColor.AQUA + "magic damage" + StatSymbols.MAGIC_DAMAGE.getSymbol());
             lore.add(ChatColor.GRAY + "before modifiers/percent damages are applied");
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Total base magic damage: " + ChatColor.AQUA + totalBaseMagic + StatSymbols.MAGIC_DAMAGE.getSymbol());
-            lore.add(" ");
             lore.add(ChatColor.GRAY + "Base magic damage from tuning: " + ChatColor.AQUA + tuningBaseMagic + StatSymbols.MAGIC_DAMAGE.getSymbol());
             lore.add(" ");
             lore.add(ChatColor.GRAY + "Base magic damage from enchants: " + ChatColor.AQUA + enchantBaseMagic + StatSymbols.MAGIC_DAMAGE.getSymbol());
+            lore.add(" ");
+            lore.add(ChatColor.GRAY + "Total base magic damage: " + ChatColor.AQUA + totalBaseMagic + StatSymbols.MAGIC_DAMAGE.getSymbol());
             lore.add(" ");
             lore.add(ChatColor.GRAY + "Percent magic damage increases your magic damage by " + ChatColor.YELLOW + "x" + ChatColor.GRAY + "%");
             lore.add(" ");
@@ -535,6 +536,8 @@ public final class StatMenuItems {
             lore.add(" ");
             lore.add(ChatColor.GRAY + "Total base range damage: " + ChatColor.DARK_PURPLE + totalBaseRange + StatSymbols.RANGE_DAMAGE.getSymbol());
             lore.add(" ");
+            lore.add(ChatColor.GRAY + "Percent range damage increases your range damage by " + ChatColor.YELLOW + "x" + ChatColor.GRAY + "%");
+            lore.add(" ");
             lore.add(ChatColor.GRAY + "Percent range damage from armor: " + ChatColor.DARK_PURPLE + armorPercentRange + StatSymbols.RANGE_DAMAGE.getSymbol());
             lore.add(" ");
             lore.add(ChatColor.GRAY + "Total percent range damage: " + ChatColor.DARK_PURPLE + totalPercentRange + StatSymbols.RANGE_DAMAGE.getSymbol());
@@ -574,7 +577,9 @@ public final class StatMenuItems {
             lore.add(ChatColor.GRAY + "amongst all players, and thus cannot be changed.");
             lore.add(ChatColor.GRAY + "This determines how much each speed point is worth");
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Speed attribute value: " + ChatColor.WHITE + baseSpeedAttribute + StatSymbols.SPEED.getSymbol());
+            lore.add(ChatColor.GRAY + "Base speed attribute value: " + ChatColor.WHITE + baseSpeedAttribute + StatSymbols.SPEED.getSymbol());
+            lore.add(" ");
+            lore.add(ChatColor.GRAY + "Current speed attribute value: " + ChatColor.WHITE + player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue() + StatSymbols.SPEED.getSymbol());
             lore.add(" ");
             lore.add(ChatColor.WHITE + "Speed points " + StatSymbols.SPEED.getSymbol() + ChatColor.GRAY + " are used as a more readable way ");
             lore.add(ChatColor.GRAY + "to measure your movement speed. Each speed point");

@@ -43,9 +43,9 @@ public enum PlayerStatKeys {
             case STARVATION -> stats.setStarvationRate((int) (stats.getStarvationRate() + amount));
             case LUCK -> stats.setLuck(stats.getLuck() + amount);
             case MANA -> stats.setMaxMana(stats.getMaxMana() + amount);
-            case BASE_MELEE -> damageStats.setbMeleeDmg(damageStats.getBaseMelee() + amount);
-            case BASE_MAGIC -> damageStats.setbMagicDmg(damageStats.getBaseMagic() + amount);
-            case BASE_RANGE -> damageStats.setbRangeDmg(damageStats.getBaseRange() + amount);
+            case BASE_MELEE -> damageStats.setBaseMeleeDmg(damageStats.getBaseMelee() + amount);
+            case BASE_MAGIC -> damageStats.setBaseMagicDmg(damageStats.getBaseMagic() + amount);
+            case BASE_RANGE -> damageStats.setBaseRangeDmg(damageStats.getBaseRange() + amount);
             case PERCENT_MELEE -> damageStats.setPercentMeleeDmg(damageStats.getPercentMelee() + amount);
             case PERCENT_MAGIC -> damageStats.setPercentMagicDmg(damageStats.getPercentMagic() + amount);
             case PERCENT_RANGE -> damageStats.setPercentRangeDmg(damageStats.getPercentRange() + amount);
@@ -60,7 +60,7 @@ public enum PlayerStatKeys {
             case ORE_LOOT -> lootStats.setBonusOreLoot(lootStats.getBonusOreLoot() + amount);
             case WOOD_LOOT -> lootStats.setBonusWoodLoot(lootStats.getBonusWoodLoot() + amount);
             case DIG_LOOT -> lootStats.setBonusDigLoot(lootStats.getBonusDigLoot() + amount);
-            case FISHING_LOOT -> lootStats.setFishingLoot(lootStats.getFishingLoot() + amount);
+            case FISHING_LOOT -> lootStats.setFishingLuck(lootStats.getFishingLuck() + amount);
         }
     }
 
@@ -78,9 +78,9 @@ public enum PlayerStatKeys {
             case STARVATION -> stats.setStarvationRate((int) (stats.getStarvationRate() - amount));
             case LUCK -> stats.setLuck(stats.getLuck() - amount);
             case MANA -> stats.setMaxMana(stats.getMaxMana() - amount);
-            case BASE_MELEE -> damageStats.setbMeleeDmg(damageStats.getBaseMelee() - amount);
-            case BASE_MAGIC -> damageStats.setbMagicDmg(damageStats.getBaseMagic() - amount);
-            case BASE_RANGE -> damageStats.setbRangeDmg(damageStats.getBaseRange() - amount);
+            case BASE_MELEE -> damageStats.setBaseMeleeDmg(damageStats.getBaseMelee() - amount);
+            case BASE_MAGIC -> damageStats.setBaseMagicDmg(damageStats.getBaseMagic() - amount);
+            case BASE_RANGE -> damageStats.setBaseRangeDmg(damageStats.getBaseRange() - amount);
             case PERCENT_MELEE -> damageStats.setPercentMeleeDmg(damageStats.getPercentMelee() - amount);
             case PERCENT_MAGIC -> damageStats.setPercentMagicDmg(damageStats.getPercentMagic() - amount);
             case PERCENT_RANGE -> damageStats.setPercentRangeDmg(damageStats.getPercentRange() - amount);
@@ -95,7 +95,7 @@ public enum PlayerStatKeys {
             case ORE_LOOT -> lootStats.setBonusOreLoot(lootStats.getBonusOreLoot() - amount);
             case WOOD_LOOT -> lootStats.setBonusWoodLoot(lootStats.getBonusWoodLoot() - amount);
             case DIG_LOOT -> lootStats.setBonusDigLoot(lootStats.getBonusDigLoot() - amount);
-            case FISHING_LOOT -> lootStats.setFishingLoot(lootStats.getFishingLoot() - amount);
+            case FISHING_LOOT -> lootStats.setFishingLuck(lootStats.getFishingLuck() - amount);
         }
     }
 

@@ -1,5 +1,6 @@
 package net.laserdiamond.ventureplugin.util.messages;
 
+import net.laserdiamond.ventureplugin.items.menuItems.tuning.TuningMenuItems;
 import org.bukkit.ChatColor;
 
 public class Messages {
@@ -52,8 +53,15 @@ public class Messages {
         return ChatColor.DARK_GRAY + abilityName + " is already active!";
     }
 
-    public static String cancelledSpellMsg()
+    public static final String CANCELLED_SPELL_MSG = ChatColor.RED + "You are unable to cast spells";
+
+    public static final String NO_INVESTED_POINTS = ChatColor.RED + "There are no points invested in this stat!";
+
+    public static final String NO_TUNING_POINTS = ChatColor.RED + "You have no more tuning points to spend!";
+
+    public static String maxedStat(TuningMenuItems.TuningItemSlots tuningItemSlots)
     {
-        return ChatColor.RED + "You are unable to cast spells";
+        String tuningStatName = tuningItemSlots.name().substring(0,1).toUpperCase() + tuningItemSlots.name().substring(1).toLowerCase();
+        return ChatColor.RED + "Your " + tuningStatName + " tuning stat is maxed out!";
     }
 }

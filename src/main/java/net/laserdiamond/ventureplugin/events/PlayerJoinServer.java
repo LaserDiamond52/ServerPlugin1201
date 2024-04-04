@@ -17,7 +17,7 @@ import org.bukkit.scoreboard.*;
 import java.net.InetSocketAddress;
 import java.util.UUID;
 
-public class PlayerJoinServer implements Listener {
+public final class PlayerJoinServer implements Listener {
 
     private final StatProfileManager statProfileManager;
     private final TuningProfileManager tuningProfileManager;

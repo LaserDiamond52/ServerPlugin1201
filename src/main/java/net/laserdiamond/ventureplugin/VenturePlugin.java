@@ -38,6 +38,7 @@ import net.laserdiamond.ventureplugin.items.util.ItemForger;
 import net.laserdiamond.ventureplugin.entities.healthDisplay.mobHealthDisplay;
 import net.laserdiamond.ventureplugin.items.armor.util.VentureArmorSet;
 import net.laserdiamond.ventureplugin.items.menuItems.util.VentureMenuItem;
+import net.laserdiamond.ventureplugin.skills.Manager.SkillsProfileManager;
 import net.laserdiamond.ventureplugin.util.Config.MiscConfig;
 import net.laserdiamond.ventureplugin.util.Config.PlayerConfig;
 import net.laserdiamond.ventureplugin.util.Config.PlayerSaveConfig;
@@ -61,7 +62,9 @@ public final class VenturePlugin extends JavaPlugin {
 
     private static VenturePlugin plugin;
     private StatProfileManager statProfileManager;
+    private PlayerSaveConfig skillsConfig;
     private PlayerSaveConfig tuningConfig;
+    private SkillsProfileManager skillsProfileManager;
     private TuningProfileManager tuningProfileManager;
     private EffectManager effectManager;
     private EffectProfileConfig effectProfileConfig;
@@ -313,13 +316,11 @@ public final class VenturePlugin extends JavaPlugin {
         baseStatsConfig = new PlayerConfig(this, "baseStats");
         baseStatsConfig.loadConfig();
 
+        skillsConfig = new PlayerSaveConfig(this, "skills");
+        skillsConfig.loadConfig();
+
         tuningConfig = new PlayerSaveConfig(this, "tuning");
         tuningConfig.loadConfig();
-        /*
-        tunementConfig = new TunementConfig(this, "tunement");
-        tunementConfig.loadConfig();
-
-         */
 
         effectProfileConfig = new EffectProfileConfig(this, "effectDurations");
         effectProfileConfig.loadConfig();
@@ -337,6 +338,10 @@ public final class VenturePlugin extends JavaPlugin {
 
     }
     private void createManagers() {
+
+        skillsProfileManager = new SkillsProfileManager(this);
+        skillsProfileManager.loadFromConfig();
+
         tuningProfileManager = new TuningProfileManager(this);
         tuningProfileManager.loadFromConfig();
 
@@ -347,8 +352,6 @@ public final class VenturePlugin extends JavaPlugin {
     }
 
     private void createItemManagers() {
-
-        //new StatMenuItems(this);
 
         netheriteArmor = new NetheriteArmor(this);
         blazeArmor = new BlazeArmor(this);
@@ -404,11 +407,17 @@ public final class VenturePlugin extends JavaPlugin {
     }
 
     private void saveProfilesToConfigs() {
+
+        skillsProfileManager.saveToConfig();
+
         tuningProfileManager.saveToConfig();
 
         effectManager.saveProfilesToConfig();
     }
     private void saveConfigs() {
+
+        skillsConfig.saveConfig();
+
         tuningConfig.saveConfig();
 
         effectProfileConfig.saveConfig();
@@ -487,5 +496,13 @@ public final class VenturePlugin extends JavaPlugin {
 
     public List<VentureMenuItem> getVentureMenuItems() {
         return ventureMenuItems;
+    }
+
+    public PlayerSaveConfig getSkillsConfig() {
+        return skillsConfig;
+    }
+
+    public SkillsProfileManager getSkillsProfileManager() {
+        return skillsProfileManager;
     }
 }

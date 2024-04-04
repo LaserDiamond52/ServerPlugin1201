@@ -25,7 +25,7 @@ public class DamageStats {
         return bMeleeDmg;
     }
 
-    public void setbMeleeDmg(double bMeleeDmg) {
+    public void setBaseMeleeDmg(double bMeleeDmg) {
         this.bMeleeDmg = bMeleeDmg;
     }
 
@@ -33,7 +33,7 @@ public class DamageStats {
         return bMagicDmg;
     }
 
-    public void setbMagicDmg(double bMagicDmg) {
+    public void setBaseMagicDmg(double bMagicDmg) {
         this.bMagicDmg = bMagicDmg;
     }
 
@@ -41,7 +41,7 @@ public class DamageStats {
         return bRangeDmg;
     }
 
-    public void setbRangeDmg(double bRangeDmg) {
+    public void setBaseRangeDmg(double bRangeDmg) {
         this.bRangeDmg = bRangeDmg;
     }
 

@@ -17,6 +17,14 @@ public final class TuningMenuItems {
     private static final VenturePlugin PLUGIN = VenturePlugin.getInstance();
     private static final PlayerConfig BASE_STATS_CONFIG = PLUGIN.getBaseStatsConfig();
 
+    public static final List<String> manipulateLore = new ArrayList<>();
+    static
+    {
+        manipulateLore.add(ChatColor.AQUA + "" + ChatColor.ITALIC + "Left-click to add a point");
+        manipulateLore.add(ChatColor.YELLOW + "" + ChatColor.ITALIC + "Right-click to remove a point");
+        manipulateLore.add(" ");
+    }
+
     public static final VentureMenuItem POINTS = new VentureMenuItem(PLUGIN) {
         @Override
         public MenuItem menuItem() {
@@ -27,7 +35,7 @@ public final class TuningMenuItems {
         public List<String> createLore(Player player) {
 
             StatPlayer statPlayer = new StatPlayer(player);
-            double tuningPoints = statPlayer.getTuningPointStats().getTuningPoints();
+            int tuningPoints = statPlayer.getTuningPointStats().getTuningPoints();
 
             List<String> lore = new ArrayList<>();
 
@@ -60,8 +68,9 @@ public final class TuningMenuItems {
             lore.add(" ");
             lore.add(ChatColor.GRAY + "Current level: " + ChatColor.YELLOW + healthPoints);
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Current bonus: " + ChatColor.RED + healthBonus + StatSymbols.HEALTH.getSymbol());
+            lore.add(ChatColor.GRAY + "Current bonus: +" + ChatColor.RED + healthBonus + StatSymbols.HEALTH.getSymbol());
             lore.add(" ");
+            lore.addAll(manipulateLore);
             return lore;
         }
     };
@@ -88,8 +97,9 @@ public final class TuningMenuItems {
             lore.add(" ");
             lore.add(ChatColor.GRAY + "Current level: " + ChatColor.YELLOW + defensePoints);
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Current bonus: " + ChatColor.GREEN + defenseBonus + StatSymbols.DEFENSE.getSymbol());
+            lore.add(ChatColor.GRAY + "Current bonus: +" + ChatColor.GREEN + defenseBonus + StatSymbols.DEFENSE.getSymbol());
             lore.add(" ");
+            lore.addAll(manipulateLore);
             return lore;
         }
     };
@@ -116,8 +126,9 @@ public final class TuningMenuItems {
             lore.add(" ");
             lore.add(ChatColor.GRAY + "Current level: " + ChatColor.YELLOW + speedPoints);
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Current bonus: " + ChatColor.WHITE + speedBonus + StatSymbols.SPEED.getSymbol());
+            lore.add(ChatColor.GRAY + "Current bonus: +" + ChatColor.WHITE + speedBonus + StatSymbols.SPEED.getSymbol());
             lore.add(" ");
+            lore.addAll(manipulateLore);
             return lore;
         }
     };
@@ -144,8 +155,9 @@ public final class TuningMenuItems {
             lore.add(" ");
             lore.add(ChatColor.GRAY + "Current level: " + ChatColor.YELLOW + manaPoints);
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Current bonus: " + ChatColor.BLUE + manaBonus + StatSymbols.MANA.getSymbol());
+            lore.add(ChatColor.GRAY + "Current bonus: +" + ChatColor.BLUE + manaBonus + StatSymbols.MANA.getSymbol());
             lore.add(" ");
+            lore.addAll(manipulateLore);
             return lore;
         }
     };
@@ -172,8 +184,9 @@ public final class TuningMenuItems {
             lore.add(" ");
             lore.add(ChatColor.GRAY + "Current level: " + ChatColor.YELLOW + meleePoints);
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Current bonus: " + ChatColor.RED + meleeBonus + StatSymbols.MELEE_DAMAGE.getSymbol() + ChatColor.GRAY + " base damage");
+            lore.add(ChatColor.GRAY + "Current bonus: +" + ChatColor.RED + meleeBonus + StatSymbols.MELEE_DAMAGE.getSymbol() + ChatColor.GRAY + " base damage");
             lore.add(" ");
+            lore.addAll(manipulateLore);
             return lore;
         }
     };
@@ -200,8 +213,9 @@ public final class TuningMenuItems {
             lore.add(" ");
             lore.add(ChatColor.GRAY + "Current level: " + ChatColor.YELLOW + magicPoints);
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Current bonus: " + ChatColor.AQUA + magicBonus + StatSymbols.MAGIC_DAMAGE.getSymbol() + ChatColor.GRAY + " base damage");
+            lore.add(ChatColor.GRAY + "Current bonus: +" + ChatColor.AQUA + magicBonus + StatSymbols.MAGIC_DAMAGE.getSymbol() + ChatColor.GRAY + " base damage");
             lore.add(" ");
+            lore.addAll(manipulateLore);
             return lore;
         }
     };
@@ -228,8 +242,9 @@ public final class TuningMenuItems {
             lore.add(" ");
             lore.add(ChatColor.GRAY + "Current level: " + ChatColor.YELLOW + rangePoints);
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Current bonus: " + ChatColor.DARK_PURPLE + rangeBonus + StatSymbols.RANGE_DAMAGE.getSymbol() + ChatColor.GRAY + " base damage");
+            lore.add(ChatColor.GRAY + "Current bonus: +" + ChatColor.DARK_PURPLE + rangeBonus + StatSymbols.RANGE_DAMAGE.getSymbol() + ChatColor.GRAY + " base damage");
             lore.add(" ");
+            lore.addAll(manipulateLore);
             return lore;
         }
     };

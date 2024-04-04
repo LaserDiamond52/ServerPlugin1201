@@ -10,7 +10,7 @@ public record TuningProfile(TuningPoints tuningPoints, TuningStats tuningStats) 
 
     private static final VenturePlugin plugin = VenturePlugin.getInstance();
     private static final TuningProfileManager TUNING_PROFILE_MANAGER = plugin.getTunementProfileManager();
-    public static TuningProfile createTunementProfile(Player player)
+    public static TuningProfile createTuningProfile(Player player)
     {
         TuningProfile tuningProfile = TUNING_PROFILE_MANAGER.getPlayerProfile(player.getUniqueId());
         if (tuningProfile == null) // Player does not have profile

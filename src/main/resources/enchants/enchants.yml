@@ -26,5 +26,5 @@ reachRange: 0.25
 
 minerFortune: 5
 foragerFortune: 5
-fishermanFortune: 5
+fishermanLuck: 5
 

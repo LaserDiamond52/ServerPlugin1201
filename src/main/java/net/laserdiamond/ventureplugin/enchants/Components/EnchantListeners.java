@@ -2,7 +2,6 @@ package net.laserdiamond.ventureplugin.enchants.Components;
 
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import net.laserdiamond.ventureplugin.VenturePlugin;
-import net.laserdiamond.ventureplugin.enchants.Config.EnchantConfig;
 import net.laserdiamond.ventureplugin.events.abilities.AbilityHandler;
 import net.laserdiamond.ventureplugin.events.abilities.AbilityListener;
 import net.laserdiamond.ventureplugin.events.abilities.AbilityCastType;
@@ -65,7 +64,7 @@ public class EnchantListeners implements Listener, AbilityListener, AbilityCasti
         double speed = enchantConfig.getDouble("speed");
         double minerFortune = enchantConfig.getDouble("minerFortune");
         double foragerFortune = enchantConfig.getDouble("foragerFortune");
-        double fishermanFortune = enchantConfig.getDouble("fishermanFortune");
+        double fishermanLuck = enchantConfig.getDouble("fishermanLuck");
 
         StatProfile statProfile = statProfileManager.getStatProfile(player.getUniqueId());
 
@@ -75,7 +74,7 @@ public class EnchantListeners implements Listener, AbilityListener, AbilityCasti
             addManaPool(statProfile, newMeta, manaPool);
             addDamage(statProfile, newMeta, strength, arcane, archer);
             addSpeed(statProfile, newMeta, speed);
-            addFortunes(statProfile, newMeta, minerFortune, foragerFortune, fishermanFortune);
+            addFortunes(statProfile, newMeta, minerFortune, foragerFortune, fishermanLuck);
         }
 
         if (oldMeta != null) {
@@ -84,7 +83,7 @@ public class EnchantListeners implements Listener, AbilityListener, AbilityCasti
             removeManaPool(statProfile, oldMeta, manaPool);
             removeDamage(statProfile, oldMeta, strength, arcane, archer);
             removeSpeed(statProfile, oldMeta, speed);
-            removeFortunes(statProfile, oldMeta, minerFortune, foragerFortune, fishermanFortune);
+            removeFortunes(statProfile, oldMeta, minerFortune, foragerFortune, fishermanLuck);
         }
     }
 
@@ -356,19 +355,19 @@ public class EnchantListeners implements Listener, AbilityListener, AbilityCasti
         if (itemMeta.hasEnchant(VentureEnchants.MELEE_DAMAGE)) {
             int meleeLvl = itemMeta.getEnchantLevel(VentureEnchants.MELEE_DAMAGE);
             Double finalStrength = meleeLvl * strength;
-            damageStats.setbMeleeDmg(currentBaseMelee + finalStrength);
+            damageStats.setBaseMeleeDmg(currentBaseMelee + finalStrength);
             enchantStats.setBaseMelee(currentEnchantMelee + finalStrength);
         }
         if (itemMeta.hasEnchant(VentureEnchants.MAGIC_DAMAGE)) {
             int magicLvl = itemMeta.getEnchantLevel(VentureEnchants.MAGIC_DAMAGE);
             Double finalMagic = magicLvl * arcane;
-            damageStats.setbMagicDmg(currentBaseMagic + finalMagic);
+            damageStats.setBaseMagicDmg(currentBaseMagic + finalMagic);
             enchantStats.setBaseMagic(currentEnchantMagic + finalMagic);
         }
         if (itemMeta.hasEnchant(VentureEnchants.RANGE_DAMAGE)) {
             int rangeLvl = itemMeta.getEnchantLevel(VentureEnchants.RANGE_DAMAGE);
             Double finalRange = rangeLvl * archer;
-            damageStats.setbRangeDmg(currentBaseRange + finalRange);
+            damageStats.setBaseRangeDmg(currentBaseRange + finalRange);
             enchantStats.setBaseRange(currentEnchantRange + finalRange);
         }
     }
@@ -389,19 +388,19 @@ public class EnchantListeners implements Listener, AbilityListener, AbilityCasti
         if (itemMeta.hasEnchant(VentureEnchants.MELEE_DAMAGE)) {
             int meleeLvl = itemMeta.getEnchantLevel(VentureEnchants.MELEE_DAMAGE);
             Double finalStrength = meleeLvl * strength;
-            damageStats.setbMeleeDmg(currentBaseMelee - finalStrength);
+            damageStats.setBaseMeleeDmg(currentBaseMelee - finalStrength);
             enchantStats.setBaseMelee(currentEnchantMelee - finalStrength);
         }
         if (itemMeta.hasEnchant(VentureEnchants.MAGIC_DAMAGE)) {
             int magicLvl = itemMeta.getEnchantLevel(VentureEnchants.MAGIC_DAMAGE);
             Double finalMagic = magicLvl * arcane;
-            damageStats.setbMagicDmg(currentBaseMagic - finalMagic);
+            damageStats.setBaseMagicDmg(currentBaseMagic - finalMagic);
             enchantStats.setBaseMagic(currentEnchantMagic - finalMagic);
         }
         if (itemMeta.hasEnchant(VentureEnchants.RANGE_DAMAGE)) {
             int rangeLvl = itemMeta.getEnchantLevel(VentureEnchants.RANGE_DAMAGE);
             Double finalRange = rangeLvl * archer;
-            damageStats.setbRangeDmg(currentBaseRange - finalRange);
+            damageStats.setBaseRangeDmg(currentBaseRange - finalRange);
             enchantStats.setBaseRange(currentEnchantRange - finalRange);
         }
     }
@@ -426,7 +425,7 @@ public class EnchantListeners implements Listener, AbilityListener, AbilityCasti
         }
     }
 
-    private void addFortunes(StatProfile statProfile, ItemMeta itemMeta, Double minerFortune, Double foragerFortune, Double fishermanFortune)
+    private void addFortunes(StatProfile statProfile, ItemMeta itemMeta, Double minerFortune, Double foragerFortune, Double fishermanLuck)
     {
         LootStats lootStats = statProfile.lootStats();
 
@@ -440,10 +439,10 @@ public class EnchantListeners implements Listener, AbilityListener, AbilityCasti
         }
         if (itemMeta.hasEnchant(VentureEnchants.ARMOR_FISHING_FORTUNE))
         {
-            lootStats.setFishingLoot(lootStats.getFishingLoot() + fishermanFortune);
+            lootStats.setFishingLuck(lootStats.getFishingLuck() + fishermanLuck);
         }
     }
-    private void removeFortunes(StatProfile statProfile, ItemMeta itemMeta, Double minerFortune, Double foragerFortune, Double fishermanFortune)
+    private void removeFortunes(StatProfile statProfile, ItemMeta itemMeta, Double minerFortune, Double foragerFortune, Double fishermanLuck)
     {
         LootStats lootStats = statProfile.lootStats();
 
@@ -457,7 +456,7 @@ public class EnchantListeners implements Listener, AbilityListener, AbilityCasti
         }
         if (itemMeta.hasEnchant(VentureEnchants.ARMOR_FISHING_FORTUNE))
         {
-            lootStats.setFishingLoot(lootStats.getFishingLoot() - fishermanFortune);
+            lootStats.setFishingLuck(lootStats.getFishingLuck() - fishermanLuck);
         }
     }
 

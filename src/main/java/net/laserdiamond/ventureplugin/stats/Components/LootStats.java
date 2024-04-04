@@ -6,15 +6,15 @@ public class LootStats {
     private double bonusOreLoot;
     private double bonusWoodLoot;
     private double bonusDigLoot;
-    private double fishingLoot;
+    private double fishingLuck;
 
-    public LootStats(double bonusMobLoot, double bonusOreLoot, double bonusWoodLoot, double bonusDigLoot, double fishingLoot)
+    public LootStats(double bonusMobLoot, double bonusOreLoot, double bonusWoodLoot, double bonusDigLoot, double fishingLuck)
     {
         this.bonusMobLoot = bonusMobLoot;
         this.bonusOreLoot = bonusOreLoot;
         this.bonusWoodLoot = bonusWoodLoot;
         this.bonusDigLoot = bonusDigLoot;
-        this.fishingLoot = fishingLoot;
+        this.fishingLuck = fishingLuck;
     }
 
     public double getBonusMobLoot() {
@@ -49,11 +49,11 @@ public class LootStats {
         this.bonusDigLoot = bonusDigLoot;
     }
 
-    public double getFishingLoot() {
-        return fishingLoot;
+    public double getFishingLuck() {
+        return fishingLuck;
     }
 
-    public void setFishingLoot(double fishingLoot) {
-        this.fishingLoot = fishingLoot;
+    public void setFishingLuck(double fishingLuck) {
+        this.fishingLuck = fishingLuck;
     }
 }

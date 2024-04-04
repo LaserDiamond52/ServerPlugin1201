@@ -3,15 +3,13 @@ package net.laserdiamond.ventureplugin.items.armor.trims.Components;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import com.destroystokyo.paper.event.player.PlayerPickupExperienceEvent;
 import net.laserdiamond.ventureplugin.VenturePlugin;
+import net.laserdiamond.ventureplugin.entities.player.StatPlayer;
 import net.laserdiamond.ventureplugin.stats.Components.DamageStats;
 import net.laserdiamond.ventureplugin.stats.Components.DefenseStats;
 import net.laserdiamond.ventureplugin.stats.Components.Stats;
-import net.laserdiamond.ventureplugin.stats.Config.BaseStatsConfig;
 import net.laserdiamond.ventureplugin.stats.Manager.StatProfileManager;
 import net.laserdiamond.ventureplugin.util.Config.PlayerConfig;
 import net.laserdiamond.ventureplugin.util.File.ArmorConfig;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -27,27 +25,17 @@ import org.bukkit.potion.PotionEffectType;
 
 public class TrimMaterialListeners implements Listener {
 
-    private final VenturePlugin plugin;
-    private final PlayerConfig baseStatsConfig;
     private final StatProfileManager statProfileManager;
-    private final ArmorConfig armorTrimConfig;
-    private final double defaultPlayerSpeed;
-    private final int defaultPlayerStarvationRate;
 
     private final double[] materialStatArray = new double[11];
 
     public TrimMaterialListeners(VenturePlugin plugin)
     {
-        this.plugin = plugin;
-        baseStatsConfig = plugin.getBaseStatsConfig();
         statProfileManager = plugin.getStatProfileManager();
-        armorTrimConfig = plugin.getArmorTrimConfig();
+        ArmorConfig armorTrimConfig = plugin.getArmorTrimConfig();
 
-        defaultPlayerSpeed = baseStatsConfig.getDouble("baseSpeed");
-        defaultPlayerStarvationRate = baseStatsConfig.getInt("playerDefaultStarvationRate");
-
-        materialStatArray[0] = defaultPlayerSpeed * (armorTrimConfig.getDouble("copperSpeed") * 0.01);
-        materialStatArray[1] = defaultPlayerStarvationRate * (armorTrimConfig.getInt("goldSaturation") * 0.01);
+        materialStatArray[0] = armorTrimConfig.getDouble("copperSpeed");
+        materialStatArray[1] = armorTrimConfig.getInt("goldSaturation");
         materialStatArray[2] = armorTrimConfig.getDouble("ironHealthBoost");
         materialStatArray[3] = armorTrimConfig.getInt("lapisExpBonus");
         materialStatArray[4] = armorTrimConfig.getDouble("quartzMiningExp");
@@ -67,37 +55,29 @@ public class TrimMaterialListeners implements Listener {
         ItemStack newItem = event.getNewItem(), oldItem = event.getOldItem();
         ItemMeta newMeta = newItem.getItemMeta(), oldMeta = oldItem.getItemMeta();
 
-        Stats stats = statProfileManager.getStatProfile(player.getUniqueId()).stats();
-        DamageStats damageStats = statProfileManager.getStatProfile(player.getUniqueId()).damageStats();
-        DefenseStats defenseStats = statProfileManager.getStatProfile(player.getUniqueId()).defenseStats();
-        ArmorTrimMaterialStats trimMaterialStats = statProfileManager.getStatProfile(player.getUniqueId()).armorTrimStats().armorTrimMaterialStats();
-
         if (newMeta != null)
         {
             if (newMeta instanceof ArmorMeta armorMeta)
             {
-                addStats(player, armorMeta, stats, trimMaterialStats);
+                addStats(player, armorMeta);
             }
         }
 
         if (oldMeta != null) {
             if (oldMeta instanceof ArmorMeta armorMeta)
             {
-                removeStats(player, armorMeta, stats, trimMaterialStats);
+                removeStats(player, armorMeta);
             }
         }
     }
 
-    private void addStats(Player player, ArmorMeta armorMeta, Stats stats, ArmorTrimMaterialStats trimMaterialStats)
+    private void addStats(Player player, ArmorMeta armorMeta)
     {
-        AttributeInstance healthInstance = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
-        double playerHealth = healthInstance.getBaseValue();
-
-        AttributeInstance speedInstance = player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED);
-        double playerSpeed = speedInstance.getBaseValue();
-
-        AttributeInstance luckInstance = player.getAttribute(Attribute.GENERIC_LUCK);
-        double playerLuck = luckInstance.getBaseValue();
+        StatPlayer statPlayer = new StatPlayer(player);
+        Stats stats = statPlayer.getStats();
+        DamageStats damageStats = statPlayer.getDamageStats();
+        DefenseStats defenseStats = statPlayer.getDefenseStats();
+        ArmorTrimMaterialStats trimMaterialStats = statPlayer.getArmorTrimStats().armorTrimMaterialStats();
 
         ArmorTrim armorTrim = armorMeta.getTrim();
         if (armorTrim != null)
@@ -106,51 +86,43 @@ public class TrimMaterialListeners implements Listener {
 
             if (trimMaterial.equals(TrimMaterial.COPPER))
             {
-                //speedInstance.setBaseValue(playerSpeed + materialStatArray[0]);
-                trimMaterialStats.setCopperSpeed(trimMaterialStats.getCopperSpeed() + armorTrimConfig.getDouble("copperSpeed"));
-                //stats.setSpeed(stats.getSpeed() + armorTrimConfig.getDouble("copperSpeed"));
-                stats.setSpeed(stats.getSpeed() + armorTrimConfig.getDouble("copperSpeed"));
+                stats.setSpeed(stats.getSpeed() + materialStatArray[0]);
+                trimMaterialStats.setCopperSpeed(trimMaterialStats.getCopperSpeed() + materialStatArray[0]);
             }
             if (trimMaterial.equals(TrimMaterial.GOLD))
             {
-                trimMaterialStats.setGoldSaturationChance(trimMaterialStats.getGoldSaturationChance() + armorTrimConfig.getDouble("goldSaturation"));
-
-                // Set player's saturation rate here:
-                stats.setStarvationRate((int) (stats.getStarvationRate() + armorTrimConfig.getDouble("goldSaturation")));
+                stats.setStarvationRate((int) (stats.getStarvationRate() + materialStatArray[1]));
+                trimMaterialStats.setGoldSaturationChance(trimMaterialStats.getGoldSaturationChance() + materialStatArray[1]);
             }
             if (trimMaterial.equals(TrimMaterial.IRON))
             {
-                healthInstance.setBaseValue(playerHealth + materialStatArray[2]);
+                stats.setHealth(stats.getHealth() + materialStatArray[2]);
                 trimMaterialStats.setIronHealthBoost(trimMaterialStats.getIronHealthBoost() + materialStatArray[2]);
-
             }
             if (trimMaterial.equals(TrimMaterial.LAPIS))
             {
                 trimMaterialStats.setLapisBonusExp(trimMaterialStats.getLapisBonusExp() + materialStatArray[3]);
-
             }
             if (trimMaterial.equals(TrimMaterial.QUARTZ))
             {
                 trimMaterialStats.setQuartzBonusMiningExp(trimMaterialStats.getQuartzBonusMiningExp() + materialStatArray[4]);
-
             }
             if (trimMaterial.equals(TrimMaterial.REDSTONE))
             {
                 trimMaterialStats.setRedstoneBonusPotion(trimMaterialStats.getRedstoneBonusPotion() + materialStatArray[5]);
-
             }
             if (trimMaterial.equals(TrimMaterial.EMERALD))
             {
-                luckInstance.setBaseValue(playerLuck + materialStatArray[6]);
+                stats.setLuck(stats.getLuck() + materialStatArray[6]);
                 trimMaterialStats.setEmeraldBonusLuck(trimMaterialStats.getEmeraldBonusLuck() + materialStatArray[6]);
-
             }
             if (trimMaterial.equals(TrimMaterial.AMETHYST))
             {
                 trimMaterialStats.setAmethystBonusDamage(trimMaterialStats.getAmethystBonusDamage() + materialStatArray[7]);
-                stats.setMeleeDamage(stats.getMeleeDamage() + materialStatArray[7]);
-                stats.setRangeDamage(stats.getRangeDamage() + materialStatArray[7]);
-                stats.setMagicDamage(stats.getMagicDamage() + materialStatArray[7]);
+
+                damageStats.setPercentMeleeDmg(damageStats.getPercentMelee() + materialStatArray[7]);
+                damageStats.setPercentMagicDmg(damageStats.getPercentMagic() + materialStatArray[7]);
+                damageStats.setPercentRangeDmg(damageStats.getPercentRange() + materialStatArray[7]);
 
             }
             if (trimMaterial.equals(TrimMaterial.DIAMOND))
@@ -163,23 +135,20 @@ public class TrimMaterialListeners implements Listener {
             {
                 trimMaterialStats.setNetheriteBonusDefense(trimMaterialStats.getNetheriteBonusDefense() + materialStatArray[9]);
                 trimMaterialStats.setNetheriteBonusFireDefense(trimMaterialStats.getNetheriteBonusFireDefense() + materialStatArray[10]);
-                stats.setDefense(stats.getDefense() + materialStatArray[9]);
-                stats.setFireDefense(stats.getFireDefense() + materialStatArray[10]);
-            }
 
+                defenseStats.setDefense(defenseStats.getDefense() + materialStatArray[9]);
+                defenseStats.setFireDefense(defenseStats.getFireDefense() + materialStatArray[10]);
+            }
         }
     }
 
-    private void removeStats(Player player, ArmorMeta armorMeta, Stats stats, ArmorTrimMaterialStats trimMaterialStats)
+    private void removeStats(Player player, ArmorMeta armorMeta)
     {
-        AttributeInstance healthInstance = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
-        double playerHealth = healthInstance.getBaseValue();
-
-        AttributeInstance speedInstance = player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED);
-        double playerSpeed = speedInstance.getBaseValue();
-
-        AttributeInstance luckInstance = player.getAttribute(Attribute.GENERIC_LUCK);
-        double playerLuck = luckInstance.getBaseValue();
+        StatPlayer statPlayer = new StatPlayer(player);
+        Stats stats = statPlayer.getStats();
+        DamageStats damageStats = statPlayer.getDamageStats();
+        DefenseStats defenseStats = statPlayer.getDefenseStats();
+        ArmorTrimMaterialStats trimMaterialStats = statPlayer.getArmorTrimStats().armorTrimMaterialStats();
 
         ArmorTrim armorTrim = armorMeta.getTrim();
         if (armorTrim != null)
@@ -188,52 +157,43 @@ public class TrimMaterialListeners implements Listener {
 
             if (trimMaterial.equals(TrimMaterial.COPPER))
             {
-                //speedInstance.setBaseValue(playerSpeed - materialStatArray[0]);
-                trimMaterialStats.setCopperSpeed(trimMaterialStats.getCopperSpeed() - armorTrimConfig.getDouble("copperSpeed"));
-                //stats.setSpeed(stats.getSpeed() - armorTrimConfig.getDouble("copperSpeed"));
-                stats.setSpeed(stats.getSpeed() - armorTrimConfig.getDouble("copperSpeed"));
+                stats.setSpeed(stats.getSpeed() - materialStatArray[0]);
+                trimMaterialStats.setCopperSpeed(trimMaterialStats.getCopperSpeed() - materialStatArray[0]);
             }
             if (trimMaterial.equals(TrimMaterial.GOLD))
             {
-                trimMaterialStats.setGoldSaturationChance(trimMaterialStats.getGoldSaturationChance() - armorTrimConfig.getDouble("goldSaturation"));
-
-                // Set player's saturation rate here:
-                stats.setStarvationRate((int) (stats.getStarvationRate() - armorTrimConfig.getDouble("goldSaturation")));
+                stats.setStarvationRate((int) (stats.getStarvationRate() - materialStatArray[1]));
+                trimMaterialStats.setGoldSaturationChance(trimMaterialStats.getGoldSaturationChance() - materialStatArray[1]);
             }
             if (trimMaterial.equals(TrimMaterial.IRON))
             {
-                healthInstance.setBaseValue(playerHealth - materialStatArray[2]);
+                stats.setHealth(stats.getHealth() - materialStatArray[2]);
                 trimMaterialStats.setIronHealthBoost(trimMaterialStats.getIronHealthBoost() - materialStatArray[2]);
-
             }
             if (trimMaterial.equals(TrimMaterial.LAPIS))
             {
                 trimMaterialStats.setLapisBonusExp(trimMaterialStats.getLapisBonusExp() - materialStatArray[3]);
-
             }
             if (trimMaterial.equals(TrimMaterial.QUARTZ))
             {
                 trimMaterialStats.setQuartzBonusMiningExp(trimMaterialStats.getQuartzBonusMiningExp() - materialStatArray[4]);
-
             }
             if (trimMaterial.equals(TrimMaterial.REDSTONE))
             {
                 trimMaterialStats.setRedstoneBonusPotion(trimMaterialStats.getRedstoneBonusPotion() - materialStatArray[5]);
-
             }
             if (trimMaterial.equals(TrimMaterial.EMERALD))
             {
-                luckInstance.setBaseValue(playerLuck + materialStatArray[6]);
+                stats.setLuck(stats.getLuck() - materialStatArray[6]);
                 trimMaterialStats.setEmeraldBonusLuck(trimMaterialStats.getEmeraldBonusLuck() - materialStatArray[6]);
-
             }
             if (trimMaterial.equals(TrimMaterial.AMETHYST))
             {
                 trimMaterialStats.setAmethystBonusDamage(trimMaterialStats.getAmethystBonusDamage() - materialStatArray[7]);
-                stats.setMeleeDamage(stats.getMeleeDamage() - materialStatArray[7]);
-                stats.setRangeDamage(stats.getRangeDamage() - materialStatArray[7]);
-                stats.setMagicDamage(stats.getMagicDamage() - materialStatArray[7]);
 
+                damageStats.setPercentMeleeDmg(damageStats.getPercentMelee() - materialStatArray[7]);
+                damageStats.setPercentMagicDmg(damageStats.getPercentMagic() - materialStatArray[7]);
+                damageStats.setPercentRangeDmg(damageStats.getPercentRange() - materialStatArray[7]);
             }
             if (trimMaterial.equals(TrimMaterial.DIAMOND))
             {
@@ -245,10 +205,10 @@ public class TrimMaterialListeners implements Listener {
             {
                 trimMaterialStats.setNetheriteBonusDefense(trimMaterialStats.getNetheriteBonusDefense() - materialStatArray[9]);
                 trimMaterialStats.setNetheriteBonusFireDefense(trimMaterialStats.getNetheriteBonusFireDefense() - materialStatArray[10]);
-                stats.setDefense(stats.getDefense() - materialStatArray[9]);
-                stats.setFireDefense(stats.getFireDefense() - materialStatArray[10]);
-            }
 
+                defenseStats.setDefense(defenseStats.getDefense() - materialStatArray[9]);
+                defenseStats.setFireDefense(defenseStats.getFireDefense() - materialStatArray[10]);
+            }
         }
     }
 

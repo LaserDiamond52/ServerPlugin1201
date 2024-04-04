@@ -6,9 +6,8 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public enum ArmorCMD {
-
-    DIAMOND_ARMOR (37, 38, 39, 40),
-    NETHERITE_ARMOR (41,42,43,44),
+    
+    NETHERITE_ARMOR (1002,1001,1000,999),
     REINFORCED_DIAMOND_ARMOR (1006, 1005, 1004, 1003),
     EMERALD_ARMOR (1010, 1009, 1008, 1007),
     STORM_LORD_ARMOR(1026, 1027, 1028, 1029, 1030, 1031, 1032, 1033, 1034, 1035, 1036, 1037, 1188, 1189, 1190, 1191),

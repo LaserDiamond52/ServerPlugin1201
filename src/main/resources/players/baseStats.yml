@@ -94,26 +94,33 @@ baseTuningPoints: 5
 
 # Tuning Point Values
 
-# Determines how much of a stat each tuning point gives
+# Determines how much of a stat each tuning point gives and how many points a player can put into each category
 
 # Health
 healthValue: 1
+healthMax: 25
 
 # Defense
 defenseValue: 1
+defenseMax: 50
 
 # Speed
 speedValue: 2
+speedMax: 50
 
 # Mana
 manaValue: 5
+manaMax: 20
 
 # Melee
 meleeValue: 0.25
+meleeMax: 20
 
 # Magic
 magicValue: 0.25
+magicMax: 20
 
 # Range
 rangeValue: 0.25
+rangeMax: 20
 
