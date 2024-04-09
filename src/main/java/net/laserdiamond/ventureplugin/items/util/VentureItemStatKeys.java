@@ -1,6 +1,6 @@
 package net.laserdiamond.ventureplugin.items.util;
 
-import net.laserdiamond.ventureplugin.stats.Components.StatSymbols;
+import net.laserdiamond.ventureplugin.util.StatSymbols;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 

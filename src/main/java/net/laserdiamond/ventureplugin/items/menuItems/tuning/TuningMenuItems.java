@@ -4,7 +4,7 @@ import net.laserdiamond.ventureplugin.VenturePlugin;
 import net.laserdiamond.ventureplugin.entities.player.StatPlayer;
 import net.laserdiamond.ventureplugin.items.menuItems.util.MenuItem;
 import net.laserdiamond.ventureplugin.items.menuItems.util.VentureMenuItem;
-import net.laserdiamond.ventureplugin.stats.Components.StatSymbols;
+import net.laserdiamond.ventureplugin.util.StatSymbols;
 import net.laserdiamond.ventureplugin.util.Config.PlayerConfig;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

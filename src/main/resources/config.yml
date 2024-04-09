@@ -1,6 +1,13 @@
 
 # Damage Display Lifespan
+
+# Lifespan in ticks for how long damage displays last
 damageDisplayLifeSpanTicks: 20
+
+# Skill Display Lifespan
+
+# Lifespan in ticks for how long skill exp displays last
+skillDisplayLifeSpanTicks: 20
 
 # Star stats
 maxStars: 5

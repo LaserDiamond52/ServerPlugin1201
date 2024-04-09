@@ -38,6 +38,7 @@ import net.laserdiamond.ventureplugin.items.util.ItemForger;
 import net.laserdiamond.ventureplugin.entities.healthDisplay.mobHealthDisplay;
 import net.laserdiamond.ventureplugin.items.armor.util.VentureArmorSet;
 import net.laserdiamond.ventureplugin.items.menuItems.util.VentureMenuItem;
+import net.laserdiamond.ventureplugin.skills.Components.ExpGain.SkillsExpGainListener;
 import net.laserdiamond.ventureplugin.skills.Manager.SkillsProfileManager;
 import net.laserdiamond.ventureplugin.util.Config.MiscConfig;
 import net.laserdiamond.ventureplugin.util.Config.PlayerConfig;
@@ -178,6 +179,9 @@ public final class VenturePlugin extends JavaPlugin {
 
         // Mob names
         getServer().getPluginManager().registerEvents(new mobHealthDisplay(this),this);
+
+        // Skill Exp Listeners
+        getServer().getPluginManager().registerEvents(new SkillsExpGainListener(), this);
 
 
 

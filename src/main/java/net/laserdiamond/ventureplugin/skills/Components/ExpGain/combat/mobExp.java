@@ -1,6 +1,7 @@
 package net.laserdiamond.ventureplugin.skills.Components.ExpGain.combat;
 
 import net.laserdiamond.ventureplugin.entities.management.MobKeys;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Mob;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -9,92 +10,94 @@ import java.util.HashMap;
 
 public class mobExp {
 
-    private static final HashMap<String, Double> vanillaMobCombatExp = new HashMap<>();
+    private static final HashMap<EntityType, Double> vanillaMobCombatExp = new HashMap<>();
     static
     {
         // Passive Mobs
-        vanillaMobCombatExp.put("allay", 10.0); //
-        vanillaMobCombatExp.put("axolotl", 10.0); //
-        vanillaMobCombatExp.put("bat", 5.0); //
-        vanillaMobCombatExp.put("camel", 12.0); //
-        vanillaMobCombatExp.put("cat", 5.0); //
-        vanillaMobCombatExp.put("chicken", 5.0); //
-        vanillaMobCombatExp.put("cod", 3.0); //
-        vanillaMobCombatExp.put("cow", 5.0); //
-        vanillaMobCombatExp.put("donkey", 5.0); //
-        vanillaMobCombatExp.put("frog", 12.0); //
-        vanillaMobCombatExp.put("glow_squid", 4.0); //
-        vanillaMobCombatExp.put("horse", 6.5); //
-        vanillaMobCombatExp.put("mooshroom", 5.0); //
-        vanillaMobCombatExp.put("mule", 6.0); //
-        vanillaMobCombatExp.put("ocelot", 11.0); //
-        vanillaMobCombatExp.put("parrot", 3.5); //
-        vanillaMobCombatExp.put("pig", 5.0); //
-        vanillaMobCombatExp.put("pufferfish", 13.0); //
-        vanillaMobCombatExp.put("rabbit", 2.5); //
-        vanillaMobCombatExp.put("salmon", 3.0); //
-        vanillaMobCombatExp.put("sheep", 5.0); //
-        vanillaMobCombatExp.put("skeleton_horse", 20.0); //
-        vanillaMobCombatExp.put("zombie_horse", 20.0); //
-        vanillaMobCombatExp.put("sniffer", 17.0); //
-        vanillaMobCombatExp.put("snow_golem", 2.0); //
-        vanillaMobCombatExp.put("squid", 3.5); //
-        vanillaMobCombatExp.put("strider", 14.0); //
-        vanillaMobCombatExp.put("tadpole", 1.0); //
-        vanillaMobCombatExp.put("tropical_fish", 1.5); //
-        vanillaMobCombatExp.put("turtle", 3.0); //
-        vanillaMobCombatExp.put("villager", 7.5); //
-        vanillaMobCombatExp.put("wandering_trader", 7.5); //
+        vanillaMobCombatExp.put(EntityType.ALLAY, 10.0); //
+        vanillaMobCombatExp.put(EntityType.AXOLOTL, 10.0); //
+        vanillaMobCombatExp.put(EntityType.BAT, 5.0); //
+        vanillaMobCombatExp.put(EntityType.CAMEL, 12.0); //
+        vanillaMobCombatExp.put(EntityType.CAT, 5.0); //
+        vanillaMobCombatExp.put(EntityType.CHICKEN, 5.0); //
+        vanillaMobCombatExp.put(EntityType.COD, 3.0); //
+        vanillaMobCombatExp.put(EntityType.COW, 5.0); //
+        vanillaMobCombatExp.put(EntityType.DONKEY, 5.0); //
+        vanillaMobCombatExp.put(EntityType.FROG, 12.0); //
+        vanillaMobCombatExp.put(EntityType.GLOW_SQUID, 4.0); //
+        vanillaMobCombatExp.put(EntityType.HORSE, 6.5); //
+        vanillaMobCombatExp.put(EntityType.MUSHROOM_COW, 5.0); //
+        vanillaMobCombatExp.put(EntityType.MULE, 6.0); //
+        vanillaMobCombatExp.put(EntityType.OCELOT, 11.0); //
+        vanillaMobCombatExp.put(EntityType.PARROT, 3.5); //
+        vanillaMobCombatExp.put(EntityType.PIG, 5.0); //
+        vanillaMobCombatExp.put(EntityType.PUFFERFISH, 13.0); //
+        vanillaMobCombatExp.put(EntityType.RABBIT, 2.5); //
+        vanillaMobCombatExp.put(EntityType.SALMON, 3.0); //
+        vanillaMobCombatExp.put(EntityType.SHEEP, 5.0); //
+        vanillaMobCombatExp.put(EntityType.SKELETON_HORSE, 20.0); //
+        vanillaMobCombatExp.put(EntityType.ZOMBIE_HORSE, 20.0); //
+        vanillaMobCombatExp.put(EntityType.SNIFFER, 17.0); //
+        vanillaMobCombatExp.put(EntityType.SNOWMAN, 2.0); //
+        vanillaMobCombatExp.put(EntityType.SQUID, 3.5); //
+        vanillaMobCombatExp.put(EntityType.STRIDER, 14.0); //
+        vanillaMobCombatExp.put(EntityType.TADPOLE, 1.0); //
+        vanillaMobCombatExp.put(EntityType.TROPICAL_FISH, 1.5); //
+        vanillaMobCombatExp.put(EntityType.TURTLE, 3.0); //
+        vanillaMobCombatExp.put(EntityType.VILLAGER, 7.5); //
+        vanillaMobCombatExp.put(EntityType.WANDERING_TRADER, 7.5); //
 
         // Neutral Mobs
-        vanillaMobCombatExp.put("bee", 5.75); //
-        vanillaMobCombatExp.put("cave_spider", 15.5); //
-        vanillaMobCombatExp.put("dolphin", 13.5); //
-        vanillaMobCombatExp.put("drowned", 20.5); //
-        vanillaMobCombatExp.put("enderman", 35.0); //
-        vanillaMobCombatExp.put("fox", 4.5); //
-        vanillaMobCombatExp.put("goat", 4.5); //
-        vanillaMobCombatExp.put("iron_golem", 25.0); //
-        vanillaMobCombatExp.put("llama", 6.5); //
-        vanillaMobCombatExp.put("panda", 6.5); //
-        vanillaMobCombatExp.put("piglin", 20.5); //
-        vanillaMobCombatExp.put("polar_bear", 16.0); //
-        vanillaMobCombatExp.put("spider", 17.0); //
-        vanillaMobCombatExp.put("trader_llama", 7.5); //
-        vanillaMobCombatExp.put("wolf", 15.0); //
-        vanillaMobCombatExp.put("zombified_piglin", 27.0); //
+        vanillaMobCombatExp.put(EntityType.BEE, 5.75); //
+        vanillaMobCombatExp.put(EntityType.CAVE_SPIDER, 15.5); //
+        vanillaMobCombatExp.put(EntityType.DOLPHIN, 13.5); //
+        vanillaMobCombatExp.put(EntityType.DROWNED, 20.5); //
+        vanillaMobCombatExp.put(EntityType.ENDERMAN, 35.0); //
+        vanillaMobCombatExp.put(EntityType.FOX, 4.5); //
+        vanillaMobCombatExp.put(EntityType.GOAT, 4.5); //
+        vanillaMobCombatExp.put(EntityType.IRON_GOLEM, 25.0); //
+        vanillaMobCombatExp.put(EntityType.LLAMA, 6.5); //
+        vanillaMobCombatExp.put(EntityType.PANDA, 6.5); //
+        vanillaMobCombatExp.put(EntityType.PIGLIN, 20.5); //
+        vanillaMobCombatExp.put(EntityType.POLAR_BEAR, 16.0); //
+        vanillaMobCombatExp.put(EntityType.SPIDER, 17.0); //
+        vanillaMobCombatExp.put(EntityType.TRADER_LLAMA, 7.5); //
+        vanillaMobCombatExp.put(EntityType.WOLF, 15.0); //
+        vanillaMobCombatExp.put(EntityType.ZOMBIFIED_PIGLIN, 27.0); //
 
         // Hostile Mobs
-        vanillaMobCombatExp.put("blaze", 30.0); //
-        vanillaMobCombatExp.put("creeper", 27.5); //
-        vanillaMobCombatExp.put("elder_guardian", 100.0); // Boss //
-        vanillaMobCombatExp.put("endermite", 20.0); //
-        vanillaMobCombatExp.put("ender_dragon", 50000.0); // Boss //
-        vanillaMobCombatExp.put("evoker", 40.0); //
-        vanillaMobCombatExp.put("ghast", 21.0); //
-        vanillaMobCombatExp.put("guardian", 26.0); //
-        vanillaMobCombatExp.put("hoglin", 24.0); //
-        vanillaMobCombatExp.put("husk", 20.5); //
-        vanillaMobCombatExp.put("illusioner", 200.0); //
-        vanillaMobCombatExp.put("magma_cube", 22.0); //
-        vanillaMobCombatExp.put("phantom", 23.0); //
-        vanillaMobCombatExp.put("piglin_brute", 45.0); //
-        vanillaMobCombatExp.put("pillager", 18.0); //
-        vanillaMobCombatExp.put("ravager", 60.0); //
-        vanillaMobCombatExp.put("shulker", 75.0); //
-        vanillaMobCombatExp.put("silverfish", 7.0); //
-        vanillaMobCombatExp.put("skeleton", 18.5); //
-        vanillaMobCombatExp.put("slime", 16.0); //
-        vanillaMobCombatExp.put("stray", 19.5); //
-        vanillaMobCombatExp.put("vex", 4.75); //
-        vanillaMobCombatExp.put("vindicator", 40.0); //
-        vanillaMobCombatExp.put("warden", 750.0); //
-        vanillaMobCombatExp.put("witch", 28.0); //
-        vanillaMobCombatExp.put("wither", 40000.0); // Boss //
-        vanillaMobCombatExp.put("wither_skeleton", 31.5); //
-        vanillaMobCombatExp.put("zoglin", 27.0); //
-        vanillaMobCombatExp.put("zombie", 20.0); //
-        vanillaMobCombatExp.put("zombie_villager", 20.0); //
+        vanillaMobCombatExp.put(EntityType.BLAZE, 30.0); //
+        vanillaMobCombatExp.put(EntityType.CREEPER, 27.5); //
+        vanillaMobCombatExp.put(EntityType.ELDER_GUARDIAN, 100.0); // Boss //
+        vanillaMobCombatExp.put(EntityType.ENDERMITE, 20.0); //
+        vanillaMobCombatExp.put(EntityType.ENDER_DRAGON, 50000.0); // Boss //
+        vanillaMobCombatExp.put(EntityType.EVOKER, 40.0); //
+        vanillaMobCombatExp.put(EntityType.GHAST, 21.0); //
+        vanillaMobCombatExp.put(EntityType.GUARDIAN, 26.0); //
+        vanillaMobCombatExp.put(EntityType.HOGLIN, 24.0); //
+        vanillaMobCombatExp.put(EntityType.HUSK, 20.5); //
+        vanillaMobCombatExp.put(EntityType.ILLUSIONER, 200.0); //
+        vanillaMobCombatExp.put(EntityType.MAGMA_CUBE, 22.0); //
+        vanillaMobCombatExp.put(EntityType.PHANTOM, 23.0); //
+        vanillaMobCombatExp.put(EntityType.PIGLIN_BRUTE, 45.0); //
+        vanillaMobCombatExp.put(EntityType.PILLAGER, 18.0); //
+        vanillaMobCombatExp.put(EntityType.RAVAGER, 60.0); //
+        vanillaMobCombatExp.put(EntityType.SHULKER, 75.0); //
+        vanillaMobCombatExp.put(EntityType.SILVERFISH, 7.0); //
+        vanillaMobCombatExp.put(EntityType.SKELETON, 18.5); //
+        vanillaMobCombatExp.put(EntityType.SLIME, 16.0); //
+        vanillaMobCombatExp.put(EntityType.STRAY, 19.5); //
+        vanillaMobCombatExp.put(EntityType.VEX, 4.75); //
+        vanillaMobCombatExp.put(EntityType.VINDICATOR, 40.0); //
+        vanillaMobCombatExp.put(EntityType.WARDEN, 750.0); //
+        vanillaMobCombatExp.put(EntityType.WITCH, 28.0); //
+        vanillaMobCombatExp.put(EntityType.WITHER, 40000.0); // Boss //
+        vanillaMobCombatExp.put(EntityType.WITHER_SKELETON, 31.5); //
+        vanillaMobCombatExp.put(EntityType.ZOGLIN, 27.0); //
+        vanillaMobCombatExp.put(EntityType.ZOMBIE, 20.0); //
+        vanillaMobCombatExp.put(EntityType.ZOMBIE_VILLAGER, 20.0); //
+
+
 
     }
 
@@ -112,6 +115,7 @@ public class mobExp {
     public static Double getMobCombatExp(Mob mob)
     {
         Double exp = 0.0;
+        EntityType mobType = mob.getType();
         PersistentDataContainer persistentDataContainer = mob.getPersistentDataContainer();
 
         if (persistentDataContainer.get(MobKeys.VENTURE_MOB, PersistentDataType.STRING) != null) // TODO: Change to check for VENTURE_MOB_COMBAT_EXP key on mob
@@ -121,13 +125,9 @@ public class mobExp {
             {
                 exp = ventureMobCombatExp.get(ventureMobName);
             }
-        } else if (persistentDataContainer.get(MobKeys.MOB_TYPE, PersistentDataType.STRING) != null)
+        } else if (vanillaMobCombatExp.containsKey(mobType) && vanillaMobCombatExp.get(mobType) != null)
         {
-            String vanillaMobName = persistentDataContainer.get(MobKeys.MOB_TYPE, PersistentDataType.STRING);
-            if (vanillaMobCombatExp.get(vanillaMobName) != null)
-            {
-                exp = vanillaMobCombatExp.get(vanillaMobName);
-            }
+            exp = vanillaMobCombatExp.get(mobType);
         }
 
         return exp;

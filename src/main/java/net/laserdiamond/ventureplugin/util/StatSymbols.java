@@ -1,4 +1,4 @@
-package net.laserdiamond.ventureplugin.stats.Components;
+package net.laserdiamond.ventureplugin.util;
 
 public enum StatSymbols {
 
@@ -10,7 +10,14 @@ public enum StatSymbols {
     MAGIC_DAMAGE ("⚝"),
     RANGE_DAMAGE ("➶"),
     FORTITUDE ("⛊"),
-    SPEED ("\uD83D\uDC5F");
+    SPEED ("\uD83D\uDC5F"),
+    COMBAT ("⚔"),
+    MINING ("⛏"),
+    FORAGING ("\uD83E\uDE93"),
+    FARMING ("\uD83E\uDEB4"),
+    ENCHANTING ("\uD83D\uDD6E"),
+    FISHING ("\uD83C\uDFA3"),
+    BREWING ("⚗️");
 
     private final String symbol;
 

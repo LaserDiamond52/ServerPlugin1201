@@ -14,15 +14,15 @@ public class farmingExp {
         farmingBlockExp.put(Material.NETHER_WART_BLOCK, 13.0);
         farmingBlockExp.put(Material.WARPED_WART_BLOCK, 13.0);
         farmingBlockExp.put(Material.HAY_BLOCK, 19.0);
-        farmingBlockExp.put(Material.SCULK, 40.0);
+        farmingBlockExp.put(Material.SCULK, 25.0);
         farmingBlockExp.put(Material.SCULK_VEIN, 15.0);
+        farmingBlockExp.put(Material.SCULK_CATALYST, 60.0);
+        farmingBlockExp.put(Material.SCULK_SHRIEKER, 53.5);
+        farmingBlockExp.put(Material.SCULK_SENSOR, 47.0);
         farmingBlockExp.put(Material.MOSS_BLOCK, 10.0);
         farmingBlockExp.put(Material.SHROOMLIGHT, 14.0);
-
-        //farmingBlockExp.put(Material.POTATOES, 4.5);
-        //farmingBlockExp.put(Material.WHEAT, 4.5);
-
-        //farmingBlockExp.put(Material.NETHER_WART, 7.0);
+        farmingBlockExp.put(Material.SPONGE, 37.0);
+        farmingBlockExp.put(Material.WET_SPONGE, 37.0);
     }
 
     public static Double getFarmingExp(Block block)
