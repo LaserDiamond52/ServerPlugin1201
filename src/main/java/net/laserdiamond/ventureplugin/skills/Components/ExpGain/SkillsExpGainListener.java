@@ -4,6 +4,7 @@ import net.laserdiamond.ventureplugin.VenturePlugin;
 import net.laserdiamond.ventureplugin.entities.player.StatPlayer;
 import net.laserdiamond.ventureplugin.events.skills.SkillsExpGainEvent;
 import net.laserdiamond.ventureplugin.skills.Components.ExpGain.combat.mobExp;
+import net.laserdiamond.ventureplugin.skills.Components.ExpGain.farming.farmingExp;
 import net.laserdiamond.ventureplugin.skills.Components.ExpGain.foraging.foragingExp;
 import net.laserdiamond.ventureplugin.skills.Components.ExpGain.mining.miningExp;
 import net.laserdiamond.ventureplugin.skills.Components.SkillsEXP;
@@ -93,6 +94,51 @@ public class SkillsExpGainListener implements Listener {
                 {
                     skillsEXP.setTotalMiningEXP(skillsEXP.getTotalMiningEXP() + expAmount);
                     skillsEXP.setMiningExpToNextLevel(skillsEXP.getMiningExpToNextLevel() + expAmount);
+                    int skillLevel = skillsLevel.getMiningLevel();
+
+                    while (skillsEXP.getMiningExpToNextLevel() >= skillsEXP.getRequiredMiningExpToNextLevel() && skillLevel < 50)
+                    {
+                        skillLevel = skillsLevel.getMiningLevel();
+                        double requiredExp = skillsEXP.getRequiredMiningExpToNextLevel();
+                        double fortuneBonus = skillsReward.getMiningFortuneBonus();
+                        double defenseBonus = skillsReward.getMiningDefenseBonus();
+
+                        if (skillLevel < 5)
+                        {
+                            skillsEXP.setRequiredMiningExpToNextLevel(requiredExp + 100);
+                        } else if (skillLevel < 10)
+                        {
+                            skillsEXP.setRequiredMiningExpToNextLevel(requiredExp + 250);
+                        } else if (skillLevel < 15)
+                        {
+                            skillsEXP.setRequiredMiningExpToNextLevel(requiredExp + 500);
+                        } else if (skillLevel < 20)
+                        {
+                            skillsEXP.setRequiredMiningExpToNextLevel(requiredExp + 1000);
+                        } else if (skillLevel < 25)
+                        {
+                            skillsEXP.setRequiredMiningExpToNextLevel(requiredExp + 2000);
+                        } else if (skillLevel < 30)
+                        {
+                            skillsEXP.setRequiredMiningExpToNextLevel(requiredExp + 5000);
+                        } else if (skillLevel < 40)
+                        {
+                            skillsEXP.setRequiredMiningExpToNextLevel(requiredExp + 10000);
+                        } else if (skillLevel < 50)
+                        {
+                            skillsEXP.setRequiredMiningExpToNextLevel(requiredExp + 17500);
+                        }
+
+                        skillsLevel.setMiningLevel(skillLevel + 1);
+                        skillsReward.setMiningFortuneBonus(fortuneBonus + 2);
+                        skillsReward.setMiningDefenseBonus(defenseBonus + 2);
+
+                        if (skillLevel + 1 == 50)
+                        {
+                            skillsEXP.setRequiredMiningExpToNextLevel(0);
+                            break;
+                        }
+                    }
                 }
                 case FORAGING ->
                 {
@@ -155,11 +201,15 @@ public class SkillsExpGainListener implements Listener {
 
         Double miningSkillExp = miningExp.getBlockMiningExp(block);
         Double foragingSkillExp = foragingExp.getForagingExp(block);
-        // TODO: Need farming exp from block/crop mined
+        Double farmingSkillExp = farmingExp.getFarmingExp(block);
 
         SkillsExpGainEvent miningExpGainEvent = new SkillsExpGainEvent(player, miningSkillExp, SkillsExpGainEvent.Skill.MINING);
         SkillsExpGainEvent foragingExpGainEvent = new SkillsExpGainEvent(player, foragingSkillExp, SkillsExpGainEvent.Skill.FORAGING);
-        // TODO: Need farming exp event
+        SkillsExpGainEvent farmingExpGainEvent = new SkillsExpGainEvent(player, farmingSkillExp, SkillsExpGainEvent.Skill.FARMING);
+
+        Bukkit.getPluginManager().callEvent(miningExpGainEvent);
+        Bukkit.getPluginManager().callEvent(foragingExpGainEvent);
+        Bukkit.getPluginManager().callEvent(farmingExpGainEvent);
 
     }
 }
