@@ -3,6 +3,8 @@ package net.laserdiamond.ventureplugin.skills.Components.ExpGain;
 import net.laserdiamond.ventureplugin.VenturePlugin;
 import net.laserdiamond.ventureplugin.entities.player.StatPlayer;
 import net.laserdiamond.ventureplugin.events.skills.SkillsExpGainEvent;
+import net.laserdiamond.ventureplugin.items.util.ItemForger;
+import net.laserdiamond.ventureplugin.skills.Components.ExpGain.brewing.brewingExp;
 import net.laserdiamond.ventureplugin.skills.Components.ExpGain.combat.mobExp;
 import net.laserdiamond.ventureplugin.skills.Components.ExpGain.farming.farmingExp;
 import net.laserdiamond.ventureplugin.skills.Components.ExpGain.foraging.foragingExp;
@@ -14,21 +16,24 @@ import net.laserdiamond.ventureplugin.util.StatSymbols;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BrewingStartEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.inventory.BrewingStandFuelEvent;
+import org.bukkit.event.inventory.BrewEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.BrewerInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SkillsExpGainListener implements Listener {
 
@@ -61,40 +66,63 @@ public class SkillsExpGainListener implements Listener {
                     skillSymbol = ChatColor.DARK_RED + StatSymbols.COMBAT.getSymbol();
                     skillsEXP.setTotalCombatEXP(skillsEXP.getTotalCombatEXP() + expAmount);
                     skillsEXP.setCombatExpToNextLevel(skillsEXP.getCombatExpToNextLevel() + expAmount);
+                    final int previousSkillLevel = skillsLevel.getCombatLevel();
                     int skillLevel = skillsLevel.getCombatLevel();
-                    double damageBonus = skillsReward.getCombatDamageBonus();
+                    final double previousDamageBonus = skillsReward.getCombatDamageBonus();
 
                     while (skillsEXP.getCombatExpToNextLevel() >= skillsEXP.getRequiredCombatExpToNextLevel() && skillLevel < 50) // Check if player has acquired an adequate amount of exp to level up and is under the max level
                     {
                         skillLevel = skillsLevel.getCombatLevel();
-                        damageBonus = skillsReward.getCombatDamageBonus();
-                        if (skillLevel < 5) // Previous level is under 5
+                        double expToNextLevel = skillsEXP.getCombatExpToNextLevel();
+                        double requiredExp = skillsEXP.getRequiredCombatExpToNextLevel();
+                        double damageBonus = skillsReward.getCombatDamageBonus();
+
+                        skillsEXP.setCombatExpToNextLevel(expToNextLevel - requiredExp);
+
+                        if (skillLevel <= 5) // Previous level is under 5
                         {
-                            skillsEXP.setRequiredCombatExpToNextLevel(skillsEXP.getRequiredCombatExpToNextLevel() + 100);
-                        } else if (skillLevel < 10) // Previous level is under 10
+                            skillsEXP.setRequiredCombatExpToNextLevel(requiredExp + 100);
+                        } else if (skillLevel <= 10) // Previous level is under 10
                         {
-                            skillsEXP.setRequiredCombatExpToNextLevel(skillsEXP.getRequiredCombatExpToNextLevel() + 250);
-                        } else if (skillLevel < 15) // Previous level is under 15
+                            skillsEXP.setRequiredCombatExpToNextLevel(requiredExp + 250);
+                        } else if (skillLevel <= 15) // Previous level is under 15
                         {
-                            skillsEXP.setRequiredCombatExpToNextLevel(skillsEXP.getRequiredCombatExpToNextLevel() + 500);
-                        } else if (skillLevel < 20) // Previous level is under 20
+                            skillsEXP.setRequiredCombatExpToNextLevel(requiredExp + 500);
+                        } else if (skillLevel <= 20) // Previous level is under 20
                         {
-                            skillsEXP.setRequiredCombatExpToNextLevel(skillsEXP.getRequiredCombatExpToNextLevel() + 1000);
-                        } else if (skillLevel < 25) // Previous level is under 25
+                            skillsEXP.setRequiredCombatExpToNextLevel(requiredExp + 1000);
+                        } else if (skillLevel <= 25) // Previous level is under 25
                         {
-                            skillsEXP.setRequiredCombatExpToNextLevel(skillsEXP.getRequiredCombatExpToNextLevel() + 2000);
-                        } else if (skillLevel < 30) // Previous level is under 30
+                            skillsEXP.setRequiredCombatExpToNextLevel(requiredExp + 2000);
+                        } else if (skillLevel <= 30) // Previous level is under 30
                         {
-                            skillsEXP.setRequiredCombatExpToNextLevel(skillsEXP.getRequiredCombatExpToNextLevel() + 5000);
-                        } else if (skillLevel < 40) // Previous level is under 40
+                            skillsEXP.setRequiredCombatExpToNextLevel(requiredExp + 5000);
+                        } else if (skillLevel <= 40) // Previous level is under 40
                         {
-                            skillsEXP.setRequiredCombatExpToNextLevel(skillsEXP.getRequiredCombatExpToNextLevel() + 10000);
+                            skillsEXP.setRequiredCombatExpToNextLevel(requiredExp + 10000);
                         } else { // Previous level is under 50
-                            skillsEXP.setRequiredCombatExpToNextLevel(skillsEXP.getRequiredCombatExpToNextLevel() + 17500);
+                            skillsEXP.setRequiredCombatExpToNextLevel(requiredExp + 17500);
                         }
 
                         skillsLevel.setCombatLevel(skillLevel + 1); // Update combat level
-                        skillsReward.setCombatDamageBonus(damageBonus + 2);
+                        skillsReward.setCombatDamageBonus(damageBonus + 2); // Update skill rewards
+                        double newExpToNextLevel = skillsEXP.getCombatExpToNextLevel(); // Get Exp to next level
+                        double newRequiredExpToNextLevel = skillsEXP.getRequiredCombatExpToNextLevel(); // Get Required Exp to next level
+
+                        if (newExpToNextLevel < newRequiredExpToNextLevel) // Check if we can no longer level up
+                        {
+                            int newSkillLevel = skillsLevel.getCombatLevel(); // Skill level after leveling
+                            double newDamageBonus = skillsReward.getCombatDamageBonus(); // New damage bonus after leveling
+
+                            player.sendMessage(ChatColor.DARK_RED + "" + ChatColor.BOLD + "_____________________________________________");
+                            player.sendMessage(" ");
+                            player.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + "Skill Level Up!" + ChatColor.RESET + ChatColor.DARK_RED + " Combat " + ChatColor.DARK_GRAY + previousSkillLevel + " ---> " + ChatColor.DARK_RED + newSkillLevel);
+                            player.sendMessage(" ");
+                            player.sendMessage(ChatColor.GREEN + " " + ChatColor.BOLD + "Rewards");
+                            player.sendMessage(ChatColor.WHITE + "    Deal " + ChatColor.DARK_GRAY + previousDamageBonus + " ---> " + ChatColor.GREEN + newDamageBonus + "% " + ChatColor.WHITE + "more damage");
+                            player.sendMessage(" ");
+                            player.sendMessage(ChatColor.DARK_RED + "" + ChatColor.BOLD + "_____________________________________________");
+                        }
 
                         if (skillLevel + 1 == 50) // New level is 50
                         {
@@ -103,64 +131,75 @@ public class SkillsExpGainListener implements Listener {
                         }
                     }
 
-                    int newSkillLevel = skillsLevel.getCombatLevel(); // Skill level after leveling
-                    double newDamageBonus = skillsReward.getCombatDamageBonus(); // New damage bonus after leveling
-
-                    player.sendMessage(ChatColor.DARK_RED + "" + ChatColor.BOLD + "_____________________________________________");
-                    player.sendMessage(" ");
-                    player.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + "Skill Level Up!" + ChatColor.RESET + ChatColor.DARK_RED + " Combat " + ChatColor.DARK_GRAY + skillLevel + " ---> " + ChatColor.DARK_RED + newSkillLevel);
-                    player.sendMessage(" ");
-                    player.sendMessage(ChatColor.GREEN + " " + ChatColor.BOLD + "Rewards");
-                    player.sendMessage(ChatColor.WHITE + "    Deal " + ChatColor.DARK_GRAY + damageBonus + " ---> " + ChatColor.GREEN + newDamageBonus + "% " + ChatColor.WHITE + "more damage");
-                    player.sendMessage(" ");
-                    player.sendMessage(ChatColor.DARK_RED + "" + ChatColor.BOLD + "_____________________________________________");
-
                 }
                 case MINING ->
                 {
                     skillSymbol = ChatColor.DARK_BLUE + StatSymbols.MINING.getSymbol();
                     skillsEXP.setTotalMiningEXP(skillsEXP.getTotalMiningEXP() + expAmount);
                     skillsEXP.setMiningExpToNextLevel(skillsEXP.getMiningExpToNextLevel() + expAmount);
+                    final int previousSkillLevel = skillsLevel.getMiningLevel();
                     int skillLevel = skillsLevel.getMiningLevel();
-                    double fortuneBonus = skillsReward.getMiningFortuneBonus();
-                    double defense = skillsReward.getMiningDefenseBonus();
+                    final double previousFortuneBonus = skillsReward.getMiningFortuneBonus();
+                    final double previousDefenseBonus = skillsReward.getMiningDefenseBonus();
 
                     while (skillsEXP.getMiningExpToNextLevel() >= skillsEXP.getRequiredMiningExpToNextLevel() && skillLevel < 50)
                     {
                         skillLevel = skillsLevel.getMiningLevel();
+                        double expToNextLevel = skillsEXP.getMiningExpToNextLevel();
                         double requiredExp = skillsEXP.getRequiredMiningExpToNextLevel();
-                        fortuneBonus = skillsReward.getMiningFortuneBonus();
-                        double defenseBonus = skillsReward.getMiningDefenseBonus();
+                        double fortuneBonus = skillsReward.getMiningFortuneBonus();
+                        double defense = skillsReward.getMiningDefenseBonus();
 
-                        if (skillLevel < 5)
+                        skillsEXP.setMiningExpToNextLevel(expToNextLevel - requiredExp);
+
+                        if (skillLevel <= 5)
                         {
                             skillsEXP.setRequiredMiningExpToNextLevel(requiredExp + 100);
-                        } else if (skillLevel < 10)
+                        } else if (skillLevel <= 10)
                         {
                             skillsEXP.setRequiredMiningExpToNextLevel(requiredExp + 250);
-                        } else if (skillLevel < 15)
+                        } else if (skillLevel <= 15)
                         {
                             skillsEXP.setRequiredMiningExpToNextLevel(requiredExp + 500);
-                        } else if (skillLevel < 20)
+                        } else if (skillLevel <= 20)
                         {
                             skillsEXP.setRequiredMiningExpToNextLevel(requiredExp + 1000);
-                        } else if (skillLevel < 25)
+                        } else if (skillLevel <= 25)
                         {
                             skillsEXP.setRequiredMiningExpToNextLevel(requiredExp + 2000);
-                        } else if (skillLevel < 30)
+                        } else if (skillLevel <= 30)
                         {
                             skillsEXP.setRequiredMiningExpToNextLevel(requiredExp + 5000);
-                        } else if (skillLevel < 40)
+                        } else if (skillLevel <= 40)
                         {
                             skillsEXP.setRequiredMiningExpToNextLevel(requiredExp + 10000);
-                        } else if (skillLevel < 50)
+                        } else if (skillLevel <= 50)
                         {
                             skillsEXP.setRequiredMiningExpToNextLevel(requiredExp + 17500);
                         }
 
                         skillsLevel.setMiningLevel(skillLevel + 1);
                         skillsReward.setMiningFortuneBonus(fortuneBonus + 2);
-                        skillsReward.setMiningDefenseBonus(defenseBonus + 2);
+                        skillsReward.setMiningDefenseBonus(defense + 2);
+                        double newExpToNextLevel = skillsEXP.getMiningExpToNextLevel();
+                        double newRequiredExpToNextLevel = skillsEXP.getRequiredMiningExpToNextLevel();
+
+                        if (newExpToNextLevel < newRequiredExpToNextLevel)
+                        {
+                            int newSkillLevel = skillsLevel.getMiningLevel();
+                            double newFortuneBonus = skillsReward.getMiningFortuneBonus();
+                            double newDefense = skillsReward.getMiningDefenseBonus();
+
+                            player.sendMessage(ChatColor.DARK_BLUE + "" + ChatColor.BOLD + "_____________________________________________");
+                            player.sendMessage(" ");
+                            player.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + " Skill Level Up!" + ChatColor.RESET + ChatColor.DARK_BLUE + " Mining " + ChatColor.DARK_GRAY + previousSkillLevel + " ---> " + ChatColor.DARK_BLUE + newSkillLevel);
+                            player.sendMessage(" ");
+                            player.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + " Rewards");
+                            player.sendMessage(ChatColor.WHITE + "    Gain " + ChatColor.DARK_GRAY + previousFortuneBonus + " ---> " + ChatColor.GREEN + newFortuneBonus + ChatColor.WHITE + " Mining Fortune");
+                            player.sendMessage(ChatColor.WHITE + "    Gain " + ChatColor.DARK_GRAY + previousDefenseBonus + " ---> " + ChatColor.GREEN + newDefense + ChatColor.WHITE + " more " + ChatColor.GREEN + " Defense" + StatSymbols.DEFENSE.getSymbol());
+                            player.sendMessage(" ");
+                            player.sendMessage(ChatColor.DARK_BLUE + "" + ChatColor.BOLD + "_____________________________________________");
+                        }
 
                         if (skillLevel + 1 == 50)
                         {
@@ -169,19 +208,7 @@ public class SkillsExpGainListener implements Listener {
                         }
                     }
 
-                    int newSkillLevel = skillsLevel.getMiningLevel();
-                    double newFortuneBonus = skillsReward.getMiningFortuneBonus();
-                    double newDefense = skillsReward.getMiningDefenseBonus();
 
-                    player.sendMessage(ChatColor.DARK_BLUE + "" + ChatColor.BOLD + "_____________________________________________");
-                    player.sendMessage(" ");
-                    player.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + " Skill Level Up!" + ChatColor.RESET + ChatColor.DARK_BLUE + " Mining " + ChatColor.DARK_GRAY + skillLevel + " ---> " + ChatColor.DARK_BLUE + newSkillLevel);
-                    player.sendMessage(" ");
-                    player.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + " Rewards");
-                    player.sendMessage(ChatColor.WHITE + "    Gain " + ChatColor.DARK_GRAY + fortuneBonus + " ---> " + ChatColor.GREEN + newFortuneBonus + ChatColor.WHITE + " Mining Fortune");
-                    player.sendMessage(ChatColor.WHITE + "    Gain " + ChatColor.DARK_GRAY + defense + " ---> " + ChatColor.GREEN + newDefense + ChatColor.WHITE + " more " + ChatColor.GREEN + " Defense" + StatSymbols.DEFENSE.getSymbol());
-                    player.sendMessage(" ");
-                    player.sendMessage(ChatColor.DARK_BLUE + "" + ChatColor.BOLD + "_____________________________________________");
 
                 }
                 case FORAGING ->
@@ -189,34 +216,38 @@ public class SkillsExpGainListener implements Listener {
                     skillSymbol = ChatColor.DARK_GREEN + StatSymbols.FORAGING.getSymbol();
                     skillsEXP.setTotalForagingEXP(skillsEXP.getTotalForagingEXP() + expAmount);
                     skillsEXP.setForagingExpToNextLevel(skillsEXP.getForagingExpToNextLevel() + expAmount);
+                    final int previousSkillLevel = skillsLevel.getForagingLevel();
                     int skillLevel = skillsLevel.getForagingLevel();
-                    double fortuneBonus = skillsReward.getForagingFortuneBonus();
+                    final double previousFortuneBonus = skillsReward.getForagingFortuneBonus();
 
                     while (skillsEXP.getForagingExpToNextLevel() >= skillsEXP.getRequiredForagingExpToNextLevel() && skillLevel < 50)
                     {
                         skillLevel = skillsLevel.getForagingLevel();
+                        double expToNextLevel = skillsEXP.getForagingExpToNextLevel();
                         double requiredExp = skillsEXP.getRequiredForagingExpToNextLevel();
-                        fortuneBonus = skillsReward.getForagingFortuneBonus();
+                        double fortuneBonus = skillsReward.getForagingFortuneBonus();
 
-                        if (skillLevel < 5)
+                        skillsEXP.setForagingExpToNextLevel(expToNextLevel - requiredExp);
+
+                        if (skillLevel <= 5)
                         {
                             skillsEXP.setRequiredForagingExpToNextLevel(requiredExp + 100);
-                        } else if (skillLevel < 10)
+                        } else if (skillLevel <= 10)
                         {
                             skillsEXP.setRequiredForagingExpToNextLevel(requiredExp + 250);
-                        } else if (skillLevel < 15)
+                        } else if (skillLevel <= 15)
                         {
                             skillsEXP.setRequiredForagingExpToNextLevel(requiredExp + 500);
-                        } else if (skillLevel < 20)
+                        } else if (skillLevel <= 20)
                         {
                             skillsEXP.setRequiredForagingExpToNextLevel(requiredExp + 1000);
-                        } else if (skillLevel < 25)
+                        } else if (skillLevel <= 25)
                         {
                             skillsEXP.setRequiredForagingExpToNextLevel(requiredExp + 2000);
-                        } else if (skillLevel < 30)
+                        } else if (skillLevel <= 30)
                         {
                             skillsEXP.setRequiredForagingExpToNextLevel(requiredExp + 5000);
-                        } else if (skillLevel < 40)
+                        } else if (skillLevel <= 40)
                         {
                             skillsEXP.setRequiredForagingExpToNextLevel(requiredExp + 10000);
                         } else
@@ -226,6 +257,23 @@ public class SkillsExpGainListener implements Listener {
 
                         skillsLevel.setForagingLevel(skillLevel + 1);
                         skillsReward.setForagingFortuneBonus(fortuneBonus + 2);
+                        double newExpToNextLevel = skillsEXP.getForagingExpToNextLevel();
+                        double newRequiredExpToNextLevel = skillsEXP.getRequiredForagingExpToNextLevel();
+
+                        if (newExpToNextLevel < newRequiredExpToNextLevel)
+                        {
+                            int newSkillLevel = skillsLevel.getForagingLevel();
+                            double newFortuneBonus = skillsReward.getForagingFortuneBonus();
+
+                            player.sendMessage(ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "_____________________________________________");
+                            player.sendMessage(" ");
+                            player.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + " Skill Level Up!" + ChatColor.RESET + ChatColor.DARK_GREEN + " Foraging " + ChatColor.DARK_GRAY + previousSkillLevel + " ---> " + ChatColor.DARK_GREEN + newSkillLevel);
+                            player.sendMessage(" ");
+                            player.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + " Rewards");
+                            player.sendMessage(ChatColor.WHITE + "    Gain " + ChatColor.DARK_GRAY + previousFortuneBonus + " ---> " + ChatColor.GREEN + newFortuneBonus + ChatColor.WHITE + " Foraging Fortune");
+                            player.sendMessage(" ");
+                            player.sendMessage(ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "_____________________________________________");
+                        }
 
                         if (skillLevel + 1 == 50)
                         {
@@ -234,17 +282,7 @@ public class SkillsExpGainListener implements Listener {
                         }
                     }
 
-                    int newSkillLevel = skillsLevel.getForagingLevel();
-                    double newFortuneBonus = skillsReward.getForagingFortuneBonus();
 
-                    player.sendMessage(ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "_____________________________________________");
-                    player.sendMessage(" ");
-                    player.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + " Skill Level Up!" + ChatColor.RESET + ChatColor.DARK_GREEN + " Foraging " + ChatColor.DARK_GRAY + skillLevel + " ---> " + ChatColor.DARK_GREEN + newSkillLevel);
-                    player.sendMessage(" ");
-                    player.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + " Rewards");
-                    player.sendMessage(ChatColor.WHITE + "    Gain " + ChatColor.DARK_GRAY + fortuneBonus + " ---> " + ChatColor.GREEN + newFortuneBonus + ChatColor.WHITE + " Foraging Fortune");
-                    player.sendMessage(" ");
-                    player.sendMessage(ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "_____________________________________________");
 
                 }
                 case FARMING ->
@@ -252,34 +290,38 @@ public class SkillsExpGainListener implements Listener {
                     skillSymbol = ChatColor.GREEN + StatSymbols.FARMING.getSymbol();
                     skillsEXP.setTotalFarmingEXP(skillsEXP.getTotalFarmingEXP() + expAmount);
                     skillsEXP.setFarmingExpToNextLevel(skillsEXP.getFarmingExpToNextLevel() + expAmount);
+                    final int previousSkillLevel = skillsLevel.getFarmingLevel();
                     int skillLevel = skillsLevel.getFarmingLevel();
-                    double fortuneBonus = skillsReward.getFarmingFortuneBonus();
+                    final double previousFortuneBonus = skillsReward.getFarmingFortuneBonus();
 
                     while (skillsEXP.getFarmingExpToNextLevel() >= skillsEXP.getRequiredFarmingExpToNextLevel() && skillLevel < 50)
                     {
                         skillLevel = skillsLevel.getFarmingLevel();
+                        double expToNextLevel = skillsEXP.getFarmingExpToNextLevel();
                         double requiredExp = skillsEXP.getRequiredFarmingExpToNextLevel();
-                        fortuneBonus = skillsReward.getFarmingFortuneBonus();
+                        double fortuneBonus = skillsReward.getFarmingFortuneBonus();
 
-                        if (skillLevel < 5)
+                        skillsEXP.setFarmingExpToNextLevel(expToNextLevel - requiredExp);
+
+                        if (skillLevel <= 5)
                         {
                             skillsEXP.setRequiredFarmingExpToNextLevel(requiredExp + 100);
-                        } else if (skillLevel < 10)
+                        } else if (skillLevel <= 10)
                         {
                             skillsEXP.setRequiredFarmingExpToNextLevel(requiredExp + 250);
-                        } else if (skillLevel < 15)
+                        } else if (skillLevel <= 15)
                         {
                             skillsEXP.setRequiredFarmingExpToNextLevel(requiredExp + 500);
-                        } else if (skillLevel < 20)
+                        } else if (skillLevel <= 20)
                         {
                             skillsEXP.setRequiredFarmingExpToNextLevel(requiredExp + 1000);
-                        } else if (skillLevel < 25)
+                        } else if (skillLevel <= 25)
                         {
                             skillsEXP.setRequiredFarmingExpToNextLevel(requiredExp + 2000);
-                        } else if (skillLevel < 30)
+                        } else if (skillLevel <= 30)
                         {
                             skillsEXP.setRequiredFarmingExpToNextLevel(requiredExp + 5000);
-                        } else if (skillLevel < 40)
+                        } else if (skillLevel <= 40)
                         {
                             skillsEXP.setRequiredFarmingExpToNextLevel(requiredExp + 10000);
                         } else
@@ -289,6 +331,23 @@ public class SkillsExpGainListener implements Listener {
 
                         skillsLevel.setFarmingLevel(skillLevel + 1);
                         skillsReward.setFarmingFortuneBonus(fortuneBonus + 2);
+                        double newExpToNextLevel = skillsEXP.getFarmingExpToNextLevel();
+                        double newRequiredExpToNextLevel = skillsEXP.getRequiredFarmingExpToNextLevel();
+
+                        if (newExpToNextLevel < newRequiredExpToNextLevel)
+                        {
+                            int newSkillLevel = skillsLevel.getFarmingLevel();
+                            double newFortuneBonus = skillsReward.getFarmingFortuneBonus();
+
+                            player.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "_____________________________________________");
+                            player.sendMessage(" ");
+                            player.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + " Skill Level Up!" + ChatColor.RESET + ChatColor.GREEN + " Farming " + ChatColor.DARK_GRAY + previousSkillLevel + " ---> " + ChatColor.GREEN + newSkillLevel);
+                            player.sendMessage(" ");
+                            player.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + " Rewards");
+                            player.sendMessage(ChatColor.WHITE + "    Gain " + ChatColor.DARK_GRAY + previousFortuneBonus + " ---> " + ChatColor.GREEN + newFortuneBonus + "% " + ChatColor.WHITE + " Farming Fortune");
+                            player.sendMessage(" ");
+                            player.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "_____________________________________________");
+                        }
 
                         if (skillLevel + 1 == 50)
                         {
@@ -297,17 +356,7 @@ public class SkillsExpGainListener implements Listener {
                         }
                     }
 
-                    int newSkillLevel = skillsLevel.getFarmingLevel();
-                    double newFortuneBonus = skillsReward.getFarmingFortuneBonus();
 
-                    player.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "_____________________________________________");
-                    player.sendMessage(" ");
-                    player.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + " Skill Level Up!" + ChatColor.RESET + ChatColor.GREEN + " Farming " + ChatColor.DARK_GRAY + skillLevel + " ---> " + ChatColor.GREEN + newSkillLevel);
-                    player.sendMessage(" ");
-                    player.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + " Rewards");
-                    player.sendMessage(ChatColor.WHITE + "    Gain " + ChatColor.DARK_GRAY + fortuneBonus + " ---> " + ChatColor.GREEN + newFortuneBonus + "% " + ChatColor.WHITE + " Farming Fortune");
-                    player.sendMessage(" ");
-                    player.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "_____________________________________________");
 
                 }
                 case ENCHANTING ->
@@ -315,34 +364,38 @@ public class SkillsExpGainListener implements Listener {
                     skillSymbol = ChatColor.LIGHT_PURPLE + StatSymbols.ENCHANTING.getSymbol();
                     skillsEXP.setTotalEnchantingEXP(skillsEXP.getTotalEnchantingEXP() + expAmount);
                     skillsEXP.setEnchantingExpToNextLevel(skillsEXP.getEnchantingExpToNextLevel() + expAmount);
+                    final int previousSkillLevel = skillsLevel.getEnchantingLevel();
                     int skillLevel = skillsLevel.getEnchantingLevel();
-                    double manaBonus = skillsReward.getEnchantingManaBonus();
+                    final double previousManaBonus = skillsReward.getEnchantingManaBonus();
 
                     while (skillsEXP.getEnchantingExpToNextLevel() >= skillsEXP.getRequiredEnchantingExpToNextLevel() && skillLevel < 50)
                     {
                         skillLevel = skillsLevel.getEnchantingLevel();
+                        double expToNextLevel = skillsEXP.getEnchantingExpToNextLevel();
                         double requiredExp = skillsEXP.getRequiredEnchantingExpToNextLevel();
-                        manaBonus = skillsReward.getEnchantingManaBonus();
+                        double manaBonus = skillsReward.getEnchantingManaBonus();
 
-                        if (skillLevel < 5)
+                        skillsEXP.setEnchantingExpToNextLevel(expToNextLevel - requiredExp);
+
+                        if (skillLevel <= 5)
                         {
                             skillsEXP.setRequiredEnchantingExpToNextLevel(requiredExp + 100);
-                        } else if (skillLevel < 10)
+                        } else if (skillLevel <= 10)
                         {
                             skillsEXP.setRequiredEnchantingExpToNextLevel(requiredExp + 250);
-                        } else if (skillLevel < 15)
+                        } else if (skillLevel <= 15)
                         {
                             skillsEXP.setRequiredEnchantingExpToNextLevel(requiredExp + 500);
-                        } else if (skillLevel < 20)
+                        } else if (skillLevel <= 20)
                         {
                             skillsEXP.setRequiredEnchantingExpToNextLevel(requiredExp + 1000);
-                        } else if (skillLevel < 25)
+                        } else if (skillLevel <= 25)
                         {
                             skillsEXP.setRequiredEnchantingExpToNextLevel(requiredExp + 2000);
-                        } else if (skillLevel < 30)
+                        } else if (skillLevel <= 30)
                         {
                             skillsEXP.setRequiredEnchantingExpToNextLevel(requiredExp + 5000);
-                        } else if (skillLevel < 40)
+                        } else if (skillLevel <= 40)
                         {
                             skillsEXP.setRequiredEnchantingExpToNextLevel(requiredExp + 10000);
                         } else
@@ -352,6 +405,23 @@ public class SkillsExpGainListener implements Listener {
 
                         skillsLevel.setEnchantingLevel(skillLevel + 1);
                         skillsReward.setEnchantingManaBonus(manaBonus + 2);
+                        double newExpToNextLevel = skillsEXP.getEnchantingExpToNextLevel();
+                        double newRequiredExpToNextLevel = skillsEXP.getRequiredEnchantingExpToNextLevel();
+
+                        if (newExpToNextLevel < newRequiredExpToNextLevel)
+                        {
+                            int newSkillLevel = skillsLevel.getEnchantingLevel();
+                            double newManaBonus = skillsReward.getEnchantingManaBonus();
+
+                            player.sendMessage(ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "_____________________________________________");
+                            player.sendMessage(" ");
+                            player.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + " Skill Level Up!" + ChatColor.RESET + ChatColor.LIGHT_PURPLE + " Enchanting " + ChatColor.DARK_GRAY + previousSkillLevel + " ---> " + ChatColor.LIGHT_PURPLE + newSkillLevel);
+                            player.sendMessage(" ");
+                            player.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + " Rewards");
+                            player.sendMessage(ChatColor.WHITE + "    Gain " + ChatColor.DARK_GRAY + previousManaBonus + " ---> " + ChatColor.LIGHT_PURPLE + newManaBonus + ChatColor.WHITE + " more " + ChatColor.BLUE + "Mana" + StatSymbols.MANA.getSymbol());
+                            player.sendMessage(" ");
+                            player.sendMessage(ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "_____________________________________________");
+                        }
 
                         if (skillLevel + 1 == 50)
                         {
@@ -360,17 +430,7 @@ public class SkillsExpGainListener implements Listener {
                         }
                     }
 
-                    int newSkillLevel = skillsLevel.getEnchantingLevel();
-                    double newManaBonus = skillsReward.getEnchantingManaBonus();
 
-                    player.sendMessage(ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "_____________________________________________");
-                    player.sendMessage(" ");
-                    player.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + " Skill Level Up!" + ChatColor.RESET + ChatColor.LIGHT_PURPLE + " Enchanting " + ChatColor.DARK_GRAY + skillLevel + " ---> " + ChatColor.LIGHT_PURPLE + newSkillLevel);
-                    player.sendMessage(" ");
-                    player.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + " Rewards");
-                    player.sendMessage(ChatColor.WHITE + "    Gain " + ChatColor.DARK_GRAY + manaBonus + " ---> " + ChatColor.LIGHT_PURPLE + newManaBonus + ChatColor.WHITE + " more " + ChatColor.BLUE + "Mana" + StatSymbols.MANA.getSymbol());
-                    player.sendMessage(" ");
-                    player.sendMessage(ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "_____________________________________________");
 
                 }
                 case FISHING ->
@@ -378,34 +438,38 @@ public class SkillsExpGainListener implements Listener {
                     skillSymbol = ChatColor.AQUA + StatSymbols.FISHING.getSymbol();
                     skillsEXP.setTotalFishingExp(skillsEXP.getTotalFishingExp() + expAmount);
                     skillsEXP.setFishingExpToNextLevel(skillsEXP.getFishingExpToNextLevel() + expAmount);
+                    final int previousSkillLevel = skillsLevel.getFishingLevel();
                     int skillLevel = skillsLevel.getFishingLevel();
-                    double fishingLuckBonus = skillsReward.getFishingLuckBonus();
+                    final double previousFishingLuckBonus = skillsReward.getFishingLuckBonus();
 
                     while (skillsEXP.getFishingExpToNextLevel() >= skillsEXP.getRequiredFishingExpToNextLevel() && skillLevel < 50)
                     {
                         skillLevel = skillsLevel.getFishingLevel();
-                        fishingLuckBonus = skillsReward.getFishingLuckBonus();
+                        double expToNextLevel = skillsEXP.getFishingExpToNextLevel();
                         double requiredExp = skillsEXP.getRequiredFishingExpToNextLevel();
+                        double fishingLuckBonus = skillsReward.getFishingLuckBonus();
 
-                        if (skillLevel < 5)
+                        skillsEXP.setFishingExpToNextLevel(expToNextLevel - requiredExp);
+
+                        if (skillLevel <= 5)
                         {
                             skillsEXP.setRequiredFishingExpToNextLevel(requiredExp + 100);
-                        } else if (skillLevel < 10)
+                        } else if (skillLevel <= 10)
                         {
                             skillsEXP.setRequiredFishingExpToNextLevel(requiredExp + 250);
-                        } else if (skillLevel < 15)
+                        } else if (skillLevel <= 15)
                         {
                             skillsEXP.setRequiredFishingExpToNextLevel(requiredExp + 500);
-                        } else if (skillLevel < 20)
+                        } else if (skillLevel <= 20)
                         {
                             skillsEXP.setRequiredFishingExpToNextLevel(requiredExp + 1000);
-                        } else if (skillLevel < 25)
+                        } else if (skillLevel <= 25)
                         {
                             skillsEXP.setRequiredFishingExpToNextLevel(requiredExp + 2000);
-                        } else if (skillLevel < 30)
+                        } else if (skillLevel <= 30)
                         {
                             skillsEXP.setRequiredFishingExpToNextLevel(requiredExp + 5000);
-                        } else if (skillLevel < 40)
+                        } else if (skillLevel <= 40)
                         {
                             skillsEXP.setRequiredFishingExpToNextLevel(requiredExp + 10000);
                         } else
@@ -415,6 +479,24 @@ public class SkillsExpGainListener implements Listener {
 
                         skillsLevel.setFishingLevel(skillLevel + 1);
                         skillsReward.setFishingLuckBonus(fishingLuckBonus + 2);
+                        double newExpToLevel = skillsEXP.getFishingExpToNextLevel();
+                        double newRequiredExpToNextLevel = skillsEXP.getRequiredFishingExpToNextLevel();
+
+                        if (newExpToLevel < newRequiredExpToNextLevel)
+                        {
+                            int newSkillLevel = skillsLevel.getFishingLevel();
+                            double newFishingLuckBonus = skillsReward.getFishingLuckBonus();
+
+                            player.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + "_____________________________________________");
+                            player.sendMessage(" ");
+                            player.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + " Skill Level Up!" + ChatColor.RESET + ChatColor.AQUA + " Fishing " + ChatColor.DARK_GRAY + previousSkillLevel + " ---> " + ChatColor.AQUA + newSkillLevel);
+                            player.sendMessage(" ");
+                            player.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + " Rewards");
+                            player.sendMessage(ChatColor.WHITE + "    Receive " + ChatColor.DARK_GRAY + previousFishingLuckBonus + " ---> " + ChatColor.GREEN + newFishingLuckBonus + "% " + ChatColor.WHITE + "chance to catch sea creatures");
+                            player.sendMessage(" ");
+                            player.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + "_____________________________________________");
+
+                        }
 
                         if (skillLevel + 1 == 50)
                         {
@@ -423,51 +505,45 @@ public class SkillsExpGainListener implements Listener {
                         }
                     }
 
-                    int newSkillLevel = skillsLevel.getFishingLevel();
-                    double newFishingLuckBonus = skillsReward.getFishingLuckBonus();
 
-                    player.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + "_____________________________________________");
-                    player.sendMessage(" ");
-                    player.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + " Skill Level Up!" + ChatColor.RESET + ChatColor.AQUA + " Fishing " + ChatColor.DARK_GRAY + skillLevel + " ---> " + ChatColor.AQUA + newSkillLevel);
-                    player.sendMessage(" ");
-                    player.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + " Rewards");
-                    player.sendMessage(ChatColor.WHITE + "    Receive " + ChatColor.DARK_GRAY + fishingLuckBonus + " ---> " + ChatColor.GREEN + newFishingLuckBonus + "% " + ChatColor.WHITE + "chance to catch sea creatures");
-                    player.sendMessage(" ");
-                    player.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + "_____________________________________________");
                 }
                 case BREWING ->
                 {
                     skillSymbol = ChatColor.BLUE + StatSymbols.BREWING.getSymbol();
                     skillsEXP.setTotalBrewingExp(skillsEXP.getTotalBrewingExp() + expAmount);
                     skillsEXP.setBrewingExpToNextLevel(skillsEXP.getBrewingExpToNextLevel() + expAmount);
+                    final int previousSkillLevel = skillsLevel.getBrewingLevel();
                     int skillLevel = skillsLevel.getBrewingLevel();
-                    double durationBonus = skillsReward.getBrewingPotionDurationBonus();
+                    final double previousDurationBonus = skillsReward.getBrewingPotionDurationBonus();
 
                     while (skillsEXP.getBrewingExpToNextLevel() >= skillsEXP.getRequiredBrewingExpToNextLevel() && skillLevel < 50)
                     {
                         skillLevel = skillsLevel.getBrewingLevel();
-                        durationBonus = skillsReward.getBrewingPotionDurationBonus();
+                        double durationBonus = skillsReward.getBrewingPotionDurationBonus();
+                        double expToNextLevel = skillsEXP.getBrewingExpToNextLevel();
                         double requiredExp = skillsEXP.getRequiredBrewingExpToNextLevel();
 
-                        if (skillLevel < 5)
+                        skillsEXP.setBrewingExpToNextLevel(expToNextLevel - requiredExp);
+
+                        if (skillLevel <= 5)
                         {
                             skillsEXP.setRequiredBrewingExpToNextLevel(requiredExp + 100);
-                        } else if (skillLevel < 10)
+                        } else if (skillLevel <= 10)
                         {
                             skillsEXP.setRequiredBrewingExpToNextLevel(requiredExp + 250);
-                        } else if (skillLevel < 15)
+                        } else if (skillLevel <= 15)
                         {
                             skillsEXP.setRequiredBrewingExpToNextLevel(requiredExp + 500);
-                        } else if (skillLevel < 20)
+                        } else if (skillLevel <= 20)
                         {
                             skillsEXP.setRequiredBrewingExpToNextLevel(requiredExp + 1000);
-                        } else if (skillLevel < 25)
+                        } else if (skillLevel <= 25)
                         {
                             skillsEXP.setRequiredBrewingExpToNextLevel(requiredExp + 2000);
-                        } else if (skillLevel < 30)
+                        } else if (skillLevel <= 30)
                         {
                             skillsEXP.setRequiredBrewingExpToNextLevel(requiredExp + 5000);
-                        } else if (skillLevel < 40)
+                        } else if (skillLevel <= 40)
                         {
                             skillsEXP.setRequiredBrewingExpToNextLevel(requiredExp + 10000);
                         } else
@@ -477,6 +553,23 @@ public class SkillsExpGainListener implements Listener {
 
                         skillsLevel.setBrewingLevel(skillLevel + 1);
                         skillsReward.setBrewingPotionDurationBonus(durationBonus + 2);
+                        double newExpToNextLevel = skillsEXP.getBrewingExpToNextLevel();
+                        double newRequiredExpToNextLevel = skillsEXP.getRequiredBrewingExpToNextLevel();
+
+                        if (newExpToNextLevel < newRequiredExpToNextLevel)
+                        {
+                            int newSkillLevel = skillsLevel.getBrewingLevel();
+                            double newDurationBonus = skillsReward.getBrewingPotionDurationBonus();
+
+                            player.sendMessage(ChatColor.BLUE + "" + ChatColor.BOLD + "_____________________________________________");
+                            player.sendMessage(" ");
+                            player.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + " Skill Level Up!" + ChatColor.RESET + ChatColor.BLUE + " Brewing " + ChatColor.DARK_GRAY + previousSkillLevel + " ---> " + ChatColor.BLUE + newSkillLevel);
+                            player.sendMessage(" ");
+                            player.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + " Rewards");
+                            player.sendMessage(ChatColor.WHITE + "    Receive " + ChatColor.DARK_GRAY + previousDurationBonus + " ---> " + ChatColor.GREEN + newDurationBonus + "% " + ChatColor.WHITE + "longer potion duration");
+                            player.sendMessage(" ");
+                            player.sendMessage(ChatColor.BLUE + "" + ChatColor.BOLD + "_____________________________________________");
+                        }
 
                         if (skillLevel + 1 == 50)
                         {
@@ -485,17 +578,7 @@ public class SkillsExpGainListener implements Listener {
                         }
                     }
 
-                    int newSkillLevel = skillsLevel.getBrewingLevel();
-                    double newDurationBonus = skillsReward.getBrewingPotionDurationBonus();
 
-                    player.sendMessage(ChatColor.BLUE + "" + ChatColor.BOLD + "_____________________________________________");
-                    player.sendMessage(" ");
-                    player.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + " Skill Level Up!" + ChatColor.RESET + ChatColor.BLUE + " Brewing " + ChatColor.DARK_GRAY + skillLevel + " ---> " + ChatColor.BLUE + newSkillLevel);
-                    player.sendMessage(" ");
-                    player.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + " Rewards");
-                    player.sendMessage(ChatColor.WHITE + "    Receive " + ChatColor.DARK_GRAY + durationBonus + " ---> " + ChatColor.GREEN + newDurationBonus + "% " + ChatColor.WHITE + "longer potion duration");
-                    player.sendMessage(" ");
-                    player.sendMessage(ChatColor.BLUE + "" + ChatColor.BOLD + "_____________________________________________");
                 }
             }
         }
@@ -568,6 +651,41 @@ public class SkillsExpGainListener implements Listener {
         }
     }
 
+    /**
+     * When a potion is brewed, this event is called to ready the potions for exp collection
+     * @param event BrewEvent
+     */
+    @EventHandler
+    public void brewingExpReady(BrewEvent event)
+    {
+        List<ItemStack> results = event.getResults();
+        ItemStack potion1 = results.get(0);
+        ItemStack potion2 = results.get(1);
+        ItemStack potion3 = results.get(2);
+
+        if (potion1 != null)
+        {
+            ItemForger potionForger = new ItemForger(potion1);
+            potionForger.setPotionReady(true);
+
+        }
+        if (potion2 != null)
+        {
+            ItemForger potionForger = new ItemForger(potion2);
+            potionForger.setPotionReady(true);
+
+        }
+        if (potion3 != null)
+        {
+            ItemForger potionForger = new ItemForger(potion3);
+            potionForger.setPotionReady(true);
+        }
+    }
+
+    /**
+     * When a player claims a potion from the brewing stand, they will collect the exp, and the potion itemStack will be updated so that exp can only be gained when the potion is freshly brewed
+     * @param event InventoryClickEvent
+     */
     @EventHandler
     public void brewingExpGain(InventoryClickEvent event)
     {
@@ -582,32 +700,85 @@ public class SkillsExpGainListener implements Listener {
                 ItemStack potion2 = brewerInventory.getItem(1);
                 ItemStack potion3 = brewerInventory.getItem(2);
 
-                if (potion1 != null)
+                Double exp = 0.0;
+
+                switch (event.getSlot())
                 {
-                    if (potion1.getItemMeta() instanceof PotionMeta potionMeta)
-                    {
+                    case 0:
+                        if (potion1 != null)
+                        {
+                            ItemForger potionForger = new ItemForger(potion1);
+                            if (potionForger.getPotionReady())
+                            {
+                                if (potion1.getItemMeta() instanceof PotionMeta potionMeta)
+                                {
+                                    exp = brewingExp.getBrewingExp(potionMeta);
+                                    SkillsExpGainEvent skillsExpGainEvent = new SkillsExpGainEvent(player, exp, SkillsExpGainEvent.Skill.BREWING);
+                                    Bukkit.getPluginManager().callEvent(skillsExpGainEvent);
 
-                    }
+                                    player.sendMessage("collect exp: " + exp);
+                                }
+
+
+                                potionForger.setPotionReady(false);
+                            } else
+                            {
+                                player.sendMessage("not ready 1");
+                            }
+                        }
+                        break;
+                    case 1:
+                        if (potion2 != null)
+                        {
+                            ItemForger potionForger = new ItemForger(potion2);
+                            if (potionForger.getPotionReady())
+                            {
+                                if (potion2.getItemMeta() instanceof PotionMeta potionMeta)
+                                {
+                                    exp = brewingExp.getBrewingExp(potionMeta);
+                                    SkillsExpGainEvent skillsExpGainEvent = new SkillsExpGainEvent(player, exp, SkillsExpGainEvent.Skill.BREWING);
+                                    Bukkit.getPluginManager().callEvent(skillsExpGainEvent);
+
+                                    player.sendMessage("collect exp: " + exp);
+                                }
+
+
+                                potionForger.setPotionReady(false);
+                            } else
+                            {
+                                player.sendMessage("not ready 2");
+                            }
+                        }
+                        break;
+                    case 2:
+                        if (potion3 != null)
+                        {
+                            ItemForger potionForger = new ItemForger(potion3);
+                            if (potionForger.getPotionReady())
+                            {
+                                if (potion3.getItemMeta() instanceof PotionMeta potionMeta)
+                                {
+                                    exp = brewingExp.getBrewingExp(potionMeta);
+                                    SkillsExpGainEvent skillsExpGainEvent = new SkillsExpGainEvent(player, exp, SkillsExpGainEvent.Skill.BREWING);
+                                    Bukkit.getPluginManager().callEvent(skillsExpGainEvent);
+
+                                    player.sendMessage("collect exp: " + exp);
+                                }
+
+
+                                potionForger.setPotionReady(false);
+                            } else
+                            {
+                                player.sendMessage("not ready 3");
+                            }
+                        }
+                        break;
                 }
-                if (potion2 != null)
-                {
-                    if (potion2 instanceof PotionMeta potionMeta)
-                    {
-
-                    }
-                }
-                if (potion3 != null)
-                {
-                    if (potion3 instanceof PotionMeta potionMeta)
-                    {
-
-                    }
-                }
-
             }
         }
-
     }
+
+
 
     private void runExpDisplay(Location location, ChatColor symbolColor, StatSymbols statSymbols, double exp)
     {

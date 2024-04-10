@@ -42,6 +42,7 @@ public class ItemForger {
     private final NamespacedKey meleeDamageKey = VentureItemStatKeys.ARMOR_MELEE_DAMAGE_KEY.getKey();
     private final NamespacedKey magicDamageKey = VentureItemStatKeys.ARMOR_MAGIC_DAMAGE_KEY.getKey();
     private final NamespacedKey rangeDamageKey = VentureItemStatKeys.ARMOR_RANGE_DAMAGE_KEY.getKey();
+    private static final NamespacedKey POTION_BREWING_EXP_READY_KEY = ItemPropertiesKeys.POTION_CLAIMED_KEY.getKey();
     private static final NamespacedKey ITEM_MAP_KEY = ItemPropertiesKeys.ITEM_MAP_KEY.getKey();
 
     private final int maxStars = plugin.getConfig().getInt("maxStars");
@@ -1173,6 +1174,69 @@ public class ItemForger {
     {
         ItemMeta itemMeta = itemStack.getItemMeta();
         return itemMeta.getPersistentDataContainer().get(ITEM_MAP_KEY, PersistentDataType.STRING);
+    }
+
+    /**
+     * Sets if a potion is ready for brewing exp collection. If true, the potion exp hasn't been collected yet, and claiming it will grant the brewing exp. If false, no exp will be granted
+     * @param ready Whether the potion is ready for exp collection
+     * @return ItemForger instance of itemStack
+     */
+    public ItemForger setPotionReady(boolean ready)
+    {
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        if (itemMeta instanceof PotionMeta potionMeta)
+        {
+            potionMeta.getPersistentDataContainer().set(POTION_BREWING_EXP_READY_KEY, PersistentDataType.BOOLEAN, ready);
+            itemStack.setItemMeta(potionMeta);
+        }
+        return this;
+    }
+
+    /**
+     * Gets if a potion is ready for brewing exp collection
+     * @return True if ready, false if not
+     */
+    public Boolean getPotionReady()
+    {
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        if (itemMeta instanceof PotionMeta potionMeta)
+        {
+            if (potionMeta.getPersistentDataContainer().get(POTION_BREWING_EXP_READY_KEY, PersistentDataType.BOOLEAN) != null &&
+                potionMeta.getPersistentDataContainer().has(POTION_BREWING_EXP_READY_KEY, PersistentDataType.BOOLEAN))
+            {
+                return potionMeta.getPersistentDataContainer().get(POTION_BREWING_EXP_READY_KEY, PersistentDataType.BOOLEAN);
+            } else
+            {
+                Bukkit.broadcastMessage("not ready :(");
+            }
+        }
+        return false;
+    }
+
+    public static ItemStack setPotionItemReady(ItemStack itemStack, boolean ready)
+    {
+        if (itemStack != null)
+        {
+            if (itemStack.getItemMeta() != null && itemStack.getItemMeta() instanceof PotionMeta potionMeta)
+            {
+                potionMeta.getPersistentDataContainer().set(POTION_BREWING_EXP_READY_KEY, PersistentDataType.BOOLEAN, ready);
+                itemStack.setItemMeta(potionMeta);
+            }
+            return itemStack;
+        }
+        return new ItemStack(Material.AIR);
+    }
+
+    public static Boolean getPotionItemReady(ItemStack itemStack)
+    {
+        if (itemStack != null)
+        {
+           if (itemStack.getItemMeta() != null && itemStack.getItemMeta() instanceof PotionMeta potionMeta)
+           {
+               return potionMeta.getPersistentDataContainer().get(POTION_BREWING_EXP_READY_KEY, PersistentDataType.BOOLEAN);
+           }
+        }
+        return false;
     }
 
     public ItemStack toItemStack() {

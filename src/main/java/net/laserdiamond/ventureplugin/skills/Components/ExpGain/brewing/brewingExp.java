@@ -1,8 +1,10 @@
 package net.laserdiamond.ventureplugin.skills.Components.ExpGain.brewing;
 
 import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 
 import java.util.HashMap;
 import java.util.List;
@@ -49,25 +51,71 @@ public class brewingExp {
 
     /**
      * Gets the brewing exp a potion will give when brewed
+     * <p>
+     * Brewing exp is calculated with the following in mind for each potion effect in a given potion:
+     *
+     * <li>Potion Effect(s)</li>
+     * <li>The effect duration(s)</li>
+     * <li>The effect amplifier(s)</li>
+     *
      * @param potionMeta The potionMeta of the potion
      * @return The amount of brewing exp the potion will give
      */
     public static Double getBrewingExp(PotionMeta potionMeta)
     {
-        Double exp = 0.0;
+        double exp = 0.0;
         if (potionMeta != null)
         {
+            PotionType potionType = potionMeta.getBasePotionData().getType();
+
+            PotionEffectType effectType = potionType.getEffectType();
+            if (potionEffectBrewingExp.containsKey(effectType) && potionEffectBrewingExp.get(effectType) != null)
+            {
+                double effectExp = potionEffectBrewingExp.get(effectType);
+                exp += effectExp;
+                if (potionMeta.getBasePotionData().isExtended())
+                {
+                    exp += 3000;
+                } else
+                {
+                    exp += 900;
+                }
+                if (potionMeta.getBasePotionData().isUpgraded())
+                {
+                    exp += 1200;
+                } else
+                {
+                    exp += 500;
+                }
+                if (potionType.isInstant())
+                {
+                    exp += 1000;
+                } else
+                {
+                    exp += 450;
+                }
+            }
+            /*
             List<PotionEffect> potionEffects = potionMeta.getCustomEffects();
+
             for (PotionEffect potionEffect : potionEffects)
             {
-                // TODO: How much exp per second?
-                // TODO: How much exp per amplifier level?
                 PotionEffectType effect = potionEffect.getType();
-                int duration = potionEffect.getDuration();
+                int duration = potionEffect.getDuration() / 20;
                 int amplifier = potionEffect.getAmplifier();
 
-
+                double potionEffectExp = 0.0;
+                if (potionEffectBrewingExp.containsKey(effect) && potionEffectBrewingExp.get(effect) != null)
+                {
+                    double effectExp = potionEffectBrewingExp.get(effect);
+                    double durationExp = duration * 5;
+                    double amplifierExp = (amplifier + 1) * 250;
+                    potionEffectExp = effectExp + durationExp + amplifierExp;
+                    exp += potionEffectExp;
+                }
             }
+
+             */
         }
 
         return exp;
