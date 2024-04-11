@@ -2,13 +2,16 @@ package net.laserdiamond.ventureplugin.events.effects.Components;
 
 import io.papermc.paper.event.entity.EntityMoveEvent;
 import net.laserdiamond.ventureplugin.VenturePlugin;
+import net.laserdiamond.ventureplugin.entities.player.StatPlayer;
 import net.laserdiamond.ventureplugin.events.effects.Components.Timers.ManaFreezeTimer;
 import net.laserdiamond.ventureplugin.events.effects.Components.Timers.NecrosisTimer;
 import net.laserdiamond.ventureplugin.events.effects.Components.Timers.ParalyzeTimer;
 import net.laserdiamond.ventureplugin.events.effects.Components.Timers.VulnerableTimer;
 import net.laserdiamond.ventureplugin.events.effects.EffectBoolean;
 import net.laserdiamond.ventureplugin.events.effects.Managers.EffectManager;
+import net.laserdiamond.ventureplugin.stats.Components.PotionStats;
 import net.laserdiamond.ventureplugin.util.EffectKeys;
+import net.laserdiamond.ventureplugin.util.Randomizer;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -19,6 +22,7 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class EffectEvents implements Listener {
@@ -97,6 +101,49 @@ public class EffectEvents implements Listener {
         }
 
          */
+    }
+
+    @EventHandler
+    public void effectGain(EntityPotionEffectEvent event)
+    {
+        if (event.getEntity() instanceof Player player)
+        {
+            StatPlayer statPlayer = new StatPlayer(player);
+            PotionStats potionStats = statPlayer.getPotionStats();
+
+            PotionEffect newEffect = event.getNewEffect();
+            if (newEffect != null)
+            {
+                int duration = (int) (newEffect.getDuration() * (1 + (potionStats.getLongevity() * 0.01)));
+                int amplifier = newEffect.getAmplifier();
+                PotionEffectType.Category category = newEffect.getType().getEffectCategory();
+                if (category == PotionEffectType.Category.BENEFICIAL)
+                {
+                    event.setCancelled(true);
+                    PotionEffectType potionEffectType = event.getModifiedType();
+
+                    int baseCaffeinatedAmp = ((int) potionStats.getCaffeination()) / 100; // Gets the base amplifier increase from the Caffeination Stat
+
+                    // TODO: chance with remaining caffeination points
+                    int bonusChance = ((int) potionStats.getCaffeination()) % 100; // Get the % chance of adding +1 to the amplifier
+
+                    Integer randomChoice = Randomizer.getRandomInteger(bonusChance); // Random number rolled
+
+                    int bonusAmp;
+                    if (randomChoice <= bonusChance) // Determine if player should have an extra amplifier level
+                    {
+                        bonusAmp = 1;
+                    } else
+                    {
+                        bonusAmp = 0;
+                    }
+
+                    int finalAmplifier = amplifier + baseCaffeinatedAmp + bonusAmp;
+
+                    player.addPotionEffect(potionEffectType.createEffect(duration, finalAmplifier));
+                }
+            }
+        }
     }
 
     @EventHandler

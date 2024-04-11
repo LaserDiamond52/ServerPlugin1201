@@ -40,7 +40,7 @@ public enum PlayerTrimMaterialStatKeys {
             }
             case LAPIS -> trimMaterialStats.setLapisBonusExp(trimMaterialStats.getLapisBonusExp() + amount);
             case QUARTZ -> trimMaterialStats.setQuartzBonusMiningExp(trimMaterialStats.getQuartzBonusMiningExp() + amount);
-            case REDSTONE -> trimMaterialStats.setRedstoneBonusPotion(trimMaterialStats.getRedstoneBonusPotion() + amount);
+            case REDSTONE -> trimMaterialStats.setRedstoneLongevity(trimMaterialStats.getRedstoneLongevity() + amount);
             case EMERALD -> {
                 trimMaterialStats.setEmeraldBonusLuck(trimMaterialStats.getEmeraldBonusLuck() + amount);
                 stats.setLuck(stats.getLuck() + amount);
@@ -86,7 +86,7 @@ public enum PlayerTrimMaterialStatKeys {
             }
             case LAPIS -> trimMaterialStats.setLapisBonusExp(trimMaterialStats.getLapisBonusExp() - amount);
             case QUARTZ -> trimMaterialStats.setQuartzBonusMiningExp(trimMaterialStats.getQuartzBonusMiningExp() - amount);
-            case REDSTONE -> trimMaterialStats.setRedstoneBonusPotion(trimMaterialStats.getRedstoneBonusPotion() - amount);
+            case REDSTONE -> trimMaterialStats.setRedstoneLongevity(trimMaterialStats.getRedstoneLongevity() - amount);
             case EMERALD -> {
                 trimMaterialStats.setEmeraldBonusLuck(trimMaterialStats.getEmeraldBonusLuck() - amount);
                 stats.setLuck(stats.getLuck() - amount);

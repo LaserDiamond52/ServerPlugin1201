@@ -16,7 +16,6 @@ import net.laserdiamond.ventureplugin.util.StatSymbols;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -28,11 +27,9 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.BrewerInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SkillsExpGainListener implements Listener {
@@ -418,7 +415,7 @@ public class SkillsExpGainListener implements Listener {
                             player.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + " Skill Level Up!" + ChatColor.RESET + ChatColor.LIGHT_PURPLE + " Enchanting " + ChatColor.DARK_GRAY + previousSkillLevel + " ---> " + ChatColor.LIGHT_PURPLE + newSkillLevel);
                             player.sendMessage(" ");
                             player.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + " Rewards");
-                            player.sendMessage(ChatColor.WHITE + "    Gain " + ChatColor.DARK_GRAY + previousManaBonus + " ---> " + ChatColor.LIGHT_PURPLE + newManaBonus + ChatColor.WHITE + " more " + ChatColor.BLUE + "Mana" + StatSymbols.MANA.getSymbol());
+                            player.sendMessage(ChatColor.WHITE + "    Gain +" + ChatColor.DARK_GRAY + previousManaBonus + " ---> " + ChatColor.LIGHT_PURPLE + newManaBonus + ChatColor.WHITE + " more " + ChatColor.BLUE + "Mana" + StatSymbols.MANA.getSymbol());
                             player.sendMessage(" ");
                             player.sendMessage(ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "_____________________________________________");
                         }
@@ -514,12 +511,14 @@ public class SkillsExpGainListener implements Listener {
                     skillsEXP.setBrewingExpToNextLevel(skillsEXP.getBrewingExpToNextLevel() + expAmount);
                     final int previousSkillLevel = skillsLevel.getBrewingLevel();
                     int skillLevel = skillsLevel.getBrewingLevel();
-                    final double previousDurationBonus = skillsReward.getBrewingPotionDurationBonus();
+                    final double previousLongevity = skillsReward.getBrewingLongevity();
+                    final double previousCaffeination = skillsReward.getBrewingCaffeination();
 
                     while (skillsEXP.getBrewingExpToNextLevel() >= skillsEXP.getRequiredBrewingExpToNextLevel() && skillLevel < 50)
                     {
                         skillLevel = skillsLevel.getBrewingLevel();
-                        double durationBonus = skillsReward.getBrewingPotionDurationBonus();
+                        double longevity = skillsReward.getBrewingLongevity();
+                        double caffeination = skillsReward.getBrewingCaffeination();
                         double expToNextLevel = skillsEXP.getBrewingExpToNextLevel();
                         double requiredExp = skillsEXP.getRequiredBrewingExpToNextLevel();
 
@@ -552,21 +551,24 @@ public class SkillsExpGainListener implements Listener {
                         }
 
                         skillsLevel.setBrewingLevel(skillLevel + 1);
-                        skillsReward.setBrewingPotionDurationBonus(durationBonus + 2);
+                        skillsReward.setBrewingLongevity(longevity + 2);
+                        skillsReward.setBrewingCaffeination(caffeination + 1);
                         double newExpToNextLevel = skillsEXP.getBrewingExpToNextLevel();
                         double newRequiredExpToNextLevel = skillsEXP.getRequiredBrewingExpToNextLevel();
 
                         if (newExpToNextLevel < newRequiredExpToNextLevel)
                         {
                             int newSkillLevel = skillsLevel.getBrewingLevel();
-                            double newDurationBonus = skillsReward.getBrewingPotionDurationBonus();
+                            double newLongevity = skillsReward.getBrewingLongevity();
+                            double newCaffeination = skillsReward.getBrewingCaffeination();
 
                             player.sendMessage(ChatColor.BLUE + "" + ChatColor.BOLD + "_____________________________________________");
                             player.sendMessage(" ");
                             player.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + " Skill Level Up!" + ChatColor.RESET + ChatColor.BLUE + " Brewing " + ChatColor.DARK_GRAY + previousSkillLevel + " ---> " + ChatColor.BLUE + newSkillLevel);
                             player.sendMessage(" ");
                             player.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + " Rewards");
-                            player.sendMessage(ChatColor.WHITE + "    Receive " + ChatColor.DARK_GRAY + previousDurationBonus + " ---> " + ChatColor.GREEN + newDurationBonus + "% " + ChatColor.WHITE + "longer potion duration");
+                            player.sendMessage(ChatColor.WHITE + "    Gain +" + ChatColor.DARK_GRAY + previousLongevity + " ---> " + ChatColor.GREEN + newLongevity + ChatColor.WHITE + " more " + ChatColor.DARK_AQUA + "Longevity" + StatSymbols.LONGEVITY.getSymbol());
+                            player.sendMessage(ChatColor.WHITE + "    Gain +" + ChatColor.DARK_GRAY + previousCaffeination + " ---> " + ChatColor.GREEN + newCaffeination + ChatColor.WHITE + " more " + ChatColor.LIGHT_PURPLE + "Caffeination" + StatSymbols.CAFFEINATION.getSymbol());
                             player.sendMessage(" ");
                             player.sendMessage(ChatColor.BLUE + "" + ChatColor.BOLD + "_____________________________________________");
                         }

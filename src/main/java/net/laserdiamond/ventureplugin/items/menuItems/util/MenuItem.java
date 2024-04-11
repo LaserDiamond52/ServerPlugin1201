@@ -31,7 +31,14 @@ public enum MenuItem {
     TUNING_MANA (Material.HEART_OF_THE_SEA, ChatColor.BLUE + "Mana", 24),
     TUNING_MELEE (Material.IRON_SWORD, ChatColor.RED + "Melee Damage", 25),
     TUNING_MAGIC (Material.DIAMOND, ChatColor.AQUA + "Magic Damage", 26),
-    TUNING_RANGE (Material.BOW, ChatColor.DARK_PURPLE + "Range Damage", 27);
+    TUNING_RANGE (Material.BOW, ChatColor.DARK_PURPLE + "Range Damage", 27),
+    SKILL_COMBAT (Material.DIAMOND_SWORD, ChatColor.DARK_RED + "Combat", 28),
+    SKILL_MINING (Material.DIAMOND_PICKAXE, ChatColor.DARK_BLUE + "Mining", 29),
+    SKILL_FORAGING (Material.DIAMOND_AXE, ChatColor.DARK_GREEN + "Foraging", 30),
+    SKILL_FARMING (Material.DIAMOND_HOE, ChatColor.GREEN + "Farming", 31),
+    SKILL_ENCHANTING (Material.ENCHANTING_TABLE, ChatColor.LIGHT_PURPLE + "Enchanting", 32),
+    SKILL_FISHING (Material.FISHING_ROD, ChatColor.AQUA + "Fishing", 33),
+    SKILL_BREWING (Material.BREWING_STAND, ChatColor.BLUE + "Brewing", 34);
 
 
     private final Material material;

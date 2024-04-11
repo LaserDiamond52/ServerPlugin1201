@@ -7,20 +7,20 @@ public class ArmorTrimMaterialStats {
     private double ironHealthBoost;
     private double lapisBonusExp;
     private double quartzBonusMiningExp;
-    private double redstoneBonusPotion;
+    private double redstoneLongevity;
     private double emeraldBonusLuck;
     private double amethystBonusDamage;
     private double diamondBonusMana;
     private double netheriteBonusDefense;
     private double netheriteBonusFireDefense;
 
-    public ArmorTrimMaterialStats(double copperSpeed, double goldSaturationChance, double ironHealthBoost, double lapisBonusExp, double quartzBonusMiningExp, double redstoneBonusPotion, double emeraldBonusLuck, double amethystBonusDamage, double diamondBonusMana, double netheriteBonusDefense, double netheriteBonusFireDefense) {
+    public ArmorTrimMaterialStats(double copperSpeed, double goldSaturationChance, double ironHealthBoost, double lapisBonusExp, double quartzBonusMiningExp, double redstoneLongevity, double emeraldBonusLuck, double amethystBonusDamage, double diamondBonusMana, double netheriteBonusDefense, double netheriteBonusFireDefense) {
         this.copperSpeed = copperSpeed;
         this.goldSaturationChance = goldSaturationChance;
         this.ironHealthBoost = ironHealthBoost;
         this.lapisBonusExp = lapisBonusExp;
         this.quartzBonusMiningExp = quartzBonusMiningExp;
-        this.redstoneBonusPotion = redstoneBonusPotion;
+        this.redstoneLongevity = redstoneLongevity;
         this.emeraldBonusLuck = emeraldBonusLuck;
         this.amethystBonusDamage = amethystBonusDamage;
         this.diamondBonusMana = diamondBonusMana;
@@ -68,12 +68,12 @@ public class ArmorTrimMaterialStats {
         this.quartzBonusMiningExp = quartzBonusMiningExp;
     }
 
-    public double getRedstoneBonusPotion() {
-        return redstoneBonusPotion;
+    public double getRedstoneLongevity() {
+        return redstoneLongevity;
     }
 
-    public void setRedstoneBonusPotion(double redstoneBonusPotion) {
-        this.redstoneBonusPotion = redstoneBonusPotion;
+    public void setRedstoneLongevity(double redstoneLongevity) {
+        this.redstoneLongevity = redstoneLongevity;
     }
 
     public double getEmeraldBonusLuck() {

@@ -6,9 +6,9 @@ import net.laserdiamond.ventureplugin.VenturePlugin;
 import net.laserdiamond.ventureplugin.entities.player.StatPlayer;
 import net.laserdiamond.ventureplugin.stats.Components.DamageStats;
 import net.laserdiamond.ventureplugin.stats.Components.DefenseStats;
+import net.laserdiamond.ventureplugin.stats.Components.PotionStats;
 import net.laserdiamond.ventureplugin.stats.Components.Stats;
 import net.laserdiamond.ventureplugin.stats.Manager.StatProfileManager;
-import net.laserdiamond.ventureplugin.util.Config.PlayerConfig;
 import net.laserdiamond.ventureplugin.util.File.ArmorConfig;
 import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
@@ -39,7 +39,7 @@ public class TrimMaterialListeners implements Listener {
         materialStatArray[2] = armorTrimConfig.getDouble("ironHealthBoost");
         materialStatArray[3] = armorTrimConfig.getInt("lapisExpBonus");
         materialStatArray[4] = armorTrimConfig.getDouble("quartzMiningExp");
-        materialStatArray[5] = armorTrimConfig.getInt("redstonePotionBonus");
+        materialStatArray[5] = armorTrimConfig.getInt("redstoneLongevity");
         materialStatArray[6] = armorTrimConfig.getDouble("emeraldLuck");
         materialStatArray[7] = armorTrimConfig.getDouble("amethystDamage");
         materialStatArray[8] = armorTrimConfig.getDouble("diamondMana");
@@ -78,6 +78,7 @@ public class TrimMaterialListeners implements Listener {
         DamageStats damageStats = statPlayer.getDamageStats();
         DefenseStats defenseStats = statPlayer.getDefenseStats();
         ArmorTrimMaterialStats trimMaterialStats = statPlayer.getArmorTrimStats().armorTrimMaterialStats();
+        PotionStats potionStats = statPlayer.getPotionStats();
 
         ArmorTrim armorTrim = armorMeta.getTrim();
         if (armorTrim != null)
@@ -109,7 +110,8 @@ public class TrimMaterialListeners implements Listener {
             }
             if (trimMaterial.equals(TrimMaterial.REDSTONE))
             {
-                trimMaterialStats.setRedstoneBonusPotion(trimMaterialStats.getRedstoneBonusPotion() + materialStatArray[5]);
+                potionStats.setLongevity(potionStats.getLongevity() + materialStatArray[5]);
+                trimMaterialStats.setRedstoneLongevity(trimMaterialStats.getRedstoneLongevity() + materialStatArray[5]);
             }
             if (trimMaterial.equals(TrimMaterial.EMERALD))
             {
@@ -149,6 +151,7 @@ public class TrimMaterialListeners implements Listener {
         DamageStats damageStats = statPlayer.getDamageStats();
         DefenseStats defenseStats = statPlayer.getDefenseStats();
         ArmorTrimMaterialStats trimMaterialStats = statPlayer.getArmorTrimStats().armorTrimMaterialStats();
+        PotionStats potionStats = statPlayer.getPotionStats();
 
         ArmorTrim armorTrim = armorMeta.getTrim();
         if (armorTrim != null)
@@ -180,7 +183,8 @@ public class TrimMaterialListeners implements Listener {
             }
             if (trimMaterial.equals(TrimMaterial.REDSTONE))
             {
-                trimMaterialStats.setRedstoneBonusPotion(trimMaterialStats.getRedstoneBonusPotion() - materialStatArray[5]);
+                potionStats.setLongevity(potionStats.getLongevity() - materialStatArray[5]);
+                trimMaterialStats.setRedstoneLongevity(trimMaterialStats.getRedstoneLongevity() - materialStatArray[5]);
             }
             if (trimMaterial.equals(TrimMaterial.EMERALD))
             {
@@ -226,13 +230,14 @@ public class TrimMaterialListeners implements Listener {
         expOrb.setExperience((int) (expAmount * lapisBonusExpPlayer));
     }
 
+    /*
     @EventHandler
     public void redstonePotion(EntityPotionEffectEvent event)
     {
         if (event.getEntity() instanceof Player player)
         {
             ArmorTrimMaterialStats trimMaterialStats = statProfileManager.getStatProfile(player.getUniqueId()).armorTrimStats().armorTrimMaterialStats();
-            double redstonePotionBonusPlayer = 1 + (trimMaterialStats.getRedstoneBonusPotion() * 0.01);
+            double redstonePotionBonusPlayer = 1 + (trimMaterialStats.getRedstoneLongevity() * 0.01);
 
             PotionEffect newEffect = event.getNewEffect();
             if (newEffect != null) {
@@ -248,4 +253,6 @@ public class TrimMaterialListeners implements Listener {
             }
         }
     }
+
+     */
 }

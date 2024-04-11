@@ -34,7 +34,7 @@ public class EnchantCommand implements CommandExecutor, TabExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args)
     {
-        if (sender.hasPermission(Permissions.ENCHANT.getPermissionString()))
+        if (sender.hasPermission(Permissions.ENCHANT.getPermission()))
         {
             if (args.length == 0)
             {
@@ -101,7 +101,7 @@ public class EnchantCommand implements CommandExecutor, TabExecutor {
     {
 
         List<String> argsList = new ArrayList<>();
-        if (sender.hasPermission(Permissions.ENCHANT.getPermissionString()))
+        if (sender.hasPermission(Permissions.ENCHANT.getPermission()))
         {
 
             if (args.length == 1)

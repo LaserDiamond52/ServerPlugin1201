@@ -60,7 +60,7 @@ public class TuningMenu implements CommandExecutor, Listener {
     {
         if (sender instanceof Player player)
         {
-            if (sender.hasPermission(Permissions.TUNING_MENU.getPermissionString()))
+            if (sender.hasPermission(Permissions.TUNING_MENU.getPermission()))
             {
                 player.openInventory(tuningInventory(player));
             } else

@@ -24,7 +24,7 @@ public final class StatMenuItems {
         return 100 * (defense / (defense + DEFENSE_FACTOR));
     }
 
-    public static VentureMenuItem HEALTH_STAT_ITEM = new VentureMenuItem(PLUGIN)
+    public static final VentureMenuItem HEALTH_STAT_ITEM = new VentureMenuItem(PLUGIN)
     {
         @Override
         public MenuItem menuItem() {
@@ -66,7 +66,7 @@ public final class StatMenuItems {
         }
     };
 
-    public static VentureMenuItem DEFENSE_STAT_ITEM = new VentureMenuItem(PLUGIN)
+    public static final VentureMenuItem DEFENSE_STAT_ITEM = new VentureMenuItem(PLUGIN)
     {
         @Override
         public MenuItem menuItem() {
@@ -117,7 +117,7 @@ public final class StatMenuItems {
         }
     };
 
-    public static VentureMenuItem TOUGHNESS_STAT_ITEM = new VentureMenuItem(PLUGIN) {
+    public static final VentureMenuItem TOUGHNESS_STAT_ITEM = new VentureMenuItem(PLUGIN) {
         @Override
         public MenuItem menuItem() {
             return MenuItem.TOUGHNESS_STAT;
@@ -152,7 +152,7 @@ public final class StatMenuItems {
         }
     };
 
-    public static VentureMenuItem MANA_STAT_ITEM = new VentureMenuItem(PLUGIN) {
+    public static final VentureMenuItem MANA_STAT_ITEM = new VentureMenuItem(PLUGIN) {
         @Override
         public MenuItem menuItem() {
             return MenuItem.MAX_MANA_STAT;
@@ -201,7 +201,7 @@ public final class StatMenuItems {
         }
     };
 
-    public static VentureMenuItem DAMAGE_STAT_ITEM = new VentureMenuItem(PLUGIN) {
+    public static final VentureMenuItem DAMAGE_STAT_ITEM = new VentureMenuItem(PLUGIN) {
         @Override
         public MenuItem menuItem() {
             return MenuItem.DAMAGE_STAT;
@@ -231,7 +231,7 @@ public final class StatMenuItems {
         }
     };
 
-    public static VentureMenuItem DEFENSE_STAT_ITEM_MORE = new VentureMenuItem(PLUGIN)
+    public static final VentureMenuItem DEFENSE_STAT_ITEM_MORE = new VentureMenuItem(PLUGIN)
     {
         @Override
         public MenuItem menuItem() {
@@ -273,7 +273,7 @@ public final class StatMenuItems {
         }
     };
 
-    public static VentureMenuItem FIRE_DEFENSE_STAT_ITEM_MORE = new VentureMenuItem(PLUGIN)
+    public static final VentureMenuItem FIRE_DEFENSE_STAT_ITEM_MORE = new VentureMenuItem(PLUGIN)
     {
         @Override
         public MenuItem menuItem() {
@@ -310,7 +310,7 @@ public final class StatMenuItems {
         }
     };
 
-    public static VentureMenuItem EXPLOSION_DEFENSE_STAT_ITEM_MORE = new VentureMenuItem(PLUGIN)
+    public static final VentureMenuItem EXPLOSION_DEFENSE_STAT_ITEM_MORE = new VentureMenuItem(PLUGIN)
     {
         @Override
         public MenuItem menuItem() {
@@ -345,7 +345,7 @@ public final class StatMenuItems {
         }
     };
 
-    public static VentureMenuItem PROJECTILE_DEFENSE_STAT_ITEM_MORE = new VentureMenuItem(PLUGIN)
+    public static final VentureMenuItem PROJECTILE_DEFENSE_STAT_ITEM_MORE = new VentureMenuItem(PLUGIN)
     {
         @Override
         public MenuItem menuItem() {
@@ -380,7 +380,7 @@ public final class StatMenuItems {
         }
     };
 
-    public static VentureMenuItem MAGIC_DEFENSE_STAT_ITEM_MORE = new VentureMenuItem(PLUGIN)
+    public static final VentureMenuItem MAGIC_DEFENSE_STAT_ITEM_MORE = new VentureMenuItem(PLUGIN)
     {
         @Override
         public MenuItem menuItem() {
@@ -415,7 +415,7 @@ public final class StatMenuItems {
         }
     };
 
-    public static VentureMenuItem MELEE_DAMAGE_STAT_ITEM = new VentureMenuItem(PLUGIN)
+    public static final VentureMenuItem MELEE_DAMAGE_STAT_ITEM = new VentureMenuItem(PLUGIN)
     {
         @Override
         public MenuItem menuItem() {
@@ -459,7 +459,7 @@ public final class StatMenuItems {
         }
     };
 
-    public static VentureMenuItem MAGIC_DAMAGE_STAT_ITEM = new VentureMenuItem(PLUGIN)
+    public static final VentureMenuItem MAGIC_DAMAGE_STAT_ITEM = new VentureMenuItem(PLUGIN)
     {
         @Override
         public MenuItem menuItem() {
@@ -503,7 +503,7 @@ public final class StatMenuItems {
         }
     };
 
-    public static VentureMenuItem RANGE_DAMAGE_STAT_ITEM = new VentureMenuItem(PLUGIN)
+    public static final VentureMenuItem RANGE_DAMAGE_STAT_ITEM = new VentureMenuItem(PLUGIN)
     {
         @Override
         public MenuItem menuItem() {
@@ -547,7 +547,7 @@ public final class StatMenuItems {
         }
     };
 
-    public static VentureMenuItem SPEED_STAT_ITEM = new VentureMenuItem(PLUGIN)
+    public static final VentureMenuItem SPEED_STAT_ITEM = new VentureMenuItem(PLUGIN)
     {
         @Override
         public MenuItem menuItem() {
@@ -602,7 +602,7 @@ public final class StatMenuItems {
         }
     };
 
-    public static VentureMenuItem FORTITUDE_STAT_ITEM = new VentureMenuItem(PLUGIN)
+    public static final VentureMenuItem FORTITUDE_STAT_ITEM = new VentureMenuItem(PLUGIN)
     {
         @Override
         public MenuItem menuItem() {

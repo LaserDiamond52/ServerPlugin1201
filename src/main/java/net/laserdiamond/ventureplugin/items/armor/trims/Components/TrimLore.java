@@ -2,6 +2,7 @@ package net.laserdiamond.ventureplugin.items.armor.trims.Components;
 
 import net.laserdiamond.ventureplugin.VenturePlugin;
 import net.laserdiamond.ventureplugin.util.File.ArmorConfig;
+import net.laserdiamond.ventureplugin.util.StatSymbols;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.meta.ArmorMeta;
 import org.bukkit.inventory.meta.trim.TrimMaterial;
@@ -230,7 +231,7 @@ public class TrimLore {
             double ironHealthBoost = ARMOR_TRIM_CONFIG.getDouble("ironHealthBoost");
             double lapisExpBonus = ARMOR_TRIM_CONFIG.getDouble("lapisExpBonus");
             double quartzMiningExp = ARMOR_TRIM_CONFIG.getDouble("quartzMiningExp");
-            double redstonePotionBonus = ARMOR_TRIM_CONFIG.getDouble("redstonePotionBonus");
+            double redstonePotionBonus = ARMOR_TRIM_CONFIG.getDouble("redstoneLongevity");
             double emeraldLuck = ARMOR_TRIM_CONFIG.getDouble("emeraldLuck");
             double amethystDamage = ARMOR_TRIM_CONFIG.getDouble("amethystDamage");
             double diamondMana = ARMOR_TRIM_CONFIG.getDouble("diamondMana");
@@ -290,12 +291,10 @@ public class TrimLore {
                 // Grants bonus potion duration
 
                 trimLore.add(MaterialDisplayColor.REDSTONE.displayColor + "Redstone Trim Material");
-                trimLore.add(ChatColor.GRAY + " Grants +" + MaterialDisplayColor.REDSTONE.displayColor + redstonePotionBonus + ChatColor.GRAY + "% longer");
-                trimLore.add(ChatColor.GRAY + " potion duration");
+                trimLore.add(ChatColor.GRAY + " Grants +" + MaterialDisplayColor.REDSTONE.displayColor + redstonePotionBonus + StatSymbols.LONGEVITY.getSymbol() + ChatColor.GRAY + " longevity");
 
                 //Redstone Trim Material
-                // Grants +15% longer
-                // potion duration
+                // Grants +15% longevity
 
             } else if (trimMaterial.equals(TrimMaterial.EMERALD)) {
                 // Grants luck

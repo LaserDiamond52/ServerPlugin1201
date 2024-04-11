@@ -9,9 +9,10 @@ public class SkillsReward {
     private double farmingFortuneBonus;
     private double enchantingManaBonus;
     private double fishingLuckBonus;
-    private double brewingPotionDurationBonus;
+    private double brewingLongevity;
+    private double brewingCaffeination;
 
-    public SkillsReward(double combatDamageBonus, double miningDefenseBonus, double miningFortuneBonus, double foragingFortuneBonus, double farmingFortuneBonus, double enchantingManaBonus, double fishingLuckBonus, double brewingPotionDurationBonus)
+    public SkillsReward(double combatDamageBonus, double miningDefenseBonus, double miningFortuneBonus, double foragingFortuneBonus, double farmingFortuneBonus, double enchantingManaBonus, double fishingLuckBonus, double brewingLongevity, double brewingCaffeination)
     {
         this.combatDamageBonus = combatDamageBonus;
         this.miningDefenseBonus = miningDefenseBonus;
@@ -20,7 +21,8 @@ public class SkillsReward {
         this.farmingFortuneBonus = farmingFortuneBonus;
         this.enchantingManaBonus = enchantingManaBonus;
         this.fishingLuckBonus = fishingLuckBonus;
-        this.brewingPotionDurationBonus = brewingPotionDurationBonus;
+        this.brewingLongevity = brewingLongevity;
+        this.brewingCaffeination = brewingCaffeination;
     }
 
     public double getCombatDamageBonus() {
@@ -71,12 +73,12 @@ public class SkillsReward {
         this.fishingLuckBonus = fishingLuckBonus;
     }
 
-    public double getBrewingPotionDurationBonus() {
-        return brewingPotionDurationBonus;
+    public double getBrewingLongevity() {
+        return brewingLongevity;
     }
 
-    public void setBrewingPotionDurationBonus(double brewingPotionDurationBonus) {
-        this.brewingPotionDurationBonus = brewingPotionDurationBonus;
+    public void setBrewingLongevity(double brewingLongevity) {
+        this.brewingLongevity = brewingLongevity;
     }
 
     public double getMiningDefenseBonus() {
@@ -85,5 +87,13 @@ public class SkillsReward {
 
     public void setMiningDefenseBonus(double miningDefenseBonus) {
         this.miningDefenseBonus = miningDefenseBonus;
+    }
+
+    public double getBrewingCaffeination() {
+        return brewingCaffeination;
+    }
+
+    public void setBrewingCaffeination(double brewingCaffeination) {
+        this.brewingCaffeination = brewingCaffeination;
     }
 }

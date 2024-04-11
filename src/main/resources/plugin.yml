@@ -101,6 +101,14 @@ commands:
     aliases:
       - viewstats
 
+  skills:
+    description: allows players to view their skills and progression
+    usage: /<command>
+    permission: venture.skills
+    aliases:
+      - ventureskills
+      - viewskills
+
   refillmana:
     description: allows players to refill their mana instantly
     usage: /<command> <arg>

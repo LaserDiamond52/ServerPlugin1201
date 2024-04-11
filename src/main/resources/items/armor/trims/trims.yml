@@ -16,8 +16,8 @@ lapisExpBonus: 15
 # Grants +x% more mining exp
 quartzMiningExp: 7.5
 
-# Grants +x% more potion duration (positive effects only)
-redstonePotionBonus: 15
+# Grants +x Longevity
+redstoneLongevity: 15
 
 # Grants +x luck
 emeraldLuck: 0.25

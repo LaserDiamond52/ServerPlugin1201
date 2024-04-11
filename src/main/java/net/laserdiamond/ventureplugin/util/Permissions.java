@@ -37,7 +37,7 @@ public enum Permissions {
         this.permissionString = permissionString;
     }
 
-    public String getPermissionString() {
+    public String getPermission() {
         return VenturePlugin.PLUGIN_ID + "." + permissionString;
     }
 }

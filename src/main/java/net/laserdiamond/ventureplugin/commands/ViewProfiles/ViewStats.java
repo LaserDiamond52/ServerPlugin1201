@@ -19,9 +19,13 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.*;
-
 public class ViewStats implements CommandExecutor, Listener {
+
+    public static final String STAT_INV_TITLE = "'s Stats";
+
+    public static final String DEFENSE_STAT_INV_TITLE = "'s Defense Stats";
+
+    public static final String DAMAGE_STAT_INV_TITLE = "'s Damage Stats";
 
     public ViewStats(VenturePlugin plugin)
     {
@@ -31,7 +35,7 @@ public class ViewStats implements CommandExecutor, Listener {
 
     private Inventory statInventory(Player player)
     {
-        Inventory statInventory = Bukkit.createInventory(null, 54, ChatColor.GOLD + player.getName() + "'s Stats");
+        Inventory statInventory = Bukkit.createInventory(null, 54, ChatColor.GOLD + player.getName() + STAT_INV_TITLE);
 
         for (StatMenuItems.StatItemSlots statItemSlots : StatMenuItems.StatItemSlots.values())
         {
@@ -47,7 +51,7 @@ public class ViewStats implements CommandExecutor, Listener {
 
     private Inventory defenseStatInventory(Player player)
     {
-        Inventory defenseInventory = Bukkit.createInventory(null, 54, ChatColor.GREEN + player.getName() + "'s Defense Stats");
+        Inventory defenseInventory = Bukkit.createInventory(null, 54, ChatColor.GREEN + player.getName() + DEFENSE_STAT_INV_TITLE);
 
         for (StatMenuItems.DefenseStatSlots defenseStatSlots : StatMenuItems.DefenseStatSlots.values())
         {
@@ -64,7 +68,7 @@ public class ViewStats implements CommandExecutor, Listener {
 
     private Inventory damageStatInventory(Player player)
     {
-        Inventory damageInventory = Bukkit.createInventory(null, 54, ChatColor.RED + player.getName() + "'s Damage Stats");
+        Inventory damageInventory = Bukkit.createInventory(null, 54, ChatColor.RED + player.getName() + DAMAGE_STAT_INV_TITLE);
 
         for (StatMenuItems.DamageStatSlots damageStatSlots : StatMenuItems.DamageStatSlots.values())
         {
@@ -83,7 +87,7 @@ public class ViewStats implements CommandExecutor, Listener {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
         if (sender instanceof Player player) {
-            if (player.hasPermission(Permissions.STATS.getPermissionString()))
+            if (player.hasPermission(Permissions.STATS.getPermission()))
             {
                 player.openInventory(statInventory(player));
             } else {
@@ -95,12 +99,6 @@ public class ViewStats implements CommandExecutor, Listener {
 
         return true;
     }
-
-    public static final String STAT_INV_TITLE = "'s Stats";
-
-    public static final String DEFENSE_STAT_INV_TITLE = "'s Defense Stats";
-
-    public static final String DAMAGE_STAT_INV_TITLE = "'s Damage Stats";
 
     @EventHandler
     public void clickInsideInv(InventoryClickEvent event)
@@ -144,8 +142,6 @@ public class ViewStats implements CommandExecutor, Listener {
                         player.openInventory(statInventory(player));
                     }
                 }
-            } else {
-                player.sendMessage("clicked outside inventory!");
             }
         }
     }

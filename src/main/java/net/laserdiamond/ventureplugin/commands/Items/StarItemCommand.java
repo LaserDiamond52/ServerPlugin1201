@@ -25,7 +25,7 @@ public class StarItemCommand implements CommandExecutor, TabExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
-        if (sender.hasPermission(Permissions.GIVE_ITEMS.getPermissionString()))
+        if (sender.hasPermission(Permissions.GIVE_ITEMS.getPermission()))
         {
             if (args.length == 0)
             {
@@ -78,7 +78,7 @@ public class StarItemCommand implements CommandExecutor, TabExecutor {
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
         List<String> argsList = new ArrayList<>();
-        if (sender.hasPermission(Permissions.GIVE_ITEMS.getPermissionString()))
+        if (sender.hasPermission(Permissions.GIVE_ITEMS.getPermission()))
         {
             if (args.length == 1)
             {

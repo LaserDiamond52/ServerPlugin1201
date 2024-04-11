@@ -26,7 +26,7 @@ public class fillMana implements CommandExecutor, TabExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
-        if (sender.hasPermission(Permissions.EDIT_MANA.getPermissionString()))
+        if (sender.hasPermission(Permissions.EDIT_MANA.getPermission()))
         {
             if (args.length == 0)
             {
@@ -64,7 +64,7 @@ public class fillMana implements CommandExecutor, TabExecutor {
 
         List<String> playerNames = new ArrayList<>();
 
-        if (sender.hasPermission(Permissions.EDIT_MANA.getPermissionString())) {
+        if (sender.hasPermission(Permissions.EDIT_MANA.getPermission())) {
 
             if (args.length == 1)
             {

@@ -3,10 +3,12 @@ package net.laserdiamond.ventureplugin.items.util;
 import com.google.common.collect.Multimap;
 import net.laserdiamond.ventureplugin.VenturePlugin;
 import net.laserdiamond.ventureplugin.commands.ViewProfiles.TuningMenu;
+import net.laserdiamond.ventureplugin.commands.ViewProfiles.ViewSkills;
 import net.laserdiamond.ventureplugin.commands.ViewProfiles.ViewStats;
 import net.laserdiamond.ventureplugin.enchants.Components.VentureEnchants;
 import net.laserdiamond.ventureplugin.items.armor.armor_sets.SoulFireBlazeArmor;
 import net.laserdiamond.ventureplugin.items.armor.trims.Components.TrimLore;
+import net.laserdiamond.ventureplugin.items.menuItems.skills.SkillsMenuItems;
 import net.laserdiamond.ventureplugin.items.menuItems.stats.StatMenuItems;
 import net.laserdiamond.ventureplugin.items.armor.util.ArmorCMD;
 import net.laserdiamond.ventureplugin.items.armor.util.ArmorPieceTypes;
@@ -88,6 +90,14 @@ public class ItemRegistry implements Listener {
         map.put(TuningMenuItems.MELEE.menuItem().getCustomModelData(), TuningMenuItems.MELEE.createLore(player));
         map.put(TuningMenuItems.MAGIC.menuItem().getCustomModelData(), TuningMenuItems.MAGIC.createLore(player));
         map.put(TuningMenuItems.RANGE.menuItem().getCustomModelData(), TuningMenuItems.RANGE.createLore(player));
+
+        map.put(SkillsMenuItems.COMBAT_SKILL_ITEM.menuItem().getCustomModelData(), SkillsMenuItems.COMBAT_SKILL_ITEM.createLore(player));
+        map.put(SkillsMenuItems.MINING_SKILL_ITEM.menuItem().getCustomModelData(), SkillsMenuItems.MINING_SKILL_ITEM.createLore(player));
+        map.put(SkillsMenuItems.FORAGING_SKILL_ITEM.menuItem().getCustomModelData(), SkillsMenuItems.FORAGING_SKILL_ITEM.createLore(player));
+        map.put(SkillsMenuItems.FARMING_SKILL_ITEM.menuItem().getCustomModelData(), SkillsMenuItems.FARMING_SKILL_ITEM.createLore(player));
+        map.put(SkillsMenuItems.ENCHANTING_SKILL_ITEM.menuItem().getCustomModelData(), SkillsMenuItems.ENCHANTING_SKILL_ITEM.createLore(player));
+        map.put(SkillsMenuItems.FISHING_SKILL_ITEM.menuItem().getCustomModelData(), SkillsMenuItems.FISHING_SKILL_ITEM.createLore(player));
+        map.put(SkillsMenuItems.BREWING_SKILL_ITEM.menuItem().getCustomModelData(), SkillsMenuItems.BREWING_SKILL_ITEM.createLore(player));
         return map;
     }
 
@@ -122,6 +132,7 @@ public class ItemRegistry implements Listener {
         PLAYER_INV_TITLES.add(ViewStats.DEFENSE_STAT_INV_TITLE);
         PLAYER_INV_TITLES.add(ViewStats.DAMAGE_STAT_INV_TITLE);
         PLAYER_INV_TITLES.add(TuningMenu.TUNING_INV_TITLE);
+        PLAYER_INV_TITLES.add(ViewSkills.SKILL_INV_TITLE);
     }
 
     private static boolean isAnyPlayerInvTitle(String invTitle)

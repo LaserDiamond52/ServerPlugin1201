@@ -31,7 +31,7 @@ public class GiveItemsCommand implements CommandExecutor, TabExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
-        if (sender.hasPermission(Permissions.GIVE_ITEMS.getPermissionString())) {
+        if (sender.hasPermission(Permissions.GIVE_ITEMS.getPermission())) {
             if (args.length == 0) {
                 sender.sendMessage(ChatColor.RED + "Please specify a target");
             } else if (args.length == 1) {
@@ -73,7 +73,7 @@ public class GiveItemsCommand implements CommandExecutor, TabExecutor {
 
         List<String> argsList = new ArrayList<>();
 
-        if (sender.hasPermission(Permissions.GIVE_ITEMS.getPermissionString())) {
+        if (sender.hasPermission(Permissions.GIVE_ITEMS.getPermission())) {
             if (args.length == 1) {
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     argsList.add(player.getName());

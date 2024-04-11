@@ -56,6 +56,11 @@ public class StatPlayer {
         return getStatProfile().armorTrimStats();
     }
 
+    public PotionStats getPotionStats()
+    {
+        return getStatProfile().potionStats();
+    }
+
     public TuningPoints getTuningPointStats()
     {
         return getStatProfile().tuningProfile().tuningPoints();

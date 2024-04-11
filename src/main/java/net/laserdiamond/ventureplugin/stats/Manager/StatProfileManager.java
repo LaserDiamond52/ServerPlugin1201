@@ -141,7 +141,9 @@ public class StatProfileManager {
         ArmorTrimPatternStats armorTrimPatternStats = new ArmorTrimPatternStats(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
         ArmorTrimStats armorTrimStats = new ArmorTrimStats(armorTrimMaterialStats, armorTrimPatternStats);
 
-        StatProfile statProfile = new StatProfile(stats, armorStats, damageStats, defenseStats, lootStats, enchantStats, armorTrimStats, tuningProfile, skillsProfile);
+        PotionStats potionStats = new PotionStats(0,0);
+
+        StatProfile statProfile = new StatProfile(stats, armorStats, damageStats, defenseStats, lootStats, enchantStats, armorTrimStats, tuningProfile, skillsProfile, potionStats);
         statProfiles.put(player.getUniqueId(), statProfile);
 
         return statProfile;

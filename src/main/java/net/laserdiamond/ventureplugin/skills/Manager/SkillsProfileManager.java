@@ -87,7 +87,8 @@ public class SkillsProfileManager implements ProfileConfigs {
             double totalBrewingEXP = config.getDouble(id + BREWING + TOTAL_EXP);
             double brewingExpToNextLevel = config.getDouble(id + BREWING + EXP_TO_NEXT_LEVEL);
             double requiredBrewingExpToNextLevel = config.getDouble(id + BREWING + REQUIRED_EXP_TO_NEXT_LEVEL);
-            double brewingPotionDurationBonus = config.getDouble(id + BREWING + ".potionDurationBonus");
+            double brewingLongevity = config.getDouble(id + BREWING + ".potionLongevity");
+            double brewingCaffeination = config.getDouble(id + BREWING + ".potionCaffeination");
 
             SkillsEXP skillsEXP = new SkillsEXP(totalCombatEXP, combatExpToNextLevel, requiredCombatExpToNextLevel,
                                                 totalMiningEXP, miningExpToNextLevel, requiredMiningExpToNextLevel,
@@ -99,7 +100,7 @@ public class SkillsProfileManager implements ProfileConfigs {
 
             SkillsLevel skillsLevel = new SkillsLevel(combatLevel, miningLevel, foragingLevel, farmingLevel, enchantingLevel, fishingLevel, brewingLevel);
 
-            SkillsReward skillsReward = new SkillsReward(combatDamageBonus, miningDefenseBonus, miningFortuneBonus, foragingFortuneBonus, farmingFortuneBonus, enchantingManaBonus, fishingLuckBonus, brewingPotionDurationBonus);
+            SkillsReward skillsReward = new SkillsReward(combatDamageBonus, miningDefenseBonus, miningFortuneBonus, foragingFortuneBonus, farmingFortuneBonus, enchantingManaBonus, fishingLuckBonus, brewingLongevity, brewingCaffeination);
 
             SkillsProfile skillsProfile = new SkillsProfile(skillsEXP, skillsLevel, skillsReward);
 
@@ -139,7 +140,7 @@ public class SkillsProfileManager implements ProfileConfigs {
 
             config.set(id + FORAGING + LEVEL, skillsLevel.getForagingLevel());
             config.set(id + FORAGING + TOTAL_EXP, skillsEXP.getTotalForagingEXP());
-            config.set(id + FORAGING + EXP_TO_NEXT_LEVEL, skillsEXP.getRequiredForagingExpToNextLevel());
+            config.set(id + FORAGING + EXP_TO_NEXT_LEVEL, skillsEXP.getForagingExpToNextLevel());
             config.set(id + FORAGING + REQUIRED_EXP_TO_NEXT_LEVEL, skillsEXP.getRequiredForagingExpToNextLevel());
             config.set(id + FORAGING + ".fortuneBonus", skillsReward.getForagingFortuneBonus());
 
@@ -165,7 +166,8 @@ public class SkillsProfileManager implements ProfileConfigs {
             config.set(id + BREWING + TOTAL_EXP, skillsEXP.getTotalBrewingExp());
             config.set(id + BREWING + EXP_TO_NEXT_LEVEL, skillsEXP.getBrewingExpToNextLevel());
             config.set(id + BREWING + REQUIRED_EXP_TO_NEXT_LEVEL, skillsEXP.getRequiredBrewingExpToNextLevel());
-            config.set(id + BREWING + ".potionDurationBonus", skillsReward.getBrewingPotionDurationBonus());
+            config.set(id + BREWING + ".potionLongevity", skillsReward.getBrewingLongevity());
+            config.set(id + BREWING + ".potionCaffeination", skillsReward.getBrewingCaffeination());
 
         }
     }
@@ -181,7 +183,7 @@ public class SkillsProfileManager implements ProfileConfigs {
                                             0,0,100);
 
         SkillsLevel skillsLevel = new SkillsLevel(0,0,0,0,0,0,0);
-        SkillsReward skillsReward = new SkillsReward(0,0,0,0,0,0,0,0);
+        SkillsReward skillsReward = new SkillsReward(0,0,0,0,0,0,0,0,0);
         SkillsProfile skillsProfile = new SkillsProfile(skillsEXP, skillsLevel, skillsReward);
         profiles.put(player.getUniqueId(), skillsProfile);
         return skillsProfile;
