@@ -218,6 +218,8 @@ public final class SkillsMenuItems {
         }
     };
 
+
+
     public enum SkillItemSlots
     {
         COMBAT (COMBAT_SKILL_ITEM, 19),

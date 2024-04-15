@@ -3,7 +3,7 @@ package net.laserdiamond.ventureplugin.items.armor.util;
 import com.google.common.collect.Multimap;
 import net.laserdiamond.ventureplugin.VenturePlugin;
 import net.laserdiamond.ventureplugin.items.util.ItemForger;
-import net.laserdiamond.ventureplugin.items.util.ItemNameBuilder;
+import net.laserdiamond.ventureplugin.items.util.ItemStringBuilder;
 import net.laserdiamond.ventureplugin.items.misc.util.VentureStatItem;
 import net.laserdiamond.ventureplugin.util.File.ArmorConfig;
 import net.laserdiamond.ventureplugin.items.util.VentureItemStatKeys;
@@ -16,21 +16,15 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
- * An abstract class that represents a Venture plugin armor set
+ * An abstract class that represents a full armor set
  */
 public abstract class VentureArmorSet extends VentureStatItem {
 
-    public final VenturePlugin plugin;
-
     public VentureArmorSet(VenturePlugin plugin)
     {
-        this.plugin = plugin;
         registerArmorSet();
     }
 
@@ -38,29 +32,29 @@ public abstract class VentureArmorSet extends VentureStatItem {
      * The name of the armor set
      * @return The name of the armor set
      */
-    public abstract String armorSetName();
+    protected abstract String armorName();
 
-    public abstract ArmorConfig config();
+    protected abstract ArmorConfig config();
 
     /**
      * Sets the custom model data for the armor set
      * @return ArmorCMD enum object containing the custom model data for each armor piece
      */
-    public abstract ArmorCMD getArmorCMD();
+    public abstract ArmorCMD armorCMD();
 
     /**
      * Gets the material for all armor pieces
      * @param armorPieceTypes The armor piece type
      * @return The material for the armor piece type
      */
-    public abstract Material armorPieceMaterials(ArmorPieceTypes armorPieceTypes);
+    protected abstract Material armorPieceMaterials(ArmorPieceTypes armorPieceTypes);
 
     /**
      * Sets the armor color for leather armor
      * @param armorPieceTypes The armor piece type
      * @return the color for the armor piece
      */
-    public final Color armorColors(ArmorPieceTypes armorPieceTypes)
+    private Color armorColors(ArmorPieceTypes armorPieceTypes)
     {
         String armorPieceString = armorPieceTypes.getName();
         int red = config().getInt(armorPieceString + "Red");
@@ -73,7 +67,7 @@ public abstract class VentureArmorSet extends VentureStatItem {
      * The player head skin for player head helmets, if applicable
      * @return The player head skin URL as a string
      */
-    public final String playerHeadSkin()
+    private String playerHeadSkin()
     {
         String url = config().getString("HelmetURL");
         if (url != null)
@@ -86,38 +80,36 @@ public abstract class VentureArmorSet extends VentureStatItem {
 
     /**
      * SigBits needed for player head skin
-     * @return
+     * @return an Array of integers containing the SigBits
      */
     private int[] sigBits()
     {
-        return new int[]{getArmorCMD().getHelmet(), getArmorCMD().getHelmet()};
+        return new int[]{armorCMD().getHelmet(), armorCMD().getHelmet()};
     }
 
     /**
-     * Creates the lore for the item
+     * Creates the lore for the item. If an item is to have lore based off the condition of the item, a static method must be made and be invoked in the ItemRegistry renewItem methods.
+     *
      * @param armorPieceTypes The armor piece type
      * @param stars The amount of stars the item has
      * @return The lore of the item
      */
-    public List<String> createLore(@NotNull ArmorPieceTypes armorPieceTypes, int stars)
+    public LinkedList<String> createLore(@NotNull ArmorPieceTypes armorPieceTypes, int stars)
     {
-        List<String> lore = new ArrayList<>();
-        lore.addAll(createStatLore(createVentureStats(armorPieceTypes, stars)));
-        return lore;
+        return new LinkedList<>(createStatLore(createVentureStats(armorPieceTypes, stars)));
     }
 
     /**
-     * Method for creating item lore based off the player that has the item in their inventory
-     * @param player The player to make the lore for
+     * Method for creating item lore based off the player that has the item in their inventory. If an item is to have lore based off the condition of the item, a static method must be made and be invoked in the ItemRegistry renewItem methods.
+     *
+     * @param player          The player to make the lore for
      * @param armorPieceTypes The armor piece type
-     * @param stars The amount of stars the item has
+     * @param stars           The amount of stars the item has
      * @return The lore of the item
      */
-    public List<String> createPlayerLore(@NotNull Player player, @NotNull ArmorPieceTypes armorPieceTypes, int stars)
+    public LinkedList<String> createPlayerLore(@NotNull Player player, @NotNull ArmorPieceTypes armorPieceTypes, int stars)
     {
-        List<String> lore = new ArrayList<>();
-        lore.addAll(createStatLore(createVentureStats(armorPieceTypes, stars)));
-        return lore;
+        return new LinkedList<>(createStatLore(createVentureStats(armorPieceTypes, stars)));
     }
 
     /**
@@ -126,7 +118,7 @@ public abstract class VentureArmorSet extends VentureStatItem {
      * @param stars The amount of stars the item has
      * @return The Venture Item Stats
      */
-    public HashMap<VentureItemStatKeys, Double> createVentureStats(@NotNull ArmorPieceTypes armorPieceTypes, int stars)
+    protected HashMap<VentureItemStatKeys, Double> createVentureStats(@NotNull ArmorPieceTypes armorPieceTypes, int stars)
     {
         double meleeDamage = config().getStat(armorPieceTypes, ArmorConfig.StatType.MELEE_DAMAGE, stars);
         double rangeDamage = config().getStat(armorPieceTypes, ArmorConfig.StatType.RANGE_DAMAGE, stars);
@@ -141,6 +133,13 @@ public abstract class VentureArmorSet extends VentureStatItem {
         double toughness = config().getStat(armorPieceTypes, ArmorConfig.StatType.TOUGHNESS, stars);
         double fortitude = config().getStat(armorPieceTypes, ArmorConfig.StatType.FORTITUDE, stars);
         double speed = config().getStat(armorPieceTypes, ArmorConfig.StatType.SPEED, stars);
+        double mobFortune = config().getStat(armorPieceTypes, ArmorConfig.StatType.MOB_FORTUNE, stars);
+        double miningFortune = config().getStat(armorPieceTypes, ArmorConfig.StatType.MINING_FORTUNE, stars);
+        double foragingFortune = config().getStat(armorPieceTypes, ArmorConfig.StatType.FORAGING_FORTUNE, stars);
+        double farmingFortune = config().getStat(armorPieceTypes, ArmorConfig.StatType.FARMING_FORTUNE, stars);
+        double fishingLuck = config().getStat(armorPieceTypes, ArmorConfig.StatType.FISHING_LUCK, stars);
+        double longevity = config().getStat(armorPieceTypes, ArmorConfig.StatType.LONGEVITY, stars);
+        double caffeination = config().getStat(armorPieceTypes, ArmorConfig.StatType.CAFFEINATION, stars);
 
         HashMap<VentureItemStatKeys, Double> itemStatKeysDoubleHashMap = new HashMap<>();
         itemStatKeysDoubleHashMap.put(VentureItemStatKeys.ARMOR_MELEE_DAMAGE_KEY, meleeDamage);
@@ -156,11 +155,18 @@ public abstract class VentureArmorSet extends VentureStatItem {
         itemStatKeysDoubleHashMap.put(VentureItemStatKeys.ARMOR_TOUGHNESS_KEY, toughness);
         itemStatKeysDoubleHashMap.put(VentureItemStatKeys.ARMOR_FORTITUDE_KEY, fortitude);
         itemStatKeysDoubleHashMap.put(VentureItemStatKeys.ARMOR_SPEED_KEY, speed);
+        itemStatKeysDoubleHashMap.put(VentureItemStatKeys.ARMOR_MOB_FORTUNE_KEY, mobFortune);
+        itemStatKeysDoubleHashMap.put(VentureItemStatKeys.ARMOR_MINING_FORTUNE_KEY, miningFortune);
+        itemStatKeysDoubleHashMap.put(VentureItemStatKeys.ARMOR_FORAGING_FORTUNE_KEY, foragingFortune);
+        itemStatKeysDoubleHashMap.put(VentureItemStatKeys.ARMOR_FARMING_FORTUNE_KEY, farmingFortune);
+        itemStatKeysDoubleHashMap.put(VentureItemStatKeys.ARMOR_FISHING_LUCK_KEY, fishingLuck);
+        itemStatKeysDoubleHashMap.put(VentureItemStatKeys.ARMOR_LONGEVITY, longevity);
+        itemStatKeysDoubleHashMap.put(VentureItemStatKeys.ARMOR_CAFFEINATION, caffeination);
 
         return itemStatKeysDoubleHashMap;
     }
 
-    public final Multimap<Attribute, AttributeModifier> createArmorAttributes(@NotNull ArmorPieceTypes armorPieceTypes, int stars)
+    protected final Multimap<Attribute, AttributeModifier> createArmorAttributes(@NotNull ArmorPieceTypes armorPieceTypes, int stars)
     {
         String armorPiece = armorPieceTypes.getName();
         double damage = config().getDouble(armorPiece + "MeleeDamage") * 0.01 * (1 + stars * this.starBonus);
@@ -189,8 +195,6 @@ public abstract class VentureArmorSet extends VentureStatItem {
         return itemForger.getAttributes();
     }
 
-    // TODO: Advanced Armor set piece generator
-
     /**
      * Creates an instance of the armor piece
      * @param armorPieceTypes The armor piece type
@@ -202,7 +206,7 @@ public abstract class VentureArmorSet extends VentureStatItem {
         String armorPieceString = armorPieceTypes.getName();
         String armorName = armorPieceString.substring(0,1).toUpperCase() + armorPieceString.substring(1);
         ItemForger itemForger = new ItemForger(armorPieceMaterials(armorPieceTypes))
-                .setName(ItemNameBuilder.name(armorSetName() + " " + armorName, stars))
+                .setName(ItemStringBuilder.name(armorName() + " " + armorName, stars))
                 .setLore(createLore(armorPieceTypes, stars))
                 .setRarity(rarity())
                 .setUnbreakable(isUnbreakable())
@@ -218,10 +222,10 @@ public abstract class VentureArmorSet extends VentureStatItem {
 
         switch (armorPieceTypes)
         {
-            case HELMET -> itemForger.setCustomModelData(getArmorCMD().getHelmet());
-            case CHESTPLATE -> itemForger.setCustomModelData(getArmorCMD().getChestplate());
-            case LEGGINGS -> itemForger.setCustomModelData(getArmorCMD().getLeggings());
-            case BOOTS -> itemForger.setCustomModelData(getArmorCMD().getBoots());
+            case HELMET -> itemForger.setCustomModelData(armorCMD().getHelmet());
+            case CHESTPLATE -> itemForger.setCustomModelData(armorCMD().getChestplate());
+            case LEGGINGS -> itemForger.setCustomModelData(armorCMD().getLeggings());
+            case BOOTS -> itemForger.setCustomModelData(armorCMD().getBoots());
         }
         return itemForger;
     }
@@ -233,13 +237,13 @@ public abstract class VentureArmorSet extends VentureStatItem {
      * @param stars The stars the armor piece will have
      * @return The armor piece as an ItemForger instance
      */
-    public final ItemForger createPlayerArmorSet(Player player, @NotNull ArmorPieceTypes armorPieceTypes, int stars)
+    public ItemForger createPlayerArmorSet(Player player, @NotNull ArmorPieceTypes armorPieceTypes, int stars)
     {
         String armorPieceTypesName = armorPieceTypes.getName();
         String armorName = armorPieceTypesName.substring(0,1).toUpperCase() + armorPieceTypesName.substring(1);
-        String keyName = (armorSetName() + "_" + armorPieceTypesName + "_" + stars).toLowerCase().replace(" ", "_");
+        String keyName = (armorName() + "_" + armorPieceTypesName + "_" + stars).toLowerCase().replace(" ", "_");
         ItemForger itemForger = new ItemForger(armorPieceMaterials(armorPieceTypes))
-                .setName(ItemNameBuilder.name(armorSetName() + " " + armorName, stars))
+                .setName(ItemStringBuilder.name(armorName() + " " + armorName, stars))
                 .setLore(createPlayerLore(player, armorPieceTypes, stars))
                 .setRarity(rarity())
                 .setUnbreakable(isUnbreakable())
@@ -256,10 +260,10 @@ public abstract class VentureArmorSet extends VentureStatItem {
 
         switch (armorPieceTypes)
         {
-            case HELMET -> itemForger.setCustomModelData(getArmorCMD().getHelmet());
-            case CHESTPLATE -> itemForger.setCustomModelData(getArmorCMD().getChestplate());
-            case LEGGINGS -> itemForger.setCustomModelData(getArmorCMD().getLeggings());
-            case BOOTS -> itemForger.setCustomModelData(getArmorCMD().getBoots());
+            case HELMET -> itemForger.setCustomModelData(armorCMD().getHelmet());
+            case CHESTPLATE -> itemForger.setCustomModelData(armorCMD().getChestplate());
+            case LEGGINGS -> itemForger.setCustomModelData(armorCMD().getLeggings());
+            case BOOTS -> itemForger.setCustomModelData(armorCMD().getBoots());
         }
         return itemForger;
     }
@@ -269,9 +273,9 @@ public abstract class VentureArmorSet extends VentureStatItem {
      * @param player The player wearing the armor
      * @return If the player is wearing the full set
      */
-    public boolean isWearingFullSet(Player player)
+    protected boolean isWearingFullSet(Player player)
     {
-        return ArmorEquipStats.isWearingFullSet(player, getArmorCMD());
+        return ArmorEquipStats.isWearingFullSet(player, armorCMD());
     }
 
     /**
@@ -279,15 +283,15 @@ public abstract class VentureArmorSet extends VentureStatItem {
      * @param itemStack The item
      * @return True if an armor piece of this class, false if not
      */
-    public boolean isArmorPiece(ItemStack itemStack)
+    protected boolean isArmorPiece(ItemStack itemStack)
     {
         if (itemStack != null && itemStack.getItemMeta() != null && itemStack.getItemMeta().hasCustomModelData())
         {
             int customModelData = itemStack.getItemMeta().getCustomModelData();
-            if (customModelData == getArmorCMD().getHelmet() ||
-                customModelData == getArmorCMD().getChestplate() ||
-                customModelData == getArmorCMD().getLeggings() ||
-                customModelData == getArmorCMD().getBoots())
+            if (customModelData == armorCMD().getHelmet() ||
+                customModelData == armorCMD().getChestplate() ||
+                customModelData == armorCMD().getLeggings() ||
+                customModelData == armorCMD().getBoots())
             {
                 return true;
             }
@@ -299,10 +303,10 @@ public abstract class VentureArmorSet extends VentureStatItem {
     /**
      * Registers the armor set to be automatically refreshed when updated and to the giveitem command
      */
-    public void registerArmorSet()
+    private void registerArmorSet()
     {
+        HashMap<String, VentureArmorSet> armorSetItemMap = plugin.getArmorSetItemMap();
         HashMap<String, ItemForger> itemRegistryMap = plugin.getItemRegistryMap();
-        List<VentureArmorSet> playerItemMap = plugin.getPlayerArmorItemMap();
 
         int maxStars = plugin.getConfig().getInt("maxStars");
 
@@ -311,15 +315,11 @@ public abstract class VentureArmorSet extends VentureStatItem {
             for (ArmorPieceTypes armorPieceTypes : ArmorPieceTypes.values())
             {
                 String armorPieceTypeName = armorPieceTypes.getName();
-                String commandName = (armorSetName() + "_" + armorPieceTypeName + "_" + i).toLowerCase().replace(" ", "_");
+                String commandName = (armorName() + "_" + armorPieceTypeName + "_" + i).toLowerCase().replace(" ", "_");
                 ItemForger armorItem = createArmorSet(armorPieceTypes, i).setItemKey(commandName);
                 itemRegistryMap.put(commandName, armorItem);
-
+                armorSetItemMap.put(commandName, this);
             }
-        }
-        if (registerPlayerArmorSet())
-        {
-            playerItemMap.add(this);
         }
     }
 
@@ -331,7 +331,7 @@ public abstract class VentureArmorSet extends VentureStatItem {
      * If createPlayerLore or other player-based methods are overridden in the child class, and this is false, they will not be in use
      * @return True if this armor set should be player-based, false if not (false by default)
      */
-    public boolean registerPlayerArmorSet()
+    public boolean isPlayerArmorSet()
     {
         return false;
     }

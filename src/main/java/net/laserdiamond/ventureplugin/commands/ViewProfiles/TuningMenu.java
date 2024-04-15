@@ -132,8 +132,8 @@ public class TuningMenu implements CommandExecutor, Listener {
 
                     }
 
-                    ItemRegistry.renewItemNew(event.getCurrentItem(), player);
-                    ItemRegistry.renewItemNew(clickedInv.getItem(TuningMenuItems.TuningItemSlots.POINTS.getInventorySlot()), player);
+                    ItemRegistry.renewItem(event.getCurrentItem(), player);
+                    ItemRegistry.renewItem(clickedInv.getItem(TuningMenuItems.TuningItemSlots.POINTS.getInventorySlot()), player);
                 }
             }
         }

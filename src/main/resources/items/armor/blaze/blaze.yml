@@ -8,6 +8,7 @@ abilityName: Blazing Aura
 
 
 helmetMeleeDamage: 5
+helmetRangeDamage: 3
 helmetHealth: 3
 helmetDefense: 3.5
 
@@ -15,6 +16,7 @@ chestplateRed: 255
 chestplateGreen: 205
 chestplateBlue: 3
 chestplateMeleeDamage: 5
+chestplateRangeDamage: 3
 chestplateHealth: 7
 chestplateDefense: 8.5
 
@@ -22,6 +24,7 @@ leggingsRed: 255
 leggingsGreen: 205
 leggingsBlue: 3
 leggingsMeleeDamage: 5
+leggingsRangeDamage: 3
 leggingsHealth: 5
 leggingsDefense: 6.5
 
@@ -29,6 +32,7 @@ bootsRed: 255
 bootsGreen: 205
 bootsBlue: 3
 bootsMeleeDamage: 5
+bootsRangeDamage: 3
 bootsHealth: 3
 bootsDefense: 3.5
 

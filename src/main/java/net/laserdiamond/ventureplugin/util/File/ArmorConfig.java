@@ -78,7 +78,14 @@ public class ArmorConfig extends ConfigLoader {
         MAGIC_DEFENSE("MagicDefense", true),
         TOUGHNESS ("toughness", false),
         FORTITUDE ("fortitude", false),
-        SPEED ("Speed", true);
+        SPEED ("Speed", true),
+        MOB_FORTUNE ("mobFortune", true),
+        MINING_FORTUNE ("miningFortune", true),
+        FORAGING_FORTUNE ("foragingFortune", true),
+        FARMING_FORTUNE ("farmingFortune", true),
+        FISHING_LUCK("fishingLuck", true),
+        LONGEVITY ("longevity", true),
+        CAFFEINATION ("caffeination", true);
         private final String key;
         private final boolean isPerPiece;
 

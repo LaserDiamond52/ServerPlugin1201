@@ -6,16 +6,13 @@ import net.laserdiamond.ventureplugin.commands.ViewProfiles.TuningMenu;
 import net.laserdiamond.ventureplugin.commands.ViewProfiles.ViewSkills;
 import net.laserdiamond.ventureplugin.commands.ViewProfiles.ViewStats;
 import net.laserdiamond.ventureplugin.enchants.Components.VentureEnchants;
+import net.laserdiamond.ventureplugin.entities.player.StatPlayer;
 import net.laserdiamond.ventureplugin.items.armor.armor_sets.SoulFireBlazeArmor;
 import net.laserdiamond.ventureplugin.items.armor.trims.Components.TrimLore;
-import net.laserdiamond.ventureplugin.items.menuItems.skills.SkillsMenuItems;
-import net.laserdiamond.ventureplugin.items.menuItems.stats.StatMenuItems;
-import net.laserdiamond.ventureplugin.items.armor.util.ArmorCMD;
 import net.laserdiamond.ventureplugin.items.armor.util.ArmorPieceTypes;
 import net.laserdiamond.ventureplugin.items.armor.util.VentureArmorSet;
-import net.laserdiamond.ventureplugin.items.menuItems.tuning.TuningMenuItems;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import net.laserdiamond.ventureplugin.items.menuItems.util.VentureMenuItem;
+import net.laserdiamond.ventureplugin.items.menuItems.util.VentureSkillProgressItem;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -35,93 +32,37 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 public class ItemRegistry implements Listener {
 
     private static final VenturePlugin PLUGIN = VenturePlugin.getInstance();
-    private static final HashMap<String, ItemForger> ITEM_COMMAND_NAME_MAP = PLUGIN.getItemRegistryMap();
-    private static final List<VentureArmorSet> PLAYER_ARMOR_ITEM_MAP = PLUGIN.getPlayerArmorItemMap();
-
-    public static HashMap<Integer, List<String>> defaultPlayerLore(Player player, int stars)
-    {
-        HashMap<Integer, List<String>> defaultPlayerLore = new HashMap<>();
-
-        for (VentureArmorSet ventureArmorSet : PLAYER_ARMOR_ITEM_MAP) // Armor pieces
-        {
-            defaultPlayerLore.put(ventureArmorSet.getArmorCMD().getHelmet(), ventureArmorSet.createPlayerLore(player, ArmorPieceTypes.HELMET, stars));
-            defaultPlayerLore.put(ventureArmorSet.getArmorCMD().getChestplate(), ventureArmorSet.createPlayerLore(player, ArmorPieceTypes.CHESTPLATE, stars));
-            defaultPlayerLore.put(ventureArmorSet.getArmorCMD().getLeggings(), ventureArmorSet.createPlayerLore(player, ArmorPieceTypes.LEGGINGS, stars));
-            defaultPlayerLore.put(ventureArmorSet.getArmorCMD().getBoots(), ventureArmorSet.createPlayerLore(player, ArmorPieceTypes.BOOTS, stars));
-        }
-
-        // Weapons
-
-        // Menu Items
-
-        return defaultPlayerLore;
-    }
-
-    public static HashMap<Integer, List<String>> playerMenuItemMap(Player player)
-    {
-        HashMap<Integer, List<String>> map = new HashMap<>();
-
-        map.put(StatMenuItems.HEALTH_STAT_ITEM.menuItem().getCustomModelData(), StatMenuItems.HEALTH_STAT_ITEM.createLore(player));
-        map.put(StatMenuItems.DEFENSE_STAT_ITEM.menuItem().getCustomModelData(), StatMenuItems.DEFENSE_STAT_ITEM.createLore(player));
-        map.put(StatMenuItems.TOUGHNESS_STAT_ITEM.menuItem().getCustomModelData(), StatMenuItems.TOUGHNESS_STAT_ITEM.createLore(player));
-        map.put(StatMenuItems.MANA_STAT_ITEM.menuItem().getCustomModelData(), StatMenuItems.MANA_STAT_ITEM.createLore(player));
-        map.put(StatMenuItems.DAMAGE_STAT_ITEM.menuItem().getCustomModelData(), StatMenuItems.DAMAGE_STAT_ITEM.createLore(player));
-        map.put(StatMenuItems.SPEED_STAT_ITEM.menuItem().getCustomModelData(), StatMenuItems.SPEED_STAT_ITEM.createLore(player));
-        map.put(StatMenuItems.FORTITUDE_STAT_ITEM.menuItem().getCustomModelData(), StatMenuItems.FORTITUDE_STAT_ITEM.createLore(player));
-        map.put(StatMenuItems.DEFENSE_STAT_ITEM_MORE.menuItem().getCustomModelData(), StatMenuItems.DEFENSE_STAT_ITEM_MORE.createLore(player));
-        map.put(StatMenuItems.FIRE_DEFENSE_STAT_ITEM_MORE.menuItem().getCustomModelData(), StatMenuItems.FIRE_DEFENSE_STAT_ITEM_MORE.createLore(player));
-        map.put(StatMenuItems.EXPLOSION_DEFENSE_STAT_ITEM_MORE.menuItem().getCustomModelData(), StatMenuItems.EXPLOSION_DEFENSE_STAT_ITEM_MORE.createLore(player));
-        map.put(StatMenuItems.PROJECTILE_DEFENSE_STAT_ITEM_MORE.menuItem().getCustomModelData(), StatMenuItems.PROJECTILE_DEFENSE_STAT_ITEM_MORE.createLore(player));
-        map.put(StatMenuItems.MAGIC_DEFENSE_STAT_ITEM_MORE.menuItem().getCustomModelData(), StatMenuItems.MAGIC_DEFENSE_STAT_ITEM_MORE.createLore(player));
-        map.put(StatMenuItems.MELEE_DAMAGE_STAT_ITEM.menuItem().getCustomModelData(), StatMenuItems.MELEE_DAMAGE_STAT_ITEM.createLore(player));
-        map.put(StatMenuItems.MAGIC_DAMAGE_STAT_ITEM.menuItem().getCustomModelData(), StatMenuItems.MAGIC_DAMAGE_STAT_ITEM.createLore(player));
-        map.put(StatMenuItems.RANGE_DAMAGE_STAT_ITEM.menuItem().getCustomModelData(), StatMenuItems.RANGE_DAMAGE_STAT_ITEM.createLore(player));
-
-        map.put(TuningMenuItems.POINTS.menuItem().getCustomModelData(), TuningMenuItems.POINTS.createLore(player));
-        map.put(TuningMenuItems.HEALTH.menuItem().getCustomModelData(), TuningMenuItems.HEALTH.createLore(player));
-        map.put(TuningMenuItems.DEFENSE.menuItem().getCustomModelData(), TuningMenuItems.DEFENSE.createLore(player));
-        map.put(TuningMenuItems.SPEED.menuItem().getCustomModelData(), TuningMenuItems.SPEED.createLore(player));
-        map.put(TuningMenuItems.MANA.menuItem().getCustomModelData(), TuningMenuItems.MANA.createLore(player));
-        map.put(TuningMenuItems.MELEE.menuItem().getCustomModelData(), TuningMenuItems.MELEE.createLore(player));
-        map.put(TuningMenuItems.MAGIC.menuItem().getCustomModelData(), TuningMenuItems.MAGIC.createLore(player));
-        map.put(TuningMenuItems.RANGE.menuItem().getCustomModelData(), TuningMenuItems.RANGE.createLore(player));
-
-        map.put(SkillsMenuItems.COMBAT_SKILL_ITEM.menuItem().getCustomModelData(), SkillsMenuItems.COMBAT_SKILL_ITEM.createLore(player));
-        map.put(SkillsMenuItems.MINING_SKILL_ITEM.menuItem().getCustomModelData(), SkillsMenuItems.MINING_SKILL_ITEM.createLore(player));
-        map.put(SkillsMenuItems.FORAGING_SKILL_ITEM.menuItem().getCustomModelData(), SkillsMenuItems.FORAGING_SKILL_ITEM.createLore(player));
-        map.put(SkillsMenuItems.FARMING_SKILL_ITEM.menuItem().getCustomModelData(), SkillsMenuItems.FARMING_SKILL_ITEM.createLore(player));
-        map.put(SkillsMenuItems.ENCHANTING_SKILL_ITEM.menuItem().getCustomModelData(), SkillsMenuItems.ENCHANTING_SKILL_ITEM.createLore(player));
-        map.put(SkillsMenuItems.FISHING_SKILL_ITEM.menuItem().getCustomModelData(), SkillsMenuItems.FISHING_SKILL_ITEM.createLore(player));
-        map.put(SkillsMenuItems.BREWING_SKILL_ITEM.menuItem().getCustomModelData(), SkillsMenuItems.BREWING_SKILL_ITEM.createLore(player));
-        return map;
-    }
+    private static final HashMap<String, VentureArmorSet> ARMOR_SET_ITEM_MAP = PLUGIN.getArmorSetItemMap();
+    private static final HashMap<String, VentureMenuItem> VENTURE_MENU_ITEMS_MAP = PLUGIN.getVentureMenuItems();
+    private static final HashMap<String, VentureSkillProgressItem> VENTURE_SKILL_PROGRESS_ITEMS = PLUGIN.getVentureSkillProgressItems();
 
     @EventHandler
-    public void refreshItemOnJoin(PlayerJoinEvent event)
+    private void refreshItemOnJoin(PlayerJoinEvent event)
     {
         Player player = event.getPlayer();
 
         for (ItemStack itemStack : player.getInventory().getContents())
         {
             // TODO: Update item to have player-defined lore
-            renewItemNew(itemStack, player);
+            renewItem(itemStack, player);
         }
     }
 
 
     @EventHandler
-    public void refreshSwitchMainHand(PlayerItemHeldEvent event)
+    private void refreshSwitchMainHand(PlayerItemHeldEvent event)
     {
         Player player = event.getPlayer();
 
         for (ItemStack itemStack : player.getInventory().getContents())
         {
-            renewItemNew(itemStack, player);
+            renewItem(itemStack, player);
         }
     }
 
@@ -133,6 +74,13 @@ public class ItemRegistry implements Listener {
         PLAYER_INV_TITLES.add(ViewStats.DAMAGE_STAT_INV_TITLE);
         PLAYER_INV_TITLES.add(TuningMenu.TUNING_INV_TITLE);
         PLAYER_INV_TITLES.add(ViewSkills.SKILL_INV_TITLE);
+        PLAYER_INV_TITLES.add(ViewSkills.COMBAT_INV_TITLE);
+        PLAYER_INV_TITLES.add(ViewSkills.MINING_INV_TITLE);
+        PLAYER_INV_TITLES.add(ViewSkills.FORAGING_INV_TITLE);
+        PLAYER_INV_TITLES.add(ViewSkills.FARMING_INV_TITLE);
+        PLAYER_INV_TITLES.add(ViewSkills.ENCHANTING_INV_TITLE);
+        PLAYER_INV_TITLES.add(ViewSkills.FISHING_INV_TITLE);
+        PLAYER_INV_TITLES.add(ViewSkills.BREWING_INV_TITLE);
     }
 
     private static boolean isAnyPlayerInvTitle(String invTitle)
@@ -148,7 +96,7 @@ public class ItemRegistry implements Listener {
     }
 
     @EventHandler
-    public void refreshOnClick(InventoryClickEvent event)
+    private void refreshOnClick(InventoryClickEvent event)
     {
         Inventory eventInv = event.getClickedInventory();
 
@@ -160,33 +108,27 @@ public class ItemRegistry implements Listener {
             {
                 if (eventInv.equals(player.getInventory()))
                 {
-                    renewItemNew(event.getCursor(), player);
+                    renewItem(event.getCursor(), player);
 
                 } else
                 {
                     if (isAnyPlayerInvTitle(event.getView().getTitle()))
                     {
-                        renewItemNew(event.getCursor(), player);
+                        renewItem(event.getCursor(), player);
                     } else {
-                        renewItemNew(event.getCursor());
+                        renewItem(event.getCursor());
                     }
                 }
                 for (ItemStack itemStack : player.getInventory().getContents())
                 {
-                    if (event.getView().getTitle().contains(ViewStats.STAT_INV_TITLE))
-                    {
-                        renewItemNew(itemStack, player);
-                    } else {
-                        renewItemNew(itemStack, player);
-                    }
-
+                    renewItem(itemStack, player);
                 }
             }
         }
     }
 
     @EventHandler
-    public void refreshOpenInventory(InventoryOpenEvent event)
+    private void refreshOpenInventory(InventoryOpenEvent event)
     {
         HumanEntity humanEntity = event.getPlayer();
         Inventory inventory = event.getInventory();
@@ -198,22 +140,22 @@ public class ItemRegistry implements Listener {
                 String title = event.getView().getTitle();
                 if (isAnyPlayerInvTitle(title))
                 {
-                    renewItemNew(itemStack, player);
+                    renewItem(itemStack, player);
                     //player.sendMessage("player gui");
                 } else {
-                    renewItemNew(itemStack);
+                    renewItem(itemStack);
                     //player.sendMessage("not player gui");
                 }
             }
             for (ItemStack itemStack : player.getInventory().getContents())
             {
-                renewItemNew(itemStack, player);
+                renewItem(itemStack, player);
             }
         }
     }
 
     @EventHandler
-    public void refreshCloseInventory(InventoryCloseEvent event)
+    private void refreshCloseInventory(InventoryCloseEvent event)
     {
         HumanEntity humanEntity = event.getPlayer();
         Inventory inventory = event.getInventory();
@@ -224,47 +166,47 @@ public class ItemRegistry implements Listener {
             {
                 if (isAnyPlayerInvTitle(event.getView().getTitle()))
                 {
-                    renewItemNew(itemStack, player);
+                    renewItem(itemStack, player);
                 } else {
-                    renewItemNew(itemStack);
+                    renewItem(itemStack);
                 }
 
             }
 
             for (ItemStack itemStack : player.getInventory().getContents())
             {
-                renewItemNew(itemStack, player);
+                renewItem(itemStack, player);
             }
         }
     }
 
     @EventHandler
-    public void refreshItemPickUp(PlayerAttemptPickupItemEvent event)
+    private void refreshItemPickUp(PlayerAttemptPickupItemEvent event)
     {
         Player player = event.getPlayer();
         ItemStack itemToPickUp = event.getItem().getItemStack();
 
         // TODO: Update item to have player-defined lore
-        renewItemNew(itemToPickUp, player);
+        renewItem(itemToPickUp, player);
 
     }
 
     @EventHandler
-    public void refreshManipulateArmorStand(PlayerArmorStandManipulateEvent event)
+    private void refreshManipulateArmorStand(PlayerArmorStandManipulateEvent event)
     {
         Player player = event.getPlayer();
         ItemStack armorStandItem = event.getArmorStandItem();
         ItemStack playerItem = event.getPlayerItem();
 
         // TODO: Update both items to have player-defined lore
-        renewItemNew(armorStandItem, player);
-        renewItemNew(playerItem, player);
+        renewItem(armorStandItem, player);
+        renewItem(playerItem, player);
 
     }
 
-    public static ItemStack renewItemNew(ItemStack itemStack)
+    public static ItemStack renewItem(ItemStack itemStack)
     {
-        List<String> newLore = new ArrayList<>();
+        LinkedList<String> newLore = new LinkedList<>();
 
         if (itemStack != null && itemStack.getType().isItem())
         {
@@ -283,62 +225,66 @@ public class ItemRegistry implements Listener {
                     newLore.addAll(VentureEnchants.enchantLore(itemForger.getEnchantments()));
                 }
 
-                if (itemMeta.hasCustomModelData())
+                String itemKeyValue = itemForger.getItemKey();
+                int stars = itemForger.getStars();
+                VentureArmorSet ventureArmorSet = ARMOR_SET_ITEM_MAP.get(itemKeyValue);
+                if (ventureArmorSet != null && ARMOR_SET_ITEM_MAP.containsKey(itemKeyValue))
                 {
-                    String keyValue = itemForger.getItemKey();
-                    try
+                    ArmorPieceTypes armorPieceTypes = null;
+                    if (itemKeyValue.contains("helmet"))
                     {
-                        ItemForger itemForgerMapItem = ITEM_COMMAND_NAME_MAP.get(keyValue);
-                        if (itemForgerMapItem != null)
-                        {
-                            List<String> lore = itemForgerMapItem.getLore();
-                            VentureItemRarity.Rarity rarity = itemForgerMapItem.getRarity();
-                            HashMap<VentureItemStatKeys, Double> itemStatMap = itemForgerMapItem.getItemStats();
-                            Multimap<Attribute, AttributeModifier> attributes = itemForgerMapItem.getAttributes();
-
-                            if (lore != null)
-                            {
-
-                                if (ArmorCMD.isAnyArmorPiece(itemStack, ArmorCMD.SOUL_FIRE_BLAZE))
-                                {
-                                    newLore.addAll(SoulFireBlazeArmor.itemSpecificLore(itemForger, lore));
-                                } else {
-                                    newLore.addAll(lore);
-                                }
-                            }
-                            if (rarity != null)
-                            {
-                                itemMeta.setDisplayName(itemForgerMapItem.getName());
-                                itemMeta.getPersistentDataContainer().set(ItemPropertiesKeys.RARITY_KEY.getKey(), VentureItemRarity.STRING, rarity.getRarity());
-                            }
-                            if (itemStatMap != null)
-                            {
-                                for (VentureItemStatKeys ventureItemStatKeys : itemStatMap.keySet())
-                                {
-                                    NamespacedKey itemStatKey = ventureItemStatKeys.getKey();
-                                    Double statKeyValue = itemStatMap.get(ventureItemStatKeys);
-                                    if (itemMeta.getPersistentDataContainer().get(itemStatKey, PersistentDataType.DOUBLE) != null)
-                                    {
-                                        itemMeta.getPersistentDataContainer().set(itemStatKey, PersistentDataType.DOUBLE, statKeyValue);
-                                    }
-                                }
-                            }
-                            if (attributes != null)
-                            {
-                                itemMeta.setAttributeModifiers(attributes);
-                            }
-                        }
-
-
-                    } catch (NullPointerException exception)
+                        armorPieceTypes = ArmorPieceTypes.HELMET;
+                    } else if (itemKeyValue.contains("chestplate"))
                     {
-                        Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Item found with no mapping! :(");
-                        Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Custom model data: " + itemForger.getCustomModelData());
-                        Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Item key value: " + keyValue);
-                        exception.printStackTrace();
+                        armorPieceTypes = ArmorPieceTypes.CHESTPLATE;
+                    } else if (itemKeyValue.contains("leggings"))
+                    {
+                        armorPieceTypes = ArmorPieceTypes.LEGGINGS;
+                    } else if (itemKeyValue.contains("boots"))
+                    {
+                        armorPieceTypes = ArmorPieceTypes.BOOTS;
                     }
 
+                    if (armorPieceTypes != null)
+                    {
+                        LinkedList<String> lore = ventureArmorSet.createLore(armorPieceTypes, stars);
+                        ItemForger armorItem = ventureArmorSet.createArmorSet(armorPieceTypes, stars);
+                        VentureItemRarity.Rarity rarity = armorItem.getRarity();
+                        HashMap<VentureItemStatKeys, Double> itemStats = armorItem.getItemStats();
+                        Multimap<Attribute, AttributeModifier> attributes = armorItem.getAttributes();
+
+                        if (lore != null)
+                        {
+                            newLore.addAll(lore);
+                            SoulFireBlazeArmor.itemSpecificLore(itemForger, newLore);
+                        }
+
+                        if (rarity != null) // Set rarity for item
+                        {
+                            itemMeta.setDisplayName(armorItem.getName());
+                            itemMeta.getPersistentDataContainer().set(ItemKeys.RARITY_KEY, VentureItemRarity.STRING, rarity.getRarity());
+                        }
+
+                        if (itemStats != null) // Set VentureItemStats for item
+                        {
+                            for (VentureItemStatKeys ventureItemStatKeys : itemStats.keySet())
+                            {
+                                NamespacedKey itemStatKey = ventureItemStatKeys.getKey();
+                                Double statKeyValue = itemStats.get(ventureItemStatKeys);
+                                if (itemMeta.getPersistentDataContainer().get(itemStatKey, PersistentDataType.DOUBLE) != null)
+                                {
+                                    itemMeta.getPersistentDataContainer().set(itemStatKey, PersistentDataType.DOUBLE, statKeyValue);
+                                }
+                            }
+                        }
+                        if (attributes != null) // Set Attributes for item
+                        {
+                            itemMeta.setAttributeModifiers(attributes);
+                        }
+
+                    }
                 }
+
                 itemMeta.setLore(newLore);
                 itemStack.setItemMeta(itemMeta);
 
@@ -347,9 +293,9 @@ public class ItemRegistry implements Listener {
         return itemStack;
     }
 
-    public static ItemStack renewItemNew(ItemStack itemStack, Player player)
+    public static ItemStack renewItem(ItemStack itemStack, Player player)
     {
-        List<String> newLore = new ArrayList<>();
+        LinkedList<String> newLore = new LinkedList<>();
 
         if (itemStack != null && itemStack.getType().isItem())
         {
@@ -368,84 +314,116 @@ public class ItemRegistry implements Listener {
                     newLore.addAll(VentureEnchants.enchantLore(itemForger.getEnchantments()));
                 }
 
-                if (itemMeta.hasCustomModelData())
+                int itemMatchCount = 0;
+                String itemKeyValue = itemForger.getItemKey();
+                int stars = itemForger.getStars();
+                VentureArmorSet ventureArmorSet = ARMOR_SET_ITEM_MAP.get(itemKeyValue);
+                if (ventureArmorSet != null && ARMOR_SET_ITEM_MAP.containsKey(itemKeyValue))
                 {
-                    int stars = itemForger.getStarsNew();
-                    String keyValue = itemForger.getItemKey();
-                    try
+                    ArmorPieceTypes armorPieceTypes = null;
+                    if (itemKeyValue.contains("helmet"))
                     {
-                        HashMap<Integer, List<String>> playerLoreMap = defaultPlayerLore(player, stars);
-                        ItemForger itemForgerMapItem = ITEM_COMMAND_NAME_MAP.get(keyValue);
-                        if (itemForgerMapItem != null)
-                        {
-                            List<String> lore = itemForgerMapItem.getLore();
-                            List<String> playerLore = playerLoreMap.get(itemMeta.getCustomModelData());
-                            VentureItemRarity.Rarity rarity = itemForgerMapItem.getRarity();
-                            HashMap<VentureItemStatKeys, Double> itemStatMap = itemForgerMapItem.getItemStats();
-                            Multimap<Attribute, AttributeModifier> attributes = itemForgerMapItem.getAttributes();
-
-
-                            if (lore != null)
-                            {
-                                if (!playerLoreMap.containsKey(itemMeta.getCustomModelData()))
-                                {
-                                    if (ArmorCMD.isAnyArmorPiece(itemStack, ArmorCMD.SOUL_FIRE_BLAZE))
-                                    {
-                                        newLore.addAll(SoulFireBlazeArmor.itemSpecificLore(itemForger, lore));
-                                    } else {
-                                        newLore.addAll(lore);
-                                    }
-                                }
-                            }
-                            if (playerLore != null)
-                            {
-                                if (playerLoreMap.containsKey(itemMeta.getCustomModelData()))
-                                {
-                                    newLore.addAll(playerLore);
-                                }
-                            }
-
-                            if (rarity != null)
-                            {
-                                itemMeta.setDisplayName(itemForgerMapItem.getName());
-                                itemMeta.getPersistentDataContainer().set(ItemPropertiesKeys.RARITY_KEY.getKey(), VentureItemRarity.STRING, rarity.getRarity());
-                            }
-                            if (itemStatMap != null)
-                            {
-                                for (VentureItemStatKeys ventureItemStatKeys : itemStatMap.keySet())
-                                {
-                                    NamespacedKey itemStatKey = ventureItemStatKeys.getKey();
-                                    Double statKeyValue = itemStatMap.get(ventureItemStatKeys);
-                                    if (itemMeta.getPersistentDataContainer().get(itemStatKey, PersistentDataType.DOUBLE) != null)
-                                    {
-                                        itemMeta.getPersistentDataContainer().set(itemStatKey, PersistentDataType.DOUBLE, statKeyValue);
-                                    }
-                                }
-                            }
-                            if (attributes != null)
-                            {
-                                itemMeta.setAttributeModifiers(attributes);
-                            }
-                        }
-                        HashMap<Integer, List<String>> menuItemLoreMap = playerMenuItemMap(player);
-                        if (menuItemLoreMap.containsKey(itemMeta.getCustomModelData()))
-                        {
-                            List<String> lore = menuItemLoreMap.get(itemMeta.getCustomModelData());
-                            itemMeta.setLore(lore);
-                            itemStack.setItemMeta(itemMeta);
-                            return itemStack;
-                        }
-
-
-                    } catch (NullPointerException exception)
+                        armorPieceTypes = ArmorPieceTypes.HELMET;
+                    } else if (itemKeyValue.contains("chestplate"))
                     {
-                        Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Item found with no mapping! :(");
-                        Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Custom model data: " + itemForger.getCustomModelData());
-                        Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Item key value: " + keyValue);
-                        exception.printStackTrace();
+                        armorPieceTypes = ArmorPieceTypes.CHESTPLATE;
+                    } else if (itemKeyValue.contains("leggings"))
+                    {
+                        armorPieceTypes = ArmorPieceTypes.LEGGINGS;
+                    } else if (itemKeyValue.contains("boots"))
+                    {
+                        armorPieceTypes = ArmorPieceTypes.BOOTS;
                     }
 
+                    if (armorPieceTypes != null)
+                    {
+                        LinkedList<String> defaultLore = ventureArmorSet.createLore(armorPieceTypes, stars);
+                        LinkedList<String> playerLore = ventureArmorSet.createPlayerLore(player, armorPieceTypes, stars);
+                        ItemForger armorItem = ventureArmorSet.createArmorSet(armorPieceTypes, stars);
+                        VentureItemRarity.Rarity rarity = armorItem.getRarity();
+                        HashMap<VentureItemStatKeys, Double> itemStats = armorItem.getItemStats();
+                        Multimap<Attribute, AttributeModifier> attributes = armorItem.getAttributes();
+
+                        if (ventureArmorSet.isPlayerArmorSet()) // Check if item is part of a player-defined armor set
+                        {
+                            if (playerLore != null)
+                            {
+                                newLore.addAll(playerLore);
+                            }
+
+                        } else // Item is not a player-defined armor set
+                        {
+                            if (defaultLore != null)
+                            {
+                                newLore.addAll(defaultLore);
+                                SoulFireBlazeArmor.itemSpecificLore(itemForger, newLore);
+                            }
+                        }
+
+                        if (rarity != null) // Set rarity for item
+                        {
+                            itemMeta.setDisplayName(armorItem.getName());
+                            itemMeta.getPersistentDataContainer().set(ItemKeys.RARITY_KEY, VentureItemRarity.STRING, rarity.getRarity());
+                        }
+
+                        if (itemStats != null) // Set VentureItemStats for item
+                        {
+                            for (VentureItemStatKeys ventureItemStatKeys : itemStats.keySet())
+                            {
+                                NamespacedKey itemStatKey = ventureItemStatKeys.getKey();
+                                Double statKeyValue = itemStats.get(ventureItemStatKeys);
+                                if (itemMeta.getPersistentDataContainer().get(itemStatKey, PersistentDataType.DOUBLE) != null)
+                                {
+                                    itemMeta.getPersistentDataContainer().set(itemStatKey, PersistentDataType.DOUBLE, statKeyValue);
+                                }
+                            }
+                        }
+                        if (attributes != null) // Set Attributes for item
+                        {
+                            itemMeta.setAttributeModifiers(attributes);
+                        }
+                    }
+                } else
+                {
+                    itemMatchCount++;
                 }
+
+                String menuItemKeyValue = itemForger.getMenuItemKey();
+                VentureMenuItem ventureMenuItem = VENTURE_MENU_ITEMS_MAP.get(menuItemKeyValue);
+                if (ventureMenuItem != null && VENTURE_MENU_ITEMS_MAP.containsKey(itemKeyValue))
+                {
+                    List<String> lore = ventureMenuItem.createLore(player);
+                    if (lore != null)
+                    {
+                        newLore.addAll(lore);
+                    }
+                } else
+                {
+                    itemMatchCount++;
+                }
+
+                String skillProgressKeyValue = itemForger.getSkillProgressSkillKey();
+                VentureSkillProgressItem skillProgressItem = VENTURE_SKILL_PROGRESS_ITEMS.get(skillProgressKeyValue);
+                if (skillProgressItem != null && VENTURE_SKILL_PROGRESS_ITEMS.containsKey(skillProgressKeyValue))
+                {
+                    int skillLvl = itemForger.getSkillProgressLvl();
+                    List<String> lore = skillProgressItem.skillProgressItem(skillLvl, new StatPlayer(player).getSkillsProfile()).getLore();
+                    if (lore != null)
+                    {
+                        newLore.addAll(lore);
+                    }
+                } else
+                {
+                    itemMatchCount++;
+                }
+
+                if (itemMatchCount == 3) // Item is not an armor set item or a menu item
+                {
+                    itemMeta.setLore(itemMeta.getLore());
+                    itemStack.setItemMeta(itemMeta);
+                    return itemStack;
+                }
+
                 itemMeta.setLore(newLore);
                 itemStack.setItemMeta(itemMeta);
 

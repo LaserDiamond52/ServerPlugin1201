@@ -6,6 +6,7 @@ import net.laserdiamond.ventureplugin.entities.player.StatPlayer;
 import net.laserdiamond.ventureplugin.events.abilities.cooldown.EyeOfStormCooldown;
 import net.laserdiamond.ventureplugin.events.damage.PlayerMagicDamageEvent;
 import net.laserdiamond.ventureplugin.events.mana.PlayerSpellCastEvent;
+import net.laserdiamond.ventureplugin.items.util.ItemStringBuilder;
 import net.laserdiamond.ventureplugin.items.util.VentureItemRarity;
 import net.laserdiamond.ventureplugin.items.armor.util.ArmorCMD;
 import net.laserdiamond.ventureplugin.items.armor.util.ArmorPieceTypes;
@@ -17,13 +18,9 @@ import net.laserdiamond.ventureplugin.stats.Components.Stats;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
@@ -39,37 +36,38 @@ public final class StormLordArmor extends VentureArmorSet implements AbilityCast
     }
 
     @Override
-    public @NotNull String armorSetName() {
+    @NotNull
+    protected String armorName() {
         return "Storm Lord";
     }
 
     @Override
-    public ArmorConfig config() {
+    protected ArmorConfig config() {
         return plugin.getStormLordArmorConfig();
     }
 
     @Override
-    public ArmorCMD getArmorCMD() {
+    public ArmorCMD armorCMD() {
         return ArmorCMD.STORM_LORD_ARMOR;
     }
 
     @Override
-    public boolean isFireResistant() {
+    protected boolean isFireResistant() {
         return true;
     }
 
     @Override
-    public boolean isUnbreakable() {
+    protected boolean isUnbreakable() {
         return true;
     }
 
     @Override
-    public VentureItemRarity.Rarity rarity() {
+    protected VentureItemRarity.Rarity rarity() {
         return VentureItemRarity.Rarity.FABLED;
     }
 
     @Override
-    public Material armorPieceMaterials(ArmorPieceTypes armorPieceTypes) {
+    protected Material armorPieceMaterials(ArmorPieceTypes armorPieceTypes) {
         Material material = null;
         switch (armorPieceTypes)
         {
@@ -82,14 +80,14 @@ public final class StormLordArmor extends VentureArmorSet implements AbilityCast
     }
 
     @Override
-    public List<String> createLore(@NotNull ArmorPieceTypes armorPieceTypes, int stars) {
+    public LinkedList<String> createLore(@NotNull ArmorPieceTypes armorPieceTypes, int stars) {
         int blastRadius = config().getInt("blastRadius");
         int weaknessLvl = config().getInt("weaknessLvl");
         double weaknessDuration = config().getDouble("weaknessDuration");
         int cooldown = config().getInt("cooldown");
         double manaCost = config().getDouble("manaCost");
 
-        List<String> lore = super.createLore(armorPieceTypes, stars);
+        LinkedList<String> lore = super.createLore(armorPieceTypes, stars);
         lore.add(ChatColor.GOLD + "Full Set Bonus: Eye of the Storm" + ChatColor.YELLOW + " " + ChatColor.BOLD + "Press Q");
         lore.add(" ");
         lore.add(ChatColor.GRAY + "Grants all items with the " + ChatColor.AQUA + "Thunder Strike" + ChatColor.GRAY + " enchantment");
@@ -101,8 +99,7 @@ public final class StormLordArmor extends VentureArmorSet implements AbilityCast
         lore.add(" ");
         lore.add(ChatColor.GRAY + "Gain " + ChatColor.DARK_AQUA + "Conduit Power" + ChatColor.GRAY + " when fully worn");
         lore.add(" ");
-
-
+        lore.addLast(ItemStringBuilder.addItemStringRarity(rarity(), armorPieceTypes));
         // Full Set Bonus: Eye of the Storm PRESS Q
         //
         // Grants all items with the Thunder Strike enchantment
@@ -125,7 +122,7 @@ public final class StormLordArmor extends VentureArmorSet implements AbilityCast
     }
 
     @Override
-    public List<String> createPlayerLore(@NotNull Player player, @NotNull ArmorPieceTypes armorPieceTypes, int stars) {
+    public LinkedList<String> createPlayerLore(@NotNull Player player, @NotNull ArmorPieceTypes armorPieceTypes, int stars) {
 
         int blastRadius = config().getInt("blastRadius");
         int weaknessLvl = config().getInt("weaknessLvl");
@@ -136,7 +133,7 @@ public final class StormLordArmor extends VentureArmorSet implements AbilityCast
         ItemStack mainHand = player.getInventory().getItemInMainHand();
         ItemMeta mainHandMeta = mainHand.getItemMeta();
 
-        List<String> lore = super.createPlayerLore(player, armorPieceTypes, stars);
+        LinkedList<String> lore = super.createPlayerLore(player, armorPieceTypes, stars);
         lore.add(ChatColor.GOLD + "Full Set Bonus: Eye of the Storm" + ChatColor.YELLOW + " " + ChatColor.BOLD + "Press Q");
         lore.add(" ");
         lore.add(ChatColor.GRAY + "Grants all items with the " + ChatColor.AQUA + "Thunder Strike" + ChatColor.GRAY + " enchantment");
@@ -160,12 +157,13 @@ public final class StormLordArmor extends VentureArmorSet implements AbilityCast
         lore.add(" ");
         lore.add(ChatColor.GRAY + "Gain " + ChatColor.DARK_AQUA + "Conduit Power" + ChatColor.GRAY + " when fully worn");
         lore.add(" ");
+        lore.addLast(ItemStringBuilder.addItemStringRarity(rarity(), armorPieceTypes));
 
         return lore;
     }
 
     @Override
-    public boolean registerPlayerArmorSet() {
+    public boolean isPlayerArmorSet() {
         return true;
     }
 

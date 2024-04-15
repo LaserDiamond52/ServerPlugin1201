@@ -1,5 +1,6 @@
 package net.laserdiamond.ventureplugin.items.misc.util;
 
+import net.laserdiamond.ventureplugin.VenturePlugin;
 import net.laserdiamond.ventureplugin.items.util.ItemForger;
 import net.laserdiamond.ventureplugin.items.util.VentureItemRarity;
 import net.laserdiamond.ventureplugin.items.util.VentureItemStatKeys;
@@ -7,6 +8,7 @@ import net.laserdiamond.ventureplugin.util.Stars;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -14,16 +16,18 @@ import java.util.List;
  */
 public abstract class VentureStatItem {
 
+    protected final VenturePlugin plugin = VenturePlugin.getInstance();
+
     /**
      * The star stat bonus
      */
-    public final double starBonus = Stars.STARS.getBoostPerStar();
+    protected final double starBonus = Stars.STARS.getBoostPerStar();
 
     /**
      * The item's rarity
      * @return The rarity of the item (default is common)
      */
-    public VentureItemRarity.Rarity rarity()
+    protected VentureItemRarity.Rarity rarity()
     {
         return VentureItemRarity.Rarity.COMMON;
     }
@@ -32,7 +36,7 @@ public abstract class VentureStatItem {
      * Determines if the armor set is unbreakable
      * @return If the armor set is unbreakable (default is false)
      */
-    public boolean isUnbreakable()
+    protected boolean isUnbreakable()
     {
         return false;
     }
@@ -41,7 +45,7 @@ public abstract class VentureStatItem {
      * Determines if the item is vulnerable to fire
      * @return If the item is vulnerable to fire (default is false)
      */
-    public boolean isFireResistant()
+    protected boolean isFireResistant()
     {
         return false;
     }
@@ -50,16 +54,16 @@ public abstract class VentureStatItem {
      * Adds Venture Plugin item stat lore to the item
      * @param statMap The Venture item Stat map
      */
-    public List<String> createStatLore(HashMap<VentureItemStatKeys, Double> statMap)
+    protected LinkedList<String> createStatLore(HashMap<VentureItemStatKeys, Double> statMap)
     {
-        List<String> baseLore = new ArrayList<>();
+        LinkedList<String> baseLore = new LinkedList<>();
         baseLore.add(" ");
         if (statMap != null)
         {
-            List<String> statLore = ItemForger.createStatLore(statMap);
+            LinkedList<String> statLore = ItemForger.createStatLore(statMap);
             baseLore.addAll(statLore);
         }
-        baseLore.add(" ");
+        baseLore.addLast(" ");
         return baseLore;
     }
 

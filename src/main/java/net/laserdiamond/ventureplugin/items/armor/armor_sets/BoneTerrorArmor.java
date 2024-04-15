@@ -27,7 +27,7 @@ import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
-import java.util.List;
+import java.util.LinkedList;
 import java.util.UUID;
 
 public final class BoneTerrorArmor extends VentureArmorSet implements AbilityCasting.toggleSneakAbility, Listener {
@@ -41,22 +41,22 @@ public final class BoneTerrorArmor extends VentureArmorSet implements AbilityCas
     }
 
     @Override
-    public ArmorConfig config() {
+    protected ArmorConfig config() {
         return plugin.getBoneTerrorArmorConfig();
     }
 
     @Override
-    public String armorSetName() {
+    protected String armorName() {
         return "Bone Terror";
     }
 
     @Override
-    public ArmorCMD getArmorCMD() {
+    public ArmorCMD armorCMD() {
         return ArmorCMD.BONE_TERROR;
     }
 
     @Override
-    public Material armorPieceMaterials(ArmorPieceTypes armorPieceTypes) {
+    protected Material armorPieceMaterials(ArmorPieceTypes armorPieceTypes) {
         Material material = null;
         switch (armorPieceTypes)
         {
@@ -69,19 +69,19 @@ public final class BoneTerrorArmor extends VentureArmorSet implements AbilityCas
     }
 
     @Override
-    public VentureItemRarity.Rarity rarity() {
+    protected VentureItemRarity.Rarity rarity() {
         return VentureItemRarity.Rarity.RARE;
     }
 
     @Override
-    public List<String> createLore(@NotNull ArmorPieceTypes armorPieceTypes, int stars) {
+    public LinkedList<String> createLore(@NotNull ArmorPieceTypes armorPieceTypes, int stars) {
 
         double arrowDamageMultiplier = config().getDouble("arrowDamageMultiplier");
         double manaCost = config().getDouble("manaCost");
         double cooldown = config().getDouble("cooldown");
         String abilityName = config().getString("abilityName");
 
-        List<String> lore = super.createLore(armorPieceTypes, stars);
+        LinkedList<String> lore = super.createLore(armorPieceTypes, stars);
         lore.add(ChatColor.GOLD + "Full Set Bonus: " + abilityName + ChatColor.YELLOW + ChatColor.BOLD + " Press Sneak");
         lore.add(" ");
         lore.add(ChatColor.GRAY + "Your next arrow shot will deal " + ChatColor.GOLD + arrowDamageMultiplier + ChatColor.GRAY + "x more damage");

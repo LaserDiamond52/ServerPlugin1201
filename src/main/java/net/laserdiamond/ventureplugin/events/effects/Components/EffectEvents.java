@@ -25,6 +25,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class EffectEvents implements Listener {
 
     private VenturePlugin plugin;
@@ -36,7 +39,7 @@ public class EffectEvents implements Listener {
     }
 
     @EventHandler
-    public void milkRemoveEffect(PlayerItemConsumeEvent event) {
+    private void milkRemoveEffect(PlayerItemConsumeEvent event) {
 
         Player player = event.getPlayer();
         ItemStack itemStack = event.getItem();
@@ -63,7 +66,7 @@ public class EffectEvents implements Listener {
     }
 
     @EventHandler
-    public void EntityDamage(EntityDamageEvent event) {
+    private void EntityDamage(EntityDamageEvent event) {
 
         double damage = event.getDamage();
 
@@ -103,8 +106,20 @@ public class EffectEvents implements Listener {
          */
     }
 
+    private static final List<EntityPotionEffectEvent.Cause> EFFECT_CAUSES = new ArrayList<>();
+    static
+    {
+        EFFECT_CAUSES.add(EntityPotionEffectEvent.Cause.BEACON);
+        EFFECT_CAUSES.add(EntityPotionEffectEvent.Cause.COMMAND);
+        EFFECT_CAUSES.add(EntityPotionEffectEvent.Cause.CONDUIT);
+        EFFECT_CAUSES.add(EntityPotionEffectEvent.Cause.PLUGIN);
+        EFFECT_CAUSES.add(EntityPotionEffectEvent.Cause.TURTLE_HELMET);
+        EFFECT_CAUSES.add(EntityPotionEffectEvent.Cause.UNKNOWN);
+    }
+
+
     @EventHandler
-    public void effectGain(EntityPotionEffectEvent event)
+    private void effectGain(EntityPotionEffectEvent event)
     {
         if (event.getEntity() instanceof Player player)
         {
@@ -117,7 +132,12 @@ public class EffectEvents implements Listener {
                 int duration = (int) (newEffect.getDuration() * (1 + (potionStats.getLongevity() * 0.01)));
                 int amplifier = newEffect.getAmplifier();
                 PotionEffectType.Category category = newEffect.getType().getEffectCategory();
-                if (category == PotionEffectType.Category.BENEFICIAL)
+
+                if (EFFECT_CAUSES.contains(event.getCause()))
+                {
+                    return;
+                }
+                if (category == PotionEffectType.Category.BENEFICIAL && !newEffect.isInfinite())
                 {
                     event.setCancelled(true);
                     PotionEffectType potionEffectType = event.getModifiedType();
@@ -147,7 +167,7 @@ public class EffectEvents implements Listener {
     }
 
     @EventHandler
-    public void PotionEffect(EntityPotionEffectEvent event) {
+    private void PotionEffect(EntityPotionEffectEvent event) {
 
         if (event.getEntity() instanceof Player player) {
             if (EffectBoolean.hasEffect(player, EffectKeys.GOD)) {
@@ -172,7 +192,7 @@ public class EffectEvents implements Listener {
     }
 
     @EventHandler
-    public void godImmunePotionSplash(PotionSplashEvent event) {
+    private void godImmunePotionSplash(PotionSplashEvent event) {
 
         for (LivingEntity livingEntity : event.getAffectedEntities()) {
             if (livingEntity instanceof Player player) {
@@ -186,7 +206,7 @@ public class EffectEvents implements Listener {
     }
 
     @EventHandler
-    public void godImmuneAreaEffectCloud(AreaEffectCloudApplyEvent event) {
+    private void godImmuneAreaEffectCloud(AreaEffectCloudApplyEvent event) {
 
         for (LivingEntity livingEntity : event.getAffectedEntities()) {
             if (livingEntity instanceof Player player) {
@@ -198,7 +218,7 @@ public class EffectEvents implements Listener {
     }
 
     @EventHandler
-    public void godDeath(PlayerDeathEvent event) {
+    private void godDeath(PlayerDeathEvent event) {
 
         Player player = event.getPlayer();
 
@@ -208,7 +228,7 @@ public class EffectEvents implements Listener {
     }
 
     @EventHandler
-    public void cancelGodTP(PlayerTeleportEvent event) {
+    private void cancelGodTP(PlayerTeleportEvent event) {
         Player player = event.getPlayer();
 
         if (EffectBoolean.hasEffect(player, EffectKeys.GOD)) {
@@ -220,7 +240,7 @@ public class EffectEvents implements Listener {
     }
 
     @EventHandler
-    public void disableHealingNecrosis(EntityRegainHealthEvent event) {
+    private void disableHealingNecrosis(EntityRegainHealthEvent event) {
 
         if (event.getEntity() instanceof LivingEntity livingEntity) {
             if (!NecrosisTimer.hasNoEffect(livingEntity)) {
@@ -246,7 +266,7 @@ public class EffectEvents implements Listener {
     }
 
     @EventHandler
-    public void paralyzeMovementEntity(EntityMoveEvent event) {
+    private void paralyzeMovementEntity(EntityMoveEvent event) {
 
         if (!ParalyzeTimer.hasNoEffect(event.getEntity())) {
             event.setCancelled(true);
@@ -254,7 +274,7 @@ public class EffectEvents implements Listener {
     }
 
     @EventHandler
-    public void paralyzeMovementPlayer(PlayerMoveEvent event) {
+    private void paralyzeMovementPlayer(PlayerMoveEvent event) {
         Player player = event.getPlayer();
 
         if (!ParalyzeTimer.hasNoEffect(player)) {

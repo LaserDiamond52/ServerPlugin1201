@@ -55,9 +55,9 @@ public class StarItemCommand implements CommandExecutor, TabExecutor {
             try {
                 int stars = Integer.parseInt(input);
                 ItemForger mainHandForger = new ItemForger(mainHand);
-                int oldStars = mainHandForger.getStarsNew();
-                mainHandForger.setStarsNew(stars);
-                ItemStack newItem = ItemRegistry.renewItemNew(mainHandForger.toItemStack(), target);
+                int oldStars = mainHandForger.getStars();
+                mainHandForger.setStars(stars);
+                ItemStack newItem = ItemRegistry.renewItem(mainHandForger.toItemStack(), target);
                 target.getInventory().setItemInMainHand(newItem);
 
                 sender.sendMessage(ChatColor.GREEN + "Successfully set stars on " + ChatColor.GOLD + target.getName() + ChatColor.GREEN + "'s main hand from " + ChatColor.RED + oldStars + ChatColor.GREEN + " to " + ChatColor.RED + Math.max(0, Math.min(stars, plugin.getConfig().getInt("maxStars"))));

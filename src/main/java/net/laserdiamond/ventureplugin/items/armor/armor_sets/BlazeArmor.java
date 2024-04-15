@@ -10,6 +10,7 @@ import net.laserdiamond.ventureplugin.events.mana.PlayerSpellCastEvent;
 import net.laserdiamond.ventureplugin.items.armor.util.ArmorCMD;
 import net.laserdiamond.ventureplugin.items.armor.util.ArmorPieceTypes;
 import net.laserdiamond.ventureplugin.items.armor.util.VentureArmorSet;
+import net.laserdiamond.ventureplugin.items.util.ItemStringBuilder;
 import net.laserdiamond.ventureplugin.items.util.VentureItemRarity;
 import net.laserdiamond.ventureplugin.stats.Components.Stats;
 import net.laserdiamond.ventureplugin.util.File.ArmorConfig;
@@ -23,7 +24,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
-import java.util.List;
+import java.util.LinkedList;
 import java.util.UUID;
 
 public final class BlazeArmor extends VentureArmorSet implements AbilityCasting.RunnableAbility {
@@ -39,38 +40,38 @@ public final class BlazeArmor extends VentureArmorSet implements AbilityCasting.
         blazeAuraTimer = new HashMap<>();
     }
     @Override
-    public String armorSetName() {
+    protected String armorName() {
         return "Blaze";
     }
 
     @Override
-    public ArmorConfig config()
+    protected ArmorConfig config()
     {
         return plugin.getBlazeArmorConfig();
     }
 
     @Override
-    public ArmorCMD getArmorCMD() {
+    public ArmorCMD armorCMD() {
         return ArmorCMD.BLAZE_ARMOR;
     }
 
     @Override
-    public boolean isFireResistant() {
+    protected boolean isFireResistant() {
         return true;
     }
 
     @Override
-    public boolean isUnbreakable() {
+    protected boolean isUnbreakable() {
         return true;
     }
 
     @Override
-    public VentureItemRarity.Rarity rarity() {
+    protected VentureItemRarity.Rarity rarity() {
         return VentureItemRarity.Rarity.LEGENDARY;
     }
 
     @Override
-    public Material armorPieceMaterials(ArmorPieceTypes armorPieceTypes) {
+    protected Material armorPieceMaterials(ArmorPieceTypes armorPieceTypes) {
         Material material = null;
         switch (armorPieceTypes)
         {
@@ -83,22 +84,21 @@ public final class BlazeArmor extends VentureArmorSet implements AbilityCasting.
     }
 
     @Override
-    public List<String> createLore(@NotNull ArmorPieceTypes armorPieceTypes, int stars) {
+    public LinkedList<String> createLore(@NotNull ArmorPieceTypes armorPieceTypes, int stars) {
 
         double auraDamage = config().getDouble("auraBaseDamage");
         double auraRadius = config().getDouble("auraRadius");
         double manaCost = config().getDouble("manaCost");
         String abilityName = config().getString("abilityName");
 
-        List<String> lore = super.createLore(armorPieceTypes, stars);
-        // TODO: Add item lore here
+        LinkedList<String> lore = super.createLore(armorPieceTypes, stars);
         lore.add(ChatColor.GOLD + "Full Set Bonus: " + abilityName + ChatColor.YELLOW + ChatColor.BOLD + " Hold Sneak");
         lore.add(" ");
         lore.add(ChatColor.GRAY + "While sneaking, set mobs within a " + ChatColor.GOLD + auraRadius + ChatColor.GRAY + " block");
         lore.add(ChatColor.GRAY + "radius ablaze and deal " + ChatColor.AQUA + auraDamage + ChatColor.GRAY + " damage/second");
         lore.add(ChatColor.DARK_GRAY + "Mana Cost: " + ChatColor.DARK_AQUA + manaCost);
         lore.add(" ");
-
+        lore.addLast(ItemStringBuilder.addItemStringRarity(rarity(), armorPieceTypes));
         // Full Set Bonus: Blazing Aura HOLD SNEAK
         //
         // While sneaking, set mobs within a 5 block

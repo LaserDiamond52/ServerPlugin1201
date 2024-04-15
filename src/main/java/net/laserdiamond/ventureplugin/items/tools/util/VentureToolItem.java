@@ -11,6 +11,9 @@ import org.bukkit.entity.Player;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * An abstract class that represents a full set of standard tools
+ */
 public abstract class VentureToolItem extends VentureStatItem {
 
     /**

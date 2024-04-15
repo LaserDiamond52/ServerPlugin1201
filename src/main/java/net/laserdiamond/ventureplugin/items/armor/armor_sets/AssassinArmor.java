@@ -7,6 +7,7 @@ import net.laserdiamond.ventureplugin.events.abilities.AbilityCasting;
 import net.laserdiamond.ventureplugin.events.abilities.AbilityHandler;
 import net.laserdiamond.ventureplugin.events.abilities.cooldown.AssassinCloakCooldown;
 import net.laserdiamond.ventureplugin.events.mana.PlayerSpellCastEvent;
+import net.laserdiamond.ventureplugin.items.util.ItemStringBuilder;
 import net.laserdiamond.ventureplugin.items.util.VentureItemRarity;
 import net.laserdiamond.ventureplugin.items.armor.util.ArmorCMD;
 import net.laserdiamond.ventureplugin.items.armor.util.ArmorPieceTypes;
@@ -24,7 +25,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+import java.util.LinkedList;
 
 public final class AssassinArmor extends VentureArmorSet implements AbilityCasting.toggleSneakAbility {
     public AssassinArmor(VenturePlugin plugin) {
@@ -33,22 +34,22 @@ public final class AssassinArmor extends VentureArmorSet implements AbilityCasti
     }
 
     @Override
-    public ArmorConfig config() {
+    protected ArmorConfig config() {
         return plugin.getAssassinArmorConfig();
     }
 
     @Override
-    public String armorSetName() {
+    protected String armorName() {
         return "Assassin";
     }
 
     @Override
-    public ArmorCMD getArmorCMD() {
+    public ArmorCMD armorCMD() {
         return ArmorCMD.ASSASSIN_ARMOR;
     }
 
     @Override
-    public Material armorPieceMaterials(ArmorPieceTypes armorPieceTypes) {
+    protected Material armorPieceMaterials(ArmorPieceTypes armorPieceTypes) {
         Material material = null;
         switch (armorPieceTypes)
         {
@@ -61,17 +62,17 @@ public final class AssassinArmor extends VentureArmorSet implements AbilityCasti
     }
 
     @Override
-    public VentureItemRarity.Rarity rarity() {
+    protected VentureItemRarity.Rarity rarity() {
         return VentureItemRarity.Rarity.LEGENDARY;
     }
 
     @Override
-    public boolean isUnbreakable() {
+    protected boolean isUnbreakable() {
         return true;
     }
 
     @Override
-    public List<String> createLore(@NotNull ArmorPieceTypes armorPieceTypes, int stars) {
+    public LinkedList<String> createLore(@NotNull ArmorPieceTypes armorPieceTypes, int stars) {
         double healthForAbility = config().getDouble("healthActivateBonus");
         int invisibilityDuration = config().getInt("invisibilityDuration");
         double blindRadius = config().getDouble("blindRadius");
@@ -80,7 +81,8 @@ public final class AssassinArmor extends VentureArmorSet implements AbilityCasti
         double cooldown = config().getDouble("cooldown");
         String abilityName = config().getString("abilityName");
 
-        List<String> lore = super.createLore(armorPieceTypes, stars);
+        LinkedList<String> lore = super.createLore(armorPieceTypes, stars);
+
         lore.add(ChatColor.GOLD + "Full Set Bonus: " + abilityName + ChatColor.YELLOW + ChatColor.BOLD + " Toggle Sneak");
         lore.add(" ");
         lore.add(ChatColor.GRAY + "When below " + ChatColor.RED + healthForAbility + "%❤" + ChatColor.GRAY + ", turn invisible for " + ChatColor.GOLD + invisibilityDuration + ChatColor.GRAY + " seconds");
@@ -89,6 +91,7 @@ public final class AssassinArmor extends VentureArmorSet implements AbilityCasti
         lore.add(ChatColor.DARK_GRAY + "Mana Cost: " + ChatColor.DARK_AQUA + manaCost);
         lore.add(ChatColor.DARK_GRAY + "Cooldown: " + ChatColor.GREEN + cooldown + ChatColor.DARK_GRAY + " seconds");
         lore.add(" ");
+        lore.addLast(ItemStringBuilder.addItemStringRarity(rarity(), armorPieceTypes));
         return lore;
 
         // Full Set Bonus: Assassin's Cloak
@@ -98,6 +101,7 @@ public final class AssassinArmor extends VentureArmorSet implements AbilityCasti
         // for 15 seconds
 
     }
+
 
     @AbilityHandler(abilityCastType = AbilityCastType.TOGGLE_SNEAK)
     @Override

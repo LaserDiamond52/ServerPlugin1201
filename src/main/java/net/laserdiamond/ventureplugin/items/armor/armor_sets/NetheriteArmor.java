@@ -1,17 +1,16 @@
 package net.laserdiamond.ventureplugin.items.armor.armor_sets;
 
 import net.laserdiamond.ventureplugin.items.armor.util.VentureArmorSet;
+import net.laserdiamond.ventureplugin.items.util.ItemStringBuilder;
 import net.laserdiamond.ventureplugin.util.File.ArmorConfig;
-import net.laserdiamond.ventureplugin.items.util.VentureItemStatKeys;
 import net.laserdiamond.ventureplugin.VenturePlugin;
 import net.laserdiamond.ventureplugin.items.util.VentureItemRarity;
 import net.laserdiamond.ventureplugin.items.armor.util.ArmorCMD;
 import net.laserdiamond.ventureplugin.items.armor.util.ArmorPieceTypes;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+import java.util.LinkedList;
 
 public final class NetheriteArmor extends VentureArmorSet {
 
@@ -21,32 +20,33 @@ public final class NetheriteArmor extends VentureArmorSet {
 
 
     @Override
-    public @NotNull String armorSetName() {
+    @NotNull
+    protected String armorName() {
         return "Netherite";
     }
 
     @Override
-    public ArmorCMD getArmorCMD() {
+    public ArmorCMD armorCMD() {
         return ArmorCMD.NETHERITE_ARMOR;
     }
 
     @Override
-    public ArmorConfig config() {
+    protected ArmorConfig config() {
         return plugin.getNetheriteArmorConfig();
     }
 
     @Override
-    public boolean isFireResistant() {
+    protected boolean isFireResistant() {
         return true;
     }
 
     @Override
-    public VentureItemRarity.Rarity rarity() {
+    protected VentureItemRarity.Rarity rarity() {
         return super.rarity();
     }
 
     @Override
-    public Material armorPieceMaterials(ArmorPieceTypes armorPieceTypes) {
+    protected Material armorPieceMaterials(ArmorPieceTypes armorPieceTypes) {
         Material material = null;
         switch (armorPieceTypes)
         {
@@ -59,9 +59,9 @@ public final class NetheriteArmor extends VentureArmorSet {
     }
 
     @Override
-    public List<String> createLore(@NotNull ArmorPieceTypes armorPieceTypes, int stars) {
-        List<String> lore = super.createLore(armorPieceTypes, stars);
-
+    public LinkedList<String> createLore(@NotNull ArmorPieceTypes armorPieceTypes, int stars) {
+        LinkedList<String> lore = super.createLore(armorPieceTypes, stars);
+        lore.addLast(ItemStringBuilder.addItemStringRarity(rarity(), armorPieceTypes));
         return lore;
     }
 }

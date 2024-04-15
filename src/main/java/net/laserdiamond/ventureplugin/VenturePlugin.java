@@ -35,6 +35,7 @@ import net.laserdiamond.ventureplugin.events.abilities.cooldown.EyeOfStormCooldo
 import net.laserdiamond.ventureplugin.items.armor.trims.Components.TrimMaterialListeners;
 import net.laserdiamond.ventureplugin.items.crafting.SmithingTable.SmithingTableCrafting;
 import net.laserdiamond.ventureplugin.items.menuItems.misc.MiscMenuItems;
+import net.laserdiamond.ventureplugin.items.menuItems.util.VentureSkillProgressItem;
 import net.laserdiamond.ventureplugin.items.util.ItemForger;
 import net.laserdiamond.ventureplugin.entities.healthDisplay.mobHealthDisplay;
 import net.laserdiamond.ventureplugin.items.armor.util.VentureArmorSet;
@@ -79,9 +80,9 @@ public final class VenturePlugin extends JavaPlugin {
     private MiscConfig enchantConfig;
 
     private final HashMap<String, ItemForger> itemRegistryMap = new HashMap<>();
-    private final HashMap<String, ItemForger> unobtainableItemRegistryMap = new HashMap<>();
-    private final List<VentureArmorSet> playerArmorItemMap = new ArrayList<>();
-    private final List<VentureMenuItem> ventureMenuItems = new ArrayList<>();
+    private final HashMap<String, VentureArmorSet> armorSetItemMap = new HashMap<>();
+    private final HashMap<String, VentureMenuItem> ventureMenuItems = new HashMap<>();
+    private final HashMap<String, VentureSkillProgressItem> ventureSkillProgressItems = new HashMap<>();
 
     private NetheriteArmor netheriteArmor;
     private BlazeArmor blazeArmor;
@@ -448,10 +449,6 @@ public final class VenturePlugin extends JavaPlugin {
         return itemRegistryMap;
     }
 
-    public List<VentureArmorSet> getPlayerArmorItemMap() {
-        return playerArmorItemMap;
-    }
-
     public List<ArmorConfig> getArmorConfigs() {
         return armorConfigs;
     }
@@ -496,11 +493,7 @@ public final class VenturePlugin extends JavaPlugin {
         return boneTerrorArmorConfig;
     }
 
-    public HashMap<String, ItemForger> getUnobtainableItemRegistryMap() {
-        return unobtainableItemRegistryMap;
-    }
-
-    public List<VentureMenuItem> getVentureMenuItems() {
+    public HashMap<String, VentureMenuItem> getVentureMenuItems() {
         return ventureMenuItems;
     }
 
@@ -510,5 +503,13 @@ public final class VenturePlugin extends JavaPlugin {
 
     public SkillsProfileManager getSkillsProfileManager() {
         return skillsProfileManager;
+    }
+
+    public HashMap<String, VentureArmorSet> getArmorSetItemMap() {
+        return armorSetItemMap;
+    }
+
+    public HashMap<String, VentureSkillProgressItem> getVentureSkillProgressItems() {
+        return ventureSkillProgressItems;
     }
 }

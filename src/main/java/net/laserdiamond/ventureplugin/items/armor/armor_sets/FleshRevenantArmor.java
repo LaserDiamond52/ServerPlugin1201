@@ -4,6 +4,7 @@ import net.laserdiamond.ventureplugin.VenturePlugin;
 import net.laserdiamond.ventureplugin.events.abilities.AbilityCastType;
 import net.laserdiamond.ventureplugin.events.abilities.AbilityCasting;
 import net.laserdiamond.ventureplugin.events.abilities.AbilityHandler;
+import net.laserdiamond.ventureplugin.items.util.ItemStringBuilder;
 import net.laserdiamond.ventureplugin.items.util.VentureItemRarity;
 import net.laserdiamond.ventureplugin.items.armor.util.ArmorCMD;
 import net.laserdiamond.ventureplugin.items.armor.util.ArmorPieceTypes;
@@ -15,7 +16,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+import java.util.LinkedList;
 
 public final class FleshRevenantArmor extends VentureArmorSet implements AbilityCasting.onKillAbility {
     public FleshRevenantArmor(VenturePlugin plugin) {
@@ -24,22 +25,22 @@ public final class FleshRevenantArmor extends VentureArmorSet implements Ability
     }
 
     @Override
-    public ArmorConfig config() {
+    protected ArmorConfig config() {
         return plugin.getFleshRevenantArmorConfig();
     }
 
     @Override
-    public String armorSetName() {
+    protected String armorName() {
         return "Flesh Revenant";
     }
 
     @Override
-    public ArmorCMD getArmorCMD() {
+    public ArmorCMD armorCMD() {
         return ArmorCMD.FLESH_HORROR;
     }
 
     @Override
-    public Material armorPieceMaterials(ArmorPieceTypes armorPieceTypes) {
+    protected Material armorPieceMaterials(ArmorPieceTypes armorPieceTypes) {
         Material material = null;
         switch (armorPieceTypes)
         {
@@ -52,22 +53,23 @@ public final class FleshRevenantArmor extends VentureArmorSet implements Ability
     }
 
     @Override
-    public VentureItemRarity.Rarity rarity() {
+    protected VentureItemRarity.Rarity rarity() {
         return VentureItemRarity.Rarity.RARE;
     }
 
     @Override
-    public List<String> createLore(@NotNull ArmorPieceTypes armorPieceTypes, int stars) {
+    public LinkedList<String> createLore(@NotNull ArmorPieceTypes armorPieceTypes, int stars) {
 
         double lifeLeechAmt = config().getDouble("lifeLeechAmount");
         String abilityName = config().getString("abilityName");
 
-        List<String> lore = super.createLore(armorPieceTypes, stars);
+        LinkedList<String> lore = super.createLore(armorPieceTypes, stars);
         lore.add(ChatColor.GOLD + "Full Set Bonus: " + abilityName);
         lore.add(" ");
         lore.add(ChatColor.GRAY + "Upon killing a mob/player, instantly");
         lore.add(ChatColor.GRAY + "regain " + ChatColor.RED + lifeLeechAmt + ChatColor.GRAY + "% of your max " + ChatColor.RED + "❤");
         lore.add(" ");
+        lore.addLast(ItemStringBuilder.addItemStringRarity(rarity(), armorPieceTypes));
         return lore;
     }
 

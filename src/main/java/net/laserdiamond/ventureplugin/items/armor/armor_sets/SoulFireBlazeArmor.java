@@ -7,15 +7,12 @@ import net.laserdiamond.ventureplugin.events.abilities.AbilityCasting;
 import net.laserdiamond.ventureplugin.events.abilities.AbilityHandler;
 import net.laserdiamond.ventureplugin.events.damage.PlayerMagicDamageEvent;
 import net.laserdiamond.ventureplugin.events.mana.PlayerSpellCastEvent;
-import net.laserdiamond.ventureplugin.items.util.ItemForger;
-import net.laserdiamond.ventureplugin.items.util.VentureItemRarity;
+import net.laserdiamond.ventureplugin.items.util.*;
 import net.laserdiamond.ventureplugin.items.armor.util.ArmorCMD;
 import net.laserdiamond.ventureplugin.items.armor.util.ArmorPieceTypes;
 import net.laserdiamond.ventureplugin.items.armor.util.VentureArmorSet;
 import net.laserdiamond.ventureplugin.stats.Components.Stats;
 import net.laserdiamond.ventureplugin.util.File.ArmorConfig;
-import net.laserdiamond.ventureplugin.items.util.ItemRegistry;
-import net.laserdiamond.ventureplugin.items.util.UniqueVentureItemDataKey;
 import net.laserdiamond.ventureplugin.util.messages.Messages;
 import net.laserdiamond.ventureplugin.util.particles.Particles;
 import org.bukkit.Bukkit;
@@ -32,6 +29,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
@@ -142,7 +140,7 @@ public final class SoulFireBlazeArmor extends VentureArmorSet implements Ability
                     double itemDamageBonus = Math.min(killDigits, maxBonus) * damageBoost;
                     ItemForger.setUniqueItemDataKeyDouble(armorStack, UniqueVentureItemDataKey.SOUL_FIRE_BLAZE_DAMAGE_BONUS, itemDamageBonus);
 
-                    ItemRegistry.renewItemNew(armorStack, player);
+                    ItemRegistry.renewItem(armorStack, player);
 
                 }
             }
@@ -177,37 +175,37 @@ public final class SoulFireBlazeArmor extends VentureArmorSet implements Ability
     }
 
     @Override
-    public ArmorConfig config() {
+    protected ArmorConfig config() {
         return ARMOR_CONFIG;
     }
 
     @Override
-    public String armorSetName() {
+    protected String armorName() {
         return "Soul Fire Blaze";
     }
 
     @Override
-    public ArmorCMD getArmorCMD() {
+    public ArmorCMD armorCMD() {
         return ArmorCMD.SOUL_FIRE_BLAZE;
     }
 
     @Override
-    public boolean isFireResistant() {
+    protected boolean isFireResistant() {
         return true;
     }
 
     @Override
-    public boolean isUnbreakable() {
+    protected boolean isUnbreakable() {
         return true;
     }
 
     @Override
-    public VentureItemRarity.Rarity rarity() {
+    protected VentureItemRarity.Rarity rarity() {
         return VentureItemRarity.Rarity.FABLED;
     }
 
     @Override
-    public Material armorPieceMaterials(ArmorPieceTypes armorPieceTypes) {
+    protected Material armorPieceMaterials(ArmorPieceTypes armorPieceTypes) {
         Material material = null;
         switch (armorPieceTypes)
         {
@@ -220,7 +218,7 @@ public final class SoulFireBlazeArmor extends VentureArmorSet implements Ability
     }
 
     @Override
-    public List<String> createLore(@NotNull ArmorPieceTypes armorPieceTypes, int stars) {
+    public LinkedList<String> createLore(@NotNull ArmorPieceTypes armorPieceTypes, int stars) {
 
         double auraDamage = config().getDouble("auraBaseDamage");
         double auraRadius = config().getDouble("auraRadius");
@@ -230,7 +228,7 @@ public final class SoulFireBlazeArmor extends VentureArmorSet implements Ability
         double damageBoost = config().getDouble("damageBoost");
         int digitMax = config().getInt("digitMax");
 
-        List<String> lore = super.createLore(armorPieceTypes, stars);
+        LinkedList<String> lore = super.createLore(armorPieceTypes, stars);
         lore.add(ChatColor.GOLD + "Full Set Bonus: " + abilityName1 + ChatColor.YELLOW + ChatColor.BOLD + " Hold Sneak");
         lore.add(" ");
         lore.add(ChatColor.GRAY + "While sneaking, set mobs within a " + ChatColor.GOLD + auraRadius + ChatColor.GRAY + " block");
@@ -246,6 +244,7 @@ public final class SoulFireBlazeArmor extends VentureArmorSet implements Ability
         lore.add(ChatColor.GRAY + "Total kills: " + ChatColor.YELLOW + ChatColor.MAGIC + "X");
         lore.add(ChatColor.GRAY + "Current damage bonus: " + ChatColor.RED + ChatColor.MAGIC + "X");
         lore.add(" ");
+        lore.addLast(ItemStringBuilder.addItemStringRarity(rarity(), armorPieceTypes));
 
         // Full Set Bonus: Blazing Aura Hold Sneak
         //
@@ -267,8 +266,6 @@ public final class SoulFireBlazeArmor extends VentureArmorSet implements Ability
     }
 
 
-
-    // TODO: May want to use this type of method to get player-defined lore
     public static List<String> itemSpecificLore(ItemForger itemForger, List<String> lore)
     {
         int kills = itemForger.getUniqueItemDataKeyInt(UniqueVentureItemDataKey.TOTAL_KILLS);

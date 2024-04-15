@@ -59,7 +59,7 @@ public class GiveItemsCommand implements CommandExecutor, TabExecutor {
         if (itemRegistryMap.containsKey(input))
         {
             ItemForger itemToGive = itemRegistryMap.get(input);
-            ItemStack itemStackToGive = ItemRegistry.renewItemNew(itemToGive.toItemStack(), target);
+            ItemStack itemStackToGive = ItemRegistry.renewItem(itemToGive.toItemStack(), target);
             target.getInventory().addItem(itemStackToGive);
             sender.sendMessage(ChatColor.GREEN + "Gave " + itemToGive.getName() + ChatColor.GREEN + " to " + ChatColor.GOLD + target.getName());
             target.sendMessage(ChatColor.GREEN + "You received a " + itemToGive.getName() + ChatColor.GREEN + " from " + ChatColor.GOLD + sender.getName());

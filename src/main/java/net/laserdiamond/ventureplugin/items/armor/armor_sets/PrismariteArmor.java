@@ -7,6 +7,7 @@ import net.laserdiamond.ventureplugin.events.abilities.AbilityCasting;
 import net.laserdiamond.ventureplugin.events.abilities.AbilityHandler;
 import net.laserdiamond.ventureplugin.events.damage.PlayerMagicDamageEvent;
 import net.laserdiamond.ventureplugin.events.mana.PlayerSpellCastEvent;
+import net.laserdiamond.ventureplugin.items.util.ItemStringBuilder;
 import net.laserdiamond.ventureplugin.items.util.VentureItemRarity;
 import net.laserdiamond.ventureplugin.items.armor.util.ArmorCMD;
 import net.laserdiamond.ventureplugin.items.armor.util.ArmorPieceTypes;
@@ -21,7 +22,7 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
-import java.util.List;
+import java.util.LinkedList;
 import java.util.UUID;
 
 public final class PrismariteArmor extends VentureArmorSet implements AbilityCasting.RunnableAbility {
@@ -34,22 +35,22 @@ public final class PrismariteArmor extends VentureArmorSet implements AbilityCas
     }
 
     @Override
-    public ArmorConfig config() {
+    protected ArmorConfig config() {
         return plugin.getPrismariteArmorConfig();
     }
 
     @Override
-    public String armorSetName() {
+    protected String armorName() {
         return "Prismarite";
     }
 
     @Override
-    public ArmorCMD getArmorCMD() {
+    public ArmorCMD armorCMD() {
         return ArmorCMD.PRISMARITE_ARMOR;
     }
 
     @Override
-    public Material armorPieceMaterials(ArmorPieceTypes armorPieceTypes) {
+    protected Material armorPieceMaterials(ArmorPieceTypes armorPieceTypes) {
         Material material = null;
         switch (armorPieceTypes)
         {
@@ -62,19 +63,20 @@ public final class PrismariteArmor extends VentureArmorSet implements AbilityCas
     }
 
     @Override
-    public List<String> createLore(@NotNull ArmorPieceTypes armorPieceTypes, int stars) {
+    public LinkedList<String> createLore(@NotNull ArmorPieceTypes armorPieceTypes, int stars) {
 
         double manaCost = config().getDouble("manaCost");
         double laserDamage = config().getDouble("laserDamage");
         String abilityName = config().getString("abilityName");
 
-        List<String> lore = super.createLore(armorPieceTypes, stars);
+        LinkedList<String> lore = super.createLore(armorPieceTypes, stars);
         lore.add(ChatColor.GOLD + "Full Set Bonus: " + abilityName + ChatColor.YELLOW + ChatColor.BOLD + " Hold Sneak");
         lore.add(" ");
         lore.add(ChatColor.GRAY + "Cast an eye laser that damages mobs in");
         lore.add(ChatColor.GRAY + "path, dealing " + ChatColor.AQUA + laserDamage + ChatColor.GRAY + " damage per second");
         lore.add(ChatColor.DARK_GRAY + "Mana Cost: " + ChatColor.DARK_AQUA + manaCost + ChatColor.DARK_GRAY + " per second");
         lore.add(" ");
+        lore.addLast(ItemStringBuilder.addItemStringRarity(rarity(), armorPieceTypes));
         return lore;
 
         // Full Set Bonus: Guardian's Laser
@@ -167,12 +169,12 @@ public final class PrismariteArmor extends VentureArmorSet implements AbilityCas
     }
 
     @Override
-    public boolean isUnbreakable() {
+    protected boolean isUnbreakable() {
         return true;
     }
 
     @Override
-    public VentureItemRarity.Rarity rarity() {
+    protected VentureItemRarity.Rarity rarity() {
         return VentureItemRarity.Rarity.EPIC;
     }
 }

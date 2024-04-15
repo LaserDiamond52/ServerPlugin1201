@@ -1,4 +1,4 @@
-### Base Player stats when joining
+### Base Player stats when joining ###
 
 # Base health
 baseHealth: 20
@@ -86,11 +86,10 @@ baseSpeedPoints: 100
 # Default Starvation Rate (ticks)
 starvationRate: 80
 
-# Player's base skill points
+### Player's base tuning points ###
 
-# Base tunement points when players first join
+# Base tuning points when players first join
 baseTuningPoints: 5
-
 
 # Tuning Point Values
 
@@ -124,3 +123,33 @@ magicMax: 20
 rangeValue: 0.25
 rangeMax: 20
 
+### Player skills ###
+
+# Determines the skill reward quantity for leveling up
+
+# Deal +x% more damage per combat level
+combatDamageBonus: 2
+
+# +x more mining fortune per mining level
+miningFortuneBonus: 2
+
+# +x more defense per mining level
+miningDefenseBonus: 1
+
+# +x more foraging fortune per mining level
+foragingFortuneBonus: 2
+
+# +x more farming fortune per mining level
+farmingFortuneBonus: 2
+
+# +x more mana per enchanting level
+enchantingManaBonus: 2
+
+# +x more fishing luck per fishing level
+fishingLuckBonus: 2
+
+# +x more longevity per brewing level
+brewingLongevity: 2
+
+# +x more caffeination per brewing level
+brewingCaffeination: 0.5

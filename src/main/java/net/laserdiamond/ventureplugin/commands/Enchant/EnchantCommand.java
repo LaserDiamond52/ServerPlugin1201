@@ -87,7 +87,7 @@ public class EnchantCommand implements CommandExecutor, TabExecutor {
                 int finalLevel = Math.min(enchantToAdd.getMaxLevel(), levelInput);
                 mainHandForger.addEnchant(enchantToAdd, finalLevel);
                 //mainHandForger.setLore(UpdateItem.renewLore(mainHandForger.toItemStack()));
-                target.getInventory().setItemInMainHand(ItemRegistry.renewItemNew(mainHandForger.toItemStack(), target));
+                target.getInventory().setItemInMainHand(ItemRegistry.renewItem(mainHandForger.toItemStack(), target));
             } else {
                 sender.sendMessage(ChatColor.RED + "Cannot apply " + input + " to " + mainHand.getType());
             }

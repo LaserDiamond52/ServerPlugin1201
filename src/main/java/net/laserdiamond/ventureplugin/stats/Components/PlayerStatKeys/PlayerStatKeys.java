@@ -26,7 +26,7 @@ public enum PlayerStatKeys {
     MOB_LOOT,
     ORE_LOOT,
     WOOD_LOOT,
-    DIG_LOOT,
+    FARMING_LOOT,
     FISHING_LOOT;
 
     public static void add(@NotNull StatProfile statProfile, @NotNull PlayerStatKeys playerStatKeys, double amount)
@@ -59,7 +59,7 @@ public enum PlayerStatKeys {
             case MOB_LOOT -> lootStats.setBonusMobLoot(lootStats.getBonusMobLoot() + amount);
             case ORE_LOOT -> lootStats.setBonusOreLoot(lootStats.getBonusOreLoot() + amount);
             case WOOD_LOOT -> lootStats.setBonusWoodLoot(lootStats.getBonusWoodLoot() + amount);
-            case DIG_LOOT -> lootStats.setBonusDigLoot(lootStats.getBonusDigLoot() + amount);
+            case FARMING_LOOT -> lootStats.setBonusFarmingLoot(lootStats.getBonusFarmingLoot() + amount);
             case FISHING_LOOT -> lootStats.setFishingLuck(lootStats.getFishingLuck() + amount);
         }
     }
@@ -94,7 +94,7 @@ public enum PlayerStatKeys {
             case MOB_LOOT -> lootStats.setBonusMobLoot(lootStats.getBonusMobLoot() - amount);
             case ORE_LOOT -> lootStats.setBonusOreLoot(lootStats.getBonusOreLoot() - amount);
             case WOOD_LOOT -> lootStats.setBonusWoodLoot(lootStats.getBonusWoodLoot() - amount);
-            case DIG_LOOT -> lootStats.setBonusDigLoot(lootStats.getBonusDigLoot() - amount);
+            case FARMING_LOOT -> lootStats.setBonusFarmingLoot(lootStats.getBonusFarmingLoot() - amount);
             case FISHING_LOOT -> lootStats.setFishingLuck(lootStats.getFishingLuck() - amount);
         }
     }

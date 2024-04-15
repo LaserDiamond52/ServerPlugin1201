@@ -3,13 +3,18 @@ package net.laserdiamond.ventureplugin.items.menuItems.misc;
 import net.laserdiamond.ventureplugin.VenturePlugin;
 import net.laserdiamond.ventureplugin.items.menuItems.util.MenuItem;
 import net.laserdiamond.ventureplugin.items.menuItems.util.VentureMenuItem;
+import net.laserdiamond.ventureplugin.items.util.ItemForger;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.loot.LootTables;
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +27,7 @@ public class MiscMenuItems implements Listener {
     {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
+
 
     public static VentureMenuItem BLANK = new VentureMenuItem(PLUGIN)
     {
@@ -52,6 +58,7 @@ public class MiscMenuItems implements Listener {
         }
     }
 
+
     public static VentureMenuItem EXIT = new VentureMenuItem(PLUGIN) {
         @Override
         public MenuItem menuItem() {
@@ -63,6 +70,7 @@ public class MiscMenuItems implements Listener {
             return null;
         }
     };
+
 
     public static VentureMenuItem GO_BACK = new VentureMenuItem(PLUGIN) {
         @Override
@@ -149,10 +157,15 @@ public class MiscMenuItems implements Listener {
         if (humanEntity instanceof Player player)
         {
             ItemStack clickedItem = event.getCurrentItem();
-            if (clickedItem != null && clickedItem.getItemMeta() != null && clickedItem.getItemMeta().hasCustomModelData())
+            if (clickedItem != null && clickedItem.getItemMeta() != null)
             {
-                int customModelData = clickedItem.getItemMeta().getCustomModelData();
-                if (customModelData == EXIT.menuItem().getCustomModelData())
+                ItemForger itemForger = new ItemForger(clickedItem);
+                String menuItemKey = itemForger.getMenuItemKey();
+                if (menuItemKey == null)
+                {
+                    return;
+                }
+                if (menuItemKey.equals(EXIT.menuItem().getKeyName()))
                 {
                     player.closeInventory();
                 }

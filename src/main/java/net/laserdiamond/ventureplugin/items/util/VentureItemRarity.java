@@ -30,13 +30,13 @@ public class VentureItemRarity implements PersistentDataType<String, VentureItem
 
     public enum Rarity {
 
-        COMMON (ChatColor.GREEN, "common", ChatColor.GREEN + "Common"),
-        RARE (ChatColor.BLUE, "rare", ChatColor.BLUE + "Rare"),
-        EPIC (ChatColor.DARK_PURPLE, "epic", ChatColor.DARK_PURPLE + "Epic"),
-        LEGENDARY (ChatColor.GOLD, "legendary", ChatColor.GOLD + "Legendary"),
-        FABLED (ChatColor.RED, "fabled", ChatColor.RED + "Fabled"),
-        MYTHICAL (ChatColor.AQUA, "mythical", ChatColor.AQUA + "Mythical"),
-        FORBIDDEN (ChatColor.LIGHT_PURPLE, "forbidden", ChatColor.LIGHT_PURPLE + "Forbidden");
+        COMMON (ChatColor.GREEN, "common", ChatColor.GREEN + "" + ChatColor.BOLD + "Common"),
+        RARE (ChatColor.BLUE, "rare", ChatColor.BLUE +  "" + ChatColor.BOLD + "Rare"),
+        EPIC (ChatColor.DARK_PURPLE, "epic", ChatColor.DARK_PURPLE +  "" + ChatColor.BOLD + "Epic"),
+        LEGENDARY (ChatColor.GOLD, "legendary", ChatColor.GOLD +  "" + ChatColor.BOLD + "Legendary"),
+        FABLED (ChatColor.RED, "fabled", ChatColor.RED +  "" + ChatColor.BOLD + "Fabled"),
+        MYTHICAL (ChatColor.AQUA, "mythical", ChatColor.AQUA +  "" + ChatColor.BOLD + "Mythical"),
+        FORBIDDEN (ChatColor.LIGHT_PURPLE, "forbidden", ChatColor.LIGHT_PURPLE +  "" + ChatColor.BOLD + "Forbidden");
 
         private final ChatColor rarityColor;
         private final String rarity;

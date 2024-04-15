@@ -12,6 +12,7 @@ import net.laserdiamond.ventureplugin.skills.Components.ExpGain.mining.miningExp
 import net.laserdiamond.ventureplugin.skills.Components.SkillsEXP;
 import net.laserdiamond.ventureplugin.skills.Components.SkillsLevel;
 import net.laserdiamond.ventureplugin.skills.Components.SkillsReward;
+import net.laserdiamond.ventureplugin.util.Config.PlayerConfig;
 import net.laserdiamond.ventureplugin.util.StatSymbols;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -35,6 +36,7 @@ import java.util.List;
 public class SkillsExpGainListener implements Listener {
 
     private static final VenturePlugin PLUGIN = VenturePlugin.getInstance();
+    private static final PlayerConfig BASE_STATS_CONFIG = PLUGIN.getBaseStatsConfig();
 
     @EventHandler
     public void onSkillExpGain(SkillsExpGainEvent event)
@@ -102,7 +104,7 @@ public class SkillsExpGainListener implements Listener {
                         }
 
                         skillsLevel.setCombatLevel(skillLevel + 1); // Update combat level
-                        skillsReward.setCombatDamageBonus(damageBonus + 2); // Update skill rewards
+                        skillsReward.setCombatDamageBonus(damageBonus + BASE_STATS_CONFIG.getDouble("combatDamageBonus")); // Update skill rewards
                         double newExpToNextLevel = skillsEXP.getCombatExpToNextLevel(); // Get Exp to next level
                         double newRequiredExpToNextLevel = skillsEXP.getRequiredCombatExpToNextLevel(); // Get Required Exp to next level
 
@@ -176,8 +178,8 @@ public class SkillsExpGainListener implements Listener {
                         }
 
                         skillsLevel.setMiningLevel(skillLevel + 1);
-                        skillsReward.setMiningFortuneBonus(fortuneBonus + 2);
-                        skillsReward.setMiningDefenseBonus(defense + 2);
+                        skillsReward.setMiningFortuneBonus(fortuneBonus + BASE_STATS_CONFIG.getDouble("miningFortuneBonus"));
+                        skillsReward.setMiningDefenseBonus(defense + BASE_STATS_CONFIG.getDouble("miningDefenseBonus"));
                         double newExpToNextLevel = skillsEXP.getMiningExpToNextLevel();
                         double newRequiredExpToNextLevel = skillsEXP.getRequiredMiningExpToNextLevel();
 
@@ -253,7 +255,7 @@ public class SkillsExpGainListener implements Listener {
                         }
 
                         skillsLevel.setForagingLevel(skillLevel + 1);
-                        skillsReward.setForagingFortuneBonus(fortuneBonus + 2);
+                        skillsReward.setForagingFortuneBonus(fortuneBonus + BASE_STATS_CONFIG.getDouble("foragingFortuneBonus"));
                         double newExpToNextLevel = skillsEXP.getForagingExpToNextLevel();
                         double newRequiredExpToNextLevel = skillsEXP.getRequiredForagingExpToNextLevel();
 
@@ -327,7 +329,7 @@ public class SkillsExpGainListener implements Listener {
                         }
 
                         skillsLevel.setFarmingLevel(skillLevel + 1);
-                        skillsReward.setFarmingFortuneBonus(fortuneBonus + 2);
+                        skillsReward.setFarmingFortuneBonus(fortuneBonus + BASE_STATS_CONFIG.getDouble("farmingFortuneBonus"));
                         double newExpToNextLevel = skillsEXP.getFarmingExpToNextLevel();
                         double newRequiredExpToNextLevel = skillsEXP.getRequiredFarmingExpToNextLevel();
 
@@ -401,7 +403,7 @@ public class SkillsExpGainListener implements Listener {
                         }
 
                         skillsLevel.setEnchantingLevel(skillLevel + 1);
-                        skillsReward.setEnchantingManaBonus(manaBonus + 2);
+                        skillsReward.setEnchantingManaBonus(manaBonus + BASE_STATS_CONFIG.getDouble("enchantingManaBonus"));
                         double newExpToNextLevel = skillsEXP.getEnchantingExpToNextLevel();
                         double newRequiredExpToNextLevel = skillsEXP.getRequiredEnchantingExpToNextLevel();
 
@@ -475,7 +477,7 @@ public class SkillsExpGainListener implements Listener {
                         }
 
                         skillsLevel.setFishingLevel(skillLevel + 1);
-                        skillsReward.setFishingLuckBonus(fishingLuckBonus + 2);
+                        skillsReward.setFishingLuckBonus(fishingLuckBonus + BASE_STATS_CONFIG.getDouble("fishingLuckBonus"));
                         double newExpToLevel = skillsEXP.getFishingExpToNextLevel();
                         double newRequiredExpToNextLevel = skillsEXP.getRequiredFishingExpToNextLevel();
 
@@ -551,8 +553,8 @@ public class SkillsExpGainListener implements Listener {
                         }
 
                         skillsLevel.setBrewingLevel(skillLevel + 1);
-                        skillsReward.setBrewingLongevity(longevity + 2);
-                        skillsReward.setBrewingCaffeination(caffeination + 1);
+                        skillsReward.setBrewingLongevity(longevity + BASE_STATS_CONFIG.getDouble("brewingLongevity"));
+                        skillsReward.setBrewingCaffeination(caffeination + BASE_STATS_CONFIG.getDouble("brewingCaffeination"));
                         double newExpToNextLevel = skillsEXP.getBrewingExpToNextLevel();
                         double newRequiredExpToNextLevel = skillsEXP.getRequiredBrewingExpToNextLevel();
 

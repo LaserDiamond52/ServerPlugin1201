@@ -120,7 +120,7 @@ public class SmithingTableCrafting implements Listener
                             ItemForger resultForger = new ItemForger(resultItem);
 
                             resultForger.setArmorTrim(trimToAdd);
-                            event.setResult(ItemRegistry.renewItemNew(resultForger.toItemStack()));
+                            event.setResult(ItemRegistry.renewItem(resultForger.toItemStack()));
                         }
 
                     }

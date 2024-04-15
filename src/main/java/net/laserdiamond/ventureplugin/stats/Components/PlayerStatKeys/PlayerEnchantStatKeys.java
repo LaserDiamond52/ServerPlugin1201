@@ -97,7 +97,7 @@ public enum PlayerEnchantStatKeys {
             }
             case DIG_LOOT -> {
                 enchantStats.setDigLoot(enchantStats.getDigLoot() + amount);
-                PlayerStatKeys.add(statProfile, PlayerStatKeys.DIG_LOOT, amount);
+                PlayerStatKeys.add(statProfile, PlayerStatKeys.FARMING_LOOT, amount);
             }
             case FISHING_LOOT -> {
                 enchantStats.setFishingLoot(enchantStats.getFishingLoot() + amount);
@@ -178,7 +178,7 @@ public enum PlayerEnchantStatKeys {
             }
             case DIG_LOOT -> {
                 enchantStats.setDigLoot(enchantStats.getDigLoot() - amount);
-                PlayerStatKeys.remove(statProfile, PlayerStatKeys.DIG_LOOT, amount);
+                PlayerStatKeys.remove(statProfile, PlayerStatKeys.FARMING_LOOT, amount);
             }
             case FISHING_LOOT -> {
                 enchantStats.setFishingLoot(enchantStats.getFishingLoot() - amount);

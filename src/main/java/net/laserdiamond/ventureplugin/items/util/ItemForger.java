@@ -3,6 +3,7 @@ package net.laserdiamond.ventureplugin.items.util;
 import com.google.common.collect.Multimap;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import net.laserdiamond.ventureplugin.events.skills.SkillsExpGainEvent;
 import net.laserdiamond.ventureplugin.items.attributes.AttributeLoreNameMap;
 import org.apache.commons.codec.binary.Base64;
 import net.laserdiamond.ventureplugin.VenturePlugin;
@@ -31,21 +32,6 @@ public class ItemForger {
     private final VenturePlugin plugin = VenturePlugin.getInstance();
 
     private final ItemStack itemStack;
-    private static final NamespacedKey rarityKey = ItemPropertiesKeys.RARITY_KEY.getKey();
-    private static final NamespacedKey starsKey = ItemPropertiesKeys.STARS_KEY.getKey();
-    private final NamespacedKey fireResistanceKey = ItemPropertiesKeys.FIRE_RESISTANCE_KEY.getKey();
-    private final NamespacedKey healthKey = VentureItemStatKeys.ARMOR_HEALTH_KEY.getKey();
-    private final NamespacedKey armorKey = VentureItemStatKeys.ARMOR_DEFENSE_KEY.getKey();
-    private final NamespacedKey toughnessKey = VentureItemStatKeys.ARMOR_TOUGHNESS_KEY.getKey();
-    private final NamespacedKey fortitudeKey = VentureItemStatKeys.ARMOR_FORTITUDE_KEY.getKey();
-    private final NamespacedKey maxManaKey = VentureItemStatKeys.ARMOR_MAX_MANA_KEY.getKey();
-    private final NamespacedKey meleeDamageKey = VentureItemStatKeys.ARMOR_MELEE_DAMAGE_KEY.getKey();
-    private final NamespacedKey magicDamageKey = VentureItemStatKeys.ARMOR_MAGIC_DAMAGE_KEY.getKey();
-    private final NamespacedKey rangeDamageKey = VentureItemStatKeys.ARMOR_RANGE_DAMAGE_KEY.getKey();
-    private static final NamespacedKey POTION_BREWING_EXP_READY_KEY = ItemPropertiesKeys.POTION_CLAIMED_KEY.getKey();
-    private static final NamespacedKey ITEM_MAP_KEY = ItemPropertiesKeys.ITEM_MAP_KEY.getKey();
-
-    private final int maxStars = plugin.getConfig().getInt("maxStars");
 
     public ItemForger(Material material) {
         itemStack = new ItemStack(material);
@@ -79,6 +65,17 @@ public class ItemForger {
     public Material getMaterial()
     {
         return itemStack.getType();
+    }
+
+    public ItemForger setAmount(int amount)
+    {
+        itemStack.setAmount(amount);
+        return this;
+    }
+
+    public int getAmount()
+    {
+        return itemStack.getAmount();
     }
 
     public ItemForger clone() {
@@ -218,15 +215,6 @@ public class ItemForger {
 
             itemStack.setItemMeta(skullMeta);
         }
-        /*
-        try {
-
-        } catch (ClassCastException exception) {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Could not cast item to 'SkullMeta'!");
-            exception.printStackTrace();
-        }
-
-         */
         return this;
     }
 
@@ -409,17 +397,6 @@ public class ItemForger {
             leatherArmorMeta.setColor(color);
             itemStack.setItemMeta(leatherArmorMeta);
         }
-        /*
-        try {
-            LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) itemStack.getItemMeta();
-
-
-        } catch (ClassCastException exception) {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Could not cast item to 'LeatherArmorMeta'!");
-            exception.printStackTrace();
-        }
-
-         */
         return this;
     }
 
@@ -429,16 +406,6 @@ public class ItemForger {
             leatherArmorMeta.setColor(Color.fromRGB(R, G, B));
             itemStack.setItemMeta(leatherArmorMeta);
         }
-        /*
-        try {
-            LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) itemStack.getItemMeta();
-
-
-        } catch (ClassCastException exception) {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Could not cast item to 'LeatherArmorMeta'!");
-            exception.printStackTrace();
-        }
-         */
         return this;
     }
 
@@ -447,15 +414,6 @@ public class ItemForger {
         {
             return leatherArmorMeta.getColor();
         }
-        /*
-        try {
-            LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) itemStack.getItemMeta();
-
-        } catch (ClassCastException exception) {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Could not cast item to 'LeatherArmorMeta'!");
-            exception.printStackTrace();
-        }
-         */
         return null;
     }
 
@@ -464,16 +422,6 @@ public class ItemForger {
         {
             return armorMeta.getTrim();
         }
-        /*
-        try {
-            ArmorMeta armorMeta = (ArmorMeta) itemStack.getItemMeta();
-
-        } catch (ClassCastException ignored) {
-            //Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Could not case item to 'ArmorMeta'!");
-            //exception.printStackTrace();
-        }
-
-         */
         return null;
     }
 
@@ -484,15 +432,6 @@ public class ItemForger {
                 return armorMeta.getTrim().getMaterial();
             }
         }
-        /*
-        try {
-            ArmorMeta armorMeta = (ArmorMeta) itemStack.getItemMeta();
-
-        } catch (ClassCastException ignored) {
-            //Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Could not case item to 'ArmorMeta'!");
-            //exception.printStackTrace();
-        }
-         */
         return null;
     }
 
@@ -503,16 +442,6 @@ public class ItemForger {
                 return armorMeta.getTrim().getPattern();
             }
         }
-        /*
-        try {
-            ArmorMeta armorMeta = (ArmorMeta) itemStack.getItemMeta();
-
-        } catch (ClassCastException ignored) {
-            //Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Could not cast item to 'ArmorMeta'!");
-            //exception.printStackTrace();
-        }
-
-         */
         return null;
     }
 
@@ -522,16 +451,6 @@ public class ItemForger {
             armorMeta.setTrim(armorTrim);
             itemStack.setItemMeta(armorMeta);
         }
-        /*
-        try {
-            ArmorMeta armorMeta = (ArmorMeta) itemStack.getItemMeta();
-
-        } catch (ClassCastException ignored) {
-            //Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Could not cast item to 'ArmorMeta'!");
-            //exception.printStackTrace();
-        }
-
-         */
         return this;
     }
 
@@ -553,16 +472,6 @@ public class ItemForger {
                 return true;
             }
         }
-        /*
-        try {
-            ArmorMeta armorMeta = (ArmorMeta) itemStack.getItemMeta();
-
-        } catch (ClassCastException ignored) {
-            //Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Could not cast item to 'ArmorMeta'!");
-            //exception.printStackTrace();
-        }
-
-         */
         return false;
     }
 
@@ -572,34 +481,7 @@ public class ItemForger {
             armorMeta.setTrim(null);
             itemStack.setItemMeta(armorMeta);
         }
-        /*
-        try {
-            ArmorMeta armorMeta = (ArmorMeta) itemStack.getItemMeta();
-
-        } catch (ClassCastException ignored) {
-            //Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Could not cast item to 'ArmorMeta'!");
-            //exception.printStackTrace();
-        }
-
-         */
         return this;
-    }
-
-
-    @Deprecated
-    public String getRarityOld() {
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        String rarityString = itemMeta.getPersistentDataContainer().get(rarityKey, PersistentDataType.STRING);
-
-        for (VentureItemRarity.Rarity rarity : VentureItemRarity.Rarity.values()) {
-            if (rarityString != null) {
-                if (rarityString.equals(rarity.getRarity())) {
-                    return rarityString;
-                }
-            }
-        }
-
-        return null;
     }
 
     public VentureItemRarity.Rarity getRarity() {
@@ -616,7 +498,7 @@ public class ItemForger {
                     }
                 };
 
-                String rarityFromStringPDC = itemMeta.getPersistentDataContainer().get(rarityKey, VentureItemRarity.STRING);
+                String rarityFromStringPDC = itemMeta.getPersistentDataContainer().get(ItemKeys.RARITY_KEY, VentureItemRarity.STRING);
                 if (rarityFromStringPDC != null) {
                     return rarityInst.fromPrimitive(rarityFromStringPDC, persistentDataAdapterContext);
                 } else {
@@ -628,40 +510,18 @@ public class ItemForger {
         return null;
     }
 
-    @Deprecated
-    public ItemForger setRarityOld(VentureItemRarity.Rarity itemRarity) {
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        String displayName = itemMeta.getDisplayName();
-        itemMeta.setDisplayName(itemRarity.getRarityColor() + displayName);
-        itemMeta.getPersistentDataContainer().set(rarityKey, PersistentDataType.STRING, itemRarity.getRarity());
-
-        List<String> lore = itemMeta.getLore();
-        List<String> rarityLore = new ArrayList<>();
-        if (lore != null) {
-            for (String l : lore) {
-                    rarityLore.add(l);
-            }
-        }
-        rarityLore.add(itemRarity.getDisplayName() + " Item");
-
-        itemMeta.setLore(rarityLore);
-        itemStack.setItemMeta(itemMeta);
-        return this;
-    }
-
 
     public ItemForger setRarity(VentureItemRarity.Rarity itemRarity) {
         ItemMeta itemMeta = itemStack.getItemMeta();
         String displayName = itemMeta.getDisplayName();
         itemMeta.setDisplayName(itemRarity.getRarityColor() + displayName);
-        itemMeta.getPersistentDataContainer().set(rarityKey, VentureItemRarity.STRING, itemRarity.getRarity());
+        itemMeta.getPersistentDataContainer().set(ItemKeys.RARITY_KEY, VentureItemRarity.STRING, itemRarity.getRarity());
         itemStack.setItemMeta(itemMeta);
         return this;
     }
 
     public static VentureItemRarity.Rarity getItemRarity(ItemMeta itemMeta) {
         VentureItemRarity rarityInst = new VentureItemRarity();
-
 
         for (VentureItemRarity.Rarity rarity : VentureItemRarity.Rarity.values()) {
             if (rarity != null) {
@@ -673,7 +533,7 @@ public class ItemForger {
                     }
                 };
 
-                String rarityFromStringPDC = itemMeta.getPersistentDataContainer().get(rarityKey, VentureItemRarity.STRING);
+                String rarityFromStringPDC = itemMeta.getPersistentDataContainer().get(ItemKeys.RARITY_KEY, VentureItemRarity.STRING);
                 if (rarityFromStringPDC != null) {
                     return rarityInst.fromPrimitive(rarityFromStringPDC, persistentDataAdapterContext);
                 } else {
@@ -689,19 +549,10 @@ public class ItemForger {
 
         itemMeta.setDisplayName(newDisplayName);
 
-        if (itemMeta.getPersistentDataContainer().get(rarityKey, VentureItemRarity.STRING) != null) {
-            itemMeta.getPersistentDataContainer().remove(rarityKey);
+        if (itemMeta.getPersistentDataContainer().get(ItemKeys.RARITY_KEY, VentureItemRarity.STRING) != null) {
+            itemMeta.getPersistentDataContainer().remove(ItemKeys.RARITY_KEY);
         }
-        itemMeta.getPersistentDataContainer().set(rarityKey, VentureItemRarity.STRING, itemRarity.getRarity());
-    }
-
-    @Deprecated
-    public Integer getStars() {
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        if (itemMeta.getPersistentDataContainer().get(starsKey, PersistentDataType.INTEGER) != null) {
-            return itemMeta.getPersistentDataContainer().get(starsKey, PersistentDataType.INTEGER);
-        }
-        return 0;
+        itemMeta.getPersistentDataContainer().set(ItemKeys.RARITY_KEY, VentureItemRarity.STRING, itemRarity.getRarity());
     }
 
     /**
@@ -710,7 +561,7 @@ public class ItemForger {
      * Item key names SHOULD NOT include numbers in their name. This can mess up this system and make it unreliable
      * @return The stars if applicable, otherwise 0
      */
-    public Integer getStarsNew()
+    public Integer getStars()
     {
         String itemKey = this.getItemKey();
         int stars = 0;
@@ -753,7 +604,7 @@ public class ItemForger {
      * @param stars The amount of stars the item should have. Stars cannot be less than 0 or greater than the max stars set in the config.yml
      * @return ItemForger instance of item (builder class)
      */
-    public ItemForger setStarsNew(int stars)
+    public ItemForger setStars(int stars)
     {
         String itemKey = this.getItemKey();
         stars = Math.min(stars, plugin.getConfig().getInt("maxStars"));
@@ -780,136 +631,6 @@ public class ItemForger {
                  */
             }
         }
-        return this;
-    }
-
-    @Deprecated
-    public static Integer getItemStars(ItemStack itemStack) {
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        if (itemMeta.getPersistentDataContainer().get(starsKey, PersistentDataType.INTEGER) != null) {
-            return itemMeta.getPersistentDataContainer().get(starsKey, PersistentDataType.INTEGER);
-        }
-        return 0;
-    }
-
-    @Deprecated
-    public ItemForger setStars(int starCount) {
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        starCount = Math.min(Math.max(0, starCount), maxStars);
-        itemMeta.getPersistentDataContainer().set(starsKey, PersistentDataType.INTEGER, starCount);
-        itemStack.setItemMeta(itemMeta);
-        return this;
-    }
-
-    @Deprecated
-    public Double getHealth() {
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        return itemMeta.getPersistentDataContainer().get(healthKey, PersistentDataType.DOUBLE);
-    }
-
-    @Deprecated
-    public ItemForger setHealth(double healthPoints) {
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.getPersistentDataContainer().set(healthKey, PersistentDataType.DOUBLE, healthPoints);
-        itemStack.setItemMeta(itemMeta);
-        return this;
-    }
-
-    @Deprecated
-    public Double getArmor() {
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        return itemMeta.getPersistentDataContainer().get(armorKey, PersistentDataType.DOUBLE);
-    }
-
-    @Deprecated
-    public ItemForger setArmor(double armorPoints) {
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.getPersistentDataContainer().set(armorKey, PersistentDataType.DOUBLE, armorPoints);
-        itemStack.setItemMeta(itemMeta);
-        return this;
-    }
-
-    @Deprecated
-    public Double getToughness() {
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        return itemMeta.getPersistentDataContainer().get(toughnessKey, PersistentDataType.DOUBLE);
-    }
-
-    @Deprecated
-    public ItemForger setToughness(double toughnessPoints) {
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.getPersistentDataContainer().set(toughnessKey, PersistentDataType.DOUBLE, toughnessPoints);
-        itemStack.setItemMeta(itemMeta);
-        return this;
-    }
-
-    @Deprecated
-    public Double getFortitude() {
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        return itemMeta.getPersistentDataContainer().get(fortitudeKey, PersistentDataType.DOUBLE);
-    }
-
-    @Deprecated
-    public ItemForger setFortitude(double fortitudePoints) {
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.getPersistentDataContainer().set(fortitudeKey, PersistentDataType.DOUBLE, fortitudePoints);
-        itemStack.setItemMeta(itemMeta);
-        return this;
-    }
-
-    @Deprecated
-    public Double getMaxMana() {
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        return itemMeta.getPersistentDataContainer().get(maxManaKey, PersistentDataType.DOUBLE);
-    }
-
-    @Deprecated
-    public ItemForger setMaxMana(double manaPoints) {
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.getPersistentDataContainer().set(maxManaKey, PersistentDataType.DOUBLE, manaPoints);
-        itemStack.setItemMeta(itemMeta);
-        return this;
-    }
-
-    @Deprecated
-    public Double getMeleeDamage() {
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        return itemMeta.getPersistentDataContainer().get(meleeDamageKey, PersistentDataType.DOUBLE);
-    }
-
-    @Deprecated
-    public ItemForger setMeleeDamage(double meleeDamagePoints) {
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.getPersistentDataContainer().set(meleeDamageKey, PersistentDataType.DOUBLE, meleeDamagePoints);
-        itemStack.setItemMeta(itemMeta);
-        return this;
-    }
-
-    @Deprecated
-    public Double getMagicDamage() {
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        return itemMeta.getPersistentDataContainer().get(magicDamageKey, PersistentDataType.DOUBLE);
-    }
-
-    @Deprecated
-    public ItemForger setMagicDamage(double magicDamagePoints) {
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.getPersistentDataContainer().set(magicDamageKey, PersistentDataType.DOUBLE, magicDamagePoints);
-        itemStack.setItemMeta(itemMeta);
-        return this;
-    }
-
-    @Deprecated
-    public Double getRangeDamage() {
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        return itemMeta.getPersistentDataContainer().get(rangeDamageKey, PersistentDataType.DOUBLE);
-    }
-
-    @Deprecated
-    public ItemForger setRangeDamage(double rangeDamagePoints) {
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.getPersistentDataContainer().set(rangeDamageKey, PersistentDataType.DOUBLE, rangeDamagePoints);
-        itemStack.setItemMeta(itemMeta);
         return this;
     }
 
@@ -943,7 +664,6 @@ public class ItemForger {
 
             itemMeta.getPersistentDataContainer().set(itemStatKey, PersistentDataType.DOUBLE, keyValue);
         }
-
 
         itemStack.setItemMeta(itemMeta);
         return this;
@@ -1045,9 +765,14 @@ public class ItemForger {
         return 0.0;
     }
 
-    public static List<String> createStatLore(HashMap<VentureItemStatKeys, Double> itemStatsKeyMap) {
+    /**
+     * Creates lore based on the VentureItemStats of the item
+     * @param itemStatsKeyMap The VentureItemStats of the item
+     * @return A LinkedList of Strings displaying the VentureItemStats of the item
+     */
+    public static LinkedList<String> createStatLore(HashMap<VentureItemStatKeys, Double> itemStatsKeyMap) {
 
-        List<String> statLore = new ArrayList<>();
+        LinkedList<String> statLore = new LinkedList<>();
 
         DecimalFormat doubleDecimalFormat = new DecimalFormat("0.00");
 
@@ -1078,30 +803,15 @@ public class ItemForger {
         return statLore;
     }
 
-    public static List<String> createAttributeLore(Multimap<Attribute, AttributeModifier> attributes) {
+    /**
+     * Creates lore based on the VentureItemStats and Attributes of the item
+     * @param itemStatsKeyMap The VentureItemStats of the item
+     * @param attributes The attributes of the item
+     * @return A LinkedList of Strings displaying the VentureItemStats and Attributes of the item
+     */
+    public static LinkedList<String> createStatLore(HashMap<VentureItemStatKeys, Double> itemStatsKeyMap, Multimap<Attribute, AttributeModifier> attributes) {
 
-        List<String> attributeLore = new ArrayList<>();
-
-        DecimalFormat doubleDecimalFormat = new DecimalFormat("0.00");
-
-        for (Attribute attribute : attributes.keys()) {
-            for (AttributeModifier attributeModifier : attributes.get(attribute)) {
-                String name = AttributeLoreNameMap.ofDisplayName(attribute);
-                ChatColor displayColor = AttributeLoreNameMap.ofDisplayColor(attribute);
-                double amount = attributeModifier.getAmount();
-                if (attribute.equals(Attribute.GENERIC_KNOCKBACK_RESISTANCE)) {
-                    amount *= 10;
-                }
-                attributeLore.add(name + displayColor + doubleDecimalFormat.format(amount));
-            }
-        }
-
-        return attributeLore;
-    }
-
-    public static List<String> createStatLore(HashMap<VentureItemStatKeys, Double> itemStatsKeyMap, Multimap<Attribute, AttributeModifier> attributes) {
-
-        List<String> statLore = new ArrayList<>();
+        LinkedList<String> statLore = new LinkedList<>();
 
         DecimalFormat doubleDecimalFormat = new DecimalFormat("0.00");
 
@@ -1126,33 +836,70 @@ public class ItemForger {
         }
 
         if (attributes != null) {
-            List<String> attributeLore = createAttributeLore(attributes);
-            for (String l : attributeLore) {
-                statLore.add(l);
-            }
+            LinkedList<String> attributeLore = createAttributeLore(attributes);
+            statLore.addAll(attributeLore);
         }
 
         return statLore;
     }
 
+    /**
+     * Creates lore based on the attributes of the item
+     * @param attributes The attributes of the item
+     * @return A LinkedList of Strings displaying the attributes of the item
+     */
+    public static LinkedList<String> createAttributeLore(Multimap<Attribute, AttributeModifier> attributes) {
+
+        LinkedList<String> attributeLore = new LinkedList<>();
+
+        DecimalFormat doubleDecimalFormat = new DecimalFormat("0.00");
+
+        for (Attribute attribute : attributes.keys()) {
+            for (AttributeModifier attributeModifier : attributes.get(attribute)) {
+                String name = AttributeLoreNameMap.ofDisplayName(attribute);
+                ChatColor displayColor = AttributeLoreNameMap.ofDisplayColor(attribute);
+                double amount = attributeModifier.getAmount();
+                if (attribute.equals(Attribute.GENERIC_KNOCKBACK_RESISTANCE)) {
+                    amount *= 10;
+                }
+                attributeLore.add(name + displayColor + doubleDecimalFormat.format(amount));
+            }
+        }
+
+        return attributeLore;
+    }
+
+    /**
+     * Sets if the item should be fire-resistant
+     * @param fireResistant True if fire-resistant, false if not
+     * @return ItemForger instance of the item
+     */
     public ItemForger setFireResistant(boolean fireResistant) {
         if (fireResistant)
         {
             ItemMeta itemMeta = itemStack.getItemMeta();
-            itemMeta.getPersistentDataContainer().set(fireResistanceKey, PersistentDataType.BOOLEAN, true);
+            itemMeta.getPersistentDataContainer().set(ItemKeys.FIRE_RESISTANCE_KEY, PersistentDataType.BOOLEAN, true);
             itemStack.setItemMeta(itemMeta);
         }
         return this;
     }
 
+    /**
+     * Returns if the item is fire resistance
+     * @return True if fire-resistant, false if not
+     */
     public boolean isFireResistant() {
         ItemMeta itemMeta = itemStack.getItemMeta();
-        if (itemMeta.getPersistentDataContainer().get(fireResistanceKey, PersistentDataType.BOOLEAN).equals(true)) {
+        if (itemMeta.getPersistentDataContainer().get(ItemKeys.FIRE_RESISTANCE_KEY, PersistentDataType.BOOLEAN).equals(true)) {
             return true;
         }
         return false;
     }
 
+    /**
+     * Hides all the item flags on the item
+     * @return ItemForger instance of the item
+     */
     public ItemForger hideAllItemFlags() {
         ItemMeta itemMeta = itemStack.getItemMeta();
         for (ItemFlag itemFlag : ItemFlag.values()) {
@@ -1162,18 +909,78 @@ public class ItemForger {
         return this;
     }
 
+    /**
+     * Sets the item key String on the item. Should only be used when initially creating the item
+     * @param value The item key String to set on the item
+     * @return ItemForger instance of the item
+     */
     public ItemForger setItemKey(String value)
     {
         ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.getPersistentDataContainer().set(ITEM_MAP_KEY, PersistentDataType.STRING, value);
+        itemMeta.getPersistentDataContainer().set(ItemKeys.ITEM_MAP_KEY, PersistentDataType.STRING, value);
         itemStack.setItemMeta(itemMeta);
         return this;
     }
 
+    /**
+     * Gets the item key of the item as a String. The item key String stored on the item is used for updating the item
+     * @return The item key String
+     */
     public String getItemKey()
     {
         ItemMeta itemMeta = itemStack.getItemMeta();
-        return itemMeta.getPersistentDataContainer().get(ITEM_MAP_KEY, PersistentDataType.STRING);
+        return itemMeta.getPersistentDataContainer().get(ItemKeys.ITEM_MAP_KEY, PersistentDataType.STRING);
+    }
+
+    /**
+     * Sets the menu item key String on the item. Should only be used when initially creating the menu item
+     * @param value The menu item key String to set on the item
+     * @return ItemForger instance of the item
+     */
+    public ItemForger setMenuItemKey(String value)
+    {
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        itemMeta.getPersistentDataContainer().set(ItemKeys.MENU_ITEM_MAP_KEY, PersistentDataType.STRING, value);
+        itemStack.setItemMeta(itemMeta);
+        return this;
+    }
+
+    /**
+     * Gets the menu item key of the item as a String. The menu item key String stored on the item is used for updating the item
+     * @return The menu item key String
+     */
+    public String getMenuItemKey()
+    {
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        return itemMeta.getPersistentDataContainer().get(ItemKeys.MENU_ITEM_MAP_KEY, PersistentDataType.STRING);
+    }
+
+    public ItemForger setSkillProgressSkill(SkillsExpGainEvent.Skill skill)
+    {
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        itemMeta.getPersistentDataContainer().set(ItemKeys.SKILL_PROGRESS_SKILL_KEY, PersistentDataType.STRING, skill.name().toLowerCase() + "_progress");
+        itemStack.setItemMeta(itemMeta);
+        return this;
+    }
+
+    public String getSkillProgressSkillKey()
+    {
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        return itemMeta.getPersistentDataContainer().get(ItemKeys.SKILL_PROGRESS_SKILL_KEY, PersistentDataType.STRING);
+    }
+
+    public ItemForger setSkillProgressLvl(Integer lvl)
+    {
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        itemMeta.getPersistentDataContainer().set(ItemKeys.SKILL_PROGRESS_LEVEL_KEY, PersistentDataType.INTEGER, lvl);
+        itemStack.setItemMeta(itemMeta);
+        return this;
+    }
+
+    public Integer getSkillProgressLvl()
+    {
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        return itemMeta.getPersistentDataContainer().get(ItemKeys.SKILL_PROGRESS_LEVEL_KEY, PersistentDataType.INTEGER);
     }
 
     /**
@@ -1186,7 +993,7 @@ public class ItemForger {
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta instanceof PotionMeta potionMeta)
         {
-            potionMeta.getPersistentDataContainer().set(POTION_BREWING_EXP_READY_KEY, PersistentDataType.BOOLEAN, ready);
+            potionMeta.getPersistentDataContainer().set(ItemKeys.POTION_CLAIMED_KEY, PersistentDataType.BOOLEAN, ready);
             itemStack.setItemMeta(potionMeta);
         }
         return this;
@@ -1201,10 +1008,10 @@ public class ItemForger {
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta instanceof PotionMeta potionMeta)
         {
-            if (potionMeta.getPersistentDataContainer().get(POTION_BREWING_EXP_READY_KEY, PersistentDataType.BOOLEAN) != null &&
-                potionMeta.getPersistentDataContainer().has(POTION_BREWING_EXP_READY_KEY, PersistentDataType.BOOLEAN))
+            if (potionMeta.getPersistentDataContainer().get(ItemKeys.POTION_CLAIMED_KEY, PersistentDataType.BOOLEAN) != null &&
+                potionMeta.getPersistentDataContainer().has(ItemKeys.POTION_CLAIMED_KEY, PersistentDataType.BOOLEAN))
             {
-                return potionMeta.getPersistentDataContainer().get(POTION_BREWING_EXP_READY_KEY, PersistentDataType.BOOLEAN);
+                return potionMeta.getPersistentDataContainer().get(ItemKeys.POTION_CLAIMED_KEY, PersistentDataType.BOOLEAN);
             } else
             {
                 Bukkit.broadcastMessage("not ready :(");
@@ -1219,7 +1026,7 @@ public class ItemForger {
         {
             if (itemStack.getItemMeta() != null && itemStack.getItemMeta() instanceof PotionMeta potionMeta)
             {
-                potionMeta.getPersistentDataContainer().set(POTION_BREWING_EXP_READY_KEY, PersistentDataType.BOOLEAN, ready);
+                potionMeta.getPersistentDataContainer().set(ItemKeys.POTION_CLAIMED_KEY, PersistentDataType.BOOLEAN, ready);
                 itemStack.setItemMeta(potionMeta);
             }
             return itemStack;
@@ -1233,7 +1040,7 @@ public class ItemForger {
         {
            if (itemStack.getItemMeta() != null && itemStack.getItemMeta() instanceof PotionMeta potionMeta)
            {
-               return potionMeta.getPersistentDataContainer().get(POTION_BREWING_EXP_READY_KEY, PersistentDataType.BOOLEAN);
+               return potionMeta.getPersistentDataContainer().get(ItemKeys.POTION_CLAIMED_KEY, PersistentDataType.BOOLEAN);
            }
         }
         return false;

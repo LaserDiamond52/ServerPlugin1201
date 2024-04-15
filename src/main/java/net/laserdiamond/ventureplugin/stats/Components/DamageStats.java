@@ -2,71 +2,71 @@ package net.laserdiamond.ventureplugin.stats.Components;
 
 public class DamageStats {
 
-    private double bMeleeDmg;
-    private double bMagicDmg;
-    private double bRangeDmg;
-    private double pMeleeDmg;
-    private double pMagicDmg;
-    private double pRangeDmg;
+    private double baseMeleeDamage;
+    private double baseMagicDamage;
+    private double baseRangeDamage;
+    private double percentMeleeDmg;
+    private double percentMagicDmg;
+    private double percentRangeDmg;
     private double reach;
 
-    public DamageStats(double bMeleeDmg, double bMagicDmg, double bRangeDmg, double pMeleeDmg, double pMagicDmg, double pRangeDmg, double reach)
+    public DamageStats(double baseMeleeDamage, double baseMagicDamage, double baseRangeDamage, double percentMeleeDmg, double percentMagicDmg, double pRangeDmg, double reach)
     {
-        this.bMeleeDmg = bMeleeDmg;
-        this.bMagicDmg = bMagicDmg;
-        this.bRangeDmg = bRangeDmg;
-        this.pMeleeDmg = pMeleeDmg;
-        this.pMagicDmg = pMagicDmg;
-        this.pRangeDmg = pRangeDmg;
+        this.baseMeleeDamage = baseMeleeDamage;
+        this.baseMagicDamage = baseMagicDamage;
+        this.baseRangeDamage = baseRangeDamage;
+        this.percentMeleeDmg = percentMeleeDmg;
+        this.percentMagicDmg = percentMagicDmg;
+        this.percentRangeDmg = pRangeDmg;
         this.reach = reach;
     }
 
     public double getBaseMelee() {
-        return bMeleeDmg;
+        return baseMeleeDamage;
     }
 
     public void setBaseMeleeDmg(double bMeleeDmg) {
-        this.bMeleeDmg = bMeleeDmg;
+        this.baseMeleeDamage = bMeleeDmg;
     }
 
     public double getBaseMagic() {
-        return bMagicDmg;
+        return baseMagicDamage;
     }
 
     public void setBaseMagicDmg(double bMagicDmg) {
-        this.bMagicDmg = bMagicDmg;
+        this.baseMagicDamage = bMagicDmg;
     }
 
     public double getBaseRange() {
-        return bRangeDmg;
+        return baseRangeDamage;
     }
 
     public void setBaseRangeDmg(double bRangeDmg) {
-        this.bRangeDmg = bRangeDmg;
+        this.baseRangeDamage = bRangeDmg;
     }
 
     public double getPercentMelee() {
-        return pMeleeDmg;
+        return percentMeleeDmg;
     }
 
     public void setPercentMeleeDmg(double pMeleeDmg) {
-        this.pMeleeDmg = pMeleeDmg;
+        this.percentMeleeDmg = pMeleeDmg;
     }
 
     public double getPercentMagic() {
-        return pMagicDmg;
+        return percentMagicDmg;
     }
 
     public void setPercentMagicDmg(double pMagicDmg) {
-        this.pMagicDmg = pMagicDmg;
+        this.percentMagicDmg = pMagicDmg;
     }
 
     public double getPercentRange() {
-        return pRangeDmg;
+        return percentRangeDmg;
     }
 
     public void setPercentRangeDmg(double pRangeDmg) {
-        this.pRangeDmg = pRangeDmg;
+        this.percentRangeDmg = pRangeDmg;
     }
 
     public double getReach() {
