@@ -19,7 +19,7 @@ public final class SkillsMenuItems {
     public static List<String> skillLore(MenuItem menuItem, List<String> abilityLore, int skillLevel, double totalExp, double expToNextLevel, double requiredExpToNextLevel)
     {
         int nextLvl = skillLevel + 1;
-        double progress = expToNextLevel / requiredExpToNextLevel;
+        double progress = (expToNextLevel / requiredExpToNextLevel) * 100;
 
         DecimalFormat doubleDecimal = new DecimalFormat("0.00");
 
@@ -211,8 +211,8 @@ public final class SkillsMenuItems {
             double brewingCaffeination = statPlayer.getSkillsReward().getBrewingCaffeination();
 
             List<String> lore = new ArrayList<>();
-            lore.add(ChatColor.GRAY + " Grants +" + ChatColor.YELLOW + brewingLongevity + StatSymbols.LONGEVITY.getSymbol() + ChatColor.GRAY + " more longevity");
-            lore.add(ChatColor.GRAY + " Grants +" + ChatColor.YELLOW + brewingCaffeination + StatSymbols.CAFFEINATION.getSymbol() + ChatColor.GRAY + " more caffeination");
+            lore.add(ChatColor.GRAY + " Grants +" + ChatColor.DARK_RED + brewingLongevity + StatSymbols.LONGEVITY.getSymbol() + ChatColor.GRAY + " more longevity");
+            lore.add(ChatColor.GRAY + " Grants +" + ChatColor.LIGHT_PURPLE + brewingCaffeination + StatSymbols.CAFFEINATION.getSymbol() + ChatColor.GRAY + " more caffeination");
 
             return skillLore(menuItem(), lore, brewingLvl, totalExp, expToNextLevel, requiredExpToNextLevel);
         }

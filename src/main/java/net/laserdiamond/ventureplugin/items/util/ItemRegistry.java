@@ -72,6 +72,9 @@ public class ItemRegistry implements Listener {
         PLAYER_INV_TITLES.add(ViewStats.STAT_INV_TITLE);
         PLAYER_INV_TITLES.add(ViewStats.DEFENSE_STAT_INV_TITLE);
         PLAYER_INV_TITLES.add(ViewStats.DAMAGE_STAT_INV_TITLE);
+        PLAYER_INV_TITLES.add(ViewStats.FORTUNE_STAT_INV_TITLE);
+        PLAYER_INV_TITLES.add(ViewStats.POTION_STAT_INV_TITLE);
+
         PLAYER_INV_TITLES.add(TuningMenu.TUNING_INV_TITLE);
         PLAYER_INV_TITLES.add(ViewSkills.SKILL_INV_TITLE);
         PLAYER_INV_TITLES.add(ViewSkills.COMBAT_INV_TITLE);

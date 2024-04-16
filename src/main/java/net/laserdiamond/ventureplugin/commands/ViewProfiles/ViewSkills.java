@@ -50,6 +50,8 @@ public class ViewSkills implements CommandExecutor, Listener {
     public static final String ENCHANTING_INV_TITLE = "'s Enchanting Skill";
     public static final String FISHING_INV_TITLE = "'s Fishing Skill";
     public static final String BREWING_INV_TITLE = "'s Brewing Skill";
+    public static final String PAGE_1 = "Page 1";
+    public static final String PAGE_2 = "Page 2";
     private final PlayerConfig BASE_STATS_CONFIG;
 
     public ViewSkills(VenturePlugin plugin)
@@ -77,7 +79,7 @@ public class ViewSkills implements CommandExecutor, Listener {
 
     private Inventory skillProgressInventory(Player player, SkillsExpGainEvent.Skill skill, SkillProgressInvSection section)
     {
-        Inventory skillProgressInventory = Bukkit.createInventory(null, 54, ChatColor.GOLD + player.getName() + "'s " + ItemStringBuilder.capitalizeFirstLetter(skill.name()) + " Skill");
+        Inventory skillProgressInventory = null;
         StatPlayer statPlayer = new StatPlayer(player);
         SkillsProfile skillsProfile = statPlayer.getSkillsProfile();
 
@@ -108,14 +110,17 @@ public class ViewSkills implements CommandExecutor, Listener {
         }
         if (section == SkillProgressInvSection.SECTION_1)
         {
+            skillProgressInventory = Bukkit.createInventory(null, 54, ChatColor.GOLD + player.getName() + "'s " + ItemStringBuilder.capitalizeFirstLetter(skill.name()) + " Skill - " + PAGE_1);
             for (int i = 0; i < 26; i++)
             {
                 ItemForger progressItem = skillProgressItem.skillProgressItem(i, skillsProfile);
                 int invSlot = skillProgressItemInvLoc.get(i);
                 skillProgressInventory.setItem(invSlot, progressItem.toItemStack());
             }
+            MiscMenuItems.placeGoForwardButton(player, skillProgressInventory);
         } else if (section == SkillProgressInvSection.SECTION_2)
         {
+            skillProgressInventory = Bukkit.createInventory(null, 54, ChatColor.GOLD + player.getName() + "'s " + ItemStringBuilder.capitalizeFirstLetter(skill.name()) + " Skill - " + PAGE_2);
             for (int i = 26; i <= 51; i++)
             {
                 ItemForger progressItem = skillProgressItem.skillProgressItem(i, skillsProfile);
@@ -124,117 +129,13 @@ public class ViewSkills implements CommandExecutor, Listener {
             }
         }
 
-        MiscMenuItems.placeExitButton(player, skillProgressInventory);
-
-        MiscMenuItems.fillBlankSlotsPlayerInv(player, skillProgressInventory);
+        if (skillProgressInventory != null)
+        {
+            MiscMenuItems.placeExitButton(player, skillProgressInventory);
+            MiscMenuItems.placeGoBackButton(player, skillProgressInventory);
+            MiscMenuItems.fillBlankSlotsPlayerInv(player, skillProgressInventory);
+        }
         return skillProgressInventory;
-    }
-
-    @Deprecated
-    private ItemForger skillProgressItem(SkillsExpGainEvent.Skill skill, int skillLevel, SkillsProfile skillsProfile)
-    {
-        ItemForger itemForger = new ItemForger(Material.AIR, skillLevel);
-        itemForger.setName(ItemStringBuilder.capitalizeFirstLetter(skill.name()) + " Level " + skillLevel);
-
-        SkillsLevel skillsLevel = skillsProfile.skillsLevel();
-        SkillsEXP skillsEXP = skillsProfile.skillsEXP();
-
-        int previousLevel = skillLevel - 1;
-        int playerSkill = 0;
-        double expToNextLevel = 0;
-        double requiredExpToNextLevel = 0;
-
-        LinkedList<String> lore = new LinkedList<>();
-        lore.add(" ");
-        lore.add(ChatColor.BOLD + "" + ChatColor.AQUA + "Rewards:");
-        switch (skill)
-        {
-            case COMBAT -> {
-                playerSkill = skillsLevel.getCombatLevel();
-                expToNextLevel = skillsEXP.getCombatExpToNextLevel();
-                requiredExpToNextLevel = skillsEXP.getRequiredCombatExpToNextLevel();
-                double previousDamageBonus = previousLevel * BASE_STATS_CONFIG.getDouble("combatDamageBonus");
-                double damageBonus = skillLevel * BASE_STATS_CONFIG.getDouble("combatDamageBonus");
-
-                lore.add(ChatColor.WHITE + " Deal " + ChatColor.DARK_GRAY + previousDamageBonus + "->" + ChatColor.DARK_RED + damageBonus + "%" + ChatColor.WHITE + " more damage");
-            }
-            case MINING -> {
-                playerSkill = skillsLevel.getMiningLevel();
-                expToNextLevel = skillsEXP.getMiningExpToNextLevel();
-                requiredExpToNextLevel = skillsEXP.getRequiredMiningExpToNextLevel();
-                double previousFortuneBonus = previousLevel * BASE_STATS_CONFIG.getDouble("miningFortuneBonus");
-                double fortuneBonus = skillLevel * BASE_STATS_CONFIG.getDouble("miningFortuneBonus");
-                double previousDefenseBonus = previousLevel * BASE_STATS_CONFIG.getDouble("miningDefenseBonus");
-                double defenseBonus = skillLevel * BASE_STATS_CONFIG.getDouble("miningDefenseBonus");
-
-                lore.add(ChatColor.WHITE + " Gain " + ChatColor.DARK_GRAY + previousFortuneBonus + "->" + ChatColor.GREEN + fortuneBonus + StatSymbols.MINING_FORTUNE.getSymbol() + ChatColor.WHITE + " more Mining Fortune");
-                lore.add(ChatColor.WHITE + " Gain " + ChatColor.DARK_GRAY + previousDefenseBonus + "->" + ChatColor.GREEN + defenseBonus + StatSymbols.DEFENSE.getSymbol() + ChatColor.WHITE + " more Mining Fortune");
-            }
-            case FORAGING -> {
-                playerSkill = skillsLevel.getForagingLevel();
-                expToNextLevel = skillsEXP.getForagingExpToNextLevel();
-                requiredExpToNextLevel = skillsEXP.getRequiredForagingExpToNextLevel();
-                double previousFortuneBonus = previousLevel * BASE_STATS_CONFIG.getDouble("foragingFortuneBonus");
-                double fortuneBonus = skillLevel * BASE_STATS_CONFIG.getDouble("foragingFortuneBonus");
-
-                lore.add(ChatColor.WHITE + " Gain " + ChatColor.DARK_GRAY + previousFortuneBonus + "->" + ChatColor.GREEN + fortuneBonus + StatSymbols.FORAGING_FORTUNE.getSymbol() + ChatColor.WHITE + " more Foraging Fortune");
-            }
-            case FARMING -> {
-                playerSkill = skillsLevel.getFarmingLevel();
-                expToNextLevel = skillsEXP.getFarmingExpToNextLevel();
-                requiredExpToNextLevel = skillsEXP.getRequiredFarmingExpToNextLevel();
-                double previousFortuneBonus = previousLevel * BASE_STATS_CONFIG.getDouble("farmingFortuneBonus");
-                double fortuneBonus = skillLevel * BASE_STATS_CONFIG.getDouble("farmingFortuneBonus");
-
-                lore.add(ChatColor.WHITE + " Gain " + ChatColor.DARK_GRAY + previousFortuneBonus + "->" + ChatColor.GREEN + fortuneBonus + StatSymbols.FARMING_FORTUNE.getSymbol() + ChatColor.WHITE + " more Farming Fortune");
-            }
-            case ENCHANTING -> {
-                playerSkill = skillsLevel.getEnchantingLevel();
-                expToNextLevel = skillsEXP.getEnchantingExpToNextLevel();
-                requiredExpToNextLevel = skillsEXP.getRequiredEnchantingExpToNextLevel();
-                double previousManaBonus = previousLevel * BASE_STATS_CONFIG.getDouble("enchantingManaBonus");
-                double manaBonus = skillLevel * BASE_STATS_CONFIG.getDouble("enchantingManaBonus");
-
-                lore.add(ChatColor.WHITE + " Gain " + ChatColor.DARK_GRAY + previousManaBonus + "->" + ChatColor.BLUE + manaBonus + StatSymbols.MANA.getSymbol() + ChatColor.WHITE + " more Mana");
-            }
-            case FISHING -> {
-                playerSkill = skillsLevel.getFishingLevel();
-                expToNextLevel = skillsEXP.getFishingExpToNextLevel();
-                requiredExpToNextLevel = skillsEXP.getRequiredFishingExpToNextLevel();
-                double previousFishingLuckBonus = previousLevel * BASE_STATS_CONFIG.getDouble("fishingLuckBonus");
-                double fishingLuckBonus = skillLevel * BASE_STATS_CONFIG.getDouble("fishingLuckBonus");
-
-                lore.add(ChatColor.WHITE + " Gain " + ChatColor.DARK_GRAY + previousFishingLuckBonus + "->" + ChatColor.GREEN + fishingLuckBonus + StatSymbols.FISHING_LUCK.getSymbol() + ChatColor.WHITE + " more Fishing Luck");
-            }
-            case BREWING -> {
-                playerSkill = skillsLevel.getBrewingLevel();
-                expToNextLevel = skillsEXP.getBrewingExpToNextLevel();
-                requiredExpToNextLevel = skillsEXP.getRequiredBrewingExpToNextLevel();
-                double previousLongevity = previousLevel * BASE_STATS_CONFIG.getDouble("brewingLongevity");
-                double longevity = skillLevel * BASE_STATS_CONFIG.getDouble("brewingLongevity");
-                double previousCaffeination = previousLevel * BASE_STATS_CONFIG.getDouble("brewingCaffeination");
-                double caffeination = skillLevel * BASE_STATS_CONFIG.getDouble("brewingCaffeination");
-
-                lore.add(ChatColor.WHITE + " Gain " + ChatColor.DARK_GRAY + previousLongevity + "->" + ChatColor.DARK_AQUA + longevity + StatSymbols.LONGEVITY.getSymbol() + " more Longevity");
-                lore.add(ChatColor.WHITE + " Gain " + ChatColor.DARK_GRAY + previousCaffeination + "->" + ChatColor.LIGHT_PURPLE + caffeination + StatSymbols.CAFFEINATION.getSymbol() + " more Caffeination");
-            }
-        }
-        lore.add(" ");
-
-        if (skillLevel == playerSkill)
-        {
-            itemForger.setMaterial(Material.YELLOW_TERRACOTTA);
-            lore.addLast(ChatColor.GOLD + "Progress to Next Level: " + ChatColor.YELLOW + expToNextLevel + ChatColor.WHITE + "/" + ChatColor.RED + requiredExpToNextLevel);
-        } else if (skillLevel > playerSkill)
-        {
-            itemForger.setMaterial(Material.RED_TERRACOTTA);
-        } else
-        {
-            itemForger.setMaterial(Material.LIME_TERRACOTTA);
-        }
-        itemForger.setLore(lore);
-
-        return itemForger;
     }
 
     private static final HashMap<Integer, Integer> skillProgressItemInvLoc = new HashMap<>();
@@ -269,32 +170,32 @@ public class ViewSkills implements CommandExecutor, Listener {
         skillProgressItemInvLoc.put(25,53);
 
         // Slot 53 for section 2 is for after max level
-        skillProgressItemInvLoc.put(26,0);
-        skillProgressItemInvLoc.put(27,9);
-        skillProgressItemInvLoc.put(28,18);
-        skillProgressItemInvLoc.put(29,27);
-        skillProgressItemInvLoc.put(30,28);
-        skillProgressItemInvLoc.put(31,29);
-        skillProgressItemInvLoc.put(32,20);
-        skillProgressItemInvLoc.put(33,11);
-        skillProgressItemInvLoc.put(34,2);
-        skillProgressItemInvLoc.put(35,3);
-        skillProgressItemInvLoc.put(36,4);
-        skillProgressItemInvLoc.put(37,13);
-        skillProgressItemInvLoc.put(38,22);
-        skillProgressItemInvLoc.put(39,31);
-        skillProgressItemInvLoc.put(40,32);
-        skillProgressItemInvLoc.put(41,33);
-        skillProgressItemInvLoc.put(42,24);
-        skillProgressItemInvLoc.put(43,15);
-        skillProgressItemInvLoc.put(44,6);
-        skillProgressItemInvLoc.put(45,7);
-        skillProgressItemInvLoc.put(46,8);
-        skillProgressItemInvLoc.put(47,17);
-        skillProgressItemInvLoc.put(48,26);
-        skillProgressItemInvLoc.put(49,35);
-        skillProgressItemInvLoc.put(50,44);
-        skillProgressItemInvLoc.put(51,53);
+        skillProgressItemInvLoc.put(51,0);
+        skillProgressItemInvLoc.put(26,9);
+        skillProgressItemInvLoc.put(27,18);
+        skillProgressItemInvLoc.put(28,27);
+        skillProgressItemInvLoc.put(29,28);
+        skillProgressItemInvLoc.put(30,29);
+        skillProgressItemInvLoc.put(31,20);
+        skillProgressItemInvLoc.put(32,11);
+        skillProgressItemInvLoc.put(33,2);
+        skillProgressItemInvLoc.put(34,3);
+        skillProgressItemInvLoc.put(35,4);
+        skillProgressItemInvLoc.put(36,13);
+        skillProgressItemInvLoc.put(37,22);
+        skillProgressItemInvLoc.put(38,31);
+        skillProgressItemInvLoc.put(39,32);
+        skillProgressItemInvLoc.put(40,33);
+        skillProgressItemInvLoc.put(41,24);
+        skillProgressItemInvLoc.put(42,15);
+        skillProgressItemInvLoc.put(43,6);
+        skillProgressItemInvLoc.put(44,7);
+        skillProgressItemInvLoc.put(45,8);
+        skillProgressItemInvLoc.put(46,17);
+        skillProgressItemInvLoc.put(47,26);
+        skillProgressItemInvLoc.put(48,35);
+        skillProgressItemInvLoc.put(49,44);
+        skillProgressItemInvLoc.put(50,53);
     }
 
     @Override
@@ -338,7 +239,8 @@ public class ViewSkills implements CommandExecutor, Listener {
                         invTitle.contains(BREWING_INV_TITLE))
                 {
                     event.setCancelled(true);
-
+                    int goBackButtonLoc = MiscMenuItems.getGoBackButtonLocation(clickedInv);
+                    int goForwardButtonLoc = MiscMenuItems.getGoForwardButtonLocation(clickedInv);
                     if (invTitle.contains(SKILL_INV_TITLE))
                     {
                         // TODO: Able to click on skills to view progression
@@ -371,9 +273,57 @@ public class ViewSkills implements CommandExecutor, Listener {
                             player.openInventory(skillProgressInventory(player, SkillsExpGainEvent.Skill.BREWING, SkillProgressInvSection.SECTION_1));
 
                         }
+                    } else if (invTitle.contains(COMBAT_INV_TITLE))
+                    {
+                        navigateSkillInv(player, invTitle, clickedSlot, goBackButtonLoc, goForwardButtonLoc, SkillsExpGainEvent.Skill.COMBAT);
+
+                    } else if (invTitle.contains(MINING_INV_TITLE))
+                    {
+                        navigateSkillInv(player, invTitle, clickedSlot, goBackButtonLoc, goForwardButtonLoc, SkillsExpGainEvent.Skill.MINING);
+
+                    } else if (invTitle.contains(FORAGING_INV_TITLE))
+                    {
+                        navigateSkillInv(player, invTitle, clickedSlot, goBackButtonLoc, goForwardButtonLoc, SkillsExpGainEvent.Skill.FORAGING);
+
+                    } else if (invTitle.contains(FARMING_INV_TITLE))
+                    {
+                        navigateSkillInv(player, invTitle, clickedSlot, goBackButtonLoc, goForwardButtonLoc, SkillsExpGainEvent.Skill.FARMING);
+
+                    } else if (invTitle.contains(ENCHANTING_INV_TITLE))
+                    {
+                        navigateSkillInv(player, invTitle, clickedSlot, goBackButtonLoc, goForwardButtonLoc, SkillsExpGainEvent.Skill.ENCHANTING);
+
+                    } else if (invTitle.contains(FISHING_INV_TITLE))
+                    {
+                        navigateSkillInv(player, invTitle, clickedSlot, goBackButtonLoc, goForwardButtonLoc, SkillsExpGainEvent.Skill.FISHING);
+
+                    } else if (invTitle.contains(BREWING_INV_TITLE))
+                    {
+                        navigateSkillInv(player, invTitle, clickedSlot, goBackButtonLoc, goForwardButtonLoc, SkillsExpGainEvent.Skill.BREWING);
+
                     }
                 }
 
+            }
+        }
+    }
+
+    private void navigateSkillInv(Player player, String invTitle, int clickedSlot, int goBackButton, int goForwardButton, SkillsExpGainEvent.Skill skill)
+    {
+        if (invTitle.contains(PAGE_1))
+        {
+            if (clickedSlot == goBackButton)
+            {
+                player.openInventory(skillInventory(player));
+            } else if (clickedSlot == goForwardButton)
+            {
+                player.openInventory(skillProgressInventory(player, skill, SkillProgressInvSection.SECTION_2));
+            }
+        } else if (invTitle.contains(PAGE_2))
+        {
+            if (clickedSlot == goBackButton)
+            {
+                player.openInventory(skillProgressInventory(player, skill, SkillProgressInvSection.SECTION_1));
             }
         }
     }

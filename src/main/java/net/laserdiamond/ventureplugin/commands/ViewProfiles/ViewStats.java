@@ -22,10 +22,10 @@ import org.jetbrains.annotations.NotNull;
 public class ViewStats implements CommandExecutor, Listener {
 
     public static final String STAT_INV_TITLE = "'s Stats";
-
     public static final String DEFENSE_STAT_INV_TITLE = "'s Defense Stats";
-
     public static final String DAMAGE_STAT_INV_TITLE = "'s Damage Stats";
+    public static final String FORTUNE_STAT_INV_TITLE = "'s Fortune Stats";
+    public static final String POTION_STAT_INV_TITLE = "'s Potion Stats";
 
     public ViewStats(VenturePlugin plugin)
     {
@@ -49,38 +49,61 @@ public class ViewStats implements CommandExecutor, Listener {
         return statInventory;
     }
 
-    private Inventory defenseStatInventory(Player player)
+    private Inventory statInfoInventory(Player player, StatType statType)
     {
-        Inventory defenseInventory = Bukkit.createInventory(null, 54, ChatColor.GREEN + player.getName() + DEFENSE_STAT_INV_TITLE);
+        Inventory statInfoInv = null;
 
-        for (StatMenuItems.DefenseStatSlots defenseStatSlots : StatMenuItems.DefenseStatSlots.values())
+        switch (statType)
         {
-            ItemStack defenseStatItem = defenseStatSlots.getVentureMenuItem().createItem(player).toItemStack();
-            int inventorySlot = defenseStatSlots.getInventorySlot();
-            defenseInventory.setItem(inventorySlot, defenseStatItem);
+            case DAMAGE -> {
+                statInfoInv = Bukkit.createInventory(null, 54, ChatColor.RED + player.getName() + DAMAGE_STAT_INV_TITLE);
+
+                for (StatMenuItems.DamageStatSlots damageStatSlots : StatMenuItems.DamageStatSlots.values())
+                {
+                    ItemStack damageStatItem = damageStatSlots.getVentureMenuItem().createItem(player).toItemStack();
+                    int inventorySlot = damageStatSlots.getInventorySlot();
+                    statInfoInv.setItem(inventorySlot, damageStatItem);
+                }
+            }
+            case DEFENSE -> {
+                statInfoInv = Bukkit.createInventory(null, 54, ChatColor.GREEN + player.getName() + DEFENSE_STAT_INV_TITLE);
+
+                for (StatMenuItems.DefenseStatSlots defenseStatSlots : StatMenuItems.DefenseStatSlots.values())
+                {
+                    ItemStack defenseStatItem = defenseStatSlots.getVentureMenuItem().createItem(player).toItemStack();
+                    int inventorySlot = defenseStatSlots.getInventorySlot();
+                    statInfoInv.setItem(inventorySlot, defenseStatItem);
+                }
+            }
+            case FORTUNE -> {
+                statInfoInv = Bukkit.createInventory(null, 54, ChatColor.GREEN + player.getName() + FORTUNE_STAT_INV_TITLE);
+
+                for (StatMenuItems.FortuneStatSlots fortuneStatSlots : StatMenuItems.FortuneStatSlots.values())
+                {
+                    ItemStack fortuneStatItem = fortuneStatSlots.getVentureMenuItem().createItem(player).toItemStack();
+                    int inventorySlot = fortuneStatSlots.getInventorySlot();
+                    statInfoInv.setItem(inventorySlot, fortuneStatItem);
+                }
+            }
+            case POTION -> {
+                statInfoInv = Bukkit.createInventory(null, 54, ChatColor.DARK_AQUA + player.getName() + POTION_STAT_INV_TITLE);
+
+                for (StatMenuItems.PotionStatSlots potionStatSlots : StatMenuItems.PotionStatSlots.values())
+                {
+                    ItemStack potionStatItem = potionStatSlots.getVentureMenuItem().createItem(player).toItemStack();
+                    int inventorySlot = potionStatSlots.getInventorySlot();
+                    statInfoInv.setItem(inventorySlot, potionStatItem);
+                }
+            }
         }
-        MiscMenuItems.placeExitButton(player, defenseInventory);
-        MiscMenuItems.placeGoBackButton(player, defenseInventory);
 
-        MiscMenuItems.fillBlankSlotsPlayerInv(player, defenseInventory);
-        return defenseInventory;
-    }
-
-    private Inventory damageStatInventory(Player player)
-    {
-        Inventory damageInventory = Bukkit.createInventory(null, 54, ChatColor.RED + player.getName() + DAMAGE_STAT_INV_TITLE);
-
-        for (StatMenuItems.DamageStatSlots damageStatSlots : StatMenuItems.DamageStatSlots.values())
+        if (statInfoInv != null)
         {
-            ItemStack damageStatItem = damageStatSlots.getVentureMenuItem().createItem(player).toItemStack();
-            int inventorySlot = damageStatSlots.getInventorySlot();
-            damageInventory.setItem(inventorySlot, damageStatItem);
+            MiscMenuItems.placeGoBackButton(player, statInfoInv);
+            MiscMenuItems.placeExitButton(player, statInfoInv);
+            MiscMenuItems.fillBlankSlotsPlayerInv(player, statInfoInv);
         }
-        MiscMenuItems.placeExitButton(player, damageInventory);
-        MiscMenuItems.placeGoBackButton(player, damageInventory);
-
-        MiscMenuItems.fillBlankSlotsPlayerInv(player, damageInventory);
-        return damageInventory;
+        return statInfoInv;
     }
 
     @Override
@@ -111,25 +134,34 @@ public class ViewStats implements CommandExecutor, Listener {
                 Inventory clickedInv = event.getClickedInventory();
                 String invTitle = event.getView().getTitle();
                 int clickedSlot = event.getSlot();
+
+                int defenseSlot = StatMenuItems.StatItemSlots.DEFENSE.getInventorySlot();
+                int damageSlot = StatMenuItems.StatItemSlots.DAMAGE.getInventorySlot();
+                int fortuneSlot = StatMenuItems.StatItemSlots.FORTUNE.getInventorySlot();
+                int potionSlot = StatMenuItems.StatItemSlots.POTION.getInventorySlot();
+                int goBackButtonLoc = MiscMenuItems.getGoBackButtonLocation(clickedInv);
                 if (invTitle.contains(STAT_INV_TITLE)) // Player is clicking inside the home stat inventory
                 {
                     event.setCancelled(true); // Prevent players from moving items in the inventory
 
-                    int defenseSlot = StatMenuItems.StatItemSlots.DEFENSE.getInventorySlot();
-                    int damageSlot = StatMenuItems.StatItemSlots.DAMAGE.getInventorySlot();
-
                     if (clickedSlot == defenseSlot)
                     {
-                        player.openInventory(defenseStatInventory(player));
+                        player.openInventory(statInfoInventory(player, StatType.DEFENSE));
                     } else if (clickedSlot == damageSlot)
                     {
-                        player.openInventory(damageStatInventory(player));
+                        player.openInventory(statInfoInventory(player, StatType.DAMAGE));
+                    } else if (clickedSlot == fortuneSlot)
+                    {
+                        player.openInventory(statInfoInventory(player, StatType.FORTUNE));
+                    } else if (clickedSlot == potionSlot)
+                    {
+                        player.openInventory(statInfoInventory(player, StatType.POTION));
                     }
                 } else if (invTitle.contains(DEFENSE_STAT_INV_TITLE)) // Player is clicking inside the defense stat inventory
                 {
                     event.setCancelled(true); // Prevent players from moving items in the inventory
 
-                    if (clickedSlot == MiscMenuItems.getGoBackButtonLocation(clickedInv))
+                    if (clickedSlot == goBackButtonLoc)
                     {
                         player.openInventory(statInventory(player));
                     }
@@ -137,12 +169,36 @@ public class ViewStats implements CommandExecutor, Listener {
                 {
                     event.setCancelled(true); // Prevent players from moving items in the inventory
 
-                    if (clickedSlot == MiscMenuItems.getGoBackButtonLocation(clickedInv))
+                    if (clickedSlot == goBackButtonLoc)
+                    {
+                        player.openInventory(statInventory(player));
+                    }
+                } else if (invTitle.contains(FORTUNE_STAT_INV_TITLE))
+                {
+                    event.setCancelled(true);
+
+                    if (clickedSlot == goBackButtonLoc)
+                    {
+                        player.openInventory(statInventory(player));
+                    }
+                } else if (invTitle.contains(POTION_STAT_INV_TITLE))
+                {
+                    event.setCancelled(true);
+
+                    if (clickedSlot == goBackButtonLoc)
                     {
                         player.openInventory(statInventory(player));
                     }
                 }
             }
         }
+    }
+
+    public enum StatType
+    {
+        DEFENSE,
+        DAMAGE,
+        FORTUNE,
+        POTION
     }
 }

@@ -20,7 +20,7 @@ import java.util.LinkedList;
  */
 public abstract class VentureSkillProgressItem {
 
-    private final VenturePlugin plugin;
+    public final VenturePlugin plugin;
     private final PlayerConfig BASE_STATS_CONFIG;
 
     public VentureSkillProgressItem(VenturePlugin plugin)
@@ -129,21 +129,21 @@ public abstract class VentureSkillProgressItem {
                     double previousCaffeination = previousLevel * BASE_STATS_CONFIG.getDouble("brewingCaffeination");
                     double caffeination = skillLevel * BASE_STATS_CONFIG.getDouble("brewingCaffeination");
 
-                    lore.add(ChatColor.WHITE + " Gain " + ChatColor.DARK_GRAY + previousLongevity + "->" + ChatColor.DARK_AQUA + longevity + StatSymbols.LONGEVITY.getSymbol() + " more Longevity");
-                    lore.add(ChatColor.WHITE + " Gain " + ChatColor.DARK_GRAY + previousCaffeination + "->" + ChatColor.LIGHT_PURPLE + caffeination + StatSymbols.CAFFEINATION.getSymbol() + " more Caffeination");
+                    lore.add(ChatColor.WHITE + " Gain " + ChatColor.DARK_GRAY + previousLongevity + "->" + ChatColor.DARK_RED + longevity + StatSymbols.LONGEVITY.getSymbol() + ChatColor.WHITE + " more Longevity");
+                    lore.add(ChatColor.WHITE + " Gain " + ChatColor.DARK_GRAY + previousCaffeination + "->" + ChatColor.LIGHT_PURPLE + caffeination + StatSymbols.CAFFEINATION.getSymbol() + ChatColor.WHITE + " more Caffeination");
                 }
             }
             lore.add(" ");
-
-            if (skillLevel == playerSkill)
+            int newLvl = playerSkill + 1;
+            if (skillLevel == newLvl)
             {
                 itemForger.setMaterial(Material.YELLOW_TERRACOTTA);
-                lore.addLast(ChatColor.GOLD + "Progress to Level " + playerSkill + ":" + ChatColor.YELLOW + expToNextLevel + ChatColor.WHITE + "/" + ChatColor.RED + requiredExpToNextLevel);
-            } else if (skillLevel > playerSkill)
+                lore.addLast(ChatColor.GOLD + "Progress to Level " + newLvl + ": " + ChatColor.YELLOW + expToNextLevel + ChatColor.WHITE + "/" + ChatColor.RED + requiredExpToNextLevel);
+            } else if (skillLevel > newLvl)
             {
                 itemForger.setMaterial(Material.RED_TERRACOTTA);
                 lore.addLast(ChatColor.RED + "You have not reached this level yet!");
-            } else
+            } else if (skillLevel < newLvl)
             {
                 itemForger.setMaterial(Material.LIME_TERRACOTTA);
                 lore.addLast(ChatColor.GREEN + "Level Completed!");
@@ -153,54 +153,71 @@ public abstract class VentureSkillProgressItem {
             itemForger.setAmount(1);
             int playerSkill = 0;
 
+            lore.add(ChatColor.GRAY + "Gain " + ItemStringBuilder.capitalizeFirstLetter(getSkill().name()) + " experience by");
+
+            // Combat 3
+            //
+            // Gain Combat experience by
+            // killing mobs and slaying
+            // bosses
+
             switch (getSkill())
             {
                 case COMBAT -> {
                     itemForger.setMaterial(MenuItem.SKILL_COMBAT.getMaterial())
                             .setName(ChatColor.DARK_RED + "Combat");
                     playerSkill = skillsLevel.getCombatLevel();
-
+                    lore.add(ChatColor.GRAY + "killing mobs and slaying");
+                    lore.add(ChatColor.GRAY + "bosses across the lands");
                 }
                 case MINING -> {
                     itemForger.setMaterial(MenuItem.SKILL_MINING.getMaterial())
                             .setName(ChatColor.DARK_BLUE + "Mining");
                     playerSkill = skillsLevel.getMiningLevel();
-
+                    lore.add(ChatColor.GRAY + "mining ores, stones, and");
+                    lore.add(ChatColor.GRAY + "other rare minerals deep");
+                    lore.add(ChatColor.GRAY + "underground");
                 }
                 case FORAGING -> {
                     itemForger.setMaterial(MenuItem.SKILL_FORAGING.getMaterial())
                             .setName(ChatColor.DARK_GREEN + "Foraging");
                     playerSkill = skillsLevel.getForagingLevel();
-
+                    lore.add(ChatColor.GRAY + "chopping down trees, plants,");
+                    lore.add(ChatColor.GRAY + "and foliage");
                 }
                 case FARMING -> {
                     itemForger.setMaterial(MenuItem.SKILL_FARMING.getMaterial())
                             .setName(ChatColor.GREEN + "Farming");
                     playerSkill = skillsLevel.getFarmingLevel();
-
+                    lore.add(ChatColor.GRAY + "harvesting crops and plants");
                 }
                 case ENCHANTING -> {
                     itemForger.setMaterial(MenuItem.SKILL_ENCHANTING.getMaterial())
                             .setName(ChatColor.LIGHT_PURPLE + "Enchanting");
                     playerSkill = skillsLevel.getEnchantingLevel();
-
+                    lore.add(ChatColor.GRAY + "enchanting equipment and gear with");
+                    lore.add(ChatColor.GRAY + "various enchants to help you on your");
+                    lore.add(ChatColor.GRAY + "journey across different lands");
                 }
                 case FISHING -> {
                     itemForger.setMaterial(MenuItem.SKILL_FISHING.getMaterial())
                             .setName(ChatColor.AQUA + "Fishing");
                     playerSkill = skillsLevel.getFishingLevel();
-
+                    lore.add(ChatColor.GRAY + "fishing up treasures and");
+                    lore.add(ChatColor.GRAY + "rare sea creatures");
                 }
                 case BREWING -> {
                     itemForger.setMaterial(MenuItem.SKILL_BREWING.getMaterial())
                             .setName(ChatColor.BLUE + "Brewing");
                     playerSkill = skillsLevel.getBrewingLevel();
-
+                    lore.add(ChatColor.GRAY + "brewing up potions to assist");
+                    lore.add(ChatColor.GRAY + "you on your adventures");
                 }
             }
 
-            lore.add(ChatColor.GOLD + ItemStringBuilder.capitalizeFirstLetter(getSkill().name()) + " " + playerSkill);
             lore.add(" ");
+            lore.add(ChatColor.GOLD + "Current " + ItemStringBuilder.capitalizeFirstLetter(getSkill().name()) + " Level: " + playerSkill);
+
         }
         itemForger.hideAllItemFlags();
         itemForger.setLore(lore);

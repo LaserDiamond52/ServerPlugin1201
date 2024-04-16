@@ -19,7 +19,7 @@ import org.bukkit.loot.LootTables;
 import java.util.HashMap;
 import java.util.List;
 
-public class MiscMenuItems implements Listener {
+public final class MiscMenuItems implements Listener {
 
     private static final VenturePlugin PLUGIN = VenturePlugin.getInstance();
 
@@ -84,6 +84,18 @@ public class MiscMenuItems implements Listener {
         }
     };
 
+    public static VentureMenuItem GO_FORWARD = new VentureMenuItem(PLUGIN) {
+        @Override
+        public MenuItem menuItem() {
+            return MenuItem.GO_FORWARD;
+        }
+
+        @Override
+        public List<String> createLore(Player player) {
+            return null;
+        }
+    };
+
     private static final HashMap<Integer, Integer> EXIT_ITEM_INV_LOCATION = new HashMap<>();
     static
     {
@@ -98,12 +110,23 @@ public class MiscMenuItems implements Listener {
     private static final HashMap<Integer, Integer> GO_BACK_ITEM_INV_LOCATION = new HashMap<>();
     static
     {
-        GO_BACK_ITEM_INV_LOCATION.put(9, 5);
-        GO_BACK_ITEM_INV_LOCATION.put(18, 14);
-        GO_BACK_ITEM_INV_LOCATION.put(27, 23);
-        GO_BACK_ITEM_INV_LOCATION.put(36, 32);
-        GO_BACK_ITEM_INV_LOCATION.put(45, 41);
-        GO_BACK_ITEM_INV_LOCATION.put(54, 50);
+        GO_BACK_ITEM_INV_LOCATION.put(9, 3);
+        GO_BACK_ITEM_INV_LOCATION.put(18, 12);
+        GO_BACK_ITEM_INV_LOCATION.put(27, 21);
+        GO_BACK_ITEM_INV_LOCATION.put(36, 30);
+        GO_BACK_ITEM_INV_LOCATION.put(45, 39);
+        GO_BACK_ITEM_INV_LOCATION.put(54, 48);
+    }
+
+    private static final HashMap<Integer, Integer> GO_FORWARD_ITEM_INV_LOCATION = new HashMap<>();
+    static
+    {
+        GO_FORWARD_ITEM_INV_LOCATION.put(9,5);
+        GO_FORWARD_ITEM_INV_LOCATION.put(18,14);
+        GO_FORWARD_ITEM_INV_LOCATION.put(27,23);
+        GO_FORWARD_ITEM_INV_LOCATION.put(36,32);
+        GO_FORWARD_ITEM_INV_LOCATION.put(45,41);
+        GO_FORWARD_ITEM_INV_LOCATION.put(54,50);
     }
 
     /**
@@ -147,6 +170,28 @@ public class MiscMenuItems implements Listener {
     {
         int size = inventory.getSize();
         return GO_BACK_ITEM_INV_LOCATION.get(size);
+    }
+
+    /**
+     * Places a go back button inside the player GUI inventory
+     * <p>
+     * Note: This does not include the functionality of the button. That must be coded individually
+     * @param player The player viewing the inventory
+     * @param inventory The GUI inventory the player is viewing
+     */
+    public static void placeGoForwardButton(Player player, Inventory inventory)
+    {
+        int size = inventory.getSize();
+
+        int goForwardSlot = GO_FORWARD_ITEM_INV_LOCATION.get(size);
+
+        inventory.setItem(goForwardSlot, GO_FORWARD.createItem(player).toItemStack());
+    }
+
+    public static int getGoForwardButtonLocation(Inventory inventory)
+    {
+        int size = inventory.getSize();
+        return GO_FORWARD_ITEM_INV_LOCATION.get(size);
     }
 
     @EventHandler

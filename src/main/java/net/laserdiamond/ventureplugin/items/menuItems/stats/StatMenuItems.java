@@ -18,6 +18,7 @@ public final class StatMenuItems {
 
     private static final VenturePlugin PLUGIN = VenturePlugin.getInstance();
     private static final double DEFENSE_FACTOR = PLUGIN.getBaseStatsConfig().getInt("a");
+    private static final String MORE_INFO = ChatColor.YELLOW + "" + ChatColor.ITALIC + "Click for more info";
 
     public static double damageReduction(double defense)
     {
@@ -43,23 +44,24 @@ public final class StatMenuItems {
                     trimHealth = statPlayer.getArmorTrimStats().armorTrimMaterialStats().getIronHealthBoost(),
                     totalHealth = statPlayer.getStats().getHealth();
 
+            String healthString = ChatColor.RED + "Health " + StatSymbols.HEALTH.getSymbol();
             List<String> lore = new ArrayList<>();
 
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Health determines how much damage");
+            lore.add(healthString + ChatColor.GRAY + " determines how much damage");
             lore.add(ChatColor.GRAY + "you can take before you die");
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Base Health: " + ChatColor.RED + baseHealth + StatSymbols.HEALTH.getSymbol());
+            lore.add(ChatColor.GRAY + "Base " + healthString + ChatColor.GRAY + ": " + ChatColor.YELLOW + baseHealth);
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Health from tuning: " + ChatColor.RED + tuningHealth + StatSymbols.HEALTH.getSymbol());
+            lore.add(healthString + ChatColor.GRAY + " from tuning: " + ChatColor.YELLOW + tuningHealth);
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Health from armor: " + ChatColor.RED + armorHealth + StatSymbols.HEALTH.getSymbol());
+            lore.add(healthString + ChatColor.GRAY + " from armor: " + ChatColor.YELLOW + armorHealth);
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Health from enchants: " + ChatColor.RED + enchantHealth + StatSymbols.HEALTH.getSymbol());
+            lore.add(healthString + ChatColor.GRAY + " from enchants: " + ChatColor.YELLOW + enchantHealth);
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Health from armor trims: " + ChatColor.RED + trimHealth + StatSymbols.HEALTH.getSymbol());
+            lore.add(healthString + ChatColor.GRAY + " from armor trims: " + ChatColor.YELLOW + trimHealth);
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Total Health: " + ChatColor.RED + totalHealth + StatSymbols.HEALTH.getSymbol());
+            lore.add(ChatColor.GRAY + "Total " + healthString + ChatColor.GRAY + ": " + ChatColor.YELLOW + totalHealth);
             lore.add(" ");
 
             return lore;
@@ -86,25 +88,29 @@ public final class StatMenuItems {
                     totalMagicDefense = defenseStats.getMagicDefense();
 
 
-            //double damageReduction = 100 * (totalDefense/(totalDefense + defenseFactor));
+            String defenseString = ChatColor.GREEN + "Defense " + StatSymbols.DEFENSE.getSymbol();
+            String fireDefenseString = ChatColor.GOLD + "Fire Defense " + StatSymbols.DEFENSE.getSymbol();
+            String explosionDefenseString = ChatColor.DARK_RED + "Explosion Defense " + StatSymbols.DEFENSE.getSymbol();
+            String projectileDefenseString = ChatColor.DARK_PURPLE + "Projectile Defense " + StatSymbols.DEFENSE.getSymbol();
+            String magicDefenseString = ChatColor.AQUA + "Magic Defense " + StatSymbols.DEFENSE.getSymbol();
 
             List<String> lore = new ArrayList<>();
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Defense reduces the amount of damage you take.");
+            lore.add(defenseString + ChatColor.GRAY + " reduces the amount of damage you take.");
             lore.add(ChatColor.GRAY + "The formula for damage reduction is:");
             lore.add(ChatColor.GOLD + "x / (x + " + DEFENSE_FACTOR + ")");
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Total Defense: " + ChatColor.GREEN + totalDefense + StatSymbols.DEFENSE.getSymbol());
+            lore.add(ChatColor.GRAY + "Total " + defenseString + ChatColor.GRAY + ": " + ChatColor.YELLOW + totalDefense);
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Total Fire Defense: " + ChatColor.GOLD + totalFireDefense + StatSymbols.DEFENSE.getSymbol());
+            lore.add(ChatColor.GRAY + "Total " + fireDefenseString + ChatColor.GRAY + ": " + ChatColor.YELLOW + totalFireDefense);
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Total Explosion Defense: " + ChatColor.DARK_RED + totalExplosionDefense + StatSymbols.DEFENSE.getSymbol());
+            lore.add(ChatColor.GRAY + "Total " + explosionDefenseString + ChatColor.GRAY + ": " + ChatColor.YELLOW + totalExplosionDefense);
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Total Projectile Defense: " + ChatColor.DARK_PURPLE + totalProjectileDefense + StatSymbols.DEFENSE.getSymbol());
+            lore.add(ChatColor.GRAY + "Total " + projectileDefenseString + ChatColor.GRAY + ": " + ChatColor.YELLOW + totalProjectileDefense);
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Total Magic Defense: " + ChatColor.AQUA + totalMagicDefense + StatSymbols.DEFENSE.getSymbol());
+            lore.add(ChatColor.GRAY + "Total " + magicDefenseString + ChatColor.GRAY + ": " + ChatColor.YELLOW + totalMagicDefense);
             lore.add(" ");
-            lore.add(ChatColor.YELLOW + "" + ChatColor.ITALIC + "Click for more info");
+            lore.add(MORE_INFO);
             lore.add(" ");
 
 
@@ -131,22 +137,24 @@ public final class StatMenuItems {
             double armorToughness = statPlayer.getArmorStats().getToughness();
             double enchantToughness = statPlayer.getEnchantStats().getToughness();
 
+            String toughnessString = ChatColor.GREEN + "Toughness " + StatSymbols.TOUGHNESS.getSymbol();
+
             List<String> lore = new ArrayList<>();
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Toughness reduces damage you take from");
-            lore.add(ChatColor.GRAY + "true damage attacks. Toughness does not");
+            lore.add(toughnessString + ChatColor.GRAY + " reduces damage you take from");
+            lore.add(ChatColor.GRAY + "true damage attacks. " + toughnessString + ChatColor.GRAY + " does not");
             lore.add(ChatColor.GRAY + "affect damage from normal attacks");
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Toughness is calculated at the same rate as defense:");
+            lore.add(toughnessString + ChatColor.GRAY + " is calculated at the same rate as defense:");
             lore.add(ChatColor.GOLD + "x / (x + " + DEFENSE_FACTOR + ")");
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Base toughness: " + ChatColor.GREEN + baseToughness + StatSymbols.TOUGHNESS.getSymbol());
+            lore.add(ChatColor.GRAY + "Base " + toughnessString + ChatColor.GRAY + ": " + ChatColor.YELLOW + baseToughness);
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Toughness from armor: " + ChatColor.GREEN + armorToughness + StatSymbols.TOUGHNESS.getSymbol());
+            lore.add(toughnessString + ChatColor.GRAY + " from armor: " + ChatColor.YELLOW + armorToughness);
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Toughness from enchants: " + ChatColor.GREEN + enchantToughness + StatSymbols.TOUGHNESS.getSymbol());
+            lore.add(toughnessString + ChatColor.GRAY + " from enchants: " + ChatColor.YELLOW + enchantToughness);
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Total toughness: " + ChatColor.GREEN + toughness + StatSymbols.TOUGHNESS.getSymbol());
+            lore.add(ChatColor.GRAY + "Total " + toughnessString + ChatColor.GRAY + ": " + ChatColor.YELLOW + toughness);
             lore.add(" ");
             return lore;
         }
@@ -172,26 +180,27 @@ public final class StatMenuItems {
 
             double manaRegen = totalMana/50;
 
-            List<String> lore = new ArrayList<>();
+            String manaString = ChatColor.BLUE + "Mana " + StatSymbols.MANA.getSymbol();
 
+            List<String> lore = new ArrayList<>();
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Mana is used to cast abilities and regenerates");
-            lore.add(ChatColor.GRAY + "at a base rate of " + ChatColor.YELLOW + "2" + ChatColor.GRAY + "% per second");
+            lore.add(manaString + ChatColor.GRAY + " is used to cast abilities and regenerates");
+            lore.add(ChatColor.GRAY + "at a base rate of " + ChatColor.YELLOW + "2" + ChatColor.GRAY + "% / second");
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Mana regeneration rate: " + ChatColor.BLUE + manaRegen + StatSymbols.MANA.getSymbol() + ChatColor.GRAY + " per second");
+            lore.add(manaString + ChatColor.GRAY + " regeneration rate: " + ChatColor.BLUE + manaRegen + StatSymbols.MANA.getSymbol() + ChatColor.GRAY + " / second");
             lore.add(" ");
             // TODO: Set up mana regeneration stat
-            lore.add(ChatColor.GRAY + "Base mana: " + ChatColor.BLUE + baseMana + StatSymbols.MANA.getSymbol());
+            lore.add(ChatColor.GRAY + "Base " + manaString + ChatColor.GRAY + ": " + ChatColor.YELLOW + baseMana);
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Mana from tuning: " + ChatColor.BLUE + tuningMana + StatSymbols.MANA.getSymbol());
+            lore.add(manaString + ChatColor.GRAY + " from tuning: " + ChatColor.YELLOW + tuningMana);
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Mana from armor: " + ChatColor.BLUE + armorMana + StatSymbols.MANA.getSymbol());
+            lore.add(manaString + ChatColor.GRAY + " from armor: " + ChatColor.YELLOW + armorMana);
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Mana from enchants: " + ChatColor.BLUE + enchantMana + StatSymbols.MANA.getSymbol());
+            lore.add(manaString + ChatColor.GRAY + " from enchants: " + ChatColor.YELLOW + enchantMana);
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Mana from armor trim materials: " + ChatColor.BLUE + armorTrimMaterialMana + StatSymbols.MANA.getSymbol());
+            lore.add(manaString + ChatColor.GRAY + " from armor trim materials: " + ChatColor.YELLOW + armorTrimMaterialMana);
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Total mana: " + ChatColor.BLUE + totalMana + StatSymbols.MANA.getSymbol());
+            lore.add(ChatColor.GRAY + "Total " + manaString + ChatColor.GRAY + ": " + ChatColor.YELLOW + totalMana);
             lore.add(" ");
 
             // Mana is used to cast abilities and regenerates
@@ -219,7 +228,7 @@ public final class StatMenuItems {
             lore.add(ChatColor.GRAY + "-" + ChatColor.AQUA + " Magic" + StatSymbols.MAGIC_DAMAGE.getSymbol());
             lore.add(ChatColor.GRAY + "-" + ChatColor.DARK_PURPLE + " Range" + StatSymbols.RANGE_DAMAGE.getSymbol());
             lore.add(" ");
-            lore.add(ChatColor.YELLOW + "" + ChatColor.ITALIC + "Click for more info");
+            lore.add(MORE_INFO);
             lore.add(" ");
 
             // Every attack you inflict has its damage modified
@@ -568,34 +577,35 @@ public final class StatMenuItems {
                     enchantSpeed = statPlayer.getEnchantStats().getSpeed(),
                     armorTrimMaterialSpeed = statPlayer.getArmorTrimStats().armorTrimMaterialStats().getCopperSpeed();
 
+            String speedString = ChatColor.WHITE + "Speed " + StatSymbols.SPEED.getSymbol();
             List<String> lore = new ArrayList<>();
 
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Speed determines how fast you can walk/run");
+            lore.add(speedString + ChatColor.GRAY + " determines how fast you can walk/run");
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "The speed attribute value is a " + ChatColor.LIGHT_PURPLE + "universal constant");
+            lore.add(ChatColor.GRAY + "The " + speedString + ChatColor.GRAY + " attribute value is a " + ChatColor.LIGHT_PURPLE + "universal constant");
             lore.add(ChatColor.GRAY + "amongst all players, and thus cannot be changed.");
-            lore.add(ChatColor.GRAY + "This determines how much each speed point is worth");
+            lore.add(ChatColor.GRAY + "This determines how much each " + speedString + ChatColor.GRAY + " point is worth");
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Base speed attribute value: " + ChatColor.WHITE + baseSpeedAttribute + StatSymbols.SPEED.getSymbol());
+            lore.add(ChatColor.GRAY + "Base " + speedString + ChatColor.GRAY + " attribute value: " + ChatColor.YELLOW + baseSpeedAttribute);
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Current speed attribute value: " + ChatColor.WHITE + player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue() + StatSymbols.SPEED.getSymbol());
+            lore.add(ChatColor.GRAY + "Current " + speedString + ChatColor.GRAY + "  attribute value: " + ChatColor.YELLOW + player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue());
             lore.add(" ");
-            lore.add(ChatColor.WHITE + "Speed points " + StatSymbols.SPEED.getSymbol() + ChatColor.GRAY + " are used as a more readable way ");
-            lore.add(ChatColor.GRAY + "to measure your movement speed. Each speed point");
-            lore.add(ChatColor.GRAY + "represents " + ChatColor.YELLOW + "1" + ChatColor.GRAY + "% of the speed attribute value");
+            lore.add(speedString + ChatColor.GRAY + " points are used as a more readable way ");
+            lore.add(ChatColor.GRAY + "to measure your movement speed. Each " + speedString + ChatColor.GRAY + " point");
+            lore.add(ChatColor.GRAY + "represents " + ChatColor.YELLOW + "1" + ChatColor.GRAY + "% of the " + speedString + ChatColor.GRAY + " attribute value");
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Base speed points: " + ChatColor.WHITE + baseSpeedPoints + StatSymbols.SPEED.getSymbol());
+            lore.add(ChatColor.GRAY + "Base " + speedString + ChatColor.GRAY + " points: " + ChatColor.YELLOW + baseSpeedPoints);
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Speed from tuning: " + ChatColor.WHITE + tuningSpeed + StatSymbols.SPEED.getSymbol());
+            lore.add(speedString + ChatColor.GRAY + " from tuning: " + ChatColor.YELLOW + tuningSpeed);
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Speed from armor: " + ChatColor.WHITE + armorSpeed + StatSymbols.SPEED.getSymbol());
+            lore.add(speedString + ChatColor.GRAY + " from armor: " + ChatColor.YELLOW + armorSpeed);
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Speed from enchants: " + ChatColor.WHITE + enchantSpeed + StatSymbols.SPEED.getSymbol());
+            lore.add(speedString + ChatColor.GRAY + " from enchants: " + ChatColor.YELLOW + enchantSpeed);
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Speed from armor trims: " + ChatColor.WHITE + armorTrimMaterialSpeed + StatSymbols.SPEED.getSymbol());
+            lore.add(speedString + ChatColor.GRAY + " from armor trims: " + ChatColor.YELLOW + armorTrimMaterialSpeed);
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Total Speed: " + ChatColor.WHITE + totalSpeed + StatSymbols.SPEED.getSymbol());
+            lore.add(ChatColor.GRAY + "Total " + speedString + ChatColor.GRAY + ": " + ChatColor.YELLOW + totalSpeed);
             lore.add(" ");
 
             return lore;
@@ -618,17 +628,198 @@ public final class StatMenuItems {
                     totalFortitude = statPlayer.getDefenseStats().getFortitude(player),
                     armorFortitude = statPlayer.getArmorStats().getFortitude();
 
+            String fortitudeString = ChatColor.DARK_GREEN + "Fortitude " + StatSymbols.FORTITUDE.getSymbol();
+
             List<String> lore = new ArrayList<>();
 
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Fortitude is knockback resistance, and reduces");
+            lore.add(fortitudeString + ChatColor.GRAY + " is knockback resistance, and reduces");
             lore.add(ChatColor.GRAY + "knockback you receive from attacks");
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Fortitude from armor: " + ChatColor.DARK_GREEN + armorFortitude + StatSymbols.FORTITUDE.getSymbol());
+            lore.add(fortitudeString + ChatColor.GRAY + " from armor: " + ChatColor.YELLOW + armorFortitude);
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Total fortitude: " + ChatColor.DARK_GREEN + totalFortitude + StatSymbols.FORTITUDE.getSymbol());
+            lore.add(ChatColor.GRAY + "Total " + fortitudeString + ChatColor.GRAY + ": " + ChatColor.YELLOW + totalFortitude);
             lore.add(" ");
 
+            return lore;
+        }
+    };
+
+    public static final VentureMenuItem FORTUNE_STAT_ITEM = new VentureMenuItem(PLUGIN) {
+        @Override
+        public MenuItem menuItem() {
+            return MenuItem.FORTUNE_STAT;
+        }
+
+        @Override
+        public List<String> createLore(Player player) {
+            return null;
+        }
+    };
+
+    public static final VentureMenuItem MOB_FORTUNE_STAT_ITEM = new VentureMenuItem(PLUGIN) {
+        @Override
+        public MenuItem menuItem() {
+            return MenuItem.MOB_FORTUNE_MORE;
+        }
+
+        @Override
+        public List<String> createLore(Player player) {
+            return null;
+        }
+    };
+
+    public static final VentureMenuItem MINING_FORTUNE_STAT_ITEM = new VentureMenuItem(PLUGIN) {
+        @Override
+        public MenuItem menuItem() {
+            return MenuItem.MINING_FORTUNE_MORE;
+        }
+
+        @Override
+        public List<String> createLore(Player player) {
+            return null;
+        }
+    };
+
+    public static final VentureMenuItem FORAGING_FORTUNE_STAT_ITEM = new VentureMenuItem(PLUGIN) {
+        @Override
+        public MenuItem menuItem() {
+            return MenuItem.FORAGING_FORTUNE_MORE;
+        }
+
+        @Override
+        public List<String> createLore(Player player) {
+            return null;
+        }
+    };
+
+    public static final VentureMenuItem FARMING_FORTUNE_STAT_ITEM = new VentureMenuItem(PLUGIN) {
+        @Override
+        public MenuItem menuItem() {
+            return MenuItem.FARMING_FORTUNE_MORE;
+        }
+
+        @Override
+        public List<String> createLore(Player player) {
+            return null;
+        }
+    };
+
+    public static final VentureMenuItem FISHING_LUCK_STAT_ITEM = new VentureMenuItem(PLUGIN) {
+        @Override
+        public MenuItem menuItem() {
+            return MenuItem.FISHING_LUCK_MORE;
+        }
+
+        @Override
+        public List<String> createLore(Player player) {
+            return null;
+        }
+    };
+
+    public static final VentureMenuItem POTION_STAT_ITEM = new VentureMenuItem(PLUGIN) {
+        @Override
+        public MenuItem menuItem() {
+            return MenuItem.POTION_STAT;
+        }
+
+        @Override
+        public List<String> createLore(Player player) {
+            List<String> lore = new ArrayList<>();
+            lore.add(" ");
+            lore.add(ChatColor.GREEN + "Positive" + ChatColor.DARK_AQUA + " Potion Effects" + ChatColor.GRAY + " you gain from brewed");
+            lore.add(ChatColor.GRAY + "potions can be enhanced by the following stats:");
+            lore.add(" ");
+            lore.add(ChatColor.DARK_RED + "Longevity " + StatSymbols.LONGEVITY.getSymbol());
+            lore.add(ChatColor.GRAY + " Increases the duration of consumed potions");
+            lore.add(" ");
+            lore.add(ChatColor.LIGHT_PURPLE + "Caffeination " + StatSymbols.CAFFEINATION.getSymbol());
+            lore.add(ChatColor.GRAY + " Chance to increase the amplifier of the");
+            lore.add(ChatColor.GRAY + " consumed " + ChatColor.DARK_AQUA + "Potion Effect" + ChatColor.GRAY + " by +" + ChatColor.LIGHT_PURPLE + 1 + ChatColor.GRAY + " level");
+            lore.add(" ");
+            lore.add(MORE_INFO);
+            return lore;
+        }
+    };
+
+    public static final VentureMenuItem LONGEVITY_STAT_ITEM = new VentureMenuItem(PLUGIN) {
+        @Override
+        public MenuItem menuItem() {
+            return MenuItem.LONGEVITY_POTION_MORE;
+        }
+
+        @Override
+        public List<String> createLore(Player player) {
+
+            StatPlayer statPlayer = new StatPlayer(player);
+            double longevity = statPlayer.getPotionStats().getLongevity();
+
+            List<String> lore = new ArrayList<>();
+            lore.add(" ");
+            lore.add(ChatColor.DARK_RED + "Longevity " + StatSymbols.LONGEVITY.getSymbol() + ChatColor.GRAY + " increases the duration of");
+            lore.add(ChatColor.GREEN + "Positive " + ChatColor.DARK_AQUA + "Potion Effects" + ChatColor.GRAY + " consumed from");
+            lore.add(ChatColor.GRAY + "potions by " + ChatColor.YELLOW + "x" + ChatColor.GRAY + "%");
+            lore.add(" ");
+            lore.add(ChatColor.GRAY + "Current " + ChatColor.DARK_RED + "Longevity " + StatSymbols.LONGEVITY.getSymbol() + ChatColor.GRAY + ": " + ChatColor.YELLOW + longevity);
+            lore.add(" ");
+
+            //
+            // Longevity X increases the duration of
+            // positive potion effects consumed from
+            // potions by x%
+            //
+            // Current Longevity: XXX
+            //
+            return lore;
+        }
+    };
+
+    public static final VentureMenuItem CAFFEINATION_STAT_ITEM = new VentureMenuItem(PLUGIN) {
+        @Override
+        public MenuItem menuItem() {
+            return MenuItem.CAFFEINATION_POTION_MORE;
+        }
+
+        @Override
+        public List<String> createLore(Player player) {
+
+            StatPlayer statPlayer = new StatPlayer(player);
+            double caffeination = statPlayer.getPotionStats().getCaffeination();
+
+            double chance = caffeination % 100;
+            int guaranteed = (int) Math.floor(caffeination / 100);
+
+            List<String> lore = new ArrayList<>();
+
+            lore.add(" ");
+            lore.add(ChatColor.LIGHT_PURPLE + "Caffeination " + StatSymbols.CAFFEINATION.getSymbol() + ChatColor.GRAY + " grants a chance to increase the");
+            lore.add(ChatColor.GRAY + "amplifier of " + ChatColor.GREEN + "Positive " + ChatColor.DARK_AQUA + "Potion Effects" + ChatColor.GRAY + " consumed");
+            lore.add(ChatColor.GRAY + "from potions");
+            lore.add(" ");
+            lore.add(ChatColor.GRAY + "Current " + ChatColor.LIGHT_PURPLE + "Caffeination " + StatSymbols.CAFFEINATION.getSymbol() + ChatColor.GRAY + ": " + ChatColor.YELLOW + caffeination);
+            lore.add(" ");
+            lore.add(ChatColor.GRAY + "The last two digits of your " + ChatColor.LIGHT_PURPLE + "Caffeination " + StatSymbols.CAFFEINATION.getSymbol() + ChatColor.GRAY + " are");
+            lore.add(ChatColor.GRAY + "the chance for you to gain +" + ChatColor.LIGHT_PURPLE + 1 + " Amplifier Level");
+            lore.add(" ");
+            lore.add(ChatColor.GRAY + "Chance for +" + ChatColor.LIGHT_PURPLE + 1 + " Amplifier Level" + ChatColor.GRAY + ": " + ChatColor.YELLOW + chance);
+            lore.add(" ");
+            lore.add(ChatColor.GRAY + "Every " + ChatColor.YELLOW + 100 + ChatColor.LIGHT_PURPLE + " Caffeination " + StatSymbols.CAFFEINATION.getSymbol() + ChatColor.GRAY + " guarantees +" + ChatColor.LIGHT_PURPLE + 1 + " Amplifier");
+            lore.add(ChatColor.LIGHT_PURPLE + "Level" + ChatColor.GRAY + " to the consumed " + ChatColor.DARK_AQUA + "Potion Effect");
+            lore.add(" ");
+            lore.add(ChatColor.GRAY + "Guaranteed " + ChatColor.LIGHT_PURPLE + " Amplifier Levels" + ChatColor.GRAY + ": " + ChatColor.YELLOW + guaranteed);
+            lore.add(" ");
+
+            //
+            // Caffeination X grants a chance to increase the
+            // Amplifier of positive potion effects consumed
+            // from potions
+            //
+            // The last two digits of your Caffeination X are
+            // the chance for you to gain +1 Amplifier Level
+            //
+            // Every 100 Caffeination X guarantees +1 Amplifier
+            // Level to the consumed potion effect
+            //
             return lore;
         }
     };
@@ -641,7 +832,9 @@ public final class StatMenuItems {
         MANA (MANA_STAT_ITEM, 22),
         DAMAGE (DAMAGE_STAT_ITEM, 23),
         SPEED (SPEED_STAT_ITEM, 24),
-        FORTITUDE (FORTITUDE_STAT_ITEM, 25);
+        FORTITUDE (FORTITUDE_STAT_ITEM, 25),
+        FORTUNE (FORTUNE_STAT_ITEM, 30),
+        POTION (POTION_STAT_ITEM, 32);
 
         private final VentureMenuItem ventureMenuItem;
         private final int inventorySlot;
@@ -698,6 +891,56 @@ public final class StatMenuItems {
 
         DamageStatSlots(VentureMenuItem ventureMenuItem, int inventorySlot)
         {
+            this.ventureMenuItem = ventureMenuItem;
+            this.inventorySlot = inventorySlot;
+        }
+
+        public VentureMenuItem getVentureMenuItem() {
+            return ventureMenuItem;
+        }
+
+        public int getInventorySlot() {
+            return inventorySlot;
+        }
+    }
+
+
+    public enum FortuneStatSlots
+    {
+        MOB (MOB_FORTUNE_STAT_ITEM, 20),
+        MINING (MINING_FORTUNE_STAT_ITEM, 21),
+        FORAGING (FORAGING_FORTUNE_STAT_ITEM, 22),
+        FARMING (FARMING_FORTUNE_STAT_ITEM, 23),
+        FISHING (FISHING_LUCK_STAT_ITEM, 24);
+
+        private final VentureMenuItem ventureMenuItem;
+        private final int inventorySlot;
+
+        FortuneStatSlots(VentureMenuItem ventureMenuItem, int inventorySlot)
+        {
+            this.ventureMenuItem = ventureMenuItem;
+            this.inventorySlot = inventorySlot;
+        }
+
+        public VentureMenuItem getVentureMenuItem() {
+            return ventureMenuItem;
+        }
+
+        public int getInventorySlot() {
+            return inventorySlot;
+        }
+    }
+
+    public enum PotionStatSlots
+    {
+        LONGEVITY (LONGEVITY_STAT_ITEM, 21),
+        CAFFEINATION (CAFFEINATION_STAT_ITEM, 23);
+
+        private final VentureMenuItem ventureMenuItem;
+        private final int inventorySlot;
+
+
+        PotionStatSlots(VentureMenuItem ventureMenuItem, int inventorySlot) {
             this.ventureMenuItem = ventureMenuItem;
             this.inventorySlot = inventorySlot;
         }

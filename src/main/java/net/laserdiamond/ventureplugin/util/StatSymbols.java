@@ -24,6 +24,7 @@ public enum StatSymbols {
     FARMING ("\uD83E\uDEB4"),
     ENCHANTING ("\uD83D\uDD6E"),
     FISHING ("\uD83C\uDFA3"),
+    // TODO: May want to change Brewing Symbol
     BREWING ("⚗️");
 
     private final String symbol;
