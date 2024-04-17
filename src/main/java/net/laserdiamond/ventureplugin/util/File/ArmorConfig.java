@@ -84,6 +84,7 @@ public class ArmorConfig extends ConfigLoader {
         FORAGING_FORTUNE ("foragingFortune", true),
         FARMING_FORTUNE ("farmingFortune", true),
         FISHING_LUCK("fishingLuck", true),
+        LUCK ("luck", true),
         LONGEVITY ("longevity", true),
         CAFFEINATION ("caffeination", true);
         private final String key;

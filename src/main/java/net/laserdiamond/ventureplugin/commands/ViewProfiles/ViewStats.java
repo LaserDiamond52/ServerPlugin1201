@@ -1,6 +1,7 @@
 package net.laserdiamond.ventureplugin.commands.ViewProfiles;
 
 import net.laserdiamond.ventureplugin.VenturePlugin;
+import net.laserdiamond.ventureplugin.events.InventoryGUI.InventoryClicker;
 import net.laserdiamond.ventureplugin.items.menuItems.misc.MiscMenuItems;
 import net.laserdiamond.ventureplugin.items.menuItems.stats.StatMenuItems;
 import net.laserdiamond.ventureplugin.util.Permissions;
@@ -19,7 +20,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class ViewStats implements CommandExecutor, Listener {
+public class ViewStats implements CommandExecutor, InventoryClicker {
 
     public static final String STAT_INV_TITLE = "'s Stats";
     public static final String DEFENSE_STAT_INV_TITLE = "'s Defense Stats";
@@ -124,6 +125,7 @@ public class ViewStats implements CommandExecutor, Listener {
     }
 
     @EventHandler
+    @Override
     public void clickInsideInv(InventoryClickEvent event)
     {
         HumanEntity humanEntity = event.getWhoClicked();
@@ -139,57 +141,66 @@ public class ViewStats implements CommandExecutor, Listener {
                 int damageSlot = StatMenuItems.StatItemSlots.DAMAGE.getInventorySlot();
                 int fortuneSlot = StatMenuItems.StatItemSlots.FORTUNE.getInventorySlot();
                 int potionSlot = StatMenuItems.StatItemSlots.POTION.getInventorySlot();
-                int goBackButtonLoc = MiscMenuItems.getGoBackButtonLocation(clickedInv);
-                if (invTitle.contains(STAT_INV_TITLE)) // Player is clicking inside the home stat inventory
-                {
-                    event.setCancelled(true); // Prevent players from moving items in the inventory
 
-                    if (clickedSlot == defenseSlot)
-                    {
-                        player.openInventory(statInfoInventory(player, StatType.DEFENSE));
-                    } else if (clickedSlot == damageSlot)
-                    {
-                        player.openInventory(statInfoInventory(player, StatType.DAMAGE));
-                    } else if (clickedSlot == fortuneSlot)
-                    {
-                        player.openInventory(statInfoInventory(player, StatType.FORTUNE));
-                    } else if (clickedSlot == potionSlot)
-                    {
-                        player.openInventory(statInfoInventory(player, StatType.POTION));
-                    }
-                } else if (invTitle.contains(DEFENSE_STAT_INV_TITLE)) // Player is clicking inside the defense stat inventory
+                if (invTitle.contains(STAT_INV_TITLE) ||
+                    invTitle.contains(DEFENSE_STAT_INV_TITLE) ||
+                    invTitle.contains(DAMAGE_STAT_INV_TITLE) ||
+                    invTitle.contains(FORTUNE_STAT_INV_TITLE) ||
+                    invTitle.contains(POTION_STAT_INV_TITLE))
                 {
-                    event.setCancelled(true); // Prevent players from moving items in the inventory
-
-                    if (clickedSlot == goBackButtonLoc)
+                    int goBackButtonLoc = MiscMenuItems.getGoBackButtonLocation(clickedInv);
+                    if (invTitle.contains(STAT_INV_TITLE)) // Player is clicking inside the home stat inventory
                     {
-                        player.openInventory(statInventory(player));
-                    }
-                } else if (invTitle.contains(DAMAGE_STAT_INV_TITLE)) // Player is clicking inside the damage stat inventory
-                {
-                    event.setCancelled(true); // Prevent players from moving items in the inventory
+                        event.setCancelled(true); // Prevent players from moving items in the inventory
 
-                    if (clickedSlot == goBackButtonLoc)
+                        if (clickedSlot == defenseSlot)
+                        {
+                            player.openInventory(statInfoInventory(player, StatType.DEFENSE));
+                        } else if (clickedSlot == damageSlot)
+                        {
+                            player.openInventory(statInfoInventory(player, StatType.DAMAGE));
+                        } else if (clickedSlot == fortuneSlot)
+                        {
+                            player.openInventory(statInfoInventory(player, StatType.FORTUNE));
+                        } else if (clickedSlot == potionSlot)
+                        {
+                            player.openInventory(statInfoInventory(player, StatType.POTION));
+                        }
+                    } else if (invTitle.contains(DEFENSE_STAT_INV_TITLE)) // Player is clicking inside the defense stat inventory
                     {
-                        player.openInventory(statInventory(player));
-                    }
-                } else if (invTitle.contains(FORTUNE_STAT_INV_TITLE))
-                {
-                    event.setCancelled(true);
+                        event.setCancelled(true); // Prevent players from moving items in the inventory
 
-                    if (clickedSlot == goBackButtonLoc)
+                        if (clickedSlot == goBackButtonLoc)
+                        {
+                            player.openInventory(statInventory(player));
+                        }
+                    } else if (invTitle.contains(DAMAGE_STAT_INV_TITLE)) // Player is clicking inside the damage stat inventory
                     {
-                        player.openInventory(statInventory(player));
-                    }
-                } else if (invTitle.contains(POTION_STAT_INV_TITLE))
-                {
-                    event.setCancelled(true);
+                        event.setCancelled(true); // Prevent players from moving items in the inventory
 
-                    if (clickedSlot == goBackButtonLoc)
+                        if (clickedSlot == goBackButtonLoc)
+                        {
+                            player.openInventory(statInventory(player));
+                        }
+                    } else if (invTitle.contains(FORTUNE_STAT_INV_TITLE))
                     {
-                        player.openInventory(statInventory(player));
+                        event.setCancelled(true);
+
+                        if (clickedSlot == goBackButtonLoc)
+                        {
+                            player.openInventory(statInventory(player));
+                        }
+                    } else if (invTitle.contains(POTION_STAT_INV_TITLE))
+                    {
+                        event.setCancelled(true);
+
+                        if (clickedSlot == goBackButtonLoc)
+                        {
+                            player.openInventory(statInventory(player));
+                        }
                     }
                 }
+
             }
         }
     }

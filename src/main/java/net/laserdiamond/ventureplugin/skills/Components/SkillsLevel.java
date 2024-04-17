@@ -1,5 +1,8 @@
 package net.laserdiamond.ventureplugin.skills.Components;
 
+import java.util.OptionalDouble;
+import java.util.stream.IntStream;
+
 public class SkillsLevel {
 
     private int combatLevel;
@@ -75,5 +78,22 @@ public class SkillsLevel {
 
     public void setBrewingLevel(int brewingLevel) {
         this.brewingLevel = brewingLevel;
+    }
+
+    /**
+     * Gets the skill average of the player
+     * @return The skill average
+     */
+    public double getSkillAverage()
+    {
+        IntStream skills = IntStream.of(this.combatLevel, this.miningLevel, this.foragingLevel, this.farmingLevel, this.enchantingLevel, this.fishingLevel, this.brewingLevel);
+
+        OptionalDouble skillsOptionalDouble = skills.average();
+
+        if (skillsOptionalDouble.isPresent())
+        {
+            return skillsOptionalDouble.getAsDouble();
+        }
+        return 0.0;
     }
 }

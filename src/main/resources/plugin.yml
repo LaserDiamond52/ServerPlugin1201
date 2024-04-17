@@ -108,6 +108,7 @@ commands:
     aliases:
       - ventureskills
       - viewskills
+      - skills
 
   refillmana:
     description: allows players to refill their mana instantly
@@ -121,3 +122,8 @@ commands:
     aliases:
       - venturetuning
       - tune
+
+  skillsexp:
+    description: allows players to add to or reset their skill exp for a skill
+    usage: /<command> <arg> <arg> <arg> <arg>
+    permission: venture.edit_skills

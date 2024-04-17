@@ -131,7 +131,7 @@ public class StatProfileManager {
         double finalBaseRange = this.baseRange + tuningStats.getRange();
 
         Stats stats = new Stats(player, finalBaseHealth, finalBaseSpeed, baseStarvation, baseLuck, availableMana, finalBaseMana);
-        ArmorStats armorStats = new ArmorStats(0,0,0,0,0,0,0,0,0,0,0,0,0);
+        ArmorStats armorStats = new ArmorStats(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
         DamageStats damageStats = new DamageStats(finalBaseMelee, finalBaseMagic, finalBaseRange, percentMelee, percentMagic, percentRange,0);
         DefenseStats defenseStats = new DefenseStats(player, finalBaseDefense, baseFireDefense, baseExplosionDefense, baseProjectileDefense, baseMagicDefense, baseToughness, 0);
         LootStats lootStats = new LootStats(0,0,0,0,0);

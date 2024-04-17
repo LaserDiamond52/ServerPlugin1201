@@ -2,6 +2,7 @@ package net.laserdiamond.ventureplugin.commands.ViewProfiles;
 
 import net.laserdiamond.ventureplugin.VenturePlugin;
 import net.laserdiamond.ventureplugin.entities.player.StatPlayer;
+import net.laserdiamond.ventureplugin.events.InventoryGUI.InventoryClicker;
 import net.laserdiamond.ventureplugin.events.skills.SkillsExpGainEvent;
 import net.laserdiamond.ventureplugin.items.menuItems.misc.MiscMenuItems;
 import net.laserdiamond.ventureplugin.items.menuItems.skills.SkillsMenuItems;
@@ -40,7 +41,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-public class ViewSkills implements CommandExecutor, Listener {
+public class ViewSkills implements CommandExecutor, InventoryClicker {
 
     public static final String SKILL_INV_TITLE = "'s Skills";
     public static final String COMBAT_INV_TITLE = "'s Combat Skill";
@@ -218,6 +219,7 @@ public class ViewSkills implements CommandExecutor, Listener {
     }
 
     @EventHandler
+    @Override
     public void clickInsideInv(InventoryClickEvent event)
     {
         HumanEntity humanEntity = event.getWhoClicked();

@@ -138,6 +138,7 @@ public abstract class VentureArmorSet extends VentureStatItem {
         double foragingFortune = config().getStat(armorPieceTypes, ArmorConfig.StatType.FORAGING_FORTUNE, stars);
         double farmingFortune = config().getStat(armorPieceTypes, ArmorConfig.StatType.FARMING_FORTUNE, stars);
         double fishingLuck = config().getStat(armorPieceTypes, ArmorConfig.StatType.FISHING_LUCK, stars);
+        double luck = config().getStat(armorPieceTypes, ArmorConfig.StatType.LUCK, stars);
         double longevity = config().getStat(armorPieceTypes, ArmorConfig.StatType.LONGEVITY, stars);
         double caffeination = config().getStat(armorPieceTypes, ArmorConfig.StatType.CAFFEINATION, stars);
 
@@ -160,6 +161,7 @@ public abstract class VentureArmorSet extends VentureStatItem {
         itemStatKeysDoubleHashMap.put(VentureItemStatKeys.ARMOR_FORAGING_FORTUNE_KEY, foragingFortune);
         itemStatKeysDoubleHashMap.put(VentureItemStatKeys.ARMOR_FARMING_FORTUNE_KEY, farmingFortune);
         itemStatKeysDoubleHashMap.put(VentureItemStatKeys.ARMOR_FISHING_LUCK_KEY, fishingLuck);
+        itemStatKeysDoubleHashMap.put(VentureItemStatKeys.ARMOR_LUCK_KEY, luck);
         itemStatKeysDoubleHashMap.put(VentureItemStatKeys.ARMOR_LONGEVITY, longevity);
         itemStatKeysDoubleHashMap.put(VentureItemStatKeys.ARMOR_CAFFEINATION, caffeination);
 

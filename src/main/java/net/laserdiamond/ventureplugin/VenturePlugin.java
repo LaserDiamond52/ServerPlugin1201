@@ -4,6 +4,7 @@ import net.laserdiamond.ventureplugin.commands.Effects.EffectsCommand;
 import net.laserdiamond.ventureplugin.commands.Enchant.EnchantCommand;
 import net.laserdiamond.ventureplugin.commands.Items.GiveItemsCommand;
 import net.laserdiamond.ventureplugin.commands.Items.StarItemCommand;
+import net.laserdiamond.ventureplugin.commands.SkillsEdit.SkillsExpCommand;
 import net.laserdiamond.ventureplugin.commands.ViewProfiles.TuningMenu;
 import net.laserdiamond.ventureplugin.commands.ViewProfiles.ViewSkills;
 import net.laserdiamond.ventureplugin.commands.ViewProfiles.ViewStats;
@@ -194,6 +195,7 @@ public final class VenturePlugin extends JavaPlugin {
         ViewStats viewStats = new ViewStats(this);
         TuningMenu tuningMenu = new TuningMenu(this);
         ViewSkills viewSkills = new ViewSkills(this);
+        getCommand("skillsexp").setExecutor(new SkillsExpCommand());
         getCommand("refillmana").setExecutor(new fillMana());
         getCommand("staritem").setExecutor(new StarItemCommand());
         // TODO: Summon cmd for mobs

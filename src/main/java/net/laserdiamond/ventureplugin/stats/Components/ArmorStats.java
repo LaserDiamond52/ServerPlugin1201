@@ -15,9 +15,17 @@ public class ArmorStats {
             mana,
             percentMeleeDamage,
             percentMagicDamage,
-            percentRangeDamage;
+            percentRangeDamage,
+            mobFortune,
+            miningFortune,
+            foragingFortune,
+            farmingFortune,
+            fishingLuck,
+            luck,
+            longevity,
+            caffeination;
 
-    public ArmorStats(double health, double defense, double fireDefense, double explosionDefense, double projectileDefense, double magicDefense, double toughness, double fortitude, double speed, double mana,double percentMeleeDamage, double percentMagicDamage, double percentRangeDamage)
+    public ArmorStats(double health, double defense, double fireDefense, double explosionDefense, double projectileDefense, double magicDefense, double toughness, double fortitude, double speed, double mana, double percentMeleeDamage, double percentMagicDamage, double percentRangeDamage, double mobFortune, double miningFortune, double foragingFortune, double farmingFortune, double fishingLuck, double luck, double longevity, double caffeination)
     {
         this.health = health;
         this.defense = defense;
@@ -32,6 +40,14 @@ public class ArmorStats {
         this.percentMeleeDamage = percentMeleeDamage;
         this.percentMagicDamage = percentMagicDamage;
         this.percentRangeDamage = percentRangeDamage;
+        this.mobFortune = mobFortune;
+        this.miningFortune = miningFortune;
+        this.foragingFortune = foragingFortune;
+        this.farmingFortune = farmingFortune;
+        this.fishingLuck = fishingLuck;
+        this.luck = luck;
+        this.longevity = longevity;
+        this.caffeination = caffeination;
     }
 
     public double getDefense() {
@@ -136,5 +152,69 @@ public class ArmorStats {
 
     public void setHealth(double health) {
         this.health = health;
+    }
+
+    public double getMobFortune() {
+        return mobFortune;
+    }
+
+    public void setMobFortune(double mobFortune) {
+        this.mobFortune = mobFortune;
+    }
+
+    public double getMiningFortune() {
+        return miningFortune;
+    }
+
+    public void setMiningFortune(double miningFortune) {
+        this.miningFortune = miningFortune;
+    }
+
+    public double getForagingFortune() {
+        return foragingFortune;
+    }
+
+    public void setForagingFortune(double foragingFortune) {
+        this.foragingFortune = foragingFortune;
+    }
+
+    public double getFarmingFortune() {
+        return farmingFortune;
+    }
+
+    public void setFarmingFortune(double farmingFortune) {
+        this.farmingFortune = farmingFortune;
+    }
+
+    public double getFishingLuck() {
+        return fishingLuck;
+    }
+
+    public void setFishingLuck(double fishingLuck) {
+        this.fishingLuck = fishingLuck;
+    }
+
+    public double getLuck() {
+        return luck;
+    }
+
+    public void setLuck(double luck) {
+        this.luck = luck;
+    }
+
+    public double getLongevity() {
+        return longevity;
+    }
+
+    public void setLongevity(double longevity) {
+        this.longevity = longevity;
+    }
+
+    public double getCaffeination() {
+        return caffeination;
+    }
+
+    public void setCaffeination(double caffeination) {
+        this.caffeination = caffeination;
     }
 }

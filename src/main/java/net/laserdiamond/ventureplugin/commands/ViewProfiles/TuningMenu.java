@@ -2,6 +2,7 @@ package net.laserdiamond.ventureplugin.commands.ViewProfiles;
 
 import net.laserdiamond.ventureplugin.VenturePlugin;
 import net.laserdiamond.ventureplugin.entities.player.StatPlayer;
+import net.laserdiamond.ventureplugin.events.InventoryGUI.InventoryClicker;
 import net.laserdiamond.ventureplugin.items.menuItems.misc.MiscMenuItems;
 import net.laserdiamond.ventureplugin.items.menuItems.tuning.TuningMenuItems;
 import net.laserdiamond.ventureplugin.items.util.ItemRegistry;
@@ -28,7 +29,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class TuningMenu implements CommandExecutor, Listener {
+public class TuningMenu implements CommandExecutor, InventoryClicker {
 
     private final PlayerConfig baseStatsConfig;
 
@@ -77,6 +78,7 @@ public class TuningMenu implements CommandExecutor, Listener {
     public static final String TUNING_INV_TITLE = "'s Tuning";
 
     @EventHandler
+    @Override
     public void clickInsideInv(InventoryClickEvent event)
     {
         HumanEntity humanEntity = event.getWhoClicked();

@@ -13,6 +13,8 @@ public enum StatSymbols {
     SPEED ("\uD83D\uDC5F"),
     LONGEVITY ("\uD83D\uDD53"),
     CAFFEINATION("⚡"),
+    FORTUNE ("\uD83C\uDF40"),
+    LUCK ("\uD83C\uDF40"),
     MOB_FORTUNE ("\uD83C\uDF40"),
     MINING_FORTUNE ("\uD83C\uDF40"),
     FORAGING_FORTUNE ("\uD83C\uDF40"),

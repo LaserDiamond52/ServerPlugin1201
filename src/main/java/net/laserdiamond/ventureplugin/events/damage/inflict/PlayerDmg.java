@@ -11,11 +11,12 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public class PlayerDmg implements Listener {
 
     @EventHandler
-    public void meleeDmg(PlayerMeleeDamageEvent event)
+    private void meleeDmg(PlayerMeleeDamageEvent event)
     {
         Player player = event.getPlayer();
         LivingEntity target = event.getTarget();
@@ -42,7 +43,7 @@ public class PlayerDmg implements Listener {
     }
 
     @EventHandler
-    public void magicDmg(PlayerMagicDamageEvent event)
+    private void magicDmg(PlayerMagicDamageEvent event)
     {
         Player player = event.getPlayer();
         LivingEntity target = event.getTarget();
@@ -70,7 +71,7 @@ public class PlayerDmg implements Listener {
     }
 
     @EventHandler
-    public void rangeDmg(PlayerRangeDamageEvent event)
+    private void rangeDmg(PlayerRangeDamageEvent event)
     {
         Player player = event.getPlayer();
         LivingEntity target = event.getTarget();
@@ -96,6 +97,22 @@ public class PlayerDmg implements Listener {
         if (event.isInflictDamage())
         {
             target.damage(rangeDmg, player);
+        }
+    }
+
+    @EventHandler
+    private void combatSkillDamage(EntityDamageByEntityEvent event)
+    {
+        if (event.getDamager() instanceof Player player)
+        {
+            if (event.getEntity() instanceof LivingEntity)
+            {
+                StatPlayer statPlayer = new StatPlayer(player);
+                double damage = event.getDamage();
+
+                double combatDamageBonus = 1 + (statPlayer.getSkillsReward().getCombatDamageBonus() * 0.01);
+                event.setDamage(damage * combatDamageBonus);
+            }
         }
     }
 }

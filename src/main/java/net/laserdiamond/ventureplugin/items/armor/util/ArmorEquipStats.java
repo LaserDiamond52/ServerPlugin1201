@@ -57,12 +57,13 @@ public class ArmorEquipStats implements Listener {
                 Double foragingFortune = itemForger.getItemStat(VentureItemStatKeys.ARMOR_FORAGING_FORTUNE_KEY);
                 Double farmingFortune = itemForger.getItemStat(VentureItemStatKeys.ARMOR_FARMING_FORTUNE_KEY);
                 Double fishingLuck = itemForger.getItemStat(VentureItemStatKeys.ARMOR_FISHING_LUCK_KEY);
+                Double luck = itemForger.getItemStat(VentureItemStatKeys.ARMOR_LUCK_KEY);
                 Double longevity = itemForger.getItemStat(VentureItemStatKeys.ARMOR_LONGEVITY);
                 Double caffeination = itemForger.getItemStat(VentureItemStatKeys.ARMOR_CAFFEINATION);
 
                 addStats(statProfile, health, defense, fireDefense, projectileDefense, explosionDefense, magicDefense, toughness, speed, mana, meleeDamage, magicDamage, rangeDamage);
                 addFortitude(player, fortitude);
-                addFortuneStats(player, mobFortune, miningFortune, foragingFortune, farmingFortune, fishingLuck);
+                addFortuneStats(player, mobFortune, miningFortune, foragingFortune, farmingFortune, fishingLuck, luck);
                 addPotionStats(player, longevity, caffeination);
             } else
             {
@@ -102,12 +103,13 @@ public class ArmorEquipStats implements Listener {
                 Double foragingFortune = itemForger.getItemStat(VentureItemStatKeys.ARMOR_FORAGING_FORTUNE_KEY);
                 Double farmingFortune = itemForger.getItemStat(VentureItemStatKeys.ARMOR_FARMING_FORTUNE_KEY);
                 Double fishingLuck = itemForger.getItemStat(VentureItemStatKeys.ARMOR_FISHING_LUCK_KEY);
+                Double luck = itemForger.getItemStat(VentureItemStatKeys.ARMOR_LUCK_KEY);
                 Double longevity = itemForger.getItemStat(VentureItemStatKeys.ARMOR_LONGEVITY);
                 Double caffeination = itemForger.getItemStat(VentureItemStatKeys.ARMOR_CAFFEINATION);
 
                 removeStats(statProfile, health, defense, fireDefense, projectileDefense, explosionDefense, magicDefense, toughness, speed, mana, meleeDamage, magicDamage, rangeDamage);
                 removeFortitude(player, fortitude);
-                removeFortuneStats(player, mobFortune, miningFortune, foragingFortune, farmingFortune, fishingLuck);
+                removeFortuneStats(player, mobFortune, miningFortune, foragingFortune, farmingFortune, fishingLuck, luck);
                 removePotionStats(player, longevity, caffeination);
             } else
             {
@@ -299,87 +301,117 @@ public class ArmorEquipStats implements Listener {
         }
     }
 
-    private void addFortuneStats(Player player, Double mobFortune, Double miningFortune, Double foragingFortune, Double farmingFortune, Double fishingLuck)
+    private void addFortuneStats(Player player, Double mobFortune, Double miningFortune, Double foragingFortune, Double farmingFortune, Double fishingLuck, Double luck)
     {
         StatPlayer statPlayer = new StatPlayer(player);
+        Stats stats = statPlayer.getStats();
+        ArmorStats armorStats = statPlayer.getArmorStats();
         LootStats lootStats = statPlayer.getLootStats();
 
         if (mobFortune != null)
         {
             lootStats.setBonusMobLoot(lootStats.getBonusMobLoot() + mobFortune);
+            armorStats.setMobFortune(armorStats.getMobFortune() + mobFortune);
         }
         if (miningFortune != null)
         {
             lootStats.setBonusOreLoot(lootStats.getBonusOreLoot() + miningFortune);
+            armorStats.setMobFortune(armorStats.getMiningFortune() + miningFortune);
         }
         if (foragingFortune != null)
         {
             lootStats.setBonusWoodLoot(lootStats.getBonusWoodLoot() + foragingFortune);
+            armorStats.setForagingFortune(armorStats.getForagingFortune() + foragingFortune);
         }
         if (farmingFortune != null)
         {
             lootStats.setBonusFarmingLoot(lootStats.getBonusFarmingLoot() + farmingFortune);
+            armorStats.setFarmingFortune(armorStats.getFarmingFortune() + farmingFortune);
         }
         if (fishingLuck != null)
         {
             lootStats.setFishingLuck(lootStats.getFishingLuck() + fishingLuck);
+            armorStats.setFishingLuck(armorStats.getFishingLuck() + fishingLuck);
+        }
+        if (luck != null)
+        {
+            stats.setLuck(stats.getLuck() + luck);
+            armorStats.setLuck(armorStats.getLuck() + luck);
         }
     }
 
-    private void removeFortuneStats(Player player, Double mobFortune, Double miningFortune, Double foragingFortune, Double farmingFortune, Double fishingLuck)
+    private void removeFortuneStats(Player player, Double mobFortune, Double miningFortune, Double foragingFortune, Double farmingFortune, Double fishingLuck, Double luck)
     {
         StatPlayer statPlayer = new StatPlayer(player);
+        Stats stats = statPlayer.getStats();
+        ArmorStats armorStats = statPlayer.getArmorStats();
         LootStats lootStats = statPlayer.getLootStats();
 
         if (mobFortune != null)
         {
             lootStats.setBonusMobLoot(lootStats.getBonusMobLoot() - mobFortune);
+            armorStats.setMobFortune(armorStats.getMobFortune() - mobFortune);
         }
         if (miningFortune != null)
         {
             lootStats.setBonusOreLoot(lootStats.getBonusOreLoot() - miningFortune);
+            armorStats.setMiningFortune(armorStats.getMiningFortune() - miningFortune);
         }
         if (foragingFortune != null)
         {
             lootStats.setBonusWoodLoot(lootStats.getBonusWoodLoot() - foragingFortune);
+            armorStats.setForagingFortune(armorStats.getForagingFortune() - foragingFortune);
         }
         if (farmingFortune != null)
         {
             lootStats.setBonusFarmingLoot(lootStats.getBonusFarmingLoot() - farmingFortune);
+            armorStats.setFarmingFortune(armorStats.getFarmingFortune() - farmingFortune);
         }
         if (fishingLuck != null)
         {
             lootStats.setFishingLuck(lootStats.getFishingLuck() - fishingLuck);
+            armorStats.setFishingLuck(armorStats.getFishingLuck() - fishingLuck);
+        }
+        if (luck != null)
+        {
+            stats.setLuck(stats.getLuck() - luck);
+            armorStats.setLuck(armorStats.getLuck() - luck);
         }
     }
 
     private void addPotionStats(Player player, Double longevity, Double caffeination)
     {
         StatPlayer statPlayer = new StatPlayer(player);
+        ArmorStats armorStats = statPlayer.getArmorStats();
         PotionStats potionStats = statPlayer.getPotionStats();
 
         if (longevity != null)
         {
             potionStats.setLongevity(potionStats.getLongevity() + longevity);
+            armorStats.setLongevity(armorStats.getLongevity() + longevity);
         }
         if (caffeination != null)
         {
             potionStats.setCaffeination(potionStats.getCaffeination() + caffeination);
+            armorStats.setCaffeination(armorStats.getCaffeination() + caffeination);
         }
     }
 
     private void removePotionStats(Player player, Double longevity, Double caffeination)
     {
         StatPlayer statPlayer = new StatPlayer(player);
+        ArmorStats armorStats = statPlayer.getArmorStats();
         PotionStats potionStats = statPlayer.getPotionStats();
 
         if (longevity != null)
         {
             potionStats.setLongevity(potionStats.getLongevity() - longevity);
+            armorStats.setLongevity(armorStats.getLongevity() - longevity);
         }
         if (caffeination != null)
         {
             potionStats.setCaffeination(potionStats.getCaffeination() - caffeination);
+            armorStats.setCaffeination(armorStats.getCaffeination() - caffeination);
         }
     }
 

@@ -111,21 +111,22 @@ public class ItemRegistry implements Listener {
             {
                 if (eventInv.equals(player.getInventory()))
                 {
-                    renewItem(event.getCursor(), player);
+                    //renewItem(event.getCursor(), player);
+                    for (ItemStack itemStack : player.getInventory().getContents())
+                    {
+                        renewItem(itemStack, player);
+                    }
 
                 } else
                 {
                     if (isAnyPlayerInvTitle(event.getView().getTitle()))
                     {
-                        renewItem(event.getCursor(), player);
+                        renewItem(event.getCurrentItem(), player);
                     } else {
-                        renewItem(event.getCursor());
+                        renewItem(event.getCurrentItem());
                     }
                 }
-                for (ItemStack itemStack : player.getInventory().getContents())
-                {
-                    renewItem(itemStack, player);
-                }
+
             }
         }
     }
@@ -393,7 +394,8 @@ public class ItemRegistry implements Listener {
 
                 String menuItemKeyValue = itemForger.getMenuItemKey();
                 VentureMenuItem ventureMenuItem = VENTURE_MENU_ITEMS_MAP.get(menuItemKeyValue);
-                if (ventureMenuItem != null && VENTURE_MENU_ITEMS_MAP.containsKey(itemKeyValue))
+
+                if (ventureMenuItem != null && VENTURE_MENU_ITEMS_MAP.containsKey(menuItemKeyValue))
                 {
                     List<String> lore = ventureMenuItem.createLore(player);
                     if (lore != null)
@@ -422,8 +424,6 @@ public class ItemRegistry implements Listener {
 
                 if (itemMatchCount == 3) // Item is not an armor set item or a menu item
                 {
-                    itemMeta.setLore(itemMeta.getLore());
-                    itemStack.setItemMeta(itemMeta);
                     return itemStack;
                 }
 
