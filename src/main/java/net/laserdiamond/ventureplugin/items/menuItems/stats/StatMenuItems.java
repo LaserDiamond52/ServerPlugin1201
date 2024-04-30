@@ -4,6 +4,7 @@ import net.laserdiamond.ventureplugin.VenturePlugin;
 import net.laserdiamond.ventureplugin.entities.player.StatPlayer;
 import net.laserdiamond.ventureplugin.items.menuItems.util.MenuItem;
 import net.laserdiamond.ventureplugin.items.menuItems.util.VentureMenuItem;
+import net.laserdiamond.ventureplugin.items.util.VentureItemRarity;
 import net.laserdiamond.ventureplugin.stats.Components.ArmorStats;
 import net.laserdiamond.ventureplugin.stats.Components.DefenseStats;
 import net.laserdiamond.ventureplugin.util.StatSymbols;
@@ -680,7 +681,20 @@ public final class StatMenuItems {
             String luckString = ChatColor.GREEN + "Luck " + StatSymbols.LUCK.getSymbol();
 
             List<String> lore = new ArrayList<>();
+            lore.add(" ");
+            lore.add(fortuneString + ChatColor.GRAY + " grants a chance for gaining");
+            lore.add(ChatColor.GRAY + "more drops and finding rare drops");
+            lore.add(" ");
+            lore.add(luckString + ChatColor.GRAY + " increases the chance of a rare");
+            lore.add(ChatColor.GRAY + "event happening");
+            lore.add(" ");
+            lore.add(MORE_INFO);
 
+            // Fortune X grants a chance for gaining
+            // more drops and finding rare drops
+            //
+            // Luck X increases the chance of a rare
+            // event happening
 
 
             return lore;
@@ -700,17 +714,47 @@ public final class StatMenuItems {
             StatPlayer statPlayer = new StatPlayer(player);
             ArmorStats armorStats = statPlayer.getArmorStats();
 
-            String mobFortune = ChatColor.DARK_RED + "Looting " + StatSymbols.MOB_FORTUNE;
+            String mobFortuneString = ChatColor.DARK_RED + "Looting " + StatSymbols.MOB_FORTUNE.getSymbol();
+            String commonRarity = VentureItemRarity.Rarity.COMMON.getRarityColor() + VentureItemRarity.Rarity.COMMON.getDisplayName();
+
+            double mobFortune = statPlayer.getLootStats().getBonusMobLoot();
+
+            double chance = getLastTwoDigitsChance(mobFortune);
+            double guaranteedChance = getGuaranteedChance(mobFortune);
 
             List<String> lore = new ArrayList<>();
 
             lore.add(" ");
-            lore.add(mobFortune + ChatColor.GRAY + " increases the amount of ");
+            lore.add(mobFortuneString + ChatColor.GRAY + " increases the amount of loot");
+            lore.add(ChatColor.GRAY + "dropped from mobs you kill");
+            lore.add(" ");
+            lore.add(ChatColor.GRAY + "The last two digits of your " + mobFortuneString);
+            lore.add(ChatColor.GRAY + "is the chance for you to receive +" + ChatColor.DARK_RED + 1);
+            lore.add(ChatColor.GRAY + "extra " + commonRarity + ChatColor.GRAY + " loot drop");
+            lore.add(" ");
+            lore.add(ChatColor.GRAY + "Chance for +" + ChatColor.DARK_RED + 1 + ChatColor.GRAY + " extra " + commonRarity + ChatColor.GRAY + " loot drop: ");
+            lore.add(" ");
+            lore.add(ChatColor.GRAY + "Every " + ChatColor.YELLOW + 100 + " " + mobFortuneString + ChatColor.GRAY + " guarantees +" + ChatColor.DARK_RED + 1 + ChatColor.GRAY + " of a");
+            lore.add(commonRarity + ChatColor.GRAY + " loot drop");
+            lore.add(" ");
+            lore.add(ChatColor.GRAY + "Extra " + commonRarity + ChatColor.GRAY + " loot drop amount: ");
+            lore.add(" ");
+
+
 
             // Looting X increases the amount of loot
             // dropped from mobs you kill
             //
+            // The last two digits of your Looting X
+            // is the chance for you to receive +1
+            // extra Common loot drop
             //
+            // Chance for +1 extra Common loot drop:
+            //
+            // Every 100 Looting X guarantees +1 of a
+            // Common loot drop
+            //
+            // Extra Common loot drop amount:
             //
             return lore;
         }
@@ -894,8 +938,8 @@ public final class StatMenuItems {
             StatPlayer statPlayer = new StatPlayer(player);
             double caffeination = statPlayer.getPotionStats().getCaffeination();
 
-            double chance = caffeination % 100;
-            int guaranteed = (int) Math.floor(caffeination / 100);
+            double chance = getLastTwoDigitsChance(caffeination);
+            int guaranteed = getGuaranteedChance(caffeination);
 
             List<String> lore = new ArrayList<>();
 
@@ -906,7 +950,7 @@ public final class StatMenuItems {
             lore.add(" ");
             lore.add(ChatColor.GRAY + "Current " + ChatColor.LIGHT_PURPLE + "Caffeination " + StatSymbols.CAFFEINATION.getSymbol() + ChatColor.GRAY + ": " + ChatColor.YELLOW + caffeination);
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "The last two digits of your " + ChatColor.LIGHT_PURPLE + "Caffeination " + StatSymbols.CAFFEINATION.getSymbol() + ChatColor.GRAY + " are");
+            lore.add(ChatColor.GRAY + "The last two digits of your " + ChatColor.LIGHT_PURPLE + "Caffeination " + StatSymbols.CAFFEINATION.getSymbol() + ChatColor.GRAY + " is");
             lore.add(ChatColor.GRAY + "the chance for you to gain +" + ChatColor.LIGHT_PURPLE + 1 + " Amplifier Level");
             lore.add(" ");
             lore.add(ChatColor.GRAY + "Chance for +" + ChatColor.LIGHT_PURPLE + 1 + " Amplifier Level" + ChatColor.GRAY + ": " + ChatColor.YELLOW + chance);
@@ -922,7 +966,7 @@ public final class StatMenuItems {
             // Amplifier of positive potion effects consumed
             // from potions
             //
-            // The last two digits of your Caffeination X are
+            // The last two digits of your Caffeination X is
             // the chance for you to gain +1 Amplifier Level
             //
             // Every 100 Caffeination X guarantees +1 Amplifier
@@ -931,6 +975,16 @@ public final class StatMenuItems {
             return lore;
         }
     };
+
+    private static int getGuaranteedChance(double statAmount)
+    {
+        return (int) Math.floor(statAmount / 100);
+    }
+
+    private static double getLastTwoDigitsChance(double statAmount)
+    {
+        return statAmount % 100;
+    }
 
     public enum StatItemSlots
     {
