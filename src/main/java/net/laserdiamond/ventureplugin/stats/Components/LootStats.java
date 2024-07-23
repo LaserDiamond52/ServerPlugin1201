@@ -2,51 +2,51 @@ package net.laserdiamond.ventureplugin.stats.Components;
 
 public class LootStats {
 
-    private double bonusMobLoot;
-    private double bonusOreLoot;
-    private double bonusWoodLoot;
-    private double bonusFarmingLoot;
+    private double mobLooting;
+    private double miningFortune;
+    private double foragingFortune;
+    private double farmingFortune;
     private double fishingLuck;
 
-    public LootStats(double bonusMobLoot, double bonusOreLoot, double bonusWoodLoot, double bonusFarmingLoot, double fishingLuck)
+    public LootStats(double mobLooting, double miningFortune, double foragingFortune, double farmingFortune, double fishingLuck)
     {
-        this.bonusMobLoot = bonusMobLoot;
-        this.bonusOreLoot = bonusOreLoot;
-        this.bonusWoodLoot = bonusWoodLoot;
-        this.bonusFarmingLoot = bonusFarmingLoot;
+        this.mobLooting = mobLooting;
+        this.miningFortune = miningFortune;
+        this.foragingFortune = foragingFortune;
+        this.farmingFortune = farmingFortune;
         this.fishingLuck = fishingLuck;
     }
 
-    public double getBonusMobLoot() {
-        return bonusMobLoot;
+    public double getMobLooting() {
+        return mobLooting;
     }
 
-    public void setBonusMobLoot(double bonusMobLoot) {
-        this.bonusMobLoot = bonusMobLoot;
+    public void setMobLooting(double mobLooting) {
+        this.mobLooting = mobLooting;
     }
 
-    public double getBonusOreLoot() {
-        return bonusOreLoot;
+    public double getMiningFortune() {
+        return miningFortune;
     }
 
-    public void setBonusOreLoot(double bonusOreLoot) {
-        this.bonusOreLoot = bonusOreLoot;
+    public void setMiningFortune(double miningFortune) {
+        this.miningFortune = miningFortune;
     }
 
-    public double getBonusWoodLoot() {
-        return bonusWoodLoot;
+    public double getForagingFortune() {
+        return foragingFortune;
     }
 
-    public void setBonusWoodLoot(double bonusWoodLoot) {
-        this.bonusWoodLoot = bonusWoodLoot;
+    public void setForagingFortune(double foragingFortune) {
+        this.foragingFortune = foragingFortune;
     }
 
-    public double getBonusFarmingLoot() {
-        return bonusFarmingLoot;
+    public double getFarmingFortune() {
+        return farmingFortune;
     }
 
-    public void setBonusFarmingLoot(double bonusFarmingLoot) {
-        this.bonusFarmingLoot = bonusFarmingLoot;
+    public void setFarmingFortune(double farmingFortune) {
+        this.farmingFortune = farmingFortune;
     }
 
     public double getFishingLuck() {

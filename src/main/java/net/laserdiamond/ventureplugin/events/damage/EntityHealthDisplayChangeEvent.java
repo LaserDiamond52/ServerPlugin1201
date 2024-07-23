@@ -11,11 +11,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
 
+/**
+ * This event is called when the health in the display name of a mob changes due to healing, damage, etc.
+ */
 public class EntityHealthDisplayChangeEvent extends EntityEvent implements Cancellable {
 
-    /**
-     * This event is called when the health in the display name of a mob changes due to healing, damage, etc.
-     */
+
     private final double amount;
     private final boolean isDamage;
     private boolean isCancelled;

@@ -1,13 +1,11 @@
 package net.laserdiamond.ventureplugin.items.armor.armor_sets;
 
-import net.laserdiamond.ventureplugin.items.armor.util.VentureArmorSet;
+import net.laserdiamond.ventureplugin.items.armor.VentureArmorSet;
 import net.laserdiamond.ventureplugin.items.util.ItemStringBuilder;
-import net.laserdiamond.ventureplugin.util.File.ArmorConfig;
 import net.laserdiamond.ventureplugin.VenturePlugin;
 import net.laserdiamond.ventureplugin.items.util.VentureItemRarity;
-import net.laserdiamond.ventureplugin.items.armor.util.ArmorCMD;
-import net.laserdiamond.ventureplugin.items.armor.util.ArmorPieceTypes;
-import org.bukkit.Material;
+import net.laserdiamond.ventureplugin.items.armor.VentureArmorMaterial;
+import net.laserdiamond.ventureplugin.items.armor.ArmorPieceTypes;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
@@ -26,13 +24,8 @@ public final class NetheriteArmor extends VentureArmorSet {
     }
 
     @Override
-    public ArmorCMD armorCMD() {
-        return ArmorCMD.NETHERITE_ARMOR;
-    }
-
-    @Override
-    protected ArmorConfig config() {
-        return plugin.getNetheriteArmorConfig();
+    public VentureArmorMaterial ventureArmorMaterial() {
+        return VentureArmorMaterial.NETHERITE_ARMOR;
     }
 
     @Override
@@ -43,19 +36,6 @@ public final class NetheriteArmor extends VentureArmorSet {
     @Override
     protected VentureItemRarity.Rarity rarity() {
         return super.rarity();
-    }
-
-    @Override
-    protected Material armorPieceMaterials(ArmorPieceTypes armorPieceTypes) {
-        Material material = null;
-        switch (armorPieceTypes)
-        {
-            case HELMET -> material = Material.NETHERITE_HELMET;
-            case CHESTPLATE -> material = Material.NETHERITE_CHESTPLATE;
-            case LEGGINGS -> material = Material.NETHERITE_LEGGINGS;
-            case BOOTS -> material = Material.NETHERITE_BOOTS;
-        }
-        return material;
     }
 
     @Override

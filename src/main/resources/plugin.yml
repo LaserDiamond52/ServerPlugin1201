@@ -64,6 +64,9 @@ permissions:
   venture.enchant:
     description: Gives access to the /pluginenchant command and its aliases
 
+  venture.summon_mobs:
+    description: Allows players to summon mobs of this plugin
+
 commands:
 
   plugineffect:
@@ -127,3 +130,11 @@ commands:
     description: allows players to add to or reset their skill exp for a skill
     usage: /<command> <arg> <arg> <arg> <arg>
     permission: venture.edit_skills
+
+  summonventuremob:
+    description: allows players to summon a mob of this plugin
+    usage: /<command> <arg> <arg>
+    permission: venture.summon_mobs
+    aliases:
+      - venturesummon
+      - venturemob

@@ -8,15 +8,13 @@ import net.laserdiamond.ventureplugin.events.abilities.AbilityHandler;
 import net.laserdiamond.ventureplugin.events.abilities.cooldown.SniperCooldown;
 import net.laserdiamond.ventureplugin.events.mana.PlayerSpellCastEvent;
 import net.laserdiamond.ventureplugin.items.util.VentureItemRarity;
-import net.laserdiamond.ventureplugin.items.armor.util.ArmorCMD;
-import net.laserdiamond.ventureplugin.items.armor.util.ArmorPieceTypes;
-import net.laserdiamond.ventureplugin.items.armor.util.VentureArmorSet;
+import net.laserdiamond.ventureplugin.items.armor.VentureArmorMaterial;
+import net.laserdiamond.ventureplugin.items.armor.ArmorPieceTypes;
+import net.laserdiamond.ventureplugin.items.armor.VentureArmorSet;
 import net.laserdiamond.ventureplugin.stats.Components.Stats;
-import net.laserdiamond.ventureplugin.util.File.ArmorConfig;
 import net.laserdiamond.ventureplugin.util.messages.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -41,31 +39,13 @@ public final class BoneTerrorArmor extends VentureArmorSet implements AbilityCas
     }
 
     @Override
-    protected ArmorConfig config() {
-        return plugin.getBoneTerrorArmorConfig();
-    }
-
-    @Override
     protected String armorName() {
         return "Bone Terror";
     }
 
     @Override
-    public ArmorCMD armorCMD() {
-        return ArmorCMD.BONE_TERROR;
-    }
-
-    @Override
-    protected Material armorPieceMaterials(ArmorPieceTypes armorPieceTypes) {
-        Material material = null;
-        switch (armorPieceTypes)
-        {
-            case HELMET -> material = Material.PLAYER_HEAD;
-            case CHESTPLATE -> material = Material.LEATHER_CHESTPLATE;
-            case LEGGINGS -> material = Material.LEATHER_LEGGINGS;
-            case BOOTS -> material = Material.LEATHER_BOOTS;
-        }
-        return material;
+    public VentureArmorMaterial ventureArmorMaterial() {
+        return VentureArmorMaterial.BONE_TERROR;
     }
 
     @Override
@@ -76,10 +56,10 @@ public final class BoneTerrorArmor extends VentureArmorSet implements AbilityCas
     @Override
     public LinkedList<String> createLore(@NotNull ArmorPieceTypes armorPieceTypes, int stars) {
 
-        double arrowDamageMultiplier = config().getDouble("arrowDamageMultiplier");
-        double manaCost = config().getDouble("manaCost");
-        double cooldown = config().getDouble("cooldown");
-        String abilityName = config().getString("abilityName");
+        double arrowDamageMultiplier = getArmorConfig().getDouble("arrowDamageMultiplier");
+        double manaCost = getArmorConfig().getDouble("manaCost");
+        double cooldown = getArmorConfig().getDouble("cooldown");
+        String abilityName = getArmorConfig().getString("abilityName");
 
         LinkedList<String> lore = super.createLore(armorPieceTypes, stars);
         lore.add(ChatColor.GOLD + "Full Set Bonus: " + abilityName + ChatColor.YELLOW + ChatColor.BOLD + " Press Sneak");
@@ -98,10 +78,10 @@ public final class BoneTerrorArmor extends VentureArmorSet implements AbilityCas
         Player player = event.getPlayer();
         StatPlayer statPlayer = new StatPlayer(player);
         Stats stats = statPlayer.getStats();
-        double manaCost = config().getDouble("manaCost");
-        int cooldown = config().getInt("cooldown");
+        double manaCost = getArmorConfig().getDouble("manaCost");
+        int cooldown = getArmorConfig().getInt("cooldown");
         double availableMana = stats.getAvailableMana();
-        String abilityName = config().getString("abilityName");
+        String abilityName = getArmorConfig().getString("abilityName");
 
         PlayerSpellCastEvent spellCastEvent = new PlayerSpellCastEvent(player, manaCost);
         double eventCost = spellCastEvent.getManaCost();
@@ -159,7 +139,7 @@ public final class BoneTerrorArmor extends VentureArmorSet implements AbilityCas
                         if (arrowBonusMap.get(player.getUniqueId()))
                         {
                             double damage = event.getDamage();
-                            double damageMultiplier = config().getDouble("arrowDamageMultiplier");
+                            double damageMultiplier = getArmorConfig().getDouble("arrowDamageMultiplier");
                             event.setDamage(damage * damageMultiplier);
 
                             arrowBonusMap.put(player.getUniqueId(), false);

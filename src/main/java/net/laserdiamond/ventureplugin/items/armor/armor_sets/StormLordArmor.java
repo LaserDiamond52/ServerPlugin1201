@@ -8,16 +8,14 @@ import net.laserdiamond.ventureplugin.events.damage.PlayerMagicDamageEvent;
 import net.laserdiamond.ventureplugin.events.mana.PlayerSpellCastEvent;
 import net.laserdiamond.ventureplugin.items.util.ItemStringBuilder;
 import net.laserdiamond.ventureplugin.items.util.VentureItemRarity;
-import net.laserdiamond.ventureplugin.items.armor.util.ArmorCMD;
-import net.laserdiamond.ventureplugin.items.armor.util.ArmorPieceTypes;
+import net.laserdiamond.ventureplugin.items.armor.VentureArmorMaterial;
+import net.laserdiamond.ventureplugin.items.armor.ArmorPieceTypes;
 import net.laserdiamond.ventureplugin.events.abilities.*;
-import net.laserdiamond.ventureplugin.items.armor.util.VentureArmorSet;
-import net.laserdiamond.ventureplugin.util.File.ArmorConfig;
+import net.laserdiamond.ventureplugin.items.armor.VentureArmorSet;
 import net.laserdiamond.ventureplugin.util.messages.Messages;
 import net.laserdiamond.ventureplugin.stats.Components.Stats;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -42,13 +40,8 @@ public final class StormLordArmor extends VentureArmorSet implements AbilityCast
     }
 
     @Override
-    protected ArmorConfig config() {
-        return plugin.getStormLordArmorConfig();
-    }
-
-    @Override
-    public ArmorCMD armorCMD() {
-        return ArmorCMD.STORM_LORD_ARMOR;
+    public VentureArmorMaterial ventureArmorMaterial() {
+        return VentureArmorMaterial.STORM_LORD_ARMOR;
     }
 
     @Override
@@ -67,25 +60,12 @@ public final class StormLordArmor extends VentureArmorSet implements AbilityCast
     }
 
     @Override
-    protected Material armorPieceMaterials(ArmorPieceTypes armorPieceTypes) {
-        Material material = null;
-        switch (armorPieceTypes)
-        {
-            case HELMET -> material = Material.PLAYER_HEAD;
-            case CHESTPLATE -> material = Material.LEATHER_CHESTPLATE;
-            case LEGGINGS -> material = Material.LEATHER_LEGGINGS;
-            case BOOTS -> material = Material.LEATHER_BOOTS;
-        }
-        return material;
-    }
-
-    @Override
     public LinkedList<String> createLore(@NotNull ArmorPieceTypes armorPieceTypes, int stars) {
-        int blastRadius = config().getInt("blastRadius");
-        int weaknessLvl = config().getInt("weaknessLvl");
-        double weaknessDuration = config().getDouble("weaknessDuration");
-        int cooldown = config().getInt("cooldown");
-        double manaCost = config().getDouble("manaCost");
+        int blastRadius = getArmorConfig().getInt("blastRadius");
+        int weaknessLvl = getArmorConfig().getInt("weaknessLvl");
+        double weaknessDuration = getArmorConfig().getDouble("weaknessDuration");
+        int cooldown = getArmorConfig().getInt("cooldown");
+        double manaCost = getArmorConfig().getDouble("manaCost");
 
         LinkedList<String> lore = super.createLore(armorPieceTypes, stars);
         lore.add(ChatColor.GOLD + "Full Set Bonus: Eye of the Storm" + ChatColor.YELLOW + " " + ChatColor.BOLD + "Press Q");
@@ -124,11 +104,11 @@ public final class StormLordArmor extends VentureArmorSet implements AbilityCast
     @Override
     public LinkedList<String> createPlayerLore(@NotNull Player player, @NotNull ArmorPieceTypes armorPieceTypes, int stars) {
 
-        int blastRadius = config().getInt("blastRadius");
-        int weaknessLvl = config().getInt("weaknessLvl");
-        double weaknessDuration = config().getDouble("weaknessDuration");
-        int cooldown = config().getInt("cooldown");
-        double manaCost = config().getDouble("manaCost");
+        int blastRadius = getArmorConfig().getInt("blastRadius");
+        int weaknessLvl = getArmorConfig().getInt("weaknessLvl");
+        double weaknessDuration = getArmorConfig().getDouble("weaknessDuration");
+        int cooldown = getArmorConfig().getInt("cooldown");
+        double manaCost = getArmorConfig().getDouble("manaCost");
 
         ItemStack mainHand = player.getInventory().getItemInMainHand();
         ItemMeta mainHandMeta = mainHand.getItemMeta();
@@ -142,7 +122,7 @@ public final class StormLordArmor extends VentureArmorSet implements AbilityCast
         if (mainHandMeta != null && mainHandMeta.hasEnchant(VentureEnchants.THUNDER_STRIKE))
         {
             int enchantLvl = mainHandMeta.getEnchantLevel(VentureEnchants.THUNDER_STRIKE);
-            double baseDamage = config().getDouble("baseDamage");
+            double baseDamage = getArmorConfig().getDouble("baseDamage");
             double finalDamage = baseDamage + Math.pow(enchantLvl, 2);
 
             lore.add(ChatColor.GRAY + "that deals " + ChatColor.AQUA + finalDamage + ChatColor.RESET + ChatColor.GRAY + " base damage to nearby mobs in a " + ChatColor.GOLD + blastRadius + ChatColor.GRAY + " block");
@@ -173,12 +153,12 @@ public final class StormLordArmor extends VentureArmorSet implements AbilityCast
         Player player = event.getPlayer();
         StatPlayer statPlayer = new StatPlayer(player);
         Stats stats = statPlayer.getStats();
-        String abilityName = config().getString("abilityName");
+        String abilityName = getArmorConfig().getString("abilityName");
         double availableMana = stats.getAvailableMana();
-        double manaCost = config().getDouble("manaCost");
-        int cooldown = config().getInt("cooldown");
-        double baseDamage = config().getDouble("baseDamage");
-        double blastRadius = config().getDouble("blastRadius");
+        double manaCost = getArmorConfig().getDouble("manaCost");
+        int cooldown = getArmorConfig().getInt("cooldown");
+        double baseDamage = getArmorConfig().getDouble("baseDamage");
+        double blastRadius = getArmorConfig().getDouble("blastRadius");
 
         PlayerSpellCastEvent spellCastEvent = new PlayerSpellCastEvent(player, manaCost);
         double eventCost = spellCastEvent.getManaCost();

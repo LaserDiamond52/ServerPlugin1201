@@ -2,7 +2,7 @@ package net.laserdiamond.ventureplugin.items.menuItems.util;
 
 import net.laserdiamond.ventureplugin.VenturePlugin;
 import net.laserdiamond.ventureplugin.events.skills.SkillsExpGainEvent;
-import net.laserdiamond.ventureplugin.items.util.ItemForger;
+import net.laserdiamond.ventureplugin.items.util.VentureItemBuilder;
 import net.laserdiamond.ventureplugin.items.util.ItemStringBuilder;
 import net.laserdiamond.ventureplugin.skills.Components.SkillsEXP;
 import net.laserdiamond.ventureplugin.skills.Components.SkillsLevel;
@@ -34,10 +34,10 @@ public abstract class VentureSkillProgressItem {
 
     public abstract SkillsExpGainEvent.Skill getSkill();
 
-    public final ItemForger skillProgressItem(int skillLevel, SkillsProfile skillsProfile)
+    public final VentureItemBuilder skillProgressItem(int skillLevel, SkillsProfile skillsProfile)
     {
         int finalSkillLevel = Math.max(Math.min(skillLevel, 50), 1);
-        ItemForger itemForger = new ItemForger(Material.STONE, finalSkillLevel)
+        VentureItemBuilder ventureItemBuilder = new VentureItemBuilder(Material.STONE, finalSkillLevel)
                 .setSkillProgressSkill(getSkill())
                 .setSkillProgressLvl(skillLevel);
         SkillsLevel skillsLevel = skillsProfile.skillsLevel();
@@ -57,7 +57,7 @@ public abstract class VentureSkillProgressItem {
             switch (getSkill())
             {
                 case COMBAT -> {
-                    itemForger.setName(ChatColor.DARK_RED + "Combat " + skillLevel);
+                    ventureItemBuilder.setName(ChatColor.DARK_RED + "Combat " + skillLevel);
                     playerSkill = skillsLevel.getCombatLevel();
                     expToNextLevel = skillsEXP.getCombatExpToNextLevel();
                     requiredExpToNextLevel = skillsEXP.getRequiredCombatExpToNextLevel();
@@ -67,7 +67,7 @@ public abstract class VentureSkillProgressItem {
                     lore.add(ChatColor.WHITE + " Deal " + ChatColor.DARK_GRAY + previousDamageBonus + "->" + ChatColor.DARK_RED + damageBonus + "%" + ChatColor.WHITE + " more damage");
                 }
                 case MINING -> {
-                    itemForger.setName(ChatColor.DARK_BLUE + "Mining " + skillLevel);
+                    ventureItemBuilder.setName(ChatColor.DARK_BLUE + "Mining " + skillLevel);
                     playerSkill = skillsLevel.getMiningLevel();
                     expToNextLevel = skillsEXP.getMiningExpToNextLevel();
                     requiredExpToNextLevel = skillsEXP.getRequiredMiningExpToNextLevel();
@@ -80,7 +80,7 @@ public abstract class VentureSkillProgressItem {
                     lore.add(ChatColor.WHITE + " Gain " + ChatColor.DARK_GRAY + previousDefenseBonus + "->" + ChatColor.GREEN + defenseBonus + StatSymbols.DEFENSE.getSymbol() + ChatColor.WHITE + " more Defense");
                 }
                 case FORAGING -> {
-                    itemForger.setName(ChatColor.DARK_GREEN + "Foraging " + skillLevel);
+                    ventureItemBuilder.setName(ChatColor.DARK_GREEN + "Foraging " + skillLevel);
                     playerSkill = skillsLevel.getForagingLevel();
                     expToNextLevel = skillsEXP.getForagingExpToNextLevel();
                     requiredExpToNextLevel = skillsEXP.getRequiredForagingExpToNextLevel();
@@ -90,7 +90,7 @@ public abstract class VentureSkillProgressItem {
                     lore.add(ChatColor.WHITE + " Gain " + ChatColor.DARK_GRAY + previousFortuneBonus + "->" + ChatColor.GREEN + fortuneBonus + StatSymbols.FORAGING_FORTUNE.getSymbol() + ChatColor.WHITE + " more Foraging Fortune");
                 }
                 case FARMING -> {
-                    itemForger.setName(ChatColor.GREEN + "Farming " + skillLevel);
+                    ventureItemBuilder.setName(ChatColor.GREEN + "Farming " + skillLevel);
                     playerSkill = skillsLevel.getFarmingLevel();
                     expToNextLevel = skillsEXP.getFarmingExpToNextLevel();
                     requiredExpToNextLevel = skillsEXP.getRequiredFarmingExpToNextLevel();
@@ -100,7 +100,7 @@ public abstract class VentureSkillProgressItem {
                     lore.add(ChatColor.WHITE + " Gain " + ChatColor.DARK_GRAY + previousFortuneBonus + "->" + ChatColor.GREEN + fortuneBonus + StatSymbols.FARMING_FORTUNE.getSymbol() + ChatColor.WHITE + " more Farming Fortune");
                 }
                 case ENCHANTING -> {
-                    itemForger.setName(ChatColor.LIGHT_PURPLE + "Enchanting " + skillLevel);
+                    ventureItemBuilder.setName(ChatColor.LIGHT_PURPLE + "Enchanting " + skillLevel);
                     playerSkill = skillsLevel.getEnchantingLevel();
                     expToNextLevel = skillsEXP.getEnchantingExpToNextLevel();
                     requiredExpToNextLevel = skillsEXP.getRequiredEnchantingExpToNextLevel();
@@ -110,7 +110,7 @@ public abstract class VentureSkillProgressItem {
                     lore.add(ChatColor.WHITE + " Gain " + ChatColor.DARK_GRAY + previousManaBonus + "->" + ChatColor.BLUE + manaBonus + StatSymbols.MANA.getSymbol() + ChatColor.WHITE + " more Mana");
                 }
                 case FISHING -> {
-                    itemForger.setName(ChatColor.AQUA + "Fishing " + skillLevel);
+                    ventureItemBuilder.setName(ChatColor.AQUA + "Fishing " + skillLevel);
                     playerSkill = skillsLevel.getFishingLevel();
                     expToNextLevel = skillsEXP.getFishingExpToNextLevel();
                     requiredExpToNextLevel = skillsEXP.getRequiredFishingExpToNextLevel();
@@ -120,7 +120,7 @@ public abstract class VentureSkillProgressItem {
                     lore.add(ChatColor.WHITE + " Gain " + ChatColor.DARK_GRAY + previousFishingLuckBonus + "->" + ChatColor.GREEN + fishingLuckBonus + StatSymbols.FISHING_LUCK.getSymbol() + ChatColor.WHITE + " more Fishing Luck");
                 }
                 case BREWING -> {
-                    itemForger.setName(ChatColor.BLUE + "Brewing " + skillLevel);
+                    ventureItemBuilder.setName(ChatColor.BLUE + "Brewing " + skillLevel);
                     playerSkill = skillsLevel.getBrewingLevel();
                     expToNextLevel = skillsEXP.getBrewingExpToNextLevel();
                     requiredExpToNextLevel = skillsEXP.getRequiredBrewingExpToNextLevel();
@@ -137,20 +137,20 @@ public abstract class VentureSkillProgressItem {
             int newLvl = playerSkill + 1;
             if (skillLevel == newLvl)
             {
-                itemForger.setMaterial(Material.YELLOW_TERRACOTTA);
+                ventureItemBuilder.setMaterial(Material.YELLOW_TERRACOTTA);
                 lore.addLast(ChatColor.GOLD + "Progress to Level " + newLvl + ": " + ChatColor.YELLOW + expToNextLevel + ChatColor.WHITE + "/" + ChatColor.RED + requiredExpToNextLevel);
             } else if (skillLevel > newLvl)
             {
-                itemForger.setMaterial(Material.RED_TERRACOTTA);
+                ventureItemBuilder.setMaterial(Material.RED_TERRACOTTA);
                 lore.addLast(ChatColor.RED + "You have not reached this level yet!");
             } else if (skillLevel < newLvl)
             {
-                itemForger.setMaterial(Material.LIME_TERRACOTTA);
+                ventureItemBuilder.setMaterial(Material.LIME_TERRACOTTA);
                 lore.addLast(ChatColor.GREEN + "Level Completed!");
             }
         } else
         {
-            itemForger.setAmount(1);
+            ventureItemBuilder.setAmount(1);
             int playerSkill = 0;
 
             lore.add(ChatColor.GRAY + "Gain " + ItemStringBuilder.capitalizeFirstLetter(getSkill().name()) + " experience by");
@@ -164,14 +164,14 @@ public abstract class VentureSkillProgressItem {
             switch (getSkill())
             {
                 case COMBAT -> {
-                    itemForger.setMaterial(MenuItem.SKILL_COMBAT.getMaterial())
+                    ventureItemBuilder.setMaterial(MenuItem.SKILL_COMBAT.getMaterial())
                             .setName(ChatColor.DARK_RED + "Combat");
                     playerSkill = skillsLevel.getCombatLevel();
                     lore.add(ChatColor.GRAY + "killing mobs and slaying");
                     lore.add(ChatColor.GRAY + "bosses across the lands");
                 }
                 case MINING -> {
-                    itemForger.setMaterial(MenuItem.SKILL_MINING.getMaterial())
+                    ventureItemBuilder.setMaterial(MenuItem.SKILL_MINING.getMaterial())
                             .setName(ChatColor.DARK_BLUE + "Mining");
                     playerSkill = skillsLevel.getMiningLevel();
                     lore.add(ChatColor.GRAY + "mining ores, stones, and");
@@ -179,20 +179,20 @@ public abstract class VentureSkillProgressItem {
                     lore.add(ChatColor.GRAY + "underground");
                 }
                 case FORAGING -> {
-                    itemForger.setMaterial(MenuItem.SKILL_FORAGING.getMaterial())
+                    ventureItemBuilder.setMaterial(MenuItem.SKILL_FORAGING.getMaterial())
                             .setName(ChatColor.DARK_GREEN + "Foraging");
                     playerSkill = skillsLevel.getForagingLevel();
                     lore.add(ChatColor.GRAY + "chopping down trees, plants,");
                     lore.add(ChatColor.GRAY + "and foliage");
                 }
                 case FARMING -> {
-                    itemForger.setMaterial(MenuItem.SKILL_FARMING.getMaterial())
+                    ventureItemBuilder.setMaterial(MenuItem.SKILL_FARMING.getMaterial())
                             .setName(ChatColor.GREEN + "Farming");
                     playerSkill = skillsLevel.getFarmingLevel();
                     lore.add(ChatColor.GRAY + "harvesting crops and plants");
                 }
                 case ENCHANTING -> {
-                    itemForger.setMaterial(MenuItem.SKILL_ENCHANTING.getMaterial())
+                    ventureItemBuilder.setMaterial(MenuItem.SKILL_ENCHANTING.getMaterial())
                             .setName(ChatColor.LIGHT_PURPLE + "Enchanting");
                     playerSkill = skillsLevel.getEnchantingLevel();
                     lore.add(ChatColor.GRAY + "enchanting equipment and gear with");
@@ -200,14 +200,14 @@ public abstract class VentureSkillProgressItem {
                     lore.add(ChatColor.GRAY + "journey across different lands");
                 }
                 case FISHING -> {
-                    itemForger.setMaterial(MenuItem.SKILL_FISHING.getMaterial())
+                    ventureItemBuilder.setMaterial(MenuItem.SKILL_FISHING.getMaterial())
                             .setName(ChatColor.AQUA + "Fishing");
                     playerSkill = skillsLevel.getFishingLevel();
                     lore.add(ChatColor.GRAY + "fishing up treasures and");
                     lore.add(ChatColor.GRAY + "rare sea creatures");
                 }
                 case BREWING -> {
-                    itemForger.setMaterial(MenuItem.SKILL_BREWING.getMaterial())
+                    ventureItemBuilder.setMaterial(MenuItem.SKILL_BREWING.getMaterial())
                             .setName(ChatColor.BLUE + "Brewing");
                     playerSkill = skillsLevel.getBrewingLevel();
                     lore.add(ChatColor.GRAY + "brewing up potions to assist");
@@ -219,9 +219,9 @@ public abstract class VentureSkillProgressItem {
             lore.add(ChatColor.GOLD + "Current " + ItemStringBuilder.capitalizeFirstLetter(getSkill().name()) + " Level: " + playerSkill);
 
         }
-        itemForger.hideAllItemFlags();
-        itemForger.setLore(lore);
+        ventureItemBuilder.hideAllItemFlags();
+        ventureItemBuilder.setLore(lore);
 
-        return itemForger;
+        return ventureItemBuilder;
     }
 }

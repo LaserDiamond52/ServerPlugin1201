@@ -7,7 +7,9 @@ import net.laserdiamond.ventureplugin.items.menuItems.util.VentureMenuItem;
 import net.laserdiamond.ventureplugin.items.util.VentureItemRarity;
 import net.laserdiamond.ventureplugin.stats.Components.ArmorStats;
 import net.laserdiamond.ventureplugin.stats.Components.DefenseStats;
+import net.laserdiamond.ventureplugin.stats.Components.LootStats;
 import net.laserdiamond.ventureplugin.util.StatSymbols;
+import net.laserdiamond.ventureplugin.util.VentureMath;
 import org.bukkit.ChatColor;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
@@ -646,8 +648,7 @@ public final class StatMenuItems {
 
             StatPlayer statPlayer = new StatPlayer(player);
 
-            double
-                    totalFortitude = statPlayer.getDefenseStats().getFortitude(player),
+            double totalFortitude = statPlayer.getDefenseStats().getFortitude(),
                     armorFortitude = statPlayer.getArmorStats().getFortitude();
 
             String fortitudeString = ChatColor.DARK_GREEN + "Fortitude " + StatSymbols.FORTITUDE.getSymbol();
@@ -712,15 +713,17 @@ public final class StatMenuItems {
         public List<String> createLore(Player player) {
 
             StatPlayer statPlayer = new StatPlayer(player);
+            LootStats lootStats = statPlayer.getLootStats();
             ArmorStats armorStats = statPlayer.getArmorStats();
 
             String mobFortuneString = ChatColor.DARK_RED + "Looting " + StatSymbols.MOB_FORTUNE.getSymbol();
             String commonRarity = VentureItemRarity.Rarity.COMMON.getRarityColor() + VentureItemRarity.Rarity.COMMON.getDisplayName();
 
-            double mobFortune = statPlayer.getLootStats().getBonusMobLoot();
+            double mobFortune = lootStats.getMobLooting();
 
-            double chance = getLastTwoDigitsChance(mobFortune);
-            double guaranteedChance = getGuaranteedChance(mobFortune);
+            double chance = VentureMath.getLastTwoDigitsChanceFromChance(mobFortune);
+            double guaranteedChance = VentureMath.getGuaranteedFromChance(mobFortune);
+
 
             List<String> lore = new ArrayList<>();
 
@@ -732,18 +735,19 @@ public final class StatMenuItems {
             lore.add(ChatColor.GRAY + "is the chance for you to receive +" + ChatColor.DARK_RED + 1);
             lore.add(ChatColor.GRAY + "extra " + commonRarity + ChatColor.GRAY + " loot drop");
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Chance for +" + ChatColor.DARK_RED + 1 + ChatColor.GRAY + " extra " + commonRarity + ChatColor.GRAY + " loot drop: ");
+            lore.add(ChatColor.GRAY + "Chance for +" + ChatColor.DARK_RED + 1 + ChatColor.GRAY + " extra " + commonRarity + ChatColor.GRAY + " loot drop: " + ChatColor.YELLOW + chance + "%");
             lore.add(" ");
             lore.add(ChatColor.GRAY + "Every " + ChatColor.YELLOW + 100 + " " + mobFortuneString + ChatColor.GRAY + " guarantees +" + ChatColor.DARK_RED + 1 + ChatColor.GRAY + " of a");
             lore.add(commonRarity + ChatColor.GRAY + " loot drop");
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Extra " + commonRarity + ChatColor.GRAY + " loot drop amount: ");
+            lore.add(ChatColor.GRAY + "Extra " + commonRarity + ChatColor.GRAY + " loot drop amount: " + ChatColor.YELLOW + guaranteedChance);
             lore.add(" ");
-
+            lore.add(ChatColor.GRAY + "Total " + mobFortuneString + ChatColor.GRAY + ": " + ChatColor.YELLOW + mobFortune);
 
 
             // Looting X increases the amount of loot
-            // dropped from mobs you kill
+            // dropped from mobs you kill, and increases
+            // your chances for rare drops
             //
             // The last two digits of your Looting X
             // is the chance for you to receive +1
@@ -755,6 +759,7 @@ public final class StatMenuItems {
             // Common loot drop
             //
             // Extra Common loot drop amount:
+            // Every 100
             //
             return lore;
         }
@@ -938,8 +943,8 @@ public final class StatMenuItems {
             StatPlayer statPlayer = new StatPlayer(player);
             double caffeination = statPlayer.getPotionStats().getCaffeination();
 
-            double chance = getLastTwoDigitsChance(caffeination);
-            int guaranteed = getGuaranteedChance(caffeination);
+            double chance = VentureMath.getLastTwoDigitsChanceFromChance(caffeination);
+            int guaranteed = VentureMath.getGuaranteedFromChance(caffeination);
 
             List<String> lore = new ArrayList<>();
 
@@ -953,7 +958,7 @@ public final class StatMenuItems {
             lore.add(ChatColor.GRAY + "The last two digits of your " + ChatColor.LIGHT_PURPLE + "Caffeination " + StatSymbols.CAFFEINATION.getSymbol() + ChatColor.GRAY + " is");
             lore.add(ChatColor.GRAY + "the chance for you to gain +" + ChatColor.LIGHT_PURPLE + 1 + " Amplifier Level");
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Chance for +" + ChatColor.LIGHT_PURPLE + 1 + " Amplifier Level" + ChatColor.GRAY + ": " + ChatColor.YELLOW + chance);
+            lore.add(ChatColor.GRAY + "Chance for +" + ChatColor.LIGHT_PURPLE + 1 + " Amplifier Level" + ChatColor.GRAY + ": " + ChatColor.YELLOW + chance + "%");
             lore.add(" ");
             lore.add(ChatColor.GRAY + "Every " + ChatColor.YELLOW + 100 + ChatColor.LIGHT_PURPLE + " Caffeination " + StatSymbols.CAFFEINATION.getSymbol() + ChatColor.GRAY + " guarantees +" + ChatColor.LIGHT_PURPLE + 1 + " Amplifier");
             lore.add(ChatColor.LIGHT_PURPLE + "Level" + ChatColor.GRAY + " to the consumed " + ChatColor.DARK_AQUA + "Potion Effect");
@@ -975,16 +980,6 @@ public final class StatMenuItems {
             return lore;
         }
     };
-
-    private static int getGuaranteedChance(double statAmount)
-    {
-        return (int) Math.floor(statAmount / 100);
-    }
-
-    private static double getLastTwoDigitsChance(double statAmount)
-    {
-        return statAmount % 100;
-    }
 
     public enum StatItemSlots
     {

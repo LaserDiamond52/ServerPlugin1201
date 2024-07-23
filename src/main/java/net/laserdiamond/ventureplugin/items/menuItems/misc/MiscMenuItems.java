@@ -3,18 +3,14 @@ package net.laserdiamond.ventureplugin.items.menuItems.misc;
 import net.laserdiamond.ventureplugin.VenturePlugin;
 import net.laserdiamond.ventureplugin.items.menuItems.util.MenuItem;
 import net.laserdiamond.ventureplugin.items.menuItems.util.VentureMenuItem;
-import net.laserdiamond.ventureplugin.items.util.ItemForger;
-import org.bukkit.attribute.Attribute;
+import net.laserdiamond.ventureplugin.items.util.VentureItemBuilder;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.loot.LootTables;
 
 import java.util.HashMap;
 import java.util.List;
@@ -166,7 +162,7 @@ public final class MiscMenuItems implements Listener {
      * @param inventory The inventory to check for a go back button
      * @return The location of where the go back button would be in the inventory
      */
-    public static int getGoBackButtonLocation(Inventory inventory)
+    public static Integer getGoBackButtonLocation(Inventory inventory)
     {
         int size = inventory.getSize();
         return GO_BACK_ITEM_INV_LOCATION.get(size);
@@ -195,7 +191,7 @@ public final class MiscMenuItems implements Listener {
     }
 
     @EventHandler
-    public void manipulateInventory(InventoryClickEvent event)
+    private void manipulateInventory(InventoryClickEvent event)
     {
         HumanEntity humanEntity = event.getWhoClicked();
 
@@ -204,8 +200,8 @@ public final class MiscMenuItems implements Listener {
             ItemStack clickedItem = event.getCurrentItem();
             if (clickedItem != null && clickedItem.getItemMeta() != null)
             {
-                ItemForger itemForger = new ItemForger(clickedItem);
-                String menuItemKey = itemForger.getMenuItemKey();
+                VentureItemBuilder ventureItemBuilder = new VentureItemBuilder(clickedItem);
+                String menuItemKey = ventureItemBuilder.getMenuItemKey();
                 if (menuItemKey == null)
                 {
                     return;

@@ -7,13 +7,12 @@ import net.laserdiamond.ventureplugin.events.abilities.AbilityCasting;
 import net.laserdiamond.ventureplugin.events.abilities.AbilityHandler;
 import net.laserdiamond.ventureplugin.events.damage.PlayerMagicDamageEvent;
 import net.laserdiamond.ventureplugin.events.mana.PlayerSpellCastEvent;
-import net.laserdiamond.ventureplugin.items.armor.util.ArmorCMD;
-import net.laserdiamond.ventureplugin.items.armor.util.ArmorPieceTypes;
-import net.laserdiamond.ventureplugin.items.armor.util.VentureArmorSet;
+import net.laserdiamond.ventureplugin.items.armor.VentureArmorMaterial;
+import net.laserdiamond.ventureplugin.items.armor.ArmorPieceTypes;
+import net.laserdiamond.ventureplugin.items.armor.VentureArmorSet;
 import net.laserdiamond.ventureplugin.items.util.ItemStringBuilder;
 import net.laserdiamond.ventureplugin.items.util.VentureItemRarity;
 import net.laserdiamond.ventureplugin.stats.Components.Stats;
-import net.laserdiamond.ventureplugin.util.File.ArmorConfig;
 import net.laserdiamond.ventureplugin.util.messages.Messages;
 import net.laserdiamond.ventureplugin.util.particles.Particles;
 import org.bukkit.*;
@@ -45,14 +44,8 @@ public final class BlazeArmor extends VentureArmorSet implements AbilityCasting.
     }
 
     @Override
-    protected ArmorConfig config()
-    {
-        return plugin.getBlazeArmorConfig();
-    }
-
-    @Override
-    public ArmorCMD armorCMD() {
-        return ArmorCMD.BLAZE_ARMOR;
+    public VentureArmorMaterial ventureArmorMaterial() {
+        return VentureArmorMaterial.BLAZE_ARMOR;
     }
 
     @Override
@@ -71,25 +64,12 @@ public final class BlazeArmor extends VentureArmorSet implements AbilityCasting.
     }
 
     @Override
-    protected Material armorPieceMaterials(ArmorPieceTypes armorPieceTypes) {
-        Material material = null;
-        switch (armorPieceTypes)
-        {
-            case HELMET -> material = Material.PLAYER_HEAD;
-            case CHESTPLATE -> material = Material.LEATHER_CHESTPLATE;
-            case LEGGINGS -> material = Material.LEATHER_LEGGINGS;
-            case BOOTS -> material = Material.LEATHER_BOOTS;
-        }
-        return material;
-    }
-
-    @Override
     public LinkedList<String> createLore(@NotNull ArmorPieceTypes armorPieceTypes, int stars) {
 
-        double auraDamage = config().getDouble("auraBaseDamage");
-        double auraRadius = config().getDouble("auraRadius");
-        double manaCost = config().getDouble("manaCost");
-        String abilityName = config().getString("abilityName");
+        double auraDamage = getArmorConfig().getDouble("auraBaseDamage");
+        double auraRadius = getArmorConfig().getDouble("auraRadius");
+        double manaCost = getArmorConfig().getDouble("manaCost");
+        String abilityName = getArmorConfig().getString("abilityName");
 
         LinkedList<String> lore = super.createLore(armorPieceTypes, stars);
         lore.add(ChatColor.GOLD + "Full Set Bonus: " + abilityName + ChatColor.YELLOW + ChatColor.BOLD + " Hold Sneak");
@@ -99,6 +79,8 @@ public final class BlazeArmor extends VentureArmorSet implements AbilityCasting.
         lore.add(ChatColor.DARK_GRAY + "Mana Cost: " + ChatColor.DARK_AQUA + manaCost);
         lore.add(" ");
         lore.addLast(ItemStringBuilder.addItemStringRarity(rarity(), armorPieceTypes));
+
+        //
         // Full Set Bonus: Blazing Aura HOLD SNEAK
         //
         // While sneaking, set mobs within a 5 block
@@ -108,6 +90,7 @@ public final class BlazeArmor extends VentureArmorSet implements AbilityCasting.
         //
         // Upon killing a mob/player, instantly
         // regain 10% of your max health
+        //
 
         return lore;
     }
@@ -121,10 +104,10 @@ public final class BlazeArmor extends VentureArmorSet implements AbilityCasting.
     {
         StatPlayer statPlayer = new StatPlayer(player);
         Stats stats = statPlayer.getStats();
-        String abilityName = config().getString("abilityName");
-        double manaCost = config().getDouble("manaCost");
-        double auraRadius = config().getDouble("auraRadius");
-        double auraDamage = config().getDouble("auraBaseDamage");
+        String abilityName = getArmorConfig().getString("abilityName");
+        double manaCost = getArmorConfig().getDouble("manaCost");
+        double auraRadius = getArmorConfig().getDouble("auraRadius");
+        double auraDamage = getArmorConfig().getDouble("auraBaseDamage");
         double availableMana = stats.getAvailableMana();
 
         PlayerSpellCastEvent spellCastEvent = new PlayerSpellCastEvent(player, manaCost);

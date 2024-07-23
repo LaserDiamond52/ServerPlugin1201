@@ -1,6 +1,6 @@
 package net.laserdiamond.ventureplugin.items.util;
 
-import net.laserdiamond.ventureplugin.items.armor.util.ArmorPieceTypes;
+import net.laserdiamond.ventureplugin.items.armor.ArmorPieceTypes;
 import org.bukkit.ChatColor;
 
 import java.util.LinkedList;

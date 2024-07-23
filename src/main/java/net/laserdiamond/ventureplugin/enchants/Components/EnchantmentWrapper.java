@@ -33,14 +33,14 @@ public class EnchantmentWrapper extends Enchantment {
         this.isDiscoverable = isDiscoverable;
     }
 
-    public EnchantmentWrapper(String namespace, String name, int startLvl, int maxLvl, EnchantmentTarget enchantmentTarget, boolean isDiscoverable, List<Enchantment> conlfictingEnchants) {
+    public EnchantmentWrapper(String namespace, String name, int startLvl, int maxLvl, EnchantmentTarget enchantmentTarget, boolean isDiscoverable, List<Enchantment> conflictingEnchants) {
         super(NamespacedKey.minecraft(namespace));
         this.name = name;
         this.startLvl = startLvl;
         this.maxLvl = maxLvl;
         this.enchantmentTarget = enchantmentTarget;
         this.isDiscoverable = isDiscoverable;
-        this.conlfictingEnchants = conlfictingEnchants;
+        this.conlfictingEnchants = conflictingEnchants;
         // TODO Auto-generated constructor stub
     }
 

@@ -1,10 +1,17 @@
 package net.laserdiamond.ventureplugin.enchants.Components;
 
+import net.laserdiamond.ventureplugin.items.util.VentureItemBuilder;
+import net.laserdiamond.ventureplugin.items.util.VentureItemEnchantabilities;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -345,6 +352,76 @@ public class VentureEnchants {
         return enchantLore;
     }
 
+    /**
+     * Gets the looting value from the item stack based on the looting enchantment level.
+     * If the item does not have looting, the item stack is null, or the item stack material is air, 0 is returned.
+     * @param itemStack The item stack to check
+     * @return 0 if the item does not have looting, the item stack is null, or the material of the item stack is air. Otherwise, returns the enchantment level * the looting stat value per level
+     */
+    public static double getMobLootingValue(ItemStack itemStack)
+    {
+        if (itemStack != null && !itemStack.getType().equals(Material.AIR))
+        {
+            ItemMeta itemMeta = itemStack.getItemMeta();
+            if (itemMeta != null && itemMeta.hasEnchant(Enchantment.LOOT_BONUS_MOBS))
+            {
+                int level = itemMeta.getEnchantLevel(Enchantment.LOOT_BONUS_MOBS);
+                return level * 20;
+            }
+        }
+        return 0.0;
+    }
+
+    /**
+     * Gets the fortune value from the item stack based on the fortune enchantment level. This method does not tell the fortune type
+     * If the item does not have fortune, the item stack is null, or the item stack material is air, 0 is returned.
+     * @param itemStack The item stack to check
+     * @return 0 if the item does not have fortune, the item stack is null, or the material of the item stack is air. Otherwise, returns the enchantment level * the looting stat value per level
+     */
+    public static double getFortuneValue(ItemStack itemStack, VentureItemEnchantabilities enchantability)
+    {
+        if (itemStack != null && !itemStack.getType().equals(Material.AIR))
+        {
+            ItemMeta itemMeta = itemStack.getItemMeta();
+            if (itemMeta != null && itemMeta.hasEnchant(Enchantment.LOOT_BONUS_BLOCKS))
+            {
+                VentureItemBuilder ventureItemBuilder = new VentureItemBuilder(itemStack);
+                VentureItemEnchantabilities itemEnchantability = ventureItemBuilder.getEnchantmentType();
+                if (itemEnchantability.equals(enchantability))
+                {
+                    int level = itemMeta.getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS);
+                    return level * 20;
+                }
+            }
+        }
+        return 0.0;
+    }
+
+    /**
+     * Gets the fishing luck value from the item stack based on the luck enchantment level.
+     * If the item does not have luck, the item stack is null, or the item stack material is air, 0 is returned.
+     * @param itemStack The item stack to check
+     * @return 0 if the item does not have fortune, the item stack is null, or the material of the item stack is air. Otherwise, returns the enchantment level * the looting stat value per level
+     */
+    public static double getFishingLuck(ItemStack itemStack)
+    {
+        if (itemStack != null && !itemStack.getType().equals(Material.AIR))
+        {
+            ItemMeta itemMeta = itemStack.getItemMeta();
+            if (itemMeta != null && itemMeta.hasEnchant(Enchantment.LUCK))
+            {
+                VentureItemBuilder ventureItemBuilder = new VentureItemBuilder(itemStack);
+                VentureItemEnchantabilities enchantability = ventureItemBuilder.getEnchantmentType();
+                if (enchantability.equals(VentureItemEnchantabilities.FISHING_ROD))
+                {
+                    int level = itemMeta.getEnchantLevel(Enchantment.LUCK);
+                    return level * 5;
+                }
+            }
+        }
+        return 0.0;
+    }
+
     public enum EnchantEnum {
 
         PROTECTION (Enchantment.PROTECTION_ENVIRONMENTAL, "protection"),
@@ -402,7 +479,6 @@ public class VentureEnchants {
         ARMOR_MINING_FORTUNE (VentureEnchants.ARMOR_MINING_FORTUNE, "miner"),
         ARMOR_FORAGING_FORTUNE (VentureEnchants.ARMOR_FORAGING_FORTUNE, "forager"),
         ARMOR_FISHING_FORTUNE (VentureEnchants.ARMOR_FISHING_FORTUNE, "fishing");
-
 
         private final Enchantment enchantment;
         private final String commandName;

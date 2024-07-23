@@ -1,7 +1,7 @@
 package net.laserdiamond.ventureplugin.util.File;
 
 import net.laserdiamond.ventureplugin.VenturePlugin;
-import net.laserdiamond.ventureplugin.items.armor.util.ArmorPieceTypes;
+import net.laserdiamond.ventureplugin.items.armor.ArmorPieceTypes;
 import net.laserdiamond.ventureplugin.util.Config.ConfigLoader;
 import net.laserdiamond.ventureplugin.util.Stars;
 import org.bukkit.Bukkit;
@@ -24,7 +24,7 @@ public class ArmorConfig extends ConfigLoader {
         this.fileName = fileName;
         File folders = new File(plugin.getDataFolder() + File.separator + "items" + File.separator + "armor" + File.separator + fileName);
         file = new File(folders, fileName + ".yml");
-        plugin.getArmorConfigs().add(this);
+        //plugin.getArmorConfigs().add(this);
     }
 
     @Override

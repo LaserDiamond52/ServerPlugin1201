@@ -431,11 +431,11 @@ public class EnchantListeners implements Listener, AbilityListener, AbilityCasti
 
         if (itemMeta.hasEnchant(VentureEnchants.ARMOR_MINING_FORTUNE))
         {
-            lootStats.setBonusOreLoot(lootStats.getBonusOreLoot() + minerFortune);
+            lootStats.setMiningFortune(lootStats.getMiningFortune() + minerFortune);
         }
         if (itemMeta.hasEnchant(VentureEnchants.ARMOR_FORAGING_FORTUNE))
         {
-            lootStats.setBonusWoodLoot(lootStats.getBonusWoodLoot() + foragerFortune);
+            lootStats.setForagingFortune(lootStats.getForagingFortune() + foragerFortune);
         }
         if (itemMeta.hasEnchant(VentureEnchants.ARMOR_FISHING_FORTUNE))
         {
@@ -448,11 +448,11 @@ public class EnchantListeners implements Listener, AbilityListener, AbilityCasti
 
         if (itemMeta.hasEnchant(VentureEnchants.ARMOR_MINING_FORTUNE))
         {
-            lootStats.setBonusOreLoot(lootStats.getBonusOreLoot() - minerFortune);
+            lootStats.setMiningFortune(lootStats.getMiningFortune() - minerFortune);
         }
         if (itemMeta.hasEnchant(VentureEnchants.ARMOR_FORAGING_FORTUNE))
         {
-            lootStats.setBonusWoodLoot(lootStats.getBonusWoodLoot() - foragerFortune);
+            lootStats.setForagingFortune(lootStats.getForagingFortune() - foragerFortune);
         }
         if (itemMeta.hasEnchant(VentureEnchants.ARMOR_FISHING_FORTUNE))
         {

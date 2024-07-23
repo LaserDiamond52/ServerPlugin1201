@@ -28,7 +28,8 @@ public enum Permissions {
     EDIT_MANA("edit_mana"),
     EFFECT ("effect"),
     EDIT_EXPERIENCE("edit_experience"),
-    ENCHANT ("enchant");
+    ENCHANT ("enchant"),
+    SUMMON_MOBS ("summon_mobs");
 
     private final String permissionString;
 

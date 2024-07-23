@@ -1,6 +1,7 @@
 package net.laserdiamond.ventureplugin.util.Config;
 
 import net.laserdiamond.ventureplugin.VenturePlugin;
+import net.laserdiamond.ventureplugin.util.File.FileSaver;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import java.io.IOException;
@@ -8,13 +9,14 @@ import java.io.IOException;
 /**
  * Class that represents a player config file that is saved to the config
  */
-public class PlayerSaveConfig extends PlayerConfig {
+public class PlayerSaveConfig extends PlayerConfig implements FileSaver {
 
     public PlayerSaveConfig(VenturePlugin plugin, String fileName)
     {
         super(plugin, fileName);
     }
 
+    @Override
     public void saveConfig()
     {
         try {

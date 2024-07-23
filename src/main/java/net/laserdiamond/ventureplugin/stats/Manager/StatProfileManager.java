@@ -131,6 +131,7 @@ public class StatProfileManager {
         double finalBaseRange = this.baseRange + tuningStats.getRange();
 
         Stats stats = new Stats(player, finalBaseHealth, finalBaseSpeed, baseStarvation, baseLuck, availableMana, finalBaseMana);
+        MainhandStats mainhandStats = new MainhandStats(player,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
         ArmorStats armorStats = new ArmorStats(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
         DamageStats damageStats = new DamageStats(finalBaseMelee, finalBaseMagic, finalBaseRange, percentMelee, percentMagic, percentRange,0);
         DefenseStats defenseStats = new DefenseStats(player, finalBaseDefense, baseFireDefense, baseExplosionDefense, baseProjectileDefense, baseMagicDefense, baseToughness, 0);
@@ -143,7 +144,7 @@ public class StatProfileManager {
 
         PotionStats potionStats = new PotionStats(0,0);
 
-        StatProfile statProfile = new StatProfile(stats, armorStats, damageStats, defenseStats, lootStats, enchantStats, armorTrimStats, tuningProfile, skillsProfile, potionStats);
+        StatProfile statProfile = new StatProfile(stats, mainhandStats, armorStats, damageStats, defenseStats, lootStats, enchantStats, armorTrimStats, tuningProfile, skillsProfile, potionStats);
         statProfiles.put(player.getUniqueId(), statProfile);
 
         return statProfile;

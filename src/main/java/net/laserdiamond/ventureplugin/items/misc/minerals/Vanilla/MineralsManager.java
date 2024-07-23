@@ -1,6 +1,6 @@
 package net.laserdiamond.ventureplugin.items.misc.minerals.Vanilla;
 
-import net.laserdiamond.ventureplugin.items.util.ItemForger;
+import net.laserdiamond.ventureplugin.items.util.VentureItemBuilder;
 import net.laserdiamond.ventureplugin.items.util.VentureItemRarity;
 import org.bukkit.Material;
 
@@ -9,19 +9,19 @@ import java.util.List;
 
 public class MineralsManager {
 
-    public static ItemForger createMineral(Minerals minerals) {
+    public static VentureItemBuilder createMineral(Minerals minerals) {
 
-        ItemForger itemForger = new ItemForger(minerals.getMaterial());
-        itemForger.setCustomModelData(minerals.getNormalCMD());
-        return itemForger;
+        VentureItemBuilder ventureItemBuilder = new VentureItemBuilder(minerals.getMaterial());
+        ventureItemBuilder.setCustomModelData(minerals.getNormalCMD());
+        return ventureItemBuilder;
     }
 
-    public static ItemForger createHyperiteMineral(Minerals minerals) {
+    public static VentureItemBuilder createHyperiteMineral(Minerals minerals) {
 
-        ItemForger itemForger = new ItemForger(minerals.getMaterial());
-        itemForger.setCustomModelData(minerals.getHyperiteCMD());
-        itemForger.setRarity(VentureItemRarity.Rarity.COMMON);
-        return itemForger;
+        VentureItemBuilder ventureItemBuilder = new VentureItemBuilder(minerals.getMaterial());
+        ventureItemBuilder.setCustomModelData(minerals.getHyperiteCMD());
+        ventureItemBuilder.setRarity(VentureItemRarity.Rarity.COMMON);
+        return ventureItemBuilder;
     }
     public enum Minerals {
 

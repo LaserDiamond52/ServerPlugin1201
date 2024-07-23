@@ -1,16 +1,16 @@
 package net.laserdiamond.ventureplugin.items.misc.trimTemplate;
 
-import net.laserdiamond.ventureplugin.items.util.ItemForger;
+import net.laserdiamond.ventureplugin.items.util.VentureItemBuilder;
 import org.bukkit.Material;
 
 @Deprecated
 public class TrimTemplateManager {
 
-    public static ItemForger createTemplate(Trims trims) {
+    public static VentureItemBuilder createTemplate(Trims trims) {
 
-        ItemForger itemForger = new ItemForger(trims.getMaterial());
-        itemForger.setCustomModelData(trims.getCmd());
-        return itemForger;
+        VentureItemBuilder ventureItemBuilder = new VentureItemBuilder(trims.getMaterial());
+        ventureItemBuilder.setCustomModelData(trims.getCmd());
+        return ventureItemBuilder;
     }
 
     public enum Trims {

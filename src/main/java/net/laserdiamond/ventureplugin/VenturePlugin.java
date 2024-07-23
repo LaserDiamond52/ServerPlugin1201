@@ -1,22 +1,30 @@
 package net.laserdiamond.ventureplugin;
 
-import net.laserdiamond.ventureplugin.commands.Effects.EffectsCommand;
-import net.laserdiamond.ventureplugin.commands.Enchant.EnchantCommand;
-import net.laserdiamond.ventureplugin.commands.Items.GiveItemsCommand;
-import net.laserdiamond.ventureplugin.commands.Items.StarItemCommand;
-import net.laserdiamond.ventureplugin.commands.SkillsEdit.SkillsExpCommand;
-import net.laserdiamond.ventureplugin.commands.ViewProfiles.TuningMenu;
-import net.laserdiamond.ventureplugin.commands.ViewProfiles.ViewSkills;
-import net.laserdiamond.ventureplugin.commands.ViewProfiles.ViewStats;
-import net.laserdiamond.ventureplugin.commands.fillMana;
+import net.kyori.adventure.Adventure;
+import net.kyori.adventure.audience.Audiences;
+import net.laserdiamond.ventureplugin.commands.effects.EffectsCommand;
+import net.laserdiamond.ventureplugin.commands.enchant.EnchantCommand;
+import net.laserdiamond.ventureplugin.commands.items.GiveItemsCommand;
+import net.laserdiamond.ventureplugin.commands.items.StarItemCommand;
+import net.laserdiamond.ventureplugin.commands.skills_edit.SkillsExpCommand;
+import net.laserdiamond.ventureplugin.commands.summon.MobSummonCommand;
+import net.laserdiamond.ventureplugin.commands.view_profiles.TuningMenu;
+import net.laserdiamond.ventureplugin.commands.view_profiles.ViewSkills;
+import net.laserdiamond.ventureplugin.commands.view_profiles.ViewStats;
+import net.laserdiamond.ventureplugin.commands.FillMana;
 import net.laserdiamond.ventureplugin.enchants.Components.EnchantListeners;
 import net.laserdiamond.ventureplugin.enchants.Components.EnchantPlayerHeadHelmets;
 import net.laserdiamond.ventureplugin.enchants.Components.VentureEnchants;
+import net.laserdiamond.ventureplugin.entities.mobs.LootTableListener;
+import net.laserdiamond.ventureplugin.entities.mobs.VentureMobType;
+import net.laserdiamond.ventureplugin.entities.mobs.VentureMobs;
+import net.laserdiamond.ventureplugin.entities.util.VentureMob;
+import net.laserdiamond.ventureplugin.entities.util.loot_tables.VentureLootTableEntry;
 import net.laserdiamond.ventureplugin.events.CancelInventoryMovementMenus;
 import net.laserdiamond.ventureplugin.events.abilities.*;
 import net.laserdiamond.ventureplugin.events.abilities.cooldown.AssassinCloakCooldown;
 import net.laserdiamond.ventureplugin.events.abilities.cooldown.SniperCooldown;
-import net.laserdiamond.ventureplugin.events.damage.DamageEvent;
+import net.laserdiamond.ventureplugin.events.damage.DamageDisplays;
 import net.laserdiamond.ventureplugin.events.damage.ApplyDefense;
 import net.laserdiamond.ventureplugin.events.damage.inflict.PlayerDmg;
 import net.laserdiamond.ventureplugin.events.effects.Components.Timers.ManaFreezeTimer;
@@ -31,15 +39,17 @@ import net.laserdiamond.ventureplugin.events.effects.Components.EffectTimer;
 import net.laserdiamond.ventureplugin.events.effects.Config.EffectProfileConfig;
 import net.laserdiamond.ventureplugin.events.effects.Managers.EffectManager;
 import net.laserdiamond.ventureplugin.items.armor.armor_sets.*;
-import net.laserdiamond.ventureplugin.items.armor.util.ArmorEquipStats;
+import net.laserdiamond.ventureplugin.items.armor.ArmorEquipStats;
 import net.laserdiamond.ventureplugin.events.abilities.cooldown.EyeOfStormCooldown;
 import net.laserdiamond.ventureplugin.items.armor.trims.Components.TrimMaterialListeners;
 import net.laserdiamond.ventureplugin.items.crafting.SmithingTable.SmithingTableCrafting;
 import net.laserdiamond.ventureplugin.items.menuItems.misc.MiscMenuItems;
 import net.laserdiamond.ventureplugin.items.menuItems.util.VentureSkillProgressItem;
-import net.laserdiamond.ventureplugin.items.util.ItemForger;
-import net.laserdiamond.ventureplugin.entities.healthDisplay.mobHealthDisplay;
-import net.laserdiamond.ventureplugin.items.armor.util.VentureArmorSet;
+import net.laserdiamond.ventureplugin.items.misc.MiscItemsManager;
+import net.laserdiamond.ventureplugin.items.misc.VentureMiscItem;
+import net.laserdiamond.ventureplugin.items.tools.ToolEquipStats;
+import net.laserdiamond.ventureplugin.items.util.VentureItemBuilder;
+import net.laserdiamond.ventureplugin.items.armor.VentureArmorSet;
 import net.laserdiamond.ventureplugin.items.menuItems.util.VentureMenuItem;
 import net.laserdiamond.ventureplugin.skills.Components.ExpGain.SkillsExpGainListener;
 import net.laserdiamond.ventureplugin.skills.Manager.SkillsProfileManager;
@@ -58,9 +68,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public final class VenturePlugin extends JavaPlugin {
 
@@ -80,36 +88,26 @@ public final class VenturePlugin extends JavaPlugin {
     private PlayerConfig baseStatsConfig;
     private MiscConfig enchantConfig;
 
-    private final HashMap<String, ItemForger> itemRegistryMap = new HashMap<>();
+    private final HashMap<String, VentureItemBuilder> itemRegistryMap = new HashMap<>();
+    private final HashMap<String, VentureMiscItem> miscItemMap = new HashMap<>();
     private final HashMap<String, VentureArmorSet> armorSetItemMap = new HashMap<>();
     private final HashMap<String, VentureMenuItem> ventureMenuItems = new HashMap<>();
     private final HashMap<String, VentureSkillProgressItem> ventureSkillProgressItems = new HashMap<>();
 
-    private NetheriteArmor netheriteArmor;
-    private BlazeArmor blazeArmor;
-    private SoulFireBlazeArmor soulFireBlazeArmor;
-    private StormLordArmor stormLordArmor;
-    private AssassinArmor assassinArmor;
-    private ReinforcedDiamondArmor reinforcedDiamondArmor;
-    private PrismariteArmor prismariteArmor;
-    private FleshRevenantArmor fleshRevenantArmor;
-    private BoneTerrorArmor boneTerrorArmor;
-
+    private VentureArmorSet netheriteArmor;
+    private VentureArmorSet blazeArmor;
+    private VentureArmorSet soulFireBlazeArmor;
+    private VentureArmorSet stormLordArmor;
+    private VentureArmorSet assassinArmor;
+    private VentureArmorSet reinforcedDiamondArmor;
+    private VentureArmorSet prismariteArmor;
+    private VentureArmorSet fleshRevenantArmor;
+    private VentureArmorSet boneTerrorArmor;
 
     private final List<ArmorConfig> armorConfigs = new ArrayList<>();
 
-    private final ArmorConfig
+    private final ArmorConfig armorTrimConfig = new ArmorConfig(this, "trims");
 
-            armorTrimConfig = new ArmorConfig(this, "trims"),
-            netheriteArmorConfig = new ArmorConfig(this, "netherite"),
-            blazeArmorConfig = new ArmorConfig(this,"blaze"),
-            soulFireBlazeArmorConfig = new ArmorConfig(this, "soul_fire_blaze"),
-            stormLordArmorConfig = new ArmorConfig(this,"storm_lord"),
-            assassinArmorConfig = new ArmorConfig(this, "assassin"),
-            reinforcedDiamondArmorConfig = new ArmorConfig(this, "reinforced_diamond"),
-            prismariteArmorConfig = new ArmorConfig(this, "prismarite"),
-            fleshRevenantArmorConfig = new ArmorConfig(this, "flesh_revenant"),
-            boneTerrorArmorConfig = new ArmorConfig(this, "bone_terror");
 
     private final List<AbilityListener> abilityListeners = new ArrayList<>();
     private final HashMap<AbilityListener, Method> rightClickAbilities = new HashMap<>();
@@ -120,6 +118,9 @@ public final class VenturePlugin extends JavaPlugin {
     private final HashMap<AbilityListener, Method> onKillAbilities = new HashMap<>();
     private final HashMap<AbilityListener, Method> toggleSneakAbilities = new HashMap<>();
     private final Abilities abilities = new Abilities(rightClickAbilities, leftClickAbilities, dropItemAbilities,runnableAbilities, attackEntityAbilities, onKillAbilities, toggleSneakAbilities);
+
+    private final HashMap<String, VentureMob<?>> ventureMobMap = new HashMap<>();
+    private final HashMap<VentureMobType, List<VentureLootTableEntry>> ventureMobLootTables = new HashMap<>();
 
     public static final String PLUGIN_ID = "venture";
 
@@ -134,6 +135,7 @@ public final class VenturePlugin extends JavaPlugin {
         createConfigs();
         createItemConfigs();
         createManagers();
+        MiscItemsManager.registerItems();
         createItemManagers();
         VentureEnchants.register();
         createTimers();
@@ -154,14 +156,15 @@ public final class VenturePlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ItemRegistry(),this);
 
         // Damage
-        getServer().getPluginManager().registerEvents(new DamageEvent(this),this);
+        getServer().getPluginManager().registerEvents(new DamageDisplays(this),this);
         getServer().getPluginManager().registerEvents(new PlayerDmg(),this);
 
         // Effect events
         getServer().getPluginManager().registerEvents(new EffectEvents(this),this);
 
-        // Armor stats
+        // Armor stats + Tool stats
         getServer().getPluginManager().registerEvents(new ArmorEquipStats(this),this);
+        getServer().getPluginManager().registerEvents(new ToolEquipStats(this), this);
         getServer().getPluginManager().registerEvents(new ApplyDefense(this),this);
         getServer().getPluginManager().registerEvents(new TrimMaterialListeners(this),this);
 
@@ -180,13 +183,11 @@ public final class VenturePlugin extends JavaPlugin {
         // Anvil Inventory GUI
         //getServer().getPluginManager().registerEvents(new AnvilInvetoryGUI(this),this);
 
-        // Mob names
-        getServer().getPluginManager().registerEvents(new mobHealthDisplay(this),this);
-
         // Skill Exp Listeners
         getServer().getPluginManager().registerEvents(new SkillsExpGainListener(), this);
 
-
+        VentureMobs.register(this);
+        new LootTableListener(this);
 
         // Register Commands
         getCommand("plugineffect").setExecutor(new EffectsCommand(this));
@@ -196,9 +197,10 @@ public final class VenturePlugin extends JavaPlugin {
         TuningMenu tuningMenu = new TuningMenu(this);
         ViewSkills viewSkills = new ViewSkills(this);
         getCommand("skillsexp").setExecutor(new SkillsExpCommand());
-        getCommand("refillmana").setExecutor(new fillMana());
+        getCommand("refillmana").setExecutor(new FillMana());
         getCommand("staritem").setExecutor(new StarItemCommand());
         // TODO: Summon cmd for mobs
+        getCommand("summonventuremob").setExecutor(new MobSummonCommand());
 
         // TODO: Test Spell Casters
         addAbilities();
@@ -231,37 +233,37 @@ public final class VenturePlugin extends JavaPlugin {
     public EffectManager getEffectManager() {
         return effectManager;
     }
-    public NetheriteArmor getNetheriteArmorManager() {
+    public VentureArmorSet getNetheriteArmorManager() {
         return netheriteArmor;
     }
-    public BlazeArmor getBlazeArmorManager()
+    public VentureArmorSet getBlazeArmorManager()
     {
         return blazeArmor;
     }
-    public SoulFireBlazeArmor getSoulFireBlazeArmor()
+    public VentureArmorSet getSoulFireBlazeArmor()
     {
         return soulFireBlazeArmor;
     }
-    public StormLordArmor getStormArmorManager() {
+    public VentureArmorSet getStormArmorManager() {
         return stormLordArmor;
     }
-    public AssassinArmor getAssassinArmor()
+    public VentureArmorSet getAssassinArmor()
     {
         return assassinArmor;
     }
-    public ReinforcedDiamondArmor getReinforcedDiamondArmor()
+    public VentureArmorSet getReinforcedDiamondArmor()
     {
         return reinforcedDiamondArmor;
     }
-    public PrismariteArmor getPrismariteArmor()
+    public VentureArmorSet getPrismariteArmor()
     {
         return prismariteArmor;
     }
-    public FleshRevenantArmor getFleshRevenantArmor()
+    public VentureArmorSet getFleshRevenantArmor()
     {
         return fleshRevenantArmor;
     }
-    public BoneTerrorArmor getBoneTerrorArmor()
+    public VentureArmorSet getBoneTerrorArmor()
     {
         return boneTerrorArmor;
     }
@@ -340,10 +342,14 @@ public final class VenturePlugin extends JavaPlugin {
 
     private void createItemConfigs() {
 
+        armorTrimConfig.loadConfig();
+
         for (ArmorConfig armorConfig : armorConfigs)
         {
             armorConfig.loadConfig();
         }
+
+
 
     }
     private void createManagers() {
@@ -447,52 +453,12 @@ public final class VenturePlugin extends JavaPlugin {
         }
     }
 
-    public HashMap<String, ItemForger> getItemRegistryMap() {
+    public HashMap<String, VentureItemBuilder> getItemRegistryMap() {
         return itemRegistryMap;
-    }
-
-    public List<ArmorConfig> getArmorConfigs() {
-        return armorConfigs;
     }
 
     public ArmorConfig getArmorTrimConfig() {
         return armorTrimConfig;
-    }
-
-    public ArmorConfig getNetheriteArmorConfig() {
-        return netheriteArmorConfig;
-    }
-
-    public ArmorConfig getBlazeArmorConfig() {
-        return blazeArmorConfig;
-    }
-
-    public ArmorConfig getSoulFireBlazeArmorConfig() {
-        return soulFireBlazeArmorConfig;
-    }
-
-    public ArmorConfig getStormLordArmorConfig() {
-        return stormLordArmorConfig;
-    }
-
-    public ArmorConfig getAssassinArmorConfig() {
-        return assassinArmorConfig;
-    }
-
-    public ArmorConfig getReinforcedDiamondArmorConfig() {
-        return reinforcedDiamondArmorConfig;
-    }
-
-    public ArmorConfig getPrismariteArmorConfig() {
-        return prismariteArmorConfig;
-    }
-
-    public ArmorConfig getFleshRevenantArmorConfig() {
-        return fleshRevenantArmorConfig;
-    }
-
-    public ArmorConfig getBoneTerrorArmorConfig() {
-        return boneTerrorArmorConfig;
     }
 
     public HashMap<String, VentureMenuItem> getVentureMenuItems() {
@@ -513,5 +479,17 @@ public final class VenturePlugin extends JavaPlugin {
 
     public HashMap<String, VentureSkillProgressItem> getVentureSkillProgressItems() {
         return ventureSkillProgressItems;
+    }
+
+    public HashMap<String, VentureMob<?>> getVentureMobMap() {
+        return ventureMobMap;
+    }
+
+    public HashMap<VentureMobType, List<VentureLootTableEntry>> getVentureMobLootTables() {
+        return ventureMobLootTables;
+    }
+
+    public HashMap<String, VentureMiscItem> getMiscItemMap() {
+        return miscItemMap;
     }
 }

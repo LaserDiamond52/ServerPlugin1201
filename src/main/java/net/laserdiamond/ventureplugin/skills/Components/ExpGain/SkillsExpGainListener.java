@@ -3,12 +3,7 @@ package net.laserdiamond.ventureplugin.skills.Components.ExpGain;
 import net.laserdiamond.ventureplugin.VenturePlugin;
 import net.laserdiamond.ventureplugin.entities.player.StatPlayer;
 import net.laserdiamond.ventureplugin.events.skills.SkillsExpGainEvent;
-import net.laserdiamond.ventureplugin.items.util.ItemForger;
-import net.laserdiamond.ventureplugin.skills.Components.ExpGain.brewing.brewingExp;
-import net.laserdiamond.ventureplugin.skills.Components.ExpGain.combat.mobExp;
-import net.laserdiamond.ventureplugin.skills.Components.ExpGain.farming.farmingExp;
-import net.laserdiamond.ventureplugin.skills.Components.ExpGain.foraging.foragingExp;
-import net.laserdiamond.ventureplugin.skills.Components.ExpGain.mining.miningExp;
+import net.laserdiamond.ventureplugin.items.util.VentureItemBuilder;
 import net.laserdiamond.ventureplugin.skills.Components.SkillsEXP;
 import net.laserdiamond.ventureplugin.skills.Components.SkillsLevel;
 import net.laserdiamond.ventureplugin.skills.Components.SkillsReward;
@@ -53,7 +48,7 @@ public class SkillsExpGainListener implements Listener {
     public static final double BREWING_CAFFEINATION_REWARD = BASE_STATS_CONFIG.getDouble("brewingCaffeination");
 
     @EventHandler
-    public void onSkillExpGain(SkillsExpGainEvent event)
+    private void onSkillExpGain(SkillsExpGainEvent event)
     {
         Player player = event.getPlayer();
         double expAmount = event.getExpAmount();
@@ -67,6 +62,12 @@ public class SkillsExpGainListener implements Listener {
         DefenseStats defenseStats = statPlayer.getDefenseStats();
         PotionStats potionStats = statPlayer.getPotionStats();
         LootStats lootStats = statPlayer.getLootStats();
+
+        if (event.getExpAmount() <= 0)
+        {
+            event.setCancelled(true);
+            return;
+        }
 
         if (!event.isCancelled())
         {
@@ -200,7 +201,7 @@ public class SkillsExpGainListener implements Listener {
                         skillsReward.setMiningFortuneBonus(fortuneBonus + MINING_FORTUNE_REWARD);
                         skillsReward.setMiningDefenseBonus(defense + MINING_DEFENSE_REWARD);
 
-                        lootStats.setBonusOreLoot(lootStats.getBonusOreLoot() + MINING_FORTUNE_REWARD);
+                        lootStats.setMiningFortune(lootStats.getMiningFortune() + MINING_FORTUNE_REWARD);
                         defenseStats.setDefense(defenseStats.getDefense() + MINING_DEFENSE_REWARD);
 
                         double newExpToNextLevel = skillsEXP.getMiningExpToNextLevel();
@@ -280,7 +281,7 @@ public class SkillsExpGainListener implements Listener {
                         skillsLevel.setForagingLevel(skillLevel + 1);
                         skillsReward.setForagingFortuneBonus(fortuneBonus + FORAGING_FORTUNE_REWARD);
 
-                        lootStats.setBonusWoodLoot(lootStats.getBonusWoodLoot() - FORAGING_FORTUNE_REWARD);
+                        lootStats.setForagingFortune(lootStats.getForagingFortune() - FORAGING_FORTUNE_REWARD);
 
                         double newExpToNextLevel = skillsEXP.getForagingExpToNextLevel();
                         double newRequiredExpToNextLevel = skillsEXP.getRequiredForagingExpToNextLevel();
@@ -357,7 +358,7 @@ public class SkillsExpGainListener implements Listener {
                         skillsLevel.setFarmingLevel(skillLevel + 1);
                         skillsReward.setFarmingFortuneBonus(fortuneBonus + FARMING_FORTUNE_REWARD);
 
-                        lootStats.setBonusFarmingLoot(lootStats.getBonusFarmingLoot() + FARMING_FORTUNE_REWARD);
+                        lootStats.setFarmingFortune(lootStats.getFarmingFortune() + FARMING_FORTUNE_REWARD);
 
                         double newExpToNextLevel = skillsEXP.getFarmingExpToNextLevel();
                         double newRequiredExpToNextLevel = skillsEXP.getRequiredFarmingExpToNextLevel();
@@ -630,21 +631,31 @@ public class SkillsExpGainListener implements Listener {
      * @param event The EntityDeathEvent
      */
     @EventHandler
-    public void combatExpGain(EntityDeathEvent event)
+    private void combatExpGain(EntityDeathEvent event)
     {
         if (event.getEntity() instanceof Mob mob)
         {
             if (mob.getKiller() != null)
             {
                 Player player = mob.getKiller();
-                Double combatExp = mobExp.getMobCombatExp(mob);
+                Double combatExp = CombatExp.getMobCombatExp(mob);
                 SkillsExpGainEvent expGainEvent = new SkillsExpGainEvent(player, combatExp, SkillsExpGainEvent.Skill.COMBAT);
-                double exp = expGainEvent.getExpAmount();
+                double eventCombatExp = expGainEvent.getExpAmount();
                 Bukkit.getPluginManager().callEvent(expGainEvent);
 
                 if (!expGainEvent.isCancelled())
                 {
-                    runExpDisplay(mob.getEyeLocation(), ChatColor.DARK_RED, StatSymbols.COMBAT, exp);
+                    runExpDisplay(mob.getEyeLocation(), ChatColor.DARK_RED, StatSymbols.COMBAT, eventCombatExp);
+                }
+
+                Double fishingExp = FishingExp.getFishingExp(mob);
+                SkillsExpGainEvent expGainEvent1 = new SkillsExpGainEvent(player, fishingExp, SkillsExpGainEvent.Skill.FISHING);
+                double eventFishingExp = expGainEvent1.getExpAmount();
+                Bukkit.getPluginManager().callEvent(expGainEvent1);
+
+                if (!expGainEvent1.isCancelled())
+                {
+                    runExpDisplay(mob.getEyeLocation().add(0,0.5,0), ChatColor.AQUA, StatSymbols.FISHING, eventFishingExp);
                 }
             }
         }
@@ -655,15 +666,15 @@ public class SkillsExpGainListener implements Listener {
      * @param event The BlockBreakEvent
      */
     @EventHandler
-    public void blockBreakExpGain(BlockBreakEvent event)
+    private void blockBreakExpGain(BlockBreakEvent event)
     {
         Player player = event.getPlayer();
         Block block = event.getBlock();
         Location expDisplayLoc = block.getLocation().add(0.5,0.5,0.5);
 
-        Double miningSkillExp = miningExp.getBlockMiningExp(block);
-        Double foragingSkillExp = foragingExp.getForagingExp(block);
-        Double farmingSkillExp = farmingExp.getFarmingExp(block);
+        Double miningSkillExp = MiningExp.getBlockMiningExp(block);
+        Double foragingSkillExp = ForagingExp.getForagingExp(block);
+        Double farmingSkillExp = FarmingExp.getFarmingExp(block);
 
         SkillsExpGainEvent miningExpGainEvent = new SkillsExpGainEvent(player, miningSkillExp, SkillsExpGainEvent.Skill.MINING);
         SkillsExpGainEvent foragingExpGainEvent = new SkillsExpGainEvent(player, foragingSkillExp, SkillsExpGainEvent.Skill.FORAGING);
@@ -696,7 +707,7 @@ public class SkillsExpGainListener implements Listener {
      * @param event BrewEvent
      */
     @EventHandler
-    public void brewingExpReady(BrewEvent event)
+    private void brewingExpReady(BrewEvent event)
     {
         List<ItemStack> results = event.getResults();
         ItemStack potion1 = results.get(0);
@@ -705,19 +716,19 @@ public class SkillsExpGainListener implements Listener {
 
         if (potion1 != null)
         {
-            ItemForger potionForger = new ItemForger(potion1);
+            VentureItemBuilder potionForger = new VentureItemBuilder(potion1);
             potionForger.setPotionReady(true);
 
         }
         if (potion2 != null)
         {
-            ItemForger potionForger = new ItemForger(potion2);
+            VentureItemBuilder potionForger = new VentureItemBuilder(potion2);
             potionForger.setPotionReady(true);
 
         }
         if (potion3 != null)
         {
-            ItemForger potionForger = new ItemForger(potion3);
+            VentureItemBuilder potionForger = new VentureItemBuilder(potion3);
             potionForger.setPotionReady(true);
         }
     }
@@ -727,7 +738,7 @@ public class SkillsExpGainListener implements Listener {
      * @param event InventoryClickEvent
      */
     @EventHandler
-    public void brewingExpGain(InventoryClickEvent event)
+    private void brewingExpGain(InventoryClickEvent event)
     {
         HumanEntity humanEntity = event.getWhoClicked();
         Inventory inventory = event.getClickedInventory();
@@ -747,12 +758,12 @@ public class SkillsExpGainListener implements Listener {
                     case 0:
                         if (potion1 != null)
                         {
-                            ItemForger potionForger = new ItemForger(potion1);
+                            VentureItemBuilder potionForger = new VentureItemBuilder(potion1);
                             if (potionForger.getPotionReady())
                             {
                                 if (potion1.getItemMeta() instanceof PotionMeta potionMeta)
                                 {
-                                    exp = brewingExp.getBrewingExp(potionMeta);
+                                    exp = BrewingExp.getBrewingExp(potionMeta);
                                     SkillsExpGainEvent skillsExpGainEvent = new SkillsExpGainEvent(player, exp, SkillsExpGainEvent.Skill.BREWING);
                                     Bukkit.getPluginManager().callEvent(skillsExpGainEvent);
 
@@ -770,12 +781,12 @@ public class SkillsExpGainListener implements Listener {
                     case 1:
                         if (potion2 != null)
                         {
-                            ItemForger potionForger = new ItemForger(potion2);
+                            VentureItemBuilder potionForger = new VentureItemBuilder(potion2);
                             if (potionForger.getPotionReady())
                             {
                                 if (potion2.getItemMeta() instanceof PotionMeta potionMeta)
                                 {
-                                    exp = brewingExp.getBrewingExp(potionMeta);
+                                    exp = BrewingExp.getBrewingExp(potionMeta);
                                     SkillsExpGainEvent skillsExpGainEvent = new SkillsExpGainEvent(player, exp, SkillsExpGainEvent.Skill.BREWING);
                                     Bukkit.getPluginManager().callEvent(skillsExpGainEvent);
 
@@ -793,12 +804,12 @@ public class SkillsExpGainListener implements Listener {
                     case 2:
                         if (potion3 != null)
                         {
-                            ItemForger potionForger = new ItemForger(potion3);
+                            VentureItemBuilder potionForger = new VentureItemBuilder(potion3);
                             if (potionForger.getPotionReady())
                             {
                                 if (potion3.getItemMeta() instanceof PotionMeta potionMeta)
                                 {
-                                    exp = brewingExp.getBrewingExp(potionMeta);
+                                    exp = BrewingExp.getBrewingExp(potionMeta);
                                     SkillsExpGainEvent skillsExpGainEvent = new SkillsExpGainEvent(player, exp, SkillsExpGainEvent.Skill.BREWING);
                                     Bukkit.getPluginManager().callEvent(skillsExpGainEvent);
 

@@ -2,17 +2,18 @@ package net.laserdiamond.ventureplugin.items.util;
 
 import com.google.common.collect.Multimap;
 import net.laserdiamond.ventureplugin.VenturePlugin;
-import net.laserdiamond.ventureplugin.commands.ViewProfiles.TuningMenu;
-import net.laserdiamond.ventureplugin.commands.ViewProfiles.ViewSkills;
-import net.laserdiamond.ventureplugin.commands.ViewProfiles.ViewStats;
+import net.laserdiamond.ventureplugin.commands.view_profiles.TuningMenu;
+import net.laserdiamond.ventureplugin.commands.view_profiles.ViewSkills;
+import net.laserdiamond.ventureplugin.commands.view_profiles.ViewStats;
 import net.laserdiamond.ventureplugin.enchants.Components.VentureEnchants;
 import net.laserdiamond.ventureplugin.entities.player.StatPlayer;
 import net.laserdiamond.ventureplugin.items.armor.armor_sets.SoulFireBlazeArmor;
 import net.laserdiamond.ventureplugin.items.armor.trims.Components.TrimLore;
-import net.laserdiamond.ventureplugin.items.armor.util.ArmorPieceTypes;
-import net.laserdiamond.ventureplugin.items.armor.util.VentureArmorSet;
+import net.laserdiamond.ventureplugin.items.armor.ArmorPieceTypes;
+import net.laserdiamond.ventureplugin.items.armor.VentureArmorSet;
 import net.laserdiamond.ventureplugin.items.menuItems.util.VentureMenuItem;
 import net.laserdiamond.ventureplugin.items.menuItems.util.VentureSkillProgressItem;
+import net.laserdiamond.ventureplugin.items.misc.VentureMiscItem;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -38,6 +39,7 @@ import java.util.List;
 public class ItemRegistry implements Listener {
 
     private static final VenturePlugin PLUGIN = VenturePlugin.getInstance();
+    private static final HashMap<String, VentureMiscItem> MISC_ITEM_MAP = PLUGIN.getMiscItemMap();
     private static final HashMap<String, VentureArmorSet> ARMOR_SET_ITEM_MAP = PLUGIN.getArmorSetItemMap();
     private static final HashMap<String, VentureMenuItem> VENTURE_MENU_ITEMS_MAP = PLUGIN.getVentureMenuItems();
     private static final HashMap<String, VentureSkillProgressItem> VENTURE_SKILL_PROGRESS_ITEMS = PLUGIN.getVentureSkillProgressItems();
@@ -217,7 +219,7 @@ public class ItemRegistry implements Listener {
             ItemMeta itemMeta = itemStack.getItemMeta();
             if (itemMeta != null)
             {
-                ItemForger itemForger = new ItemForger(itemStack);
+                VentureItemBuilder ventureItemBuilder = new VentureItemBuilder(itemStack);
                 if (itemMeta instanceof ArmorMeta armorMeta)
                 {
                     List<String> trimLore = TrimLore.createLore(armorMeta);
@@ -226,11 +228,11 @@ public class ItemRegistry implements Listener {
 
                 if (itemMeta.hasEnchants())
                 {
-                    newLore.addAll(VentureEnchants.enchantLore(itemForger.getEnchantments()));
+                    newLore.addAll(VentureEnchants.enchantLore(ventureItemBuilder.getEnchantments()));
                 }
 
-                String itemKeyValue = itemForger.getItemKey();
-                int stars = itemForger.getStars();
+                String itemKeyValue = ventureItemBuilder.getItemKey();
+                int stars = ventureItemBuilder.getStars();
                 VentureArmorSet ventureArmorSet = ARMOR_SET_ITEM_MAP.get(itemKeyValue);
                 if (ventureArmorSet != null && ARMOR_SET_ITEM_MAP.containsKey(itemKeyValue))
                 {
@@ -252,7 +254,7 @@ public class ItemRegistry implements Listener {
                     if (armorPieceTypes != null)
                     {
                         LinkedList<String> lore = ventureArmorSet.createLore(armorPieceTypes, stars);
-                        ItemForger armorItem = ventureArmorSet.createArmorSet(armorPieceTypes, stars);
+                        VentureItemBuilder armorItem = ventureArmorSet.createArmorSet(armorPieceTypes, stars);
                         VentureItemRarity.Rarity rarity = armorItem.getRarity();
                         HashMap<VentureItemStatKeys, Double> itemStats = armorItem.getItemStats();
                         Multimap<Attribute, AttributeModifier> attributes = armorItem.getAttributes();
@@ -260,7 +262,7 @@ public class ItemRegistry implements Listener {
                         if (lore != null)
                         {
                             newLore.addAll(lore);
-                            SoulFireBlazeArmor.itemSpecificLore(itemForger, newLore);
+                            SoulFireBlazeArmor.itemSpecificLore(ventureItemBuilder, newLore);
                         }
 
                         if (rarity != null) // Set rarity for item
@@ -289,6 +291,26 @@ public class ItemRegistry implements Listener {
                     }
                 }
 
+                VentureMiscItem ventureMiscItem = MISC_ITEM_MAP.get(itemKeyValue);
+                if (ventureMiscItem != null && MISC_ITEM_MAP.containsKey(itemKeyValue))
+                {
+                    List<String> lore = ventureMiscItem.createLore();
+                    VentureItemRarity.Rarity rarity = ventureMiscItem.rarity();
+                    VentureItemBuilder miscItem = ventureMiscItem.createItem();
+
+                    if (!lore.isEmpty())
+                    {
+                        newLore.addAll(lore);
+                    }
+
+                    if (rarity != null)
+                    {
+                        itemMeta.setDisplayName(miscItem.getName());
+                        itemMeta.getPersistentDataContainer().set(ItemKeys.RARITY_KEY, VentureItemRarity.STRING, rarity.getRarity());
+                    }
+
+                }
+
                 itemMeta.setLore(newLore);
                 itemStack.setItemMeta(itemMeta);
 
@@ -306,7 +328,7 @@ public class ItemRegistry implements Listener {
             ItemMeta itemMeta = itemStack.getItemMeta();
             if (itemMeta != null)
             {
-                ItemForger itemForger = new ItemForger(itemStack);
+                VentureItemBuilder ventureItemBuilder = new VentureItemBuilder(itemStack);
                 if (itemMeta instanceof ArmorMeta armorMeta)
                 {
                     List<String> trimLore = TrimLore.createLore(armorMeta);
@@ -315,12 +337,13 @@ public class ItemRegistry implements Listener {
 
                 if (itemMeta.hasEnchants())
                 {
-                    newLore.addAll(VentureEnchants.enchantLore(itemForger.getEnchantments()));
+                    newLore.addAll(VentureEnchants.enchantLore(ventureItemBuilder.getEnchantments()));
                 }
 
                 int itemMatchCount = 0;
-                String itemKeyValue = itemForger.getItemKey();
-                int stars = itemForger.getStars();
+                final String itemKeyValue = ventureItemBuilder.getItemKey();
+
+                int stars = ventureItemBuilder.getStars();
                 VentureArmorSet ventureArmorSet = ARMOR_SET_ITEM_MAP.get(itemKeyValue);
                 if (ventureArmorSet != null && ARMOR_SET_ITEM_MAP.containsKey(itemKeyValue))
                 {
@@ -343,7 +366,7 @@ public class ItemRegistry implements Listener {
                     {
                         LinkedList<String> defaultLore = ventureArmorSet.createLore(armorPieceTypes, stars);
                         LinkedList<String> playerLore = ventureArmorSet.createPlayerLore(player, armorPieceTypes, stars);
-                        ItemForger armorItem = ventureArmorSet.createArmorSet(armorPieceTypes, stars);
+                        VentureItemBuilder armorItem = ventureArmorSet.createArmorSet(armorPieceTypes, stars);
                         VentureItemRarity.Rarity rarity = armorItem.getRarity();
                         HashMap<VentureItemStatKeys, Double> itemStats = armorItem.getItemStats();
                         Multimap<Attribute, AttributeModifier> attributes = armorItem.getAttributes();
@@ -360,7 +383,7 @@ public class ItemRegistry implements Listener {
                             if (defaultLore != null)
                             {
                                 newLore.addAll(defaultLore);
-                                SoulFireBlazeArmor.itemSpecificLore(itemForger, newLore);
+                                SoulFireBlazeArmor.itemSpecificLore(ventureItemBuilder, newLore);
                             }
                         }
 
@@ -392,7 +415,34 @@ public class ItemRegistry implements Listener {
                     itemMatchCount++;
                 }
 
-                String menuItemKeyValue = itemForger.getMenuItemKey();
+                VentureMiscItem ventureMiscItem = MISC_ITEM_MAP.get(itemKeyValue);
+                if (ventureMiscItem != null && MISC_ITEM_MAP.containsKey(itemKeyValue))
+                {
+                    List<String> lore = ventureMiscItem.createLore(); // Default Lore
+                    List<String> playerLore = ventureMiscItem.createPlayerLore(player); // Player Lore
+                    VentureItemRarity.Rarity rarity = ventureMiscItem.rarity(); // Rarity
+                    VentureItemBuilder miscItem = ventureMiscItem.createItem();
+
+                    if (!playerLore.isEmpty())
+                    {
+                        newLore.addAll(playerLore); // If Player lore is not empty, add player lore to new lore
+                    } else
+                    {
+                        newLore.addAll(lore); // Otherwise, add default lore
+                    }
+
+                    if (rarity != null)
+                    {
+                        itemMeta.setDisplayName(miscItem.getName());
+                        itemMeta.getPersistentDataContainer().set(ItemKeys.RARITY_KEY, VentureItemRarity.STRING, rarity.getRarity());
+                    }
+
+                } else
+                {
+                    itemMatchCount++;
+                }
+
+                final String menuItemKeyValue = ventureItemBuilder.getMenuItemKey();
                 VentureMenuItem ventureMenuItem = VENTURE_MENU_ITEMS_MAP.get(menuItemKeyValue);
 
                 if (ventureMenuItem != null && VENTURE_MENU_ITEMS_MAP.containsKey(menuItemKeyValue))
@@ -407,11 +457,11 @@ public class ItemRegistry implements Listener {
                     itemMatchCount++;
                 }
 
-                String skillProgressKeyValue = itemForger.getSkillProgressSkillKey();
+                String skillProgressKeyValue = ventureItemBuilder.getSkillProgressSkillKey();
                 VentureSkillProgressItem skillProgressItem = VENTURE_SKILL_PROGRESS_ITEMS.get(skillProgressKeyValue);
                 if (skillProgressItem != null && VENTURE_SKILL_PROGRESS_ITEMS.containsKey(skillProgressKeyValue))
                 {
-                    int skillLvl = itemForger.getSkillProgressLvl();
+                    int skillLvl = ventureItemBuilder.getSkillProgressLvl();
                     List<String> lore = skillProgressItem.skillProgressItem(skillLvl, new StatPlayer(player).getSkillsProfile()).getLore();
                     if (lore != null)
                     {
@@ -422,7 +472,7 @@ public class ItemRegistry implements Listener {
                     itemMatchCount++;
                 }
 
-                if (itemMatchCount == 3) // Item is not an armor set item or a menu item
+                if (itemMatchCount == 4) // Item is not an armor set item or a menu item
                 {
                     return itemStack;
                 }

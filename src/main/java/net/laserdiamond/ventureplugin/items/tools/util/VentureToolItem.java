@@ -1,8 +1,8 @@
 package net.laserdiamond.ventureplugin.items.tools.util;
 
 import com.google.common.collect.Multimap;
-import net.laserdiamond.ventureplugin.items.util.ItemForger;
-import net.laserdiamond.ventureplugin.items.misc.util.VentureStatItem;
+import net.laserdiamond.ventureplugin.items.util.VentureItemBuilder;
+import net.laserdiamond.ventureplugin.items.misc.VentureStatItem;
 import net.laserdiamond.ventureplugin.items.util.VentureItemStatKeys;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -54,5 +54,5 @@ public abstract class VentureToolItem extends VentureStatItem {
      * @param stars The amount of stars the tool item has
      * @return The tool item
      */
-    public abstract ItemForger createTool(ToolTypes toolTypes, int stars);
+    public abstract VentureItemBuilder createTool(ToolTypes toolTypes, int stars);
 }

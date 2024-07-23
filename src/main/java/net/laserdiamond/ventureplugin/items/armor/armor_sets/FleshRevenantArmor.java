@@ -6,12 +6,10 @@ import net.laserdiamond.ventureplugin.events.abilities.AbilityCasting;
 import net.laserdiamond.ventureplugin.events.abilities.AbilityHandler;
 import net.laserdiamond.ventureplugin.items.util.ItemStringBuilder;
 import net.laserdiamond.ventureplugin.items.util.VentureItemRarity;
-import net.laserdiamond.ventureplugin.items.armor.util.ArmorCMD;
-import net.laserdiamond.ventureplugin.items.armor.util.ArmorPieceTypes;
-import net.laserdiamond.ventureplugin.items.armor.util.VentureArmorSet;
-import net.laserdiamond.ventureplugin.util.File.ArmorConfig;
+import net.laserdiamond.ventureplugin.items.armor.VentureArmorMaterial;
+import net.laserdiamond.ventureplugin.items.armor.ArmorPieceTypes;
+import net.laserdiamond.ventureplugin.items.armor.VentureArmorSet;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -25,31 +23,13 @@ public final class FleshRevenantArmor extends VentureArmorSet implements Ability
     }
 
     @Override
-    protected ArmorConfig config() {
-        return plugin.getFleshRevenantArmorConfig();
-    }
-
-    @Override
     protected String armorName() {
         return "Flesh Revenant";
     }
 
     @Override
-    public ArmorCMD armorCMD() {
-        return ArmorCMD.FLESH_HORROR;
-    }
-
-    @Override
-    protected Material armorPieceMaterials(ArmorPieceTypes armorPieceTypes) {
-        Material material = null;
-        switch (armorPieceTypes)
-        {
-            case HELMET -> material = Material.PLAYER_HEAD;
-            case CHESTPLATE -> material = Material.LEATHER_CHESTPLATE;
-            case LEGGINGS -> material = Material.LEATHER_LEGGINGS;
-            case BOOTS -> material = Material.LEATHER_BOOTS;
-        }
-        return material;
+    public VentureArmorMaterial ventureArmorMaterial() {
+        return VentureArmorMaterial.FLESH_HORROR;
     }
 
     @Override
@@ -60,8 +40,8 @@ public final class FleshRevenantArmor extends VentureArmorSet implements Ability
     @Override
     public LinkedList<String> createLore(@NotNull ArmorPieceTypes armorPieceTypes, int stars) {
 
-        double lifeLeechAmt = config().getDouble("lifeLeechAmount");
-        String abilityName = config().getString("abilityName");
+        double lifeLeechAmt = getArmorConfig().getDouble("lifeLeechAmount");
+        String abilityName = getArmorConfig().getString("abilityName");
 
         LinkedList<String> lore = super.createLore(armorPieceTypes, stars);
         lore.add(ChatColor.GOLD + "Full Set Bonus: " + abilityName);
@@ -77,7 +57,7 @@ public final class FleshRevenantArmor extends VentureArmorSet implements Ability
     @Override
     public void onKill(Player player, LivingEntity killedEntity) {
         double maxHealth = player.getMaxHealth();
-        double lifeStealAmount = maxHealth * config().getDouble("lifeLeechAmount") * 0.01;
+        double lifeStealAmount = maxHealth * getArmorConfig().getDouble("lifeLeechAmount") * 0.01;
         double currentHealth = player.getHealth();
 
         player.setHealth(Math.min(currentHealth + lifeStealAmount, maxHealth));

@@ -1,6 +1,7 @@
 package net.laserdiamond.ventureplugin.events.mana;
 
 import net.laserdiamond.ventureplugin.VenturePlugin;
+import net.laserdiamond.ventureplugin.entities.player.StatPlayer;
 import net.laserdiamond.ventureplugin.events.effects.Managers.EffectManager;
 import net.laserdiamond.ventureplugin.stats.Components.Stats;
 import net.laserdiamond.ventureplugin.stats.Manager.StatProfileManager;
@@ -13,7 +14,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class ManaRegen extends BukkitRunnable implements Listener {
 
     private final VenturePlugin plugin;
-
     private final StatProfileManager statProfileManager;
     private final EffectManager effectManager;
 
@@ -33,29 +33,9 @@ public class ManaRegen extends BukkitRunnable implements Listener {
             double availableMana = stats.getAvailableMana();
             double maxMana = stats.getMaxMana();
             double baseManaRegen = maxMana/50;
-            /*
-            EffectDurations effectDurations = effectManager.getEffectProfile(player.getUniqueId()).getEffectDurations();
-            int manaFreezeDuration = effectDurations.getManaFreezeDuration();
-
-             */
-
-
-
-            /*
-            if (ManaFreezeTimer.hasNoEffect(player)) {
-                if (availableMana < maxMana) {
-                    stats.setAvailableMana(availableMana + baseManaRegen);
-                }
-            }
-
-             */
 
             PlayerManaRegenEvent playerManaRegenEvent = new PlayerManaRegenEvent(player, PlayerManaRegenEvent.ManaRegenReason.REGEN, baseManaRegen);
             Bukkit.getPluginManager().callEvent(playerManaRegenEvent);
-            if (!playerManaRegenEvent.isCancelled())
-            {
-                PlayerManaRegenEvent.run(player, baseManaRegen);
-            }
 
         }
     }
@@ -63,7 +43,16 @@ public class ManaRegen extends BukkitRunnable implements Listener {
     @EventHandler
     public void manaRegenEvent(PlayerManaRegenEvent event)
     {
+        if (event.isCancelled())
+        {
+            return;
+        }
+        StatPlayer statPlayer = new StatPlayer(event.getPlayer());
+        Stats stats = statPlayer.getStats();
+        double availableMana = stats.getAvailableMana();
+        double maxMana = stats.getMaxMana();
 
+        stats.setAvailableMana(Math.max(0, Math.min(availableMana + event.getManaRegenAmount(), maxMana)));
     }
 
 

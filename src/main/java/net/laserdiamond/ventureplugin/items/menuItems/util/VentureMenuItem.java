@@ -1,7 +1,7 @@
 package net.laserdiamond.ventureplugin.items.menuItems.util;
 
 import net.laserdiamond.ventureplugin.VenturePlugin;
-import net.laserdiamond.ventureplugin.items.util.ItemForger;
+import net.laserdiamond.ventureplugin.items.util.VentureItemBuilder;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -42,10 +42,10 @@ public abstract class VentureMenuItem {
      * @param player The player who will be viewing/interacting with this menu item
      * @return A new instance of the menu item
      */
-    public ItemForger createItem(Player player)
+    public VentureItemBuilder createItem(Player player)
     {
         String keyName = menuItem().getKeyName().toLowerCase().replace(" ", "_");
-        return new ItemForger(menuItem().getMaterial())
+        return new VentureItemBuilder(menuItem().getMaterial())
                 .setName(menuItem().getDisplayName())
                 .hideAllItemFlags()
                 .setLore(createLore(player))

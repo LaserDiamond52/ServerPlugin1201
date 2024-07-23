@@ -9,11 +9,11 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * This event is called when mana regeneration occurs
+ */
 public class PlayerManaRegenEvent extends PlayerEvent implements Cancellable {
 
-    /**
-     * This event is called when mana regeneration occurs
-     */
     private static final VenturePlugin PLUGIN = VenturePlugin.getInstance();
     private static final StatProfileManager STAT_PROFILE_MANAGER = PLUGIN.getStatProfileManager();
     private final ManaRegenReason manaRegenReason;
@@ -26,20 +26,6 @@ public class PlayerManaRegenEvent extends PlayerEvent implements Cancellable {
         super(player);
         this.manaRegenReason = manaRegenReason;
         this.manaRegenAmount = manaRegenAmount;
-    }
-
-    /**
-     * A method that runs the event's intended function
-     * @param player The player to run the event on
-     * @param manaRegenAmount The amount of mana to grant to the player
-     */
-    public static void run(final Player player, double manaRegenAmount)
-    {
-        Stats stats = STAT_PROFILE_MANAGER.getStatProfile(player.getUniqueId()).stats();
-        double availableMana = stats.getAvailableMana();
-        double maxMana = stats.getMaxMana();
-
-        stats.setAvailableMana(Math.max(0, Math.min(availableMana + manaRegenAmount, maxMana)));
     }
 
     @Override

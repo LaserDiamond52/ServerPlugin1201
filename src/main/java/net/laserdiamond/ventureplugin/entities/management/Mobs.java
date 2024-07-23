@@ -6,9 +6,6 @@ import org.bukkit.entity.*;
 
 public class Mobs
 {
-    private static <T extends Entity> T summonMob(Location loc, Class<T> mob) {
-        return loc.getWorld().spawn(loc, mob);
-    }
 
     public enum vanillaMobs
     {

@@ -9,11 +9,10 @@ import net.laserdiamond.ventureplugin.events.damage.PlayerMagicDamageEvent;
 import net.laserdiamond.ventureplugin.events.mana.PlayerSpellCastEvent;
 import net.laserdiamond.ventureplugin.items.util.ItemStringBuilder;
 import net.laserdiamond.ventureplugin.items.util.VentureItemRarity;
-import net.laserdiamond.ventureplugin.items.armor.util.ArmorCMD;
-import net.laserdiamond.ventureplugin.items.armor.util.ArmorPieceTypes;
-import net.laserdiamond.ventureplugin.items.armor.util.VentureArmorSet;
+import net.laserdiamond.ventureplugin.items.armor.VentureArmorMaterial;
+import net.laserdiamond.ventureplugin.items.armor.ArmorPieceTypes;
+import net.laserdiamond.ventureplugin.items.armor.VentureArmorSet;
 import net.laserdiamond.ventureplugin.stats.Components.Stats;
-import net.laserdiamond.ventureplugin.util.File.ArmorConfig;
 import net.laserdiamond.ventureplugin.util.messages.Messages;
 import org.bukkit.*;
 import org.bukkit.entity.LivingEntity;
@@ -35,39 +34,21 @@ public final class PrismariteArmor extends VentureArmorSet implements AbilityCas
     }
 
     @Override
-    protected ArmorConfig config() {
-        return plugin.getPrismariteArmorConfig();
-    }
-
-    @Override
     protected String armorName() {
         return "Prismarite";
     }
 
     @Override
-    public ArmorCMD armorCMD() {
-        return ArmorCMD.PRISMARITE_ARMOR;
-    }
-
-    @Override
-    protected Material armorPieceMaterials(ArmorPieceTypes armorPieceTypes) {
-        Material material = null;
-        switch (armorPieceTypes)
-        {
-            case HELMET -> material = Material.PLAYER_HEAD;
-            case CHESTPLATE -> material = Material.LEATHER_CHESTPLATE;
-            case LEGGINGS -> material = Material.LEATHER_LEGGINGS;
-            case BOOTS -> material = Material.LEATHER_BOOTS;
-        }
-        return material;
+    public VentureArmorMaterial ventureArmorMaterial() {
+        return VentureArmorMaterial.PRISMARITE_ARMOR;
     }
 
     @Override
     public LinkedList<String> createLore(@NotNull ArmorPieceTypes armorPieceTypes, int stars) {
 
-        double manaCost = config().getDouble("manaCost");
-        double laserDamage = config().getDouble("laserDamage");
-        String abilityName = config().getString("abilityName");
+        double manaCost = getArmorConfig().getDouble("manaCost");
+        double laserDamage = getArmorConfig().getDouble("laserDamage");
+        String abilityName = getArmorConfig().getString("abilityName");
 
         LinkedList<String> lore = super.createLore(armorPieceTypes, stars);
         lore.add(ChatColor.GOLD + "Full Set Bonus: " + abilityName + ChatColor.YELLOW + ChatColor.BOLD + " Hold Sneak");
@@ -93,9 +74,9 @@ public final class PrismariteArmor extends VentureArmorSet implements AbilityCas
         StatPlayer statPlayer = new StatPlayer(player);
         Stats stats = statPlayer.getStats();
         double availableMana = stats.getAvailableMana();
-        double manaCost = config().getDouble("manaCost");
-        double laserDamage = config().getDouble("laserDamage");
-        String abilityName = config().getString("abilityName");
+        double manaCost = getArmorConfig().getDouble("manaCost");
+        double laserDamage = getArmorConfig().getDouble("laserDamage");
+        String abilityName = getArmorConfig().getString("abilityName");
 
         PlayerSpellCastEvent spellCastEvent = new PlayerSpellCastEvent(player, manaCost);
         double eventCost = spellCastEvent.getManaCost();

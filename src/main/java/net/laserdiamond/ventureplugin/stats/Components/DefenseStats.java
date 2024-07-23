@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 
 public class DefenseStats {
 
+    private final Player player;
     private double defense;
     private double fireDefense;
     private double explosionDefense;
@@ -17,6 +18,7 @@ public class DefenseStats {
 
     public DefenseStats(Player player, double defense, double fireDefense, double explosionDefense, double projectileDefense, double magicDefense, double toughness, double fortitude)
     {
+        this.player = player;
         this.defense = defense;
         this.fireDefense = fireDefense;
         this.explosionDefense = explosionDefense;
@@ -77,13 +79,13 @@ public class DefenseStats {
         this.toughness = toughness;
     }
 
-    public double getFortitude(Player player) {
+    public double getFortitude() {
         AttributeInstance kbResInstance = player.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE);
         fortitude = kbResInstance.getBaseValue();
         return fortitude;
     }
 
-    public void setFortitude(Player player, double fortitude) {
+    public void setFortitude(double fortitude) {
         AttributeInstance kbResInstance = player.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE);
         kbResInstance.setBaseValue(fortitude);
         this.fortitude = fortitude;

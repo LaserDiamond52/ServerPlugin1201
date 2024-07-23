@@ -2,7 +2,7 @@ package net.laserdiamond.ventureplugin.items.crafting.SmithingTable;
 
 import net.laserdiamond.ventureplugin.VenturePlugin;
 import net.laserdiamond.ventureplugin.items.crafting.Recipes.SmithingTableRecipes;
-import net.laserdiamond.ventureplugin.items.util.ItemForger;
+import net.laserdiamond.ventureplugin.items.util.VentureItemBuilder;
 import net.laserdiamond.ventureplugin.items.util.ItemRegistry;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -117,7 +117,7 @@ public class SmithingTableCrafting implements Listener
 
                             ArmorTrim trimToAdd = new ArmorTrim(materialToAdd, patternToAdd);
                             ItemStack resultItem = equipmentInput.clone();
-                            ItemForger resultForger = new ItemForger(resultItem);
+                            VentureItemBuilder resultForger = new VentureItemBuilder(resultItem);
 
                             resultForger.setArmorTrim(trimToAdd);
                             event.setResult(ItemRegistry.renewItem(resultForger.toItemStack()));

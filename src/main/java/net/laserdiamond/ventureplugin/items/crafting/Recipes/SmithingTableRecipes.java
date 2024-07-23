@@ -1,9 +1,9 @@
 package net.laserdiamond.ventureplugin.items.crafting.Recipes;
 
 import net.laserdiamond.ventureplugin.VenturePlugin;
-import net.laserdiamond.ventureplugin.items.armor.armor_sets.NetheriteArmor;
+import net.laserdiamond.ventureplugin.items.armor.VentureArmorSet;
 import net.laserdiamond.ventureplugin.items.crafting.SmithingTable.SmithingRecipe;
-import net.laserdiamond.ventureplugin.items.armor.util.ArmorPieceTypes;
+import net.laserdiamond.ventureplugin.items.armor.ArmorPieceTypes;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ArmorMeta;
@@ -14,9 +14,11 @@ import org.bukkit.inventory.meta.trim.ArmorTrim;
 public class SmithingTableRecipes {
 
     private static final VenturePlugin plugin = VenturePlugin.getInstance();
-    private static final NetheriteArmor NETHERITE_ARMOR = plugin.getNetheriteArmorManager();
+    private static final VentureArmorSet NETHERITE_ARMOR = plugin.getNetheriteArmorManager();
 
-
+    /**
+     * Entries for smithing table recipes
+     */
     public enum Recipes {
 
         NETHERITE_SWORD (new SmithingRecipe(new ItemStack(Material.DIAMOND_SWORD), new ItemStack(Material.NETHERITE_INGOT,1), new ItemStack(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE,1)), new ItemStack(Material.NETHERITE_SWORD)),

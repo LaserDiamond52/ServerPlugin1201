@@ -21,9 +21,19 @@ public final class ItemKeys {
     public static final NamespacedKey FIRE_RESISTANCE_KEY = new NamespacedKey(PLUGIN, "fire_resistant");
 
     /**
+     * Key used to store the stars of the item
+     */
+    public static final NamespacedKey STARS_KEY = new NamespacedKey(PLUGIN, "stars");
+
+    /**
      * Key purely used to determine if a potion has been claimed from the brewing stand
      */
     public static final NamespacedKey POTION_CLAIMED_KEY = new NamespacedKey(PLUGIN, "potion_claimed");
+
+    /**
+     * Key used to determine what enchantments can be applied to an item
+     */
+    public static final NamespacedKey ENCHANTMENT_CATEGORY_KEY = new NamespacedKey(PLUGIN, "enchantment_category");
 
     /**
      * Key for all items that aren't menu-related
@@ -35,7 +45,9 @@ public final class ItemKeys {
      */
     public static final NamespacedKey MENU_ITEM_MAP_KEY = new NamespacedKey(PLUGIN, "menu_item_key");
 
-
+    /**
+     * Key used purely for skill type items that are the skill they represent
+     */
     public static final NamespacedKey SKILL_PROGRESS_SKILL_KEY = new NamespacedKey(PLUGIN, "skill_progress_skill_key");
 
     /**

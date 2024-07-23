@@ -27,7 +27,25 @@ public enum VentureItemStatKeys {
     ARMOR_FISHING_LUCK_KEY(new NamespacedKey(VenturePlugin.getInstance(), "armor_fishing_luck"), ChatColor.GRAY + "Fishing Luck: +", ChatColor.DARK_AQUA, StatSymbols.FISHING_LUCK),
     ARMOR_LUCK_KEY(new NamespacedKey(VenturePlugin.getInstance(), "armor_luck"), ChatColor.GRAY + "Luck: +", ChatColor.GREEN, StatSymbols.LUCK),
     ARMOR_LONGEVITY(new NamespacedKey(VenturePlugin.getInstance(), "armor_longevity"), ChatColor.GRAY + "Longevity: +", ChatColor.DARK_RED, StatSymbols.LONGEVITY),
-    ARMOR_CAFFEINATION(new NamespacedKey(VenturePlugin.getInstance(), "armor_caffeination"), ChatColor.GRAY + "Caffeination: +", ChatColor.LIGHT_PURPLE, StatSymbols.CAFFEINATION);
+    ARMOR_CAFFEINATION(new NamespacedKey(VenturePlugin.getInstance(), "armor_caffeination"), ChatColor.GRAY + "Caffeination: +", ChatColor.LIGHT_PURPLE, StatSymbols.CAFFEINATION),
+    MAINHAND_HEALTH(new NamespacedKey(VenturePlugin.getInstance(), "mainhand_health"), ChatColor.GRAY + "Health: +", ChatColor.RED, StatSymbols.HEALTH),
+    MAINHAND_DEFENSE(new NamespacedKey(VenturePlugin.getInstance(), "mainhand_defense"), ChatColor.GRAY + "Defense: +", ChatColor.GREEN, StatSymbols.DEFENSE),
+    MAINHAND_FIRE_DEFENSE(new NamespacedKey(VenturePlugin.getInstance(), "mainhand_fire_defense"), ChatColor.GRAY + "Fire Defense: +", ChatColor.GOLD, StatSymbols.DEFENSE),
+    MAINHAND_EXPLOSION_DEFENSE(new NamespacedKey(VenturePlugin.getInstance(), "mainhand_explosion_defense"), ChatColor.GRAY + "Explosion Defense: +", ChatColor.DARK_RED, StatSymbols.DEFENSE),
+    MAINHAND_PROJECTILE_DEFENSE(new NamespacedKey(VenturePlugin.getInstance(), "mainhand_projectile_defense"), ChatColor.GRAY + "Projectile Defense: +", ChatColor.DARK_PURPLE, StatSymbols.DEFENSE),
+    MAINHAND_MAGIC_DEFENSE(new NamespacedKey(VenturePlugin.getInstance(), "mainhand_magic_defense"), ChatColor.GRAY + "Magic Defense: +", ChatColor.AQUA, StatSymbols.DEFENSE),
+    MAINHAND_TOUGHNESS(new NamespacedKey(VenturePlugin.getInstance(), "mainhand_toughness"), ChatColor.GRAY + "Toughness: +", ChatColor.GREEN, StatSymbols.TOUGHNESS),
+    MAINHAND_FORTITUDE(new NamespacedKey(VenturePlugin.getInstance(), "mainhand_fortitude"), ChatColor.GRAY + "Fortitude: +", ChatColor.DARK_GREEN, StatSymbols.FORTITUDE),
+    MAINHAND_SPEED(new NamespacedKey(VenturePlugin.getInstance(), "mainhand_speed"), ChatColor.GRAY + "Speed: +", ChatColor.WHITE, StatSymbols.SPEED),
+    MAINHAND_MANA(new NamespacedKey(VenturePlugin.getInstance(), "mainhand_mana"), ChatColor.GRAY + "Mana: +", ChatColor.BLUE, StatSymbols.MANA),
+    MAINHAND_MOB_LOOTING(new NamespacedKey(VenturePlugin.getInstance(), "mainhand_mob_looting"), ChatColor.GRAY + "Looting: +", ChatColor.GREEN, StatSymbols.MOB_FORTUNE),
+    MAINHAND_MINING_FORTUNE(new NamespacedKey(VenturePlugin.getInstance(), "mainhand_mining_fortune"), ChatColor.GRAY + "Mining Fortune: +", ChatColor.GREEN, StatSymbols.MINING_FORTUNE),
+    MAINHAND_FORAGING_FORTUNE(new NamespacedKey(VenturePlugin.getInstance(), "mainhand_foraging_fortune"), ChatColor.GRAY + "Foraging Fortune: +", ChatColor.GREEN, StatSymbols.FORAGING_FORTUNE),
+    MAINHAND_FARMING_FORTUNE(new NamespacedKey(VenturePlugin.getInstance(), "mainhand_farming_fortune"), ChatColor.GRAY + "Farming Fortune: +", ChatColor.GREEN, StatSymbols.FARMING_FORTUNE),
+    MAINHAND_FISHING_LUCK(new NamespacedKey(VenturePlugin.getInstance(), "mainhand_fishing_luck"), ChatColor.GRAY + "Fishing Luck: +", ChatColor.DARK_AQUA, StatSymbols.FISHING_LUCK),
+    MAINHAND_LUCK(new NamespacedKey(VenturePlugin.getInstance(), "mainhand_luck"), ChatColor.GRAY + "Luck: +", ChatColor.GREEN, StatSymbols.LUCK)
+
+    ;
 
     private final NamespacedKey key;
     private final String displayName;

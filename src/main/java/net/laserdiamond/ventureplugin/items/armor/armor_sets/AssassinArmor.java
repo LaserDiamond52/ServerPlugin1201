@@ -9,15 +9,13 @@ import net.laserdiamond.ventureplugin.events.abilities.cooldown.AssassinCloakCoo
 import net.laserdiamond.ventureplugin.events.mana.PlayerSpellCastEvent;
 import net.laserdiamond.ventureplugin.items.util.ItemStringBuilder;
 import net.laserdiamond.ventureplugin.items.util.VentureItemRarity;
-import net.laserdiamond.ventureplugin.items.armor.util.ArmorCMD;
-import net.laserdiamond.ventureplugin.items.armor.util.ArmorPieceTypes;
-import net.laserdiamond.ventureplugin.items.armor.util.VentureArmorSet;
+import net.laserdiamond.ventureplugin.items.armor.VentureArmorMaterial;
+import net.laserdiamond.ventureplugin.items.armor.ArmorPieceTypes;
+import net.laserdiamond.ventureplugin.items.armor.VentureArmorSet;
 import net.laserdiamond.ventureplugin.stats.Components.Stats;
-import net.laserdiamond.ventureplugin.util.File.ArmorConfig;
 import net.laserdiamond.ventureplugin.util.messages.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
@@ -28,14 +26,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.LinkedList;
 
 public final class AssassinArmor extends VentureArmorSet implements AbilityCasting.toggleSneakAbility {
+
     public AssassinArmor(VenturePlugin plugin) {
         super(plugin);
         plugin.getAbilityListeners().add(this);
-    }
-
-    @Override
-    protected ArmorConfig config() {
-        return plugin.getAssassinArmorConfig();
     }
 
     @Override
@@ -44,21 +38,8 @@ public final class AssassinArmor extends VentureArmorSet implements AbilityCasti
     }
 
     @Override
-    public ArmorCMD armorCMD() {
-        return ArmorCMD.ASSASSIN_ARMOR;
-    }
-
-    @Override
-    protected Material armorPieceMaterials(ArmorPieceTypes armorPieceTypes) {
-        Material material = null;
-        switch (armorPieceTypes)
-        {
-            case HELMET -> material = Material.PLAYER_HEAD;
-            case CHESTPLATE -> material = Material.LEATHER_CHESTPLATE;
-            case LEGGINGS -> material = Material.LEATHER_LEGGINGS;
-            case BOOTS -> material = Material.LEATHER_BOOTS;
-        }
-        return material;
+    public VentureArmorMaterial ventureArmorMaterial() {
+        return VentureArmorMaterial.ASSASSIN_ARMOR;
     }
 
     @Override
@@ -73,13 +54,13 @@ public final class AssassinArmor extends VentureArmorSet implements AbilityCasti
 
     @Override
     public LinkedList<String> createLore(@NotNull ArmorPieceTypes armorPieceTypes, int stars) {
-        double healthForAbility = config().getDouble("healthActivateBonus");
-        int invisibilityDuration = config().getInt("invisibilityDuration");
-        double blindRadius = config().getDouble("blindRadius");
-        int blindDuration = config().getInt("blindDuration");
-        double manaCost = config().getDouble("manaCost");
-        double cooldown = config().getDouble("cooldown");
-        String abilityName = config().getString("abilityName");
+        double healthForAbility = getArmorConfig().getDouble("healthActivateBonus");
+        int invisibilityDuration = getArmorConfig().getInt("invisibilityDuration");
+        double blindRadius = getArmorConfig().getDouble("blindRadius");
+        int blindDuration = getArmorConfig().getInt("blindDuration");
+        double manaCost = getArmorConfig().getDouble("manaCost");
+        double cooldown = getArmorConfig().getDouble("cooldown");
+        String abilityName = getArmorConfig().getString("abilityName");
 
         LinkedList<String> lore = super.createLore(armorPieceTypes, stars);
 
@@ -114,13 +95,13 @@ public final class AssassinArmor extends VentureArmorSet implements AbilityCasti
         double availableMana = stats.getAvailableMana();
         double maxHP = player.getMaxHealth();
         double currentHealth = player.getHealth();
-        double healthToActivate = maxHP * config().getDouble("healthActivateBonus") * 0.01;
-        double manaCost = config().getDouble("manaCost");
-        int invisibilityDuration = config().getInt("invisibilityDuration") * 20;
-        int blindDuration = config().getInt("blindDuration") * 20;
-        double blindRadius = config().getDouble("blindRadius");
-        int cooldown = config().getInt("cooldown");
-        String abilityName = config().getString("abilityName");
+        double healthToActivate = maxHP * getArmorConfig().getDouble("healthActivateBonus") * 0.01;
+        double manaCost = getArmorConfig().getDouble("manaCost");
+        int invisibilityDuration = getArmorConfig().getInt("invisibilityDuration") * 20;
+        int blindDuration = getArmorConfig().getInt("blindDuration") * 20;
+        double blindRadius = getArmorConfig().getDouble("blindRadius");
+        int cooldown = getArmorConfig().getInt("cooldown");
+        String abilityName = getArmorConfig().getString("abilityName");
 
         PlayerSpellCastEvent spellCastEvent = new PlayerSpellCastEvent(player, manaCost);
         double eventCost = spellCastEvent.getManaCost();

@@ -88,19 +88,19 @@ public enum PlayerEnchantStatKeys {
                 PlayerStatKeys.add(statProfile, PlayerStatKeys.MOB_LOOT, amount);
             }
             case ORE_LOOT -> {
-                enchantStats.setOreLoot(enchantStats.getOreLoot() + amount);
+                enchantStats.setMiningFortune(enchantStats.getMiningFortune() + amount);
                 PlayerStatKeys.add(statProfile, PlayerStatKeys.ORE_LOOT, amount);
             }
             case WOOD_LOOT -> {
-                enchantStats.setWoodLoot(enchantStats.getWoodLoot() + amount);
+                enchantStats.setForagingFortune(enchantStats.getForagingFortune() + amount);
                 PlayerStatKeys.add(statProfile, PlayerStatKeys.WOOD_LOOT, amount);
             }
             case DIG_LOOT -> {
-                enchantStats.setDigLoot(enchantStats.getDigLoot() + amount);
+                enchantStats.setFarmingFortune(enchantStats.getFarmingFortune() + amount);
                 PlayerStatKeys.add(statProfile, PlayerStatKeys.FARMING_LOOT, amount);
             }
             case FISHING_LOOT -> {
-                enchantStats.setFishingLoot(enchantStats.getFishingLoot() + amount);
+                enchantStats.setFishingLuck(enchantStats.getFishingLuck() + amount);
                 PlayerStatKeys.add(statProfile, PlayerStatKeys.FISHING_LOOT, amount);
             }
         }
@@ -169,19 +169,19 @@ public enum PlayerEnchantStatKeys {
                 PlayerStatKeys.remove(statProfile, PlayerStatKeys.MOB_LOOT, amount);
             }
             case ORE_LOOT -> {
-                enchantStats.setOreLoot(enchantStats.getOreLoot() - amount);
+                enchantStats.setMiningFortune(enchantStats.getMiningFortune() - amount);
                 PlayerStatKeys.remove(statProfile, PlayerStatKeys.ORE_LOOT, amount);
             }
             case WOOD_LOOT -> {
-                enchantStats.setWoodLoot(enchantStats.getWoodLoot() - amount);
+                enchantStats.setForagingFortune(enchantStats.getForagingFortune() - amount);
                 PlayerStatKeys.remove(statProfile, PlayerStatKeys.WOOD_LOOT, amount);
             }
             case DIG_LOOT -> {
-                enchantStats.setDigLoot(enchantStats.getDigLoot() - amount);
+                enchantStats.setFarmingFortune(enchantStats.getFarmingFortune() - amount);
                 PlayerStatKeys.remove(statProfile, PlayerStatKeys.FARMING_LOOT, amount);
             }
             case FISHING_LOOT -> {
-                enchantStats.setFishingLoot(enchantStats.getFishingLoot() - amount);
+                enchantStats.setFishingLuck(enchantStats.getFishingLuck() - amount);
                 PlayerStatKeys.remove(statProfile, PlayerStatKeys.FISHING_LOOT, amount);
             }
         }

@@ -56,10 +56,10 @@ public enum PlayerStatKeys {
             case PROJECTILE_DEFENSE -> defenseStats.setProjectileDefense(defenseStats.getProjectileDefense() + amount);
             case MAGIC_DEFENSE -> defenseStats.setMagicDefense(defenseStats.getMagicDefense() + amount);
             case TOUGHNESS -> defenseStats.setToughness(defenseStats.getToughness() + amount);
-            case MOB_LOOT -> lootStats.setBonusMobLoot(lootStats.getBonusMobLoot() + amount);
-            case ORE_LOOT -> lootStats.setBonusOreLoot(lootStats.getBonusOreLoot() + amount);
-            case WOOD_LOOT -> lootStats.setBonusWoodLoot(lootStats.getBonusWoodLoot() + amount);
-            case FARMING_LOOT -> lootStats.setBonusFarmingLoot(lootStats.getBonusFarmingLoot() + amount);
+            case MOB_LOOT -> lootStats.setMobLooting(lootStats.getMobLooting() + amount);
+            case ORE_LOOT -> lootStats.setMiningFortune(lootStats.getMiningFortune() + amount);
+            case WOOD_LOOT -> lootStats.setForagingFortune(lootStats.getForagingFortune() + amount);
+            case FARMING_LOOT -> lootStats.setFarmingFortune(lootStats.getFarmingFortune() + amount);
             case FISHING_LOOT -> lootStats.setFishingLuck(lootStats.getFishingLuck() + amount);
         }
     }
@@ -91,10 +91,10 @@ public enum PlayerStatKeys {
             case PROJECTILE_DEFENSE -> defenseStats.setProjectileDefense(defenseStats.getProjectileDefense() - amount);
             case MAGIC_DEFENSE -> defenseStats.setMagicDefense(defenseStats.getMagicDefense() - amount);
             case TOUGHNESS -> defenseStats.setToughness(defenseStats.getToughness() - amount);
-            case MOB_LOOT -> lootStats.setBonusMobLoot(lootStats.getBonusMobLoot() - amount);
-            case ORE_LOOT -> lootStats.setBonusOreLoot(lootStats.getBonusOreLoot() - amount);
-            case WOOD_LOOT -> lootStats.setBonusWoodLoot(lootStats.getBonusWoodLoot() - amount);
-            case FARMING_LOOT -> lootStats.setBonusFarmingLoot(lootStats.getBonusFarmingLoot() - amount);
+            case MOB_LOOT -> lootStats.setMobLooting(lootStats.getMobLooting() - amount);
+            case ORE_LOOT -> lootStats.setMiningFortune(lootStats.getMiningFortune() - amount);
+            case WOOD_LOOT -> lootStats.setForagingFortune(lootStats.getForagingFortune() - amount);
+            case FARMING_LOOT -> lootStats.setFarmingFortune(lootStats.getFarmingFortune() - amount);
             case FISHING_LOOT -> lootStats.setFishingLuck(lootStats.getFishingLuck() - amount);
         }
     }

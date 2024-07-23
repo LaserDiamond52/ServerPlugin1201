@@ -16,12 +16,12 @@ public class EnchantStats {
     private double reach;
     private double speed;
     private double mobLoot;
-    private double oreLoot;
-    private double woodLoot;
-    private double digLoot;
-    private double fishingLoot;
+    private double miningFortune;
+    private double foragingFortune;
+    private double farmingFortune;
+    private double fishingLuck;
 
-    public EnchantStats(double defense, double fireDefense, double explosionDefense, double projectileDefense, double magicDefense, double toughness, double baseMelee, double baseMagic, double baseRange, double mana, double health, double reach, double speed, double mobLoot, double oreLoot, double woodLoot, double digLoot, double fishingLoot) {
+    public EnchantStats(double defense, double fireDefense, double explosionDefense, double projectileDefense, double magicDefense, double toughness, double baseMelee, double baseMagic, double baseRange, double mana, double health, double reach, double speed, double mobLoot, double miningFortune, double foragingFortune, double farmingFortune, double fishingLuck) {
         this.defense = defense;
         this.fireDefense = fireDefense;
         this.explosionDefense = explosionDefense;
@@ -36,10 +36,10 @@ public class EnchantStats {
         this.reach = reach;
         this.speed = speed;
         this.mobLoot = mobLoot;
-        this.oreLoot = oreLoot;
-        this.woodLoot = woodLoot;
-        this.digLoot = digLoot;
-        this.fishingLoot = fishingLoot;
+        this.miningFortune = miningFortune;
+        this.foragingFortune = foragingFortune;
+        this.farmingFortune = farmingFortune;
+        this.fishingLuck = fishingLuck;
     }
 
     public double getDefense() {
@@ -146,28 +146,28 @@ public class EnchantStats {
         this.speed = speed;
     }
 
-    public double getOreLoot() {
-        return oreLoot;
+    public double getMiningFortune() {
+        return miningFortune;
     }
 
-    public void setOreLoot(double oreLoot) {
-        this.oreLoot = oreLoot;
+    public void setMiningFortune(double miningFortune) {
+        this.miningFortune = miningFortune;
     }
 
-    public double getWoodLoot() {
-        return woodLoot;
+    public double getForagingFortune() {
+        return foragingFortune;
     }
 
-    public void setWoodLoot(double woodLoot) {
-        this.woodLoot = woodLoot;
+    public void setForagingFortune(double foragingFortune) {
+        this.foragingFortune = foragingFortune;
     }
 
-    public double getFishingLoot() {
-        return fishingLoot;
+    public double getFishingLuck() {
+        return fishingLuck;
     }
 
-    public void setFishingLoot(double fishingLoot) {
-        this.fishingLoot = fishingLoot;
+    public void setFishingLuck(double fishingLuck) {
+        this.fishingLuck = fishingLuck;
     }
 
     public double getMobLoot() {
@@ -178,11 +178,11 @@ public class EnchantStats {
         this.mobLoot = mobLoot;
     }
 
-    public double getDigLoot() {
-        return digLoot;
+    public double getFarmingFortune() {
+        return farmingFortune;
     }
 
-    public void setDigLoot(double digLoot) {
-        this.digLoot = digLoot;
+    public void setFarmingFortune(double farmingFortune) {
+        this.farmingFortune = farmingFortune;
     }
 }

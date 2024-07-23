@@ -8,16 +8,14 @@ import net.laserdiamond.ventureplugin.events.abilities.AbilityHandler;
 import net.laserdiamond.ventureplugin.events.damage.PlayerMagicDamageEvent;
 import net.laserdiamond.ventureplugin.events.mana.PlayerSpellCastEvent;
 import net.laserdiamond.ventureplugin.items.util.*;
-import net.laserdiamond.ventureplugin.items.armor.util.ArmorCMD;
-import net.laserdiamond.ventureplugin.items.armor.util.ArmorPieceTypes;
-import net.laserdiamond.ventureplugin.items.armor.util.VentureArmorSet;
+import net.laserdiamond.ventureplugin.items.armor.VentureArmorMaterial;
+import net.laserdiamond.ventureplugin.items.armor.ArmorPieceTypes;
+import net.laserdiamond.ventureplugin.items.armor.VentureArmorSet;
 import net.laserdiamond.ventureplugin.stats.Components.Stats;
-import net.laserdiamond.ventureplugin.util.File.ArmorConfig;
 import net.laserdiamond.ventureplugin.util.messages.Messages;
 import net.laserdiamond.ventureplugin.util.particles.Particles;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -33,12 +31,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
-// TODO: May want to change Soul Stealer to deal bonus damage based on kills (store on armor piece)
 public final class SoulFireBlazeArmor extends VentureArmorSet implements AbilityCasting.RunnableAbility, AbilityCasting.onKillAbility, AbilityCasting.attackAbility {
 
     private final HashMap<UUID, Integer> soulFireBlazeAuraTimer;
-    private static final VenturePlugin PLUGIN = VenturePlugin.getInstance();
-    private static final ArmorConfig ARMOR_CONFIG = PLUGIN.getSoulFireBlazeArmorConfig();
 
     public SoulFireBlazeArmor(VenturePlugin plugin) {
         super(plugin);
@@ -53,10 +48,10 @@ public final class SoulFireBlazeArmor extends VentureArmorSet implements Ability
     public void onActivate(Player player) {
         StatPlayer statPlayer = new StatPlayer(player);
         Stats stats = statPlayer.getStats();
-        double manaCost = config().getDouble("manaCost");
-        double auraRadius = config().getDouble("auraRadius");
-        double auraDamage = config().getDouble("auraBaseDamage");
-        String abilityName = config().getString("abilityName1");
+        double manaCost = getArmorConfig().getDouble("manaCost");
+        double auraRadius = getArmorConfig().getDouble("auraRadius");
+        double auraDamage = getArmorConfig().getDouble("auraBaseDamage");
+        String abilityName = getArmorConfig().getString("abilityName1");
         double availableMana = stats.getAvailableMana();
 
         PlayerSpellCastEvent spellCastEvent = new PlayerSpellCastEvent(player, manaCost);
@@ -123,22 +118,22 @@ public final class SoulFireBlazeArmor extends VentureArmorSet implements Ability
 
         ItemStack[] armor = playerInv.getArmorContents();
 
-        double damageBoost = config().getDouble("damageBoost");
-        int maxBonus = config().getInt("digitMax");
+        double damageBoost = getArmorConfig().getDouble("damageBoost");
+        int maxBonus = getArmorConfig().getInt("digitMax");
         for (ItemStack armorStack : armor)
         {
             if (armorStack != null && armorStack.getItemMeta() != null)
             {
                 if (isArmorPiece(armorStack))
                 {
-                    int kills = ItemForger.getUniqueItemDataKeyInt(armorStack, UniqueVentureItemDataKey.TOTAL_KILLS);
+                    int kills = VentureItemBuilder.getUniqueItemDataKeyInt(armorStack, UniqueVentureItemDataKey.TOTAL_KILLS);
 
-                    ItemForger.setUniqueItemDataKeyInt(armorStack, UniqueVentureItemDataKey.TOTAL_KILLS, kills + 1);
+                    VentureItemBuilder.setUniqueItemDataKeyInt(armorStack, UniqueVentureItemDataKey.TOTAL_KILLS, kills + 1);
 
                     int killDigits = (int) (Math.log10(kills + 1) + 1);
 
                     double itemDamageBonus = Math.min(killDigits, maxBonus) * damageBoost;
-                    ItemForger.setUniqueItemDataKeyDouble(armorStack, UniqueVentureItemDataKey.SOUL_FIRE_BLAZE_DAMAGE_BONUS, itemDamageBonus);
+                    VentureItemBuilder.setUniqueItemDataKeyDouble(armorStack, UniqueVentureItemDataKey.SOUL_FIRE_BLAZE_DAMAGE_BONUS, itemDamageBonus);
 
                     ItemRegistry.renewItem(armorStack, player);
 
@@ -163,7 +158,7 @@ public final class SoulFireBlazeArmor extends VentureArmorSet implements Ability
                 {
                     if (isArmorPiece(armorStack))
                     {
-                        double damageBonus = ItemForger.getUniqueItemDataKeyDouble(armorStack, UniqueVentureItemDataKey.SOUL_FIRE_BLAZE_DAMAGE_BONUS);
+                        double damageBonus = VentureItemBuilder.getUniqueItemDataKeyDouble(armorStack, UniqueVentureItemDataKey.SOUL_FIRE_BLAZE_DAMAGE_BONUS);
                         i += damageBonus;
                     }
                 }
@@ -175,18 +170,13 @@ public final class SoulFireBlazeArmor extends VentureArmorSet implements Ability
     }
 
     @Override
-    protected ArmorConfig config() {
-        return ARMOR_CONFIG;
-    }
-
-    @Override
     protected String armorName() {
         return "Soul Fire Blaze";
     }
 
     @Override
-    public ArmorCMD armorCMD() {
-        return ArmorCMD.SOUL_FIRE_BLAZE;
+    public VentureArmorMaterial ventureArmorMaterial() {
+        return VentureArmorMaterial.SOUL_FIRE_BLAZE;
     }
 
     @Override
@@ -205,28 +195,15 @@ public final class SoulFireBlazeArmor extends VentureArmorSet implements Ability
     }
 
     @Override
-    protected Material armorPieceMaterials(ArmorPieceTypes armorPieceTypes) {
-        Material material = null;
-        switch (armorPieceTypes)
-        {
-            case HELMET -> material = Material.PLAYER_HEAD;
-            case CHESTPLATE -> material = Material.LEATHER_CHESTPLATE;
-            case LEGGINGS -> material = Material.LEATHER_LEGGINGS;
-            case BOOTS -> material = Material.LEATHER_BOOTS;
-        }
-        return material;
-    }
-
-    @Override
     public LinkedList<String> createLore(@NotNull ArmorPieceTypes armorPieceTypes, int stars) {
 
-        double auraDamage = config().getDouble("auraBaseDamage");
-        double auraRadius = config().getDouble("auraRadius");
-        double manaCost = config().getDouble("manaCost");
-        String abilityName1 = config().getString("abilityName1");
-        String abilityName2 = config().getString("abilityName2");
-        double damageBoost = config().getDouble("damageBoost");
-        int digitMax = config().getInt("digitMax");
+        double auraDamage = getArmorConfig().getDouble("auraBaseDamage");
+        double auraRadius = getArmorConfig().getDouble("auraRadius");
+        double manaCost = getArmorConfig().getDouble("manaCost");
+        String abilityName1 = getArmorConfig().getString("abilityName1");
+        String abilityName2 = getArmorConfig().getString("abilityName2");
+        double damageBoost = getArmorConfig().getDouble("damageBoost");
+        int digitMax = getArmorConfig().getInt("digitMax");
 
         LinkedList<String> lore = super.createLore(armorPieceTypes, stars);
         lore.add(ChatColor.GOLD + "Full Set Bonus: " + abilityName1 + ChatColor.YELLOW + ChatColor.BOLD + " Hold Sneak");
@@ -266,10 +243,10 @@ public final class SoulFireBlazeArmor extends VentureArmorSet implements Ability
     }
 
 
-    public static List<String> itemSpecificLore(ItemForger itemForger, List<String> lore)
+    public static List<String> itemSpecificLore(VentureItemBuilder ventureItemBuilder, List<String> lore)
     {
-        int kills = itemForger.getUniqueItemDataKeyInt(UniqueVentureItemDataKey.TOTAL_KILLS);
-        double damageBonus = itemForger.getUniqueItemDataKeyDouble(UniqueVentureItemDataKey.SOUL_FIRE_BLAZE_DAMAGE_BONUS);
+        int kills = ventureItemBuilder.getUniqueItemDataKeyInt(UniqueVentureItemDataKey.TOTAL_KILLS);
+        double damageBonus = ventureItemBuilder.getUniqueItemDataKeyDouble(UniqueVentureItemDataKey.SOUL_FIRE_BLAZE_DAMAGE_BONUS);
 
         for (int i = 0; i < lore.size() - 1; i++)
         {
@@ -286,7 +263,7 @@ public final class SoulFireBlazeArmor extends VentureArmorSet implements Ability
     }
 
     @Override
-    public ItemForger createArmorSet(@NotNull ArmorPieceTypes armorPieceTypes, int stars) {
+    public VentureItemBuilder createArmorSet(@NotNull ArmorPieceTypes armorPieceTypes, int stars) {
 
         return super.createArmorSet(armorPieceTypes, stars)
                 .setUniqueItemDataKeyInt(UniqueVentureItemDataKey.TOTAL_KILLS, 0)

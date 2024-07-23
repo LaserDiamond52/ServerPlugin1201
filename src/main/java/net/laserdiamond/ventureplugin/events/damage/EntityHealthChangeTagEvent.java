@@ -16,14 +16,14 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.text.DecimalFormat;
 
+/**
+ * Displays a text display that indicates whether the victim
+ * was damaged or healed, and by how much
+ * <p>
+ * Note: This DOES NOT damage the entity
+ */
 public class EntityHealthChangeTagEvent extends EntityEvent implements Cancellable {
 
-    /**
-     * Displays a text display that indicates whether the victim
-     * was damaged or healed, and by how much
-     * <p>
-     * Note: This DOES NOT damage the entity
-     */
     private static final VenturePlugin PLUGIN = VenturePlugin.getInstance();
     private final double amount;
     private EntityDamageEvent.DamageCause damageCause;
@@ -37,7 +37,6 @@ public class EntityHealthChangeTagEvent extends EntityEvent implements Cancellab
      * Note: Entity attacks that involve magic damage, projectile damage, etc. will be displayed as
      * entity damage
      */
-
     public EntityHealthChangeTagEvent(final Entity target, EntityDamageEvent.DamageCause damageCause, double amount, boolean isDamage)
     {
         super(target);
@@ -62,7 +61,7 @@ public class EntityHealthChangeTagEvent extends EntityEvent implements Cancellab
      * @param amount The amount to change the entity's health tag by
      * @param isDamage Is the result damage or healing?
      */
-    public static void run(final Entity target, EntityDamageEvent.DamageCause damageCause, double amount, boolean isDamage)
+    public void run(final Entity target, EntityDamageEvent.DamageCause damageCause, double amount, boolean isDamage)
     {
         if (target instanceof LivingEntity livingEntity)
         {
@@ -134,7 +133,7 @@ public class EntityHealthChangeTagEvent extends EntityEvent implements Cancellab
      * @param amount The amount to change the entity's health tag by
      * @param isDamage is the result damage or healing?
      */
-    public static void run(final Entity target, double amount, boolean isDamage)
+    public void run(final Entity target, double amount, boolean isDamage)
     {
         if (target instanceof LivingEntity livingEntity)
         {
